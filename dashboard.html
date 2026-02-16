@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Luxe - Panel de Control</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Estilos específicos para el Dashboard */
+    .admin-layout { display: flex; min-height: 100vh; background: #fff5f7; }
+    .sidebar { width: 260px; background: white; padding: 30px; border-right: 2px solid #ff4d6d; position: sticky; top: 0; height: 100vh; }
+    .main-content { flex: 1; padding: 40px; overflow-y: auto; }
+    .chart-box { background: white; padding: 20px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+
+    .badge { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+    .badge-admin { background: #ff4d6d; color: white; }
+    .badge-empleado { background: #ffb3c1; color: #555; }
+    
+    .tabla-productos { width: 100%; border-collapse: collapse; background: white; border-radius: 15px; overflow: hidden; }
+    .tabla-productos th { background: #ff4d6d; color: white; padding: 15px; text-align: left; }
+    .tabla-productos td { padding: 15px; border-bottom: 1px solid #ffeef1; }
+    
+    .btn-accion { padding: 8px; border: none; border-radius: 8px; cursor: pointer; margin-right: 5px; }
+    .btn-borrar { background: #ff4d6d; color: white; }
+    .btn-editar { background: #4CAF50; color: white; }
+    .hidden { display: none !important; }
+    .stats-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+    .stat-card { background: white; padding: 20px; border-radius: 15px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-bottom: 4px solid #ff4d6d; }
+    .stat-card h3 { margin: 0; color: #888; font-size: 14px; }
+    .stat-card p { margin: 10px 0 0; font-size: 24px; font-weight: bold; color: #333; }
+  </style>
+</head>
+<body>
+
+<div class="admin-layout">
+  <aside class="sidebar">
+    <img src="img/logo.png" alt="Logo" class="logo" style="width: 150px; margin-bottom: 20px;">
+    <div id="info-usuario">
+      <p style="margin-bottom: 5px;">👤 <b id="nombre-usuario">Cargando...</b></p>
+      <span id="rol-usuario" class="badge"></span>
+    </div>
+    <hr style="margin: 20px 0; border: 0.5px solid #eee;">
+    <nav>
+      <ul style="list-style: none; padding: 0;">
+        <li style="margin-bottom: 15px;"><a href="index.html" style="text-decoration: none; color: #333;">🏠 Ir a la Tienda</a></li>
+        <li style="margin-bottom: 15px; color: #ff4d6d; cursor: pointer;">📦 Inventario</li>
+        <li style="margin-bottom: 15px; cursor: pointer;">💰 Ventas</li>
+        <li><button id="btn-cerrar-sesion" style="background:none; border:none; color:red; cursor:pointer; font-family: inherit;">🚪 Cerrar Sesión</button></li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <h1 style="color: #ff4d6d; margin-bottom: 25px;">Panel de Ventas Luxe</h1>
+
+    <div class="stats-container">
+      <div class="stat-card">
+        <h3>Ventas del Mes</h3>
+        <p id="total-ventas">$0.00</p>
+      </div>
+      <div class="stat-card">
+        <h3>Productos Vendidos</h3>
+        <p id="cantidad-vendida">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Clientes Nuevos</h3>
+        <p>12</p>
+      </div>
+    </div>
+
+    
+    <div class="chart-box">
+      <canvas id="graficaVentas"></canvas>
+    </div>
+
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+      <h2 style="color: #ff4d6d; margin: 0;">Inventario Actual</h2>
+      <button id="btn-agregar" class="btn-pagar hidden" style="width: auto; padding: 10px 20px;">+ Nuevo Producto</button>
+    </header>
+
+    <div class="card" style="padding: 0;">
+      <table class="tabla-productos">
+        <thead>
+          <tr>
+            <th>Imagen</th>
+            <th>Producto</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="lista-inventario">
+          </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script src="js/dashboard.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<canvas id="graficaVentas"></canvas>
+</body>
+</html>

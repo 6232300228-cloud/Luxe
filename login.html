@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Acceso - Tienda Profesional</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header class="header">
+  <a href="index.html">
+    <img src="img/logo.png" alt="Logo" class="logo">
+  </a>  
+  <div class="icons">
+    <a href="index.html">Volver</a>
+  </div>
+</header>
+
+<center style="padding:50px;">
+  <div class="auth-container">
+    
+    <div id="login-section" class="auth-box">
+      <h2>Iniciar sesión</h2>
+      <input id="usuario" placeholder="Nombre de usuario"><br>
+      <input id="correo" placeholder="Correo electrónico"><br>
+      <button id="btnLogin">Entrar</button>
+      <p class="toggle-text">¿No tienes cuenta? <span id="to-register">Regístrate</span></p>
+    </div>
+
+   <div id="register-section" class="auth-box hidden card">
+      <h2>Crear cuenta</h2>
+      <input id="reg-nombre" placeholder="Nombre completo"><br>
+      <input id="reg-telefono" placeholder="Número de teléfono"><br>
+      <input id="reg-correo" placeholder="Correo electrónico"><br>
+      <input id="reg-pass" type="password" placeholder="Contraseña"><br>
+      <button id="btnRegister"> Registrarme </button>
+      <p class="toggle-text">¿Ya tienes cuenta? <span id="to-login">Inicia sesión</span></p>
+    </div>
+
+  </div>
+</center>
+
+<script src="js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Favoritos</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header class="header">
+  <a href="index.html">
+        <img src="img/logo.png" alt="Logo de la empresa" class="logo">
+  </a>
+  <div class="icons">
+    <a href="login.html" id="login-btn">👤 Iniciar sesión</a>
+    <span id="user-name" style="display:none;"></span>
+    <button id="logout-btn" style="display:none;">Salir</button>
+
+    <a href="carrito.html">🛒 <span id="cart-count">0</span></a>
+    <a href="index.html">Inicio 🏠</a>
+  </div>
+</header>
+
+
+<main class="container">
+  <section class="products" id="fav-items"></section>
+</main>
+
+<script src="js/favoritos.js"></script>
+<script src="js/user.js"></script>
+</body>
+<footer class="footer-luxe">
+    <div class="footer-container">
+        <div class="footer-column">
+            <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
+            <p class="footer-description">Realzando tu belleza natural con productos de alta gama.✨</p>
+            <div class="social-links">
+                <a href="https://instagram.com" target="_blank">IG</a>
+                <a href="https://facebook.com" target="_blank">FB</a>
+                <a href="https://tiktok.com" target="_blank">TK</a>
+            </div>
+        </div>
+
+        <div class="footer-column newsletter">
+            <h3>Únete al Club Luxe</h3>
+            <p>Recibe ofertas exclusivas.</p>
+            <div class="newsletter-form">
+                <input type="email" id="newsletter-email" placeholder="Tu email...">
+                <button onclick="suscribirse()">Unirse</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+    </div>
+</footer>
+</html>

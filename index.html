@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MakeupStore</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<header class="header">
+  <div style="display: flex; align-items: center; gap: 15px;">
+    <div class="menu-hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <a href="index.html">
+        <img src="img/logo.png" alt="Logo Luxe" class="logo">
+    </a>
+  </div>
+   
+  <div class="search-container">
+    <input type="text" id="search" placeholder="Buscar producto..." class="buscar">
+    <select id="sort" class="filtro">
+      <option value="default">Ordenar por...</option> 
+      <option value="az">Nombre A-Z</option>
+      <option value="za">Nombre Z-A</option>
+      <option value="precioAsc">Precio menor</option>
+      <option value="precioDesc">Precio mayor</option>
+    </select>
+  </div>
+
+  <div class="icons">
+    <a href="favoritos.html">❤️ <span id="fav-count">0</span></a>
+    <a href="carrito.html">🛒 <span id="cart-count">0</span></a>
+
+    <a href="login.html" id="login-btn">👤 Iniciar sesión</a>
+
+    <div id="user-menu" class="dropdown" style="display: none;">
+        <button class="dropbtn">
+            <span id="user-name"></span> <i class="arrow">▼</i>
+        </button>
+        <div class="dropdown-content">
+            <a href="perfil.html">👤 Mi Perfil</a>
+            <a href="pedidos.html">📦 Mis Pedidos</a>
+            <hr>
+            <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
+        </div>
+    </div>
+  </div>
+</header>
+
+<nav id="side-menu" class="side-nav">
+  <span class="close-btn" onclick="toggleMenu()">&times;</span>
+  <div class="menu-section">
+    <h3 style="color: #ff4d6d; padding-left: 20px;">Menú Principal</h3>
+    <a href="nosotros.html">📖 Sobre Nosotros</a>
+    <a href="#">✨ Lo más nuevo</a>
+    <a href="#">🏷️ Ofertas</a>
+  </div>
+</nav>
+
+
+<!-- SLIDER PRINCIPAL -->
+ <section class="slider">
+
+  <button class="prev" onclick="prevSlide()">◀</button>
+
+  <div class="slides">
+    <img src="img/slider1.jpg" class="slide active">
+    <img src="img/slider2.jpg" class="slide">
+    <img src="img/slider3.jpg" class="slide">
+  </div>
+
+  <button class="next" onclick="nextSlide()">▶</button>
+
+</section>
+
+ <!--probado-->
+<section class="video-showcase">
+  <h2 class="video-title">✨ Probado en cámara</h2>
+
+  <div class="video-grid">
+
+    <!-- Video1 -->
+    <div class="video-card">
+      <video src="videos/rubor.mp4" muted loop></video>
+      <div class="overlay">
+        <h3>Aplicando Marmoleado</h3>
+        <p>$225</p>
+      </div>
+    </div>
+
+    <!-- Video2 -->
+    <div class="video-card">
+      <video src="videos/gloss.mp4" muted loop></video>
+      <div class="overlay">
+        <h3>Labial Cremoso Soft Matte</h3>
+        <p>$250</p>
+      </div>
+    </div>
+
+    <!-- Video3 -->
+    <div class="video-card">
+      <video src="videos/swatch.mp4" muted loop></video>
+      <div class="overlay">
+        <h3>Ultimate Shadow Palette</h3>
+        <p>$400</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
+<!--look-->
+<section class="triple-banner-section">
+  <div class="triple-container-full">
+    
+    <div class="banner-box-luxe pro-box">
+      <div class="banner-info-luxe">
+        <h3>FAVORITOS PRO 🖤</h3>
+        <p>La selección exclusiva de nuestros maquilladores profesionales.</p>
+        <button class="btn-luxe" onclick="openExperience('pro')">Ver Selección</button>      </div>
+      <div class="banner-img-luxe">
+        <img src="img/modelo.png" alt="Favoritos Pro">
+      </div>
+    </div>
+
+    <div class="banner-box-luxe gift-box">
+      <div class="banner-info-luxe">
+        <h3>KITS DE REGALO 🎁</h3>
+        <p>Sets armados listos para regalar o para consentirte a ti misma.</p>
+        <button class="btn-luxe" onclick="openExperience('kit')">Ver Regalos</button>      </div>
+      <div class="banner-img-luxe">
+        <img src="img/slider1.jpg" alt="Kits de Regalo">
+      </div>
+    </div>
+
+    <div class="banner-box-luxe skin-box">
+      <div class="banner-info-luxe">
+        <h3>RITUAL SKINCARE ✨</h3>
+        <p>Prepara tu piel con lo mejor en cuidado facial antes del maquillaje.</p>
+        <button class="btn-luxe" onclick="openExperience('skincare')">Ver Rutina</button>      </div>
+      <div class="banner-img-luxe">
+        <img src="img/skincare.png" alt="Cuidado de la piel">
+      </div>
+    </div>
+  </div>
+</section>  
+
+<section class="category-menu">
+  <button onclick="filterCategory('all')">Todos</button>
+  <button onclick="filterCategory('accesorios')">Accesorios</button>
+  <button onclick="filterCategory('skincare')">Skincare</button>
+  <button onclick="filterCategory('labial')">Labios</button>
+  <button onclick="filterCategory('sombra')">Sombras</button>
+  <button onclick="filterCategory('ojos')">Ojos</button>
+  <button onclick="filterCategory('base')">Bases</button>
+  <button onclick="filterCategory('corrector')">Correctores</button>
+  <button onclick="filterCategory('rubor')">Rubores</button>
+  <button onclick="filterCategory('iluminador')">Iluminador</button>
+  
+
+  </section>
+
+  <section class="products" id="product-list"></section>
+
+<div id="toast" class="toast"></div>
+
+<script src="js/script.js"></script>
+<script src="js/slider.js"></script>
+<script src="js/user.js"></script>
+
+
+
+<!--modal dellook-->
+<div id="lookModal" class="look-modal">
+    <div class="look-modal-content">
+        <span class="close-look" onclick="closeLook()">×</span>
+        <div id="look-products" class="products"></div>
+    </div>
+</div>
+</body>
+<footer class="footer-luxe">
+    <div class="footer-container">
+        <div class="footer-column">
+            <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
+            <p class="footer-description">Realzando tu belleza natural con productos de alta gama. ✨</p>
+            <div class="social-links">
+                <a href="https://instagram.com" target="_blank">IG</a>
+                <a href="https://facebook.com" target="_blank">FB</a>
+                <a href="https://tiktok.com" target="_blank">TK</a>
+            </div>
+        </div>
+
+        <div class="footer-column">
+            <h3>Explorar</h3>
+            <ul>
+                <li><a href="javascript:void(0)" onclick="filterCategory('all'); window.scrollTo(0,0)">Tienda</a></li>
+                <li><a href="javascript:void(0)" onclick="openExperience('pro')">Favoritos Pro</a></li>
+                <li><a href="javascript:void(0)" onclick="openExperience('kit')">Kits de Regalo</a></li>
+                <li><a href="javascript:void(0)" onclick="openExperience('skincare')">Rituales Skincare</a></li>
+                <li><a href="javascript:void(0)" onclick="showOnlyFavs()">Mis Favoritos ❤️</a></li>
+                
+            </ul>
+        </div>
+
+        <div class="footer-column newsletter">
+            <h3>Únete al Club Luxe</h3>
+            <p>Recibe ofertas exclusivas.</p>
+            <div class="newsletter-form">
+                <input type="email" id="newsletter-email" placeholder="Tu email...">
+                <button onclick="suscribirse()">Unirse</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+    </div>
+</footer>
+</html>

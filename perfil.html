@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Perfil</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <header class="header">
+  <a href="index.html">
+      <img src="img/logo.png" alt="Logo de la empresa" class="logo">
+  </a>
+  <div class="icons">
+  <a href="index.html">Inicio </a>
+ 
+    <a href="pedidos.html">📦 Mis pedidos</a>
+
+    <a href="login.html" id="login-btn">👤 Iniciar sesión</a>
+    <span id="user-name" style="display:none;"></span>
+    <button id="logout-btn" style="display:none;">Salir</button>
+  </div>
+</header>
+
+<center style="padding:50px;">
+  <div class="card" style="max-width:500px; padding:30px; background: white; border-radius: 20px; text-align: left;">
+    <h2 style="text-align: center; color: #ff4d6d;">Editar Mi Perfil ✨</h2>
+
+    <p><b>Usuario actual:</b><br>
+       <input type="text" id="perfilNombreInput"></p>
+    
+    <p><b>Correo electrónico:</b><br>
+       <input type="email" id="perfilCorreoInput"></p>
+
+    <hr style="border: 0.5px solid #eee; margin: 20px 0;">
+
+    <p><b>Dirección de Envío:</b><br>
+       <input type="text" id="perfilDireccionInput" placeholder="Calle, ciudad, código postal..."></p>
+    
+    <p><b>Método de Pago (Tarjeta):</b><br>
+       <input type="text" id="perfilTarjetaInput" placeholder="0000 0000 0000 0000"></p>
+
+    <center>
+      <button id="btnGuardar">Guardar todos los cambios ✅</button>
+    </center>
+  </div>
+</center>
+<script src="js/perfil.js"></script>
+<script src="js/user.js"></script>
+</body>
+</html>

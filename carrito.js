@@ -12,7 +12,7 @@ function actualizarHeader() {
         favCount.textContent = favsActual.length;
         favCount.setAttribute("data-count", favsActual.length);
     }
-}//
+}
 
 const catalogoSugerencias = [
     { nombre: "Labial Glossy Rosa", precio: 120, img: "img/labial2.png" },

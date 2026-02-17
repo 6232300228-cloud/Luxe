@@ -1,0 +1,106 @@
+[
+  {
+    "id": 1,
+    "name": "Labial Cremoso Soft Matte",
+    "price": 250,
+    "category": "labial",
+    "img": "img/labial.png",
+    "desc": "Labial suave, matte y de larga duración."
+  },
+  {
+    "id": 2,
+    "name": "Ultimate Shadow Palette",
+    "price": 400,
+    "category": "sombra",
+    "img": "img/paletas.png",
+    "desc": "Paleta profesional con tonos increíbles."
+  },
+  {
+    "id": 3,
+    "name": "Can't Stop Foundation",
+    "price": 350,
+    "category": "base",
+    "img": "img/base.png",
+    "desc": "Base resistente todo el día."
+  },
+  {
+    "id": 4,
+    "name": "HD Photogenic Concealer",
+    "price": 280,
+    "category": "corrector",
+    "img": "img/corrector.png",
+    "desc": "Corrector de alta cobertura y acabado natural."
+  },
+  {
+    "id": 5,
+    "name": "Delineador negro waterproof",
+    "price": 95,
+    "category": "ojos",
+    "img": "img/delineador.png",
+    "desc": "Delineador de alta duración"
+  },
+  {
+    "id": 6,
+    "name": "Mascara Lash Sensational",
+    "price": 180,
+    "category": "ojos",
+    "img": "img/rimel.png",
+    "desc": "Mascara de Maybelline para un volumen definido y efecto abanico."
+  },
+  {
+    "id": 7,
+    "name": "Labial Glossy Rosa",
+    "price": 120,
+    "category": "labial",
+    "img": "img/labial2.png",
+    "desc": "Brillo labial hidratante con un toque de color rosa cristalino."
+  },
+  {
+    "id": 8,
+    "name": "Set de Brochas Luxe",
+    "price": 350,
+    "category": "accesorios",
+    "img": "img/brochas.png",
+    "desc": "Set profesional de brochas sintéticas para un difuminado perfecto."
+  },
+  {
+    "id": 9,
+    "name": "Iluminador Perla Glow",
+    "price": 210,
+    "category": "rostro",
+    "img": "img/iluminador.png",
+    "desc": "Iluminador con pigmentos perlados para un brillo natural y elegante."
+  },
+  {
+    "id": 10,
+    "name": "Rubor Silk Glow Marmoleado",
+    "price": 225,
+    "category": "rostro",
+    "img": "img/rubor.png",
+    "desc": "Acabado luminoso y textura sedosa para un rubor natural."
+  },
+  {
+    "id": 11,
+    "name": "Limpiador Hidratante Pure",
+    "price": 320,
+    "category": "skincare",
+    "img": "img/limpiador.png",
+    "desc": "Paso 1: Limpia profundamente sin resecar, dejando la piel lista."
+  },
+  {
+    "id": 12,
+    "name": "Sérum Vitamina C Glow",
+    "price": 450,
+    "category": "skincare",
+    "img": "img/serum.png",
+    "desc": "Paso 2: Aporta luminosidad instantánea para un maquillaje radiante."
+  },
+  {
+    "id": 13,
+    "name": "Crema Hydro-Primer",
+    "price": 380,
+    "category": "skincare",
+    "img": "img/crema.png",
+    "desc": "Paso 3: Hidratación intensa que funciona como barrera y primer."
+  }
+]

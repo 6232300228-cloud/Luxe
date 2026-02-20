@@ -4,22 +4,19 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const router = express.Router();
 
-// Registro de usuario
+// Registro
 router.post('/register', async (req, res) => {
     try {
         const { nombre, correo, telefono, contraseña } = req.body;
         
-        // Verificar si el usuario ya existe
         const existeUsuario = await User.findOne({ correo });
         if (existeUsuario) {
             return res.status(400).json({ error: 'El correo ya está registrado' });
         }
         
-        // Encriptar contraseña
         const salt = await bcrypt.genSalt(10);
         const contraseñaEncriptada = await bcrypt.hash(contraseña, salt);
         
-        // Crear usuario
         const nuevoUsuario = new User({
             nombre,
             correo,
@@ -30,7 +27,6 @@ router.post('/register', async (req, res) => {
         
         await nuevoUsuario.save();
         
-        // Generar token
         const token = jwt.sign(
             { id: nuevoUsuario._id, role: nuevoUsuario.role },
             process.env.JWT_SECRET,
@@ -61,7 +57,6 @@ router.post('/login', async (req, res) => {
             return res.status(400).json({ error: 'Usuario no encontrado' });
         }
         
-        // Como en tu login original no usas contraseña, mantenemos la misma lógica
         const token = jwt.sign(
             { id: usuario._id, role: usuario.role },
             process.env.JWT_SECRET,

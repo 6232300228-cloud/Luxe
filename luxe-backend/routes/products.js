@@ -2,7 +2,7 @@ const express = require('express');
 const Product = require('../models/Product');
 const router = express.Router();
 
-// Obtener todos los productos
+// RUTA 1: Obtener todos los productos (GET)
 router.get('/', async (req, res) => {
     try {
         const productos = await Product.find();
@@ -12,18 +12,8 @@ router.get('/', async (req, res) => {
     }
 });
 
-// Obtener producto por ID
-router.get('/:id', async (req, res) => {
-    try {
-        const producto = await Product.findOne({ id: req.params.id });
-        res.json(producto);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// Cargar productos iniciales (seed)
-router.post('/seed', async (req, res) => {
+// RUTA 2: Cargar productos iniciales (POST) - ¡PRIMERO LAS RUTAS ESPECÍFICAS!
+router.get('/seed', async (req, res) => {
     try {
         const productosIniciales = [
             { id:1, name:"Labial Cremoso Soft Matte", price:250, category:"labial", img:"img/labial.webp", desc:"Labial suave, matte y de larga duración." },
@@ -37,10 +27,24 @@ router.post('/seed', async (req, res) => {
             { id:9, name:"Iluminador Perla Glow", price:210, category:"rostro", img:"img/iluminador.png", desc:"Brillo natural elegante." }
         ];
         
+        // Borrar productos existentes y cargar nuevos
         await Product.deleteMany({});
         await Product.insertMany(productosIniciales);
         
         res.json({ mensaje: '✅ Productos cargados exitosamente' });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// RUTA 3: Obtener producto por ID (GET) - ¡DESPUÉS de las rutas específicas!
+router.get('/:id', async (req, res) => {
+    try {
+        const producto = await Product.findOne({ id: req.params.id });
+        if (!producto) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+        res.json(producto);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

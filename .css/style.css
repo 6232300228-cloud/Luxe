@@ -847,8 +847,10 @@ input:focus {
 }
 /* Información del Texto */
 .info-luxe {
-    padding: 15px;
-    flex-grow: 1;
+padding: 15px;
+    flex-grow: 1; /* Esto ya lo tienes, pero asegúrate de que el contenedor padre sea flex */
+    display: flex;
+    flex-direction: column;
 }
 
 .info-luxe h4 {
@@ -877,7 +879,7 @@ input:focus {
 
 /* Botón de Compra (Barra inferior completa) */
 .btn-buy-luxe {
-    background: #441e1eab;
+   background: #441e1eab;
     color: #fff;
     border: none;
     width: 100%;
@@ -888,8 +890,10 @@ input:focus {
     cursor: pointer;
     text-transform: uppercase;
     transition: background 0.3s;
+    
+    /* AÑADE ESTA LÍNEA */
+    margin-top: auto; 
 }
-
 .btn-buy-luxe:hover {
     background: #ff4d6d;
 }

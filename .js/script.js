@@ -75,9 +75,9 @@ function showToast(msg) {
 }
 
 /* CARGAR PRODUCTOS*/
-/* MOSTRAR PRODUCTOS*/
 function renderProducts() {
   productList.innerHTML = "";
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
   if (filtered.length === 0) {
     productList.innerHTML = "<h2>No se encontraron productos 😥</h2>";
@@ -85,14 +85,12 @@ function renderProducts() {
   }
 
   filtered.forEach(p => {
-    // Verificamos si ya es favorito para que el corazón salga pintado
-    let favs = JSON.parse(localStorage.getItem("favs")) || [];
-    let isFav = favs.some(f => f.id === p.id);
+    const isFav = favs.some(f => f.id === p.id);
 
     productList.innerHTML += `
       <div class="product-card-luxe">
         
-        <button class="heart-fav ${isFav ? 'active' : ''}" onclick="addToFav(${p.id})">
+       <button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">
           ❤
         </button>
 
@@ -112,7 +110,42 @@ function renderProducts() {
         </button>
       </div>
     `;
-  });
+});
+}
+/*favoritos*/
+function toggleFav(event, id) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const btn = event.currentTarget; 
+
+    // 1. CAMBIO VISUAL INMEDIATO
+    btn.classList.toggle('active');
+
+    // 2. LÓGICA DE DATOS
+    let favs = JSON.parse(localStorage.getItem("favs")) || [];
+    const index = favs.findIndex(f => f.id === id);
+
+    if (index === -1) {
+        // AGREGAR
+        const productToAdd = products.find(p => p.id === id);
+        if (productToAdd) {
+            favs.push(productToAdd);
+            // --- AQUÍ VOLVEMOS A AVISAR ---
+            showToast("Agregado a favoritos ✨");
+        }
+    } else {
+        // ELIMINAR
+        favs.splice(index, 1);
+        // --- AVISO DE ELIMINADO ---
+        showToast("Quitado de favoritos 💔");
+    }
+
+    // 3. GUARDAR
+    localStorage.setItem("favs", JSON.stringify(favs));
+
+    // 4. ACTUALIZAR EL CONTADOR DEL HEADER (Importante para que se vea arriba)
+    updateFavCounter();
 }
 /*probado*/
 document.querySelectorAll('.video-card').forEach(card => {
@@ -271,6 +304,7 @@ function addToCart(id) {
 
   localStorage.setItem("carrito", JSON.stringify(cart));
   updateCartCounter();
+  showToast("¡Añadido al carrito! 🛒✨");
 }
 
 
@@ -335,8 +369,9 @@ function showOnlyFavs() {
     showToast("No tienes favoritos 💔");
     return;
   }
-
+  filtered = favs;
   renderProducts();
+  showToast("Viendo tus favoritos ❤️");
 }
 /* LÓGICA DEL FOOTER*/
 

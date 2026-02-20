@@ -6,7 +6,7 @@ const toLogin = document.getElementById("to-login");
 const btnLogin = document.getElementById("btnLogin");
 const btnRegister = document.getElementById("btnRegister");
 
-/* CAMBIO ENTRE FORMULARIOS */
+// CAMBIO ENTRE FORMULARIOS
 toRegister.addEventListener("click", () => {
     loginSection.classList.add("hidden");
     registerSection.classList.remove("hidden");
@@ -17,9 +17,8 @@ toLogin.addEventListener("click", () => {
     loginSection.classList.remove("hidden");
 });
 
-/* LOGIN (Sincronizado con Correo y Contraseña) */
-btnLogin.addEventListener("click", () => {
-    // Cambiamos 'usuario' por los nuevos campos de correo y pass
+// LOGIN (Conectado a MongoDB)
+btnLogin.addEventListener("click", async () => {
     let correo = document.getElementById("login-correo").value;
     let pass = document.getElementById("login-pass").value;
 
@@ -28,40 +27,42 @@ btnLogin.addEventListener("click", () => {
         return;
     }
 
-    // --- LÓGICA DE ROLES PROFESIONAL ---
-    let rol = "cliente"; 
+    try {
+        const response = await fetch('http://localhost:3000/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ correo, contraseña: pass }) // Nota: 'contraseña' en backend
+        });
 
-    if (correo === "admin@luxe.com" && pass === "admin123") {
-        rol = "admin";
-    } else if (correo === "staff@luxe.com" && pass === "staff123") {
-        rol = "empleado";
-    }
+        const data = await response.json();
 
-    // Guardamos los datos simulando una sesión real
-    const datosSesion = {
-        correo: correo,
-        rol: rol,
-        nombre: rol === "admin" ? "Administrador" : "Cliente Luxe" 
-    };
+        if (response.ok) {
+            // Guardar token y datos en localStorage
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
 
-    localStorage.setItem("user", JSON.stringify(datosSesion));
-    localStorage.setItem("usuarioActual", JSON.stringify(datosSesion));
+            alert(`✅ Bienvenido ${data.user.nombre}`);
 
-    alert(`✅ Acceso concedido como: ${rol.toUpperCase()}`);
-
-    // REDIRECCIÓN
-    if (rol === "admin" || rol === "empleado") {
-        window.location.href = "dashboard.html";
-    } else {
-        window.location.href = "index.html";
+            // Redirección por rol
+            if (data.user.role === "admin" || data.user.role === "empleado") {
+                window.location.href = "dashboard.html";
+            } else {
+                window.location.href = "index.html";
+            }
+        } else {
+            alert(data.error || "Error al iniciar sesión");
+        }
+    } catch (error) {
+        alert("Error de conexión con el servidor");
+        console.error(error);
     }
 });
 
-/* REGISTRO (Incluye Dirección para el Perfil) */
-btnRegister.addEventListener("click", () => {
+// REGISTRO (Conectado a MongoDB)
+btnRegister.addEventListener("click", async () => {
     const nombre = document.getElementById("reg-nombre").value;
     const telefono = document.getElementById("reg-telefono").value;
-    const direccion = document.getElementById("reg-direccion").value; // Captura dirección
+    const direccion = document.getElementById("reg-direccion").value;
     const correo = document.getElementById("reg-correo").value;
     const pass = document.getElementById("reg-pass").value;
 
@@ -69,18 +70,34 @@ btnRegister.addEventListener("click", () => {
         alert("⚠️ Por favor, llena todos los campos de tu registro Luxe");
         return;
     }
-    // Guardamos el objeto COMPLETO. 
-    // Ahora 'direccion' viajará a tu base de datos o perfil automáticamente.
-const nuevoUsuario = {
-        nombre,
-        telefono,
-        direccion,
-        correo,
-        pass,
-        rol: "cliente"
-    };
 
-    localStorage.setItem("user", JSON.stringify(nuevoUsuario));
-    alert("✨ ¡Cuenta creada con éxito!");
-    window.location.href = "index.html";
+    try {
+        const response = await fetch('http://localhost:3000/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                nombre, 
+                correo, 
+                telefono, 
+                direccion,
+                contraseña: pass 
+            })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            // Guardar token y datos
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+            
+            alert("✨ ¡Cuenta creada con éxito!");
+            window.location.href = "index.html";
+        } else {
+            alert(data.error || "Error al registrarse");
+        }
+    } catch (error) {
+        alert("Error de conexión con el servidor");
+        console.error(error);
+    }
 });

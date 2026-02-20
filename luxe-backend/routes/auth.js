@@ -113,4 +113,14 @@ router.put('/perfil', async (req, res) => {
     }
 });
 
+// VER TODOS LOS USUARIOS (SOLO PARA PRUEBAS)
+router.get('/usuarios', async (req, res) => {
+    try {
+        const usuarios = await User.find().select('-contraseña');
+        res.json(usuarios);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 module.exports = router;

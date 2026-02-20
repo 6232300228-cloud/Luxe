@@ -17,67 +17,70 @@ toLogin.addEventListener("click", () => {
     loginSection.classList.remove("hidden");
 });
 
-/* LOGIN */
+/* LOGIN (Sincronizado con Correo y Contraseña) */
 btnLogin.addEventListener("click", () => {
-    let nombre = document.getElementById("usuario").value;
-    let correo = document.getElementById("correo").value;
+    // Cambiamos 'usuario' por los nuevos campos de correo y pass
+    let correo = document.getElementById("login-correo").value;
+    let pass = document.getElementById("login-pass").value;
 
-    if (nombre === "" || !correo.includes("@")) {
-        alert("⚠️ Completa los datos correctamente");
+    if (correo === "" || !correo.includes("@") || pass === "") {
+        alert("⚠️ Por favor, ingresa tu correo y contraseña correctamente");
         return;
     }
 
-    // --- NUEVA LÓGICA DE ROLES ---
-    let rol = "cliente"; // Por defecto es cliente
+    // --- LÓGICA DE ROLES PROFESIONAL ---
+    let rol = "cliente"; 
 
-    // Simulamos usuarios especiales para el profesor:
-    // Si el nombre de usuario es "admin", será Administrador
-    // Si el nombre de usuario es "empleado", será Empleado
-   if (correo === "admin@luxe.com") {
+    if (correo === "admin@luxe.com" && pass === "admin123") {
         rol = "admin";
-    } else if (correo === "staff@luxe.com") {
+    } else if (correo === "staff@luxe.com" && pass === "staff123") {
         rol = "empleado";
     }
-    // Guardamos el objeto con el ROL incluido
+
+    // Guardamos los datos simulando una sesión real
     const datosSesion = {
-        nombre: nombre,
         correo: correo,
-        rol: rol
+        rol: rol,
+        nombre: rol === "admin" ? "Administrador" : "Cliente Luxe" 
     };
+
     localStorage.setItem("user", JSON.stringify(datosSesion));
     localStorage.setItem("usuarioActual", JSON.stringify(datosSesion));
 
-    alert(`✅ Bienvenida, ${nombre}`);
+    alert(`✅ Acceso concedido como: ${rol.toUpperCase()}`);
 
-    // --- REDIRECCIÓN INTELIGENTE ---
+    // REDIRECCIÓN
     if (rol === "admin" || rol === "empleado") {
-        // Si es personal de la tienda, va al Dashboard
         window.location.href = "dashboard.html";
     } else {
-        // Si es un cliente normal, va a la tienda
         window.location.href = "index.html";
     }
 });
 
-/* REGISTRO */
+/* REGISTRO (Incluye Dirección para el Perfil) */
 btnRegister.addEventListener("click", () => {
-
     const nombre = document.getElementById("reg-nombre").value;
-    const correo = document.getElementById("reg-correo").value;
     const telefono = document.getElementById("reg-telefono").value;
+    const direccion = document.getElementById("reg-direccion").value; // Captura dirección
+    const correo = document.getElementById("reg-correo").value;
+    const pass = document.getElementById("reg-pass").value;
 
-    if (nombre === "" || telefono === "" || !correo.includes("@")) {
-        alert("⚠️ Llena todos los campos");
+    if (nombre === "" || telefono === "" || direccion === "" || !correo.includes("@") || pass === "") {
+        alert("⚠️ Por favor, llena todos los campos de tu registro Luxe");
         return;
     }
-
-    localStorage.setItem("user", JSON.stringify({
+    // Guardamos el objeto COMPLETO. 
+    // Ahora 'direccion' viajará a tu base de datos o perfil automáticamente.
+const nuevoUsuario = {
         nombre,
-        correo,
         telefono,
+        direccion,
+        correo,
+        pass,
         rol: "cliente"
-    }));
+    };
 
-    alert("Cuenta creada correctamente");
+    localStorage.setItem("user", JSON.stringify(nuevoUsuario));
+    alert("✨ ¡Cuenta creada con éxito!");
     window.location.href = "index.html";
 });

@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Acceso - Tienda Profesional</title>
+  <title>Acceso - Luxe Maquillaje</title>
   <link rel="stylesheet" href=".css/style.css"> 
 </head>
 
@@ -20,26 +20,54 @@
 <center style="padding:50px;">
   <div class="auth-container">
     
-    <div id="login-section" class="auth-box">
-      <h2>Iniciar sesión</h2>
-      <input id="usuario" placeholder="Nombre de usuario"><br>
-      <input id="correo" placeholder="Correo electrónico"><br>
-      <button id="btnLogin">Entrar</button>
-      <p class="toggle-text">¿No tienes cuenta? <span id="to-register">Regístrate</span></p>
-    </div>
+   <div id="login-section" class="auth-box">
+  <h2>Iniciar sesión</h2>
+  <input type="email" id="login-correo" placeholder="Correo electrónico" required><br>
+  <input type="password" id="login-pass" placeholder="Contraseña" required><br>
+  <button id="btnLogin">Entrar</button>
+  <p class="toggle-text">¿No tienes cuenta? <span id="to-register">Regístrate</span></p>
+</div>
 
-   <div id="register-section" class="auth-box hidden card">
-      <h2>Crear cuenta</h2>
-      <input id="reg-nombre" placeholder="Nombre completo"><br>
-      <input id="reg-telefono" placeholder="Número de teléfono"><br>
-      <input id="reg-correo" placeholder="Correo electrónico"><br>
-      <input id="reg-pass" type="password" placeholder="Contraseña"><br>
-      <button id="btnRegister"> Registrarme </button>
-      <p class="toggle-text">¿Ya tienes cuenta? <span id="to-login">Inicia sesión</span></p>
-    </div>
+<div id="register-section" class="auth-box hidden card">
+  <h2>Crear cuenta</h2>
+  <input type="text" id="reg-nombre" placeholder="Nombre completo" required><br>
+  <input type="email" id="reg-correo" placeholder="Correo electrónico" required><br>
+  <input type="password" id="reg-pass" placeholder="Contraseña" required><br>
+  <h2>Contacto y Envío:</h2>
+  <input type="tel" id="reg-telefono" placeholder="Número de teléfono" required><br>
+  <input type="text" id="reg-direccion" placeholder="Calle, ciudad, código postal..." required><br> 
 
+  <button id="btnRegister"> Registrarme </button>
+  <p class="toggle-text">¿Ya tienes cuenta? <span id="to-login">Inicia sesión</span></p>
+</div>
   </div>
 </center>
+<footer class="footer-luxe">
+    <div class="footer-container">
+        <div class="footer-column">
+            <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
+            <p class="footer-description">Realzando tu belleza natural con productos de alta gama.✨</p>
+            <div class="social-links">
+                <a href="https://instagram.com" target="_blank">IG</a>
+                <a href="https://facebook.com" target="_blank">FB</a>
+                <a href="https://tiktok.com" target="_blank">TK</a>
+            </div>
+        </div>
+
+        <div class="footer-column newsletter">
+            <h3>Únete al Club Luxe</h3>
+            <p>Recibe ofertas exclusivas.</p>
+            <div class="newsletter-form">
+                <input type="email" id="newsletter-email" placeholder="Tu email...">
+                <button onclick="suscribirse()">Unirse</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+    </div>
+</footer>
 
 <script src=".js/login.js"></script>
 </body>

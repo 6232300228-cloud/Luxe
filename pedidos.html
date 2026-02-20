@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Mis Pedidos - Luxe</title>
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href=".css/style.css">
 </head>
 <body>
 
@@ -25,8 +25,33 @@
     <div id="contenedor-pedidos" style="max-width: 800px; margin-top: 30px;"></div>
   </center>
 </main>
+<footer class="footer-luxe">
+    <div class="footer-container">
+        <div class="footer-column">
+            <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
+            <p class="footer-description">Realzando tu belleza natural con productos de alta gama.✨</p>
+            <div class="social-links">
+                <a href="https://instagram.com" target="_blank">IG</a>
+                <a href="https://facebook.com" target="_blank">FB</a>
+                <a href="https://tiktok.com" target="_blank">TK</a>
+            </div>
+        </div>
 
-<script src="js/pedidos.js"></script>
-<script src="js/user.js"></script>
+        <div class="footer-column newsletter">
+            <h3>Únete al Club Luxe</h3>
+            <p>Recibe ofertas exclusivas.</p>
+            <div class="newsletter-form">
+                <input type="email" id="newsletter-email" placeholder="Tu email...">
+                <button onclick="suscribirse()">Unirse</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+    </div>
+</footer>
+<script src=".js/pedidos.js"></script>
+<script src=".js/user.js"></script>
 </body>
 </html>

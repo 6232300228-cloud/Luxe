@@ -495,7 +495,7 @@ h1, h2, h3 {
   height: 100%;
   object-fit: cover;
   /* Degradado hacia arriba para fundirse con el color del cuadro */
-  mask-image: linear-gradient(to top, black 85%, transparent 100%);
+  mask-image: linear-gradient(to top, black 80%, transparent 100%);
   -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%);
 }
 
@@ -765,7 +765,142 @@ input:focus {
   width: 100%;
 }
 
-/* GRID PRODUCTOS */
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+    padding: 20px;
+    background: #fff; /* Fondo blanco limpio para que resalten los productos */
+}
+
+/* La Tarjeta */
+.product-card-luxe {
+    position: relative;
+    background: #ffffff;
+    border: 1px solid #f2f2f2;
+    display: flex;
+    flex-direction: column;
+    text-align: left; /* TODO A LA IZQUIERDA */
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.product-card-luxe:hover {
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+    transform: translateY(-5px);
+}
+
+/* Imagen del producto */
+.img-container {
+    width: 100%;
+    height: 250px; /* Altura fija para que todas sean iguales */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff; /* Fondo blanco por si la imagen es pequeña */
+    overflow: hidden;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.img-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Ajusta la imagen al cuadro sin deformarla */
+    transition: transform 0.5s ease;
+}
+
+/* Efecto de zoom suave al pasar el mouse, muy estilo Maybelline */
+.product-card-luxe:hover .img-container img {
+    transform: scale(1.1);
+}
+
+/* El Corazón de Favoritos (Arriba Derecha) */
+.heart-fav {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 26px;
+    color: #e0e0e0; /* Gris elegante cuando no es fav */
+    cursor: pointer;
+    z-index: 3;
+    transition: color 0.3s ease, transform 0.2s ease;
+    padding: 0;
+}
+
+.heart-fav:hover {
+    transform: scale(1.2);
+}
+
+.heart-fav.active {
+    color: #ff4d6d; /* Rosa/Rojo de tu marca */
+    animation: pulse 0.3s ease;
+}
+
+/* Información del Texto */
+.info-luxe {
+    padding: 15px;
+    flex-grow: 1;
+}
+
+.info-luxe h4 {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #000;
+    line-height: 1.3;
+}
+
+.subtitle-luxe {
+    font-size: 11px;
+    color: #888;
+    margin: 5px 0 10px 0;
+    font-weight: 400;
+}
+
+.price-luxe {
+    font-size: 18px;
+    font-weight: 600;
+    color: #000;
+    margin: 0;
+}
+
+/* Botón de Compra (Barra inferior completa) */
+.btn-buy-luxe {
+    background: #441e1eab;
+    color: #fff;
+    border: none;
+    width: 100%;
+    padding: 18px;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background 0.3s;
+}
+
+.btn-buy-luxe:hover {
+    background: #ff4d6d;
+}
+
+/* Animación de latido para el corazón */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1.2); }
+}
+
+/* Ajuste para los enlaces */
+.product-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
 .products {
   flex: 1;
   display: grid;

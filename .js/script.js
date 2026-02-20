@@ -75,31 +75,8 @@ function showToast(msg) {
 }
 
 /* CARGAR PRODUCTOS*/
-
-function renderBestSellers() {
-  const bestContainer = document.getElementById("best-products");
-  if (!bestContainer) return;
-
-  const best = [...products].sort((a,b) => b.price - a.price).slice(0,3);
-
-  best.forEach(p => {
-    bestContainer.innerHTML += `
-      <div class="card badge-best">
-        <span class="badge">Más Vendido</span>
-        <img src="${p.img}">
-        <h4>${p.name}</h4>
-        <p>$${p.price}</p>
-        <button onclick="openQuickView(${p.id})">Vista rápida</button>
-      </div>
-    `;
-  });
-}
-
-
 /* MOSTRAR PRODUCTOS*/
-
 function renderProducts() {
-  
   productList.innerHTML = "";
 
   if (filtered.length === 0) {
@@ -108,15 +85,31 @@ function renderProducts() {
   }
 
   filtered.forEach(p => {
+    // Verificamos si ya es favorito para que el corazón salga pintado
+    let favs = JSON.parse(localStorage.getItem("favs")) || [];
+    let isFav = favs.some(f => f.id === p.id);
+
     productList.innerHTML += `
-      <div class="card">
-        <a href="producto.html?id=${p.id}">
-          <img src="${p.img}">
-          <h4>${p.name}</h4>
+      <div class="product-card-luxe">
+        
+        <button class="heart-fav ${isFav ? 'active' : ''}" onclick="addToFav(${p.id})">
+          ❤
+        </button>
+
+        <a href="producto.html?id=${p.id}" class="product-link">
+          <div class="img-container">
+            <img src="${p.img}" alt="${p.name}">
+          </div>
+          <div class="info-luxe">
+            <h4>${p.name.toUpperCase()}</h4>
+            <p class="subtitle-luxe">DISPONIBLE AHORA</p>
+            <p class="price-luxe">$${p.price}</p>
+          </div>
         </a>
-        <p>$${p.price}</p>
-        <button onclick="addToCart(${p.id})">Agregar 🛒</button>
-        <button onclick="addToFav(${p.id})">❤️ Favorito</button>
+
+        <button class="btn-buy-luxe" onclick="addToCart(${p.id})">
+          Agregar al carrito
+        </button>
       </div>
     `;
   });

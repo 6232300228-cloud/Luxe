@@ -1,12 +1,16 @@
+// ============================================
+// 1. REFERENCIAS
+// ============================================
 const loginSection = document.getElementById("login-section");
 const registerSection = document.getElementById("register-section");
 const toRegister = document.getElementById("to-register");
 const toLogin = document.getElementById("to-login");
-
 const btnLogin = document.getElementById("btnLogin");
 const btnRegister = document.getElementById("btnRegister");
 
-// CAMBIO ENTRE FORMULARIOS
+// ============================================
+// 2. CAMBIO ENTRE FORMULARIOS (NUEVO)
+// ============================================
 toRegister.addEventListener("click", () => {
     loginSection.classList.add("hidden");
     registerSection.classList.remove("hidden");
@@ -17,12 +21,14 @@ toLogin.addEventListener("click", () => {
     loginSection.classList.remove("hidden");
 });
 
-// LOGIN (Conectado a MongoDB)
+// ============================================
+// 3. LOGIN (Código que ya tenías)
+// ============================================
 btnLogin.addEventListener("click", async () => {
     let correo = document.getElementById("login-correo").value;
-    let pass = document.getElementById("login-pass").value;
+    let contraseña = document.getElementById("login-pass").value;
 
-    if (correo === "" || !correo.includes("@") || pass === "") {
+    if (correo === "" || !correo.includes("@") || contraseña === "") {
         alert("⚠️ Por favor, ingresa tu correo y contraseña correctamente");
         return;
     }
@@ -31,19 +37,16 @@ btnLogin.addEventListener("click", async () => {
         const response = await fetch('http://localhost:3000/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ correo, contraseña: pass }) // Nota: 'contraseña' en backend
+            body: JSON.stringify({ correo, contraseña })
         });
 
         const data = await response.json();
 
         if (response.ok) {
-            // Guardar token y datos en localStorage
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
-
             alert(`✅ Bienvenido ${data.user.nombre}`);
 
-            // Redirección por rol
             if (data.user.role === "admin" || data.user.role === "empleado") {
                 window.location.href = "dashboard.html";
             } else {
@@ -58,15 +61,17 @@ btnLogin.addEventListener("click", async () => {
     }
 });
 
-// REGISTRO (Conectado a MongoDB)
+// ============================================
+// 4. REGISTRO (Código que ya tenías)
+// ============================================
 btnRegister.addEventListener("click", async () => {
     const nombre = document.getElementById("reg-nombre").value;
     const telefono = document.getElementById("reg-telefono").value;
     const direccion = document.getElementById("reg-direccion").value;
     const correo = document.getElementById("reg-correo").value;
-    const pass = document.getElementById("reg-pass").value;
+    const contraseña = document.getElementById("reg-pass").value;
 
-    if (nombre === "" || telefono === "" || direccion === "" || !correo.includes("@") || pass === "") {
+    if (nombre === "" || telefono === "" || direccion === "" || !correo.includes("@") || contraseña === "") {
         alert("⚠️ Por favor, llena todos los campos de tu registro Luxe");
         return;
     }
@@ -80,17 +85,15 @@ btnRegister.addEventListener("click", async () => {
                 correo, 
                 telefono, 
                 direccion,
-                contraseña: pass 
+                contraseña 
             })
         });
 
         const data = await response.json();
 
         if (response.ok) {
-            // Guardar token y datos
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
-            
             alert("✨ ¡Cuenta creada con éxito!");
             window.location.href = "index.html";
         } else {
@@ -101,3 +104,8 @@ btnRegister.addEventListener("click", async () => {
         console.error(error);
     }
 });
+
+
+
+
+

@@ -1612,3 +1612,7 @@ padding: 15px;
     color: #aaa;
     margin-top: 15px;
 }
+/* Clase para ocultar elementos (cambiar entre login/registro) */
+.hidden {
+    display: none !important;
+}

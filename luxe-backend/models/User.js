@@ -8,11 +8,6 @@ const userSchema = new mongoose.Schema({
     direccion: String,
     tarjeta: String,
     role: { type: String, default: 'cliente' },
-    
-    // Campos para verificación de email
-    verified: { type: Boolean, default: false },
-    verificationToken: String,
-    
     fechaRegistro: { type: Date, default: Date.now }
 });
 

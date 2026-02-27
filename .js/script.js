@@ -1,6 +1,6 @@
 let products = [
-  { id:1, name:"Labial Cremoso Soft Matte", price:250, category:"labial", img:"img/labial.png", desc:"Labial suave, matte y de larga duración." },
-  { id:2, name:"Ultimate Shadow Palette", price:400, category:"sombra", img:"img/paletas.png", desc:"Paleta profesional con tonos increíbles." },
+ { id: 1, name: "Labial Cremoso Soft Matte", price: 250, category: "labial", brand: "bissu", img: "img/labial.png", desc: "..." },
+  { id: 2, name: "Ultimate Shadow Palette", price: 400, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "..." },
   { id:3, name:"Can't Stop Foundation", price:350, category:"base", img:"img/base.png", desc:"Base resistente todo el día." },
   { id:4, name:"HD Photogenic Concealer", price:280, category:"corrector", img:"img/corrector.png", desc:"Corrector de alta cobertura y acabado natural." },
   { id:5, name:"Delineador negro waterproof", price:95, category:"ojos", img:"img/delineador.png", desc:"Delineador de alta duración." },
@@ -344,6 +344,44 @@ function addToFav(id) {
 
   showToast("Agregado a favoritos ✨");
   updateFavCounter(); // Identificador: Llamada a animación
+}
+
+/*por marcas*/ 
+let categoriaActual = 'all';
+let marcaActual = 'all';
+
+// Función para filtrar por categoría
+function filterCategory(cat) {
+    categoriaActual = cat;
+    filtrarProductos();
+}
+
+// Función para filtrar por marca
+function filterBrand(brand) {
+    marcaActual = brand;
+    filtrarProductos();
+}
+
+// Función principal que decide qué mostrar
+function filtrarProductos() {
+    // Selecciona todos tus elementos de producto (asegúrate de que tengan la clase 'producto')
+    const productos = document.querySelectorAll('.producto'); 
+    
+    productos.forEach(producto => {
+        // Obtiene las categorías y marcas desde los atributos data- en tu HTML
+        const cat = producto.getAttribute('data-category');
+        const brand = producto.getAttribute('data-brand');
+        
+        const cumpleCategoria = (categoriaActual === 'all' || cat === categoriaActual);
+        const cumpleMarca = (marcaActual === 'all' || brand === marcaActual);
+        
+        // Si cumple ambas condiciones, lo mostramos, si no, lo ocultamos
+        if (cumpleCategoria && cumpleMarca) {
+            producto.style.display = 'block';
+        } else {
+            producto.style.display = 'none';
+        }
+    });
 }
 
 /* BUSCADOR, FILTROS Y ORDEN*/

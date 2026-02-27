@@ -726,38 +726,30 @@ input:focus {
 }
 
 /*marca*/
-/* Estilo para el nuevo filtro de marcas */
-.brand-menu {
-  text-align: center;
-  margin: 20px 0;
-}
-
-.filter-subtitle {
-  font-family: 'Playfair Display', serif;
-  margin-bottom: 10px;
-  color: #333;
-}
-
 .brand-container {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  flex-wrap: wrap;
+    display: flex;
+    justify-content: center;
+    gap: 15px; /* Más espacio entre ellos */
+    flex-wrap: wrap;
+    margin-bottom: 20px;
 }
 
 .brand-container button {
-  background: transparent; /* Fondo transparente */
-  border: 1px solid #ff4d6d; /* Borde rosa igual al de tu marca */
-  color: #ff4d6d;
-  padding: 8px 16px;
-  border-radius: 20px; /* Más redondeado para diferenciarlo */
-  cursor: pointer;
-  transition: all 0.3s ease;
+    background: #f8f8f8;
+    border: 2px solid #e79a9a; /* Borde oscuro, no rosa */
+    color: #834979;
+    padding: 12px 25px; /* Más grandes */
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-.brand-container button:hover {
-  background: #ff4d6d;
-  color: white;
+.brand-container button:hover, 
+.brand-container button.active {
+    background: #dd6fd41e;
+    color: #fff;
 }
 /*categoria*/
 .category-menu button.active {

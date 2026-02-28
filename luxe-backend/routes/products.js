@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 });
 
 // RUTA 2: Cargar productos iniciales (POST) - ¡PRIMERO LAS RUTAS ESPECÍFICAS!
-router.get('/seed', async (req, res) => {
+router.post('/seed', async (req, res) => {
     try {
         const productosIniciales = [
             { id:1, name:"Labial Cremoso Soft Matte", price:250, category:"labial", img:"img/labial.webp", desc:"Labial suave, matte y de larga duración." },
@@ -51,3 +51,32 @@ router.get('/:id', async (req, res) => {
 });
 
 module.exports = router;
+
+
+
+
+// REDUCIR STOCK (cuando se vende)
+router.put('/reducir-stock/:productoId', verificarToken, async (req, res) => {
+    try {
+        const { cantidad } = req.body;
+        const producto = await Product.findOne({ id: req.params.productoId });
+        
+        if (!producto) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+        
+        if (producto.stock < cantidad) {
+            return res.status(400).json({ error: 'Stock insuficiente' });
+        }
+        
+        producto.stock -= cantidad;
+        await producto.save();
+        
+        res.json({ 
+            mensaje: '✅ Stock actualizado', 
+            nuevoStock: producto.stock 
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});

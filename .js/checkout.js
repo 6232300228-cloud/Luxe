@@ -110,6 +110,22 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
             console.log("✅ Pedido guardado:", data);
 
+
+
+
+            // En checkout.js, dentro del try después de guardar el pedido:
+
+            // Reducir stock de cada producto
+            for (const item of carrito) {
+                await fetch(`http://localhost:3000/api/products/reducir-stock/${item.id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+             },
+            body: JSON.stringify({ cantidad: item.cantidad })
+        });
+}
             // ============================================
             // GUARDAR TICKET CON TODOS LOS DATOS
             // ============================================

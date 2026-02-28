@@ -76,41 +76,30 @@ function showToast(msg) {
 
 /* CARGAR PRODUCTOS*/
 function renderProducts() {
-  productList.innerHTML = "";
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+    productList.innerHTML = "";
 
-  if (filtered.length === 0) {
-    productList.innerHTML = "<h2>No se encontraron productos 😥</h2>";
-    return;
-  }
+    filtered.forEach(p => {
+        const stockClass = p.stock <= 0 ? 'agotado' : '';
+        const botonTexto = p.stock <= 0 ? 'AGOTADO' : 'Agregar 🛒';
+        const botonDisabled = p.stock <= 0 ? 'disabled' : '';
 
-  filtered.forEach(p => {
-    const isFav = favs.some(f => f.id === p.id);
-
-    productList.innerHTML += `
-      <div class="product-card-luxe">
-        
-       <button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">
-          ❤
-        </button>
-
-        <a href="producto.html?id=${p.id}" class="product-link">
-          <div class="img-container">
-            <img src="${p.img}" alt="${p.name}">
-          </div>
-          <div class="info-luxe">
-            <h4>${p.name.toUpperCase()}</h4>
-            <p class="subtitle-luxe">DISPONIBLE AHORA</p>
-            <p class="price-luxe">$${p.price}</p>
-          </div>
-        </a>
-
-        <button class="btn-buy-luxe" onclick="addToCart(${p.id})">
-          Agregar al carrito
-        </button>
-      </div>
-    `;
-});
+        productList.innerHTML += `
+            <div class="card ${stockClass}">
+                <a href="producto.html?id=${p.id}">
+                    <img src="${p.img}">
+                    <h4>${p.name}</h4>
+                </a>
+                <p>$${p.price}</p>
+                <p style="font-size: 12px; color: ${p.stock > 20 ? '#4CAF50' : (p.stock > 0 ? '#ff9800' : '#f44336')};">
+                    Stock: ${p.stock} unidades
+                </p>
+                <button onclick="addToCart(${p.id})" ${botonDisabled} style="${p.stock <= 0 ? 'background: #ccc; cursor: not-allowed;' : ''}">
+                    ${botonTexto}
+                </button>
+                <button onclick="addToFav(${p.id})">❤️ Favorito</button>
+            </div>
+        `;
+    });
 }
 /*favoritos*/
 function toggleFav(event, id) {
@@ -280,13 +269,12 @@ function updateCartCounter() {
 }
 
 function addToCart(id) {
-  let cart = JSON.parse(localStorage.getItem("carrito")) || [];
   let product = products.find(p => p.id == id);
-
-  if (!product) {
-    console.log("Producto no encontrado:", id);
-    return;
-  }
+    
+    if (product.stock <= 0) {
+        showToast("❌ Producto agotado");
+        return;
+    }
 
   let existing = cart.find(x => x.id == id);
 

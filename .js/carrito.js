@@ -1,3 +1,6 @@
+// ============================================
+// 1. VARIABLES GLOBALES
+// ============================================
 const cartItems = document.getElementById("cart-items");
 const totalText = document.getElementById("total");
 const btnPagarContainer = document.getElementById("btn-pagar-container"); 
@@ -5,6 +8,9 @@ const sugerenciasContenedor = document.getElementById("productos-sugeridos");
 
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
+// ============================================
+// 2. ACTUALIZAR HEADER (FAVORITOS)
+// ============================================
 function actualizarHeader() {
     const favCount = document.getElementById("fav-count");
     let favsActual = JSON.parse(localStorage.getItem("favs")) || [];
@@ -14,6 +20,9 @@ function actualizarHeader() {
     }
 }
 
+// ============================================
+// 3. CATÁLOGO DE SUGERENCIAS
+// ============================================
 const catalogoSugerencias = [
     { nombre: "Labial Glossy Rosa", precio: 120, img: "img/labial2.png" },
     { nombre: "Mascara de Pestañas", precio: 180, img: "img/rimel.png" },
@@ -22,6 +31,9 @@ const catalogoSugerencias = [
     { nombre: "Iluminador Sun", precio: 210, img: "img/iluminador.png" }
 ];
 
+// ============================================
+// 4. RENDERIZAR CARRITO
+// ============================================
 function renderCarrito() {
     cartItems.innerHTML = "";
 
@@ -95,7 +107,7 @@ function renderCarrito() {
         }
     }
 
-    // RENDERIZADO DEL TOTAL (Sin subtotal si el envío es gratis)
+    // RENDERIZADO DEL TOTAL
     if (envio > 0) {
         totalText.innerHTML = `
             <div style="font-size: 14px; color: #666;">Subtotal: $${subtotal.toFixed(2)}</div>
@@ -120,6 +132,9 @@ function renderCarrito() {
     actualizarHeader();
 }
 
+// ============================================
+// 5. CARGAR SUGERENCIAS
+// ============================================
 function cargarSugerencias() {
     if (!sugerenciasContenedor) return;
     const sugerenciasFiltradas = catalogoSugerencias.filter(prod => 
@@ -145,6 +160,38 @@ function cargarSugerencias() {
     });
 }
 
+// ============================================
+// 6. AGREGAR SUGERENCIA AL CARRITO
+// ============================================
+window.agregarSugerencia = function(prod) {
+    prod.cantidad = 1;
+    carrito.push(prod);
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    renderCarrito();
+}
+
+// ============================================
+// 7. CAMBIAR CANTIDAD
+// ============================================
+function cambiarCantidad(index, cambio) {
+    carrito[index].cantidad += cambio;
+    if (carrito[index].cantidad <= 0) carrito[index].cantidad = 1;
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    renderCarrito();
+}
+
+// ============================================
+// 8. ELIMINAR PRODUCTO
+// ============================================
+function eliminarProducto(index) {
+    carrito.splice(index, 1);
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    renderCarrito();
+}
+
+// ============================================
+// 9. VACIAR CARRITO (solo localStorage)
+// ============================================
 function vaciarCarrito() {
     if(confirm("¿Vaciar carrito?")) {
         carrito = [];
@@ -153,24 +200,7 @@ function vaciarCarrito() {
     }
 }
 
-window.agregarSugerencia = function(prod) {
-    prod.cantidad = 1;
-    carrito.push(prod);
-    localStorage.setItem("carrito", JSON.stringify(carrito));
-    renderCarrito();
-}
-
-function cambiarCantidad(index, cambio) {
-    carrito[index].cantidad += cambio;
-    if (carrito[index].cantidad <= 0) carrito[index].cantidad = 1;
-    localStorage.setItem("carrito", JSON.stringify(carrito));
-    renderCarrito();
-}
-
-function eliminarProducto(index) {
-    carrito.splice(index, 1);
-    localStorage.setItem("carrito", JSON.stringify(carrito));
-    renderCarrito();
-}
-
+// ============================================
+// 10. INICIALIZAR
+// ============================================
 renderCarrito();

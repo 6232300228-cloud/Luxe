@@ -1,7 +1,6 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const Order = require('../models/Order');
-const Cart = require('../models/Cart');
 const User = require('../models/User');
 
 const router = express.Router();
@@ -23,62 +22,48 @@ const verificarToken = (req, res, next) => {
 };
 
 // ============================================
-// CREAR UN NUEVO PEDIDO DESDE EL CARRITO
+// CREAR UN NUEVO PEDIDO (RECIBE PRODUCTOS DEL FRONTEND)
 // ============================================
 router.post('/crear', verificarToken, async (req, res) => {
     try {
-        const { metodoPago, direccionEntrega, notas } = req.body;
+        const { usuario, productos, total, metodoPago, fecha, estado } = req.body;
         const usuarioId = req.usuarioId;
 
-        // 1. Obtener el carrito del usuario
-        const carrito = await Cart.findOne({ usuarioId });
-        
-        if (!carrito || carrito.productos.length === 0) {
-            return res.status(400).json({ error: '❌ El carrito está vacío' });
+        // Validaciones básicas
+        if (!productos || productos.length === 0) {
+            return res.status(400).json({ error: '❌ El pedido no tiene productos' });
         }
 
-        // 2. Obtener datos del usuario
-        const usuario = await User.findById(usuarioId);
-        if (!usuario) {
-            return res.status(404).json({ error: '❌ Usuario no encontrado' });
+        if (!usuario || !usuario.direccion) {
+            return res.status(400).json({ error: '❌ Falta dirección de envío' });
         }
 
-        // 3. Calcular total
-        const total = carrito.productos.reduce((sum, item) => 
-            sum + (item.precio * item.cantidad), 0
-        );
+        console.log('📥 Recibiendo pedido:', { usuarioId, productos, total });
 
-        // 4. Crear el pedido
+        // Crear el pedido directamente con los datos recibidos
         const nuevoPedido = new Order({
             usuarioId: usuarioId,
             usuario: {
                 nombre: usuario.nombre,
                 correo: usuario.correo,
-                direccion: direccionEntrega || usuario.direccion,
-                telefono: usuario.telefono
+                direccion: usuario.direccion
             },
-            productos: carrito.productos.map(item => ({
-                productoId: item.productoId,
+            productos: productos.map(item => ({
                 nombre: item.nombre,
                 precio: item.precio,
                 cantidad: item.cantidad,
-                imagen: item.imagen
+                imagen: item.imagen || ''
             })),
             total: total,
             metodoPago: metodoPago,
-            estado: 'pagado', // Asumimos que el pago fue exitoso
-            notas: notas || '',
+            estado: 'pagado',
             fechaPedido: new Date()
         });
 
         await nuevoPedido.save();
 
-        // 5. Vaciar el carrito después de la compra
-        carrito.productos = [];
-        carrito.total = 0;
-        await carrito.save();
+        console.log('✅ Pedido guardado con ID:', nuevoPedido._id);
 
-        // 6. Respuesta exitosa
         res.status(201).json({
             mensaje: '✅ Pedido creado exitosamente',
             pedido: {
@@ -90,7 +75,7 @@ router.post('/crear', verificarToken, async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error creando pedido:', error);
+        console.error('❌ Error creando pedido:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
@@ -101,7 +86,7 @@ router.post('/crear', verificarToken, async (req, res) => {
 router.get('/mis-pedidos', verificarToken, async (req, res) => {
     try {
         const pedidos = await Order.find({ usuarioId: req.usuarioId })
-            .sort({ fechaPedido: -1 }); // Más recientes primero
+            .sort({ fechaPedido: -1 });
 
         res.json(pedidos);
     } catch (error) {
@@ -127,41 +112,6 @@ router.get('/:pedidoId', verificarToken, async (req, res) => {
         res.json(pedido);
     } catch (error) {
         console.error('Error obteniendo pedido:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
-
-// ============================================
-// CANCELAR UN PEDIDO (si está pendiente)
-// ============================================
-router.put('/cancelar/:pedidoId', verificarToken, async (req, res) => {
-    try {
-        const pedido = await Order.findOne({
-            _id: req.params.pedidoId,
-            usuarioId: req.usuarioId
-        });
-
-        if (!pedido) {
-            return res.status(404).json({ error: '❌ Pedido no encontrado' });
-        }
-
-        // Solo se pueden cancelar pedidos pendientes
-        if (pedido.estado !== 'pendiente') {
-            return res.status(400).json({ 
-                error: '❌ No se puede cancelar un pedido que ya fue procesado' 
-            });
-        }
-
-        pedido.estado = 'cancelado';
-        await pedido.save();
-
-        res.json({ 
-            mensaje: '✅ Pedido cancelado exitosamente',
-            pedido: pedido
-        });
-
-    } catch (error) {
-        console.error('Error cancelando pedido:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });

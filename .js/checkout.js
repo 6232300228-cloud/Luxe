@@ -30,7 +30,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if(document.getElementById("direccion")) document.getElementById("direccion").value = user.direccion || "";
     }
 
+    // ============================================
     // PROCESAR PAGO
+    // ============================================
     btnPagar.addEventListener("click", async () => {
         // Verificar usuario
         if (!user || !token) { 
@@ -50,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return; 
         }
 
-        // 🔥 IMPORTANTE: Obtener carrito de LOCALSTORAGE, NO de MongoDB
+        // Obtener carrito de localStorage
         const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
         
         if (carrito.length === 0) { 
@@ -58,14 +60,18 @@ document.addEventListener("DOMContentLoaded", () => {
             return; 
         }
 
+        // Calcular total (usando pagoInfo o calculando directamente)
+        const total = pagoInfo ? pagoInfo.total : carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+
         console.log("🛒 Carrito a pagar:", carrito);
+        console.log("💰 Total:", total);
 
         // Deshabilitar botón
         btnPagar.innerText = "Procesando... ✨";
         btnPagar.disabled = true;
 
         try {
-            // Preparar datos del pedido
+            // Preparar datos del pedido para el backend
             const pedidoData = {
                 usuario: {
                     nombre: user.nombre,
@@ -78,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     cantidad: item.cantidad,
                     imagen: item.img
                 })),
-                total: pagoInfo ? pagoInfo.total : carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0),
+                total: total,
                 metodoPago: metodo,
                 fecha: new Date().toISOString(),
                 estado: "pagado"
@@ -104,13 +110,25 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
             console.log("✅ Pedido guardado:", data);
 
-            // Guardar ticket
+            // ============================================
+            // GUARDAR TICKET CON TODOS LOS DATOS
+            // ============================================
             localStorage.setItem("ticket", JSON.stringify({
-                ...pedidoData,
-                id: data.pedido?.id || Date.now()
+                id: data.pedido?.id || Date.now(),
+                fecha: new Date().toISOString(),
+                cliente: user.nombre,
+                correo: user.correo,
+                direccion: direccion,
+                metodoPago: metodo,
+                total: total,
+                productos: carrito.map(item => ({
+                    nombre: item.nombre,
+                    precio: item.precio,
+                    cantidad: item.cantidad
+                }))
             }));
 
-            // LIMPIAR TODO
+            // Limpiar carrito
             localStorage.removeItem("carrito");
             localStorage.removeItem("totalAPagar");
 

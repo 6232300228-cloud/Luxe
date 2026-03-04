@@ -11,53 +11,53 @@
 <body>
 
 <header class="header">
-    <div style="display: flex; align-items: center; gap: 15px;">
+
+  <div class="header-left">
     <div class="menu-hamburger" onclick="toggleMenu()">
       <span></span>
       <span></span>
       <span></span>
     </div>
-  <div class="logo-container">
+
     <a href="index.html" class="logo-link">
-        <img src="img/logo.png" alt="Logo Luxe" class="logo">
-        <div class="slogan-box">
-          <span class="slogan-text">Tus marcas favoritas en un solo lugar</span>
-        </div>
+      <img src="img/logo.png" alt="Logo Luxe" class="logo">
+      <span class="slogan">Tus marcas favoritas en un solo lugar</span>
     </a>
   </div>
-  
-   
-  <div class="search-container">
-    <input type="text" id="search" placeholder="Buscar producto..." class="buscar">
-    <select id="sort" class="filtro">
-      <option value="default">Ordenar por...</option> 
-      <option value="az">Nombre A-Z</option>
-      <option value="za">Nombre Z-A</option>
-      <option value="precioAsc">Precio menor</option>
-      <option value="precioDesc">Precio mayor</option>
-    </select> 
+
+  <div class="header-center">
+    <div class="search-container">
+      <input type="text" id="search" placeholder="Buscar producto..." class="buscar">
+      <select id="sort" class="filtro">
+        <option value="default">Ordenar por...</option> 
+        <option value="az">Nombre A-Z</option>
+        <option value="za">Nombre Z-A</option>
+        <option value="precioAsc">Precio menor</option>
+        <option value="precioDesc">Precio mayor</option>
+      </select> 
+    </div>
   </div>
 
-  <div class="icons">
+  <div class="header-right icons">
     <a href="favoritos.html">❤️ <span id="fav-count">0</span></a>
     <a href="carrito.html">🛒 <span id="cart-count">0</span></a>
 
     <a href="login.html" id="login-btn">👤 Iniciar sesión</a>
 
     <div id="user-menu" class="dropdown" style="display: none;">
-        <button class="dropbtn">
-            <span id="user-name"></span> <i class="arrow">▼</i>
-        </button>
-        <div class="dropdown-content">
-            <a href="perfil.html">👤 Mi Perfil</a>
-            <a href="pedidos.html">📦 Mis Pedidos</a>
-            <hr>
-            <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
-        </div>
+      <button class="dropbtn">
+        <span id="user-name"></span> <i class="arrow">▼</i>
+      </button>
+      <div class="dropdown-content">
+        <a href="perfil.html">👤 Mi Perfil</a>
+        <a href="pedidos.html">📦 Mis Pedidos</a>
+        <hr>
+        <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
+      </div>
     </div>
   </div>
-</header>
 
+</header>
 <nav id="side-menu" class="side-nav">
   <span class="close-btn" onclick="toggleMenu()">&times;</span>
   <div class="menu-section">

@@ -36,6 +36,7 @@ h1, h2, h3 {
   position: sticky;
   top: 0;
   width: 100%;
+  height: 80px;
   z-index: 1000;
   background: rgba(160, 87, 87, 0.95);
   display: flex;
@@ -241,9 +242,30 @@ h1, h2, h3 {
 }
 
 .logo {
-  width: 155px; 
+  width: 120px; 
   height: auto;
   flex-shrink: 0;
+}
+.logo-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 15px;
+}
+
+.slogan-box {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid rgba(109, 59, 59, 0.4);
+    padding-left: 15px;
+}
+
+.slogan-text {
+    font-size: 15px;
+    color: #664343;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 300;
 }
 
 /* buscador y filtro*/
@@ -257,6 +279,7 @@ h1, h2, h3 {
 
 /* Estilos de iconos dentro del header */
 .icons {
+  margin-left: auto;
   display: flex;
   align-items: center;
   gap: 9px;
@@ -726,30 +749,72 @@ input:focus {
 }
 
 /*marca*/
-.brand-container {
+/* La tira de marcas */
+.brand-menu-sticky {
+    position: sticky;
+    /* Ajusta este número: si tu header mide 70px de alto, aquí pon 70px */
+    top: 70px; 
+    z-index: 990; /* Un poquito menos que el header para que no se encime si hay sombras */
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    padding: 5px 0;
+    height: 60px; /* Un poquito más alta para logos más grandes */
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+/* El carrusel interno */
+.brand-carousel-compact {
     display: flex;
     justify-content: center;
-    gap: 15px; /* Más espacio entre ellos */
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+    align-items: center;
+    gap: 40px; /* Más espacio entre logos */
+    width: 100%;
+    padding: 0 30px;
 }
 
-.brand-container button {
-    background: #f8f8f8;
-    border: 2px solid #e79a9a; /* Borde oscuro, no rosa */
-    color: #834979;
-    padding: 12px 25px; /* Más grandes */
-    font-size: 16px;
-    font-weight: 600;
-    text-transform: uppercase;
+/* Los logos individuales */
+.brand-item-mini {
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: 0.3s ease;
+    flex-shrink: 0;
 }
 
-.brand-container button:hover, 
-.brand-container button.active {
-    background: #dd6fd41e;
-    color: #fff;
+.brand-item-mini img {
+    height: 35px; /* LOGOS MÁS GRANDES */
+    width: auto;
+    filter: grayscale(100%);
+    opacity: 0.7;
+    transition: 0.3s ease;
+}
+
+/* Efecto al pasar el mouse */
+.brand-item-mini:hover img {
+    filter: grayscale(0%);
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+.todo-btn {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #333;
+    border-right: 1px solid #ddd;
+    padding-right: 20px;
+}
+
+/* IMPORTANTE: Asegúrate que tu header tenga un z-index más alto */
+.header {
+    z-index: 1000 !important;
+}
+
+/* Ocultar scrollbar */
+.brand-menu-sticky::-webkit-scrollbar {
+    display: none;
 }
 /*categoria*/
 .category-menu button.active {

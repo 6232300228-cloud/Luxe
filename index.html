@@ -11,17 +11,21 @@
 <body>
 
 <header class="header">
-  <div style="display: flex; align-items: center; gap: 15px;">
+    <div style="display: flex; align-items: center; gap: 15px;">
     <div class="menu-hamburger" onclick="toggleMenu()">
       <span></span>
       <span></span>
       <span></span>
     </div>
-
-    <a href="index.html">
+  <div class="logo-container">
+    <a href="index.html" class="logo-link">
         <img src="img/logo.png" alt="Logo Luxe" class="logo">
+        <div class="slogan-box">
+          <span class="slogan-text">Tus marcas favoritas en un solo lugar</span>
+        </div>
     </a>
   </div>
+  
    
   <div class="search-container">
     <input type="text" id="search" placeholder="Buscar producto..." class="buscar">
@@ -115,7 +119,34 @@
 
   </div>
 </section>
-
+<section class="brand-menu-sticky">
+    <div class="brand-carousel-compact">        
+        <div class="brand-item-mini" onclick="filterBrand('bissu')">
+            <img src="img/logobissu.png" alt="Bissu">
+        </div>
+        <div class="brand-item-mini" onclick="filterBrand('nyx')">
+            <img src="img/logonyx.png" alt="NYX">
+        </div>
+        <div class="brand-item-mini" onclick="filterBrand('maybelline')">
+            <img src="img/logomay.png" alt="Maybelline">
+        </div>
+        <div class="brand-item-mini" onclick="filterBrand('loreal')">
+            <img src="img/logoloreal.png" alt="L'Oréal">
+        </div>
+        <div class="brand-item-mini" onclick="filterBrand('rare')">
+            <img src="img/logorare.png" alt="Rare Beauty">
+        </div>
+        <div class="brand-item-mini" onclick="filterBrand('fenty')">
+            <img src="img/logofenty.png" alt="Fenty">
+        </div>
+        <div class="brand-item-mini" onclick="filterBrand('dior')">
+            <img src="img/logodior.png" alt="Dior">
+        </div>
+        <div class="brand-item-mini" onclick="filterBrand('mac')">
+            <img src="img/logomac.png" alt="Mac">
+        </div>
+    </div>
+</section>
 
 <!--look-->
 <section class="triple-banner-section">
@@ -153,23 +184,6 @@
   </div>
 </section> 
 
-<section class="brand-menu">
-  <h3 class="filter-subtitle"> Marca</h3>
-  <div class="brand-container">
-    <button onclick="filterBrand('all')">Todas</button>
-    <button onclick="filterBrand('bissu')">Bissú</button>
-    <button onclick="filterBrand('maybelline')">Maybelline</button>
-    <button onclick="filterBrand('loreal')">L'Oréal</button>
-    <button onclick="filterBrand('nyx')">NYX</button>
-    <button onclick="filterBrand('rare')">Rare Beauty</button>
-    <button onclick="filterBrand('fenty')">Fenty</button>
-    <button onclick="filterBrand('dior')">Dior</button>
-    <button onclick="filterBrand('mac')">MAC</button>
-  </div>
-</section>
-
-<section class="category-menu">
-  </section>
 
 <section class="category-menu">
   <button onclick="filterCategory('all')">Todos</button>

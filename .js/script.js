@@ -1,17 +1,66 @@
 let products = [
- { id: 1, name: "Labial Cremoso Soft Matte", price: 250, category: "labial", brand: "bissu", img: "img/labial.png", desc: "..." },
-  { id: 2, name: "Ultimate Shadow Palette", price: 400, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "..." },
-  { id:3, name:"Can't Stop Foundation", price:350, category:"base", img:"img/base.png", desc:"Base resistente todo el día." },
-  { id:4, name:"HD Photogenic Concealer", price:280, category:"corrector", img:"img/corrector.png", desc:"Corrector de alta cobertura y acabado natural." },
-  { id:5, name:"Delineador negro waterproof", price:95, category:"ojos", img:"img/delineador.png", desc:"Delineador de alta duración." },
-  { id:6, name:"Mascara Lash Sensational", price:180, category:"ojos", img:"img/rimel.png", desc:"Volumen definido." },
-  { id:7, name:"Labial Glossy Rosa", price:120, category:"labial", img:"img/labial2.png", desc:"Brillo labial hidratante." },
-  { id:8, name:"Set de Brochas Luxe", price:350, category:"accesorios", img:"img/brochas.png", desc:"Set profesional." },
-  { id:9, name:"Iluminador Perla Glow", price:210, category:"iluminador", img:"img/iluminador.png", desc:"Brillo natural elegante." },
-  { id: 10, name: "Rubor Silk Glow ", price: 225, category: "rubor", img: "img/rubor.png", desc: "Acabado luminoso y textura sedosa marmoleada." },
-  { id: 11, name: "Limpiador Hidratante Pure", price: 320, category: "skincare", img: "img/limpiador.png", desc: "Paso 1: Limpia profundamente sin resecar." },
-  { id: 12, name: "Sérum Vitamina C Glow", price: 450, category: "skincare", img: "img/serum.png", desc: "Paso 2: Luminosidad instantánea pre-maquillaje." },
-  { id: 13, name: "Crema Hydro-Primer", price: 380, category: "skincare", img: "img/crema.png", desc: "Paso 3: Hidratación intensa y base para el maquillaje." }
+{ id: 1, name: "Labial Humectante", price: 65, category: "labial", brand: "bissu", img: "img/labial.png", desc: "Labial clásico de Bissú con aceite de coco." },
+  { id: 2, name: "Ultimate Shadow Palette", price: 420, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "Paleta profesional con 16 tonos de alta pigmentación." },
+  { id: 3, name: "Can't Stop Won't Stop Foundation", price: 380, category: "base", brand: "nyx", img: "img/base.png", desc: "Base de maquillaje líquida de cobertura total y mate." },
+  { id: 4, name: "HD Photogenic Concealer", price: 160, category: "corrector", brand: "nyx", img: "img/corrector.png", desc: "Corrector que ayuda a cubrir imperfecciones y ojeras." },
+  { id: 5, name: "Plumin Delineador Mate", price: 95, category: "ojos", brand: "bissu", img: "img/delineador.png", desc: "Delineador de ojos tipo plumín resistente al agua." },
+  { id: 6, name: "Lash Sensational Sky High", price: 285, category: "ojos", brand: "maybelline", img: "img/rimel.png", desc: "Máscara que ofrece longitud sin límites y volumen." },
+  { id: 7, name: "Gloss Labial", price: 85, category: "labial", brand: "bissu", img: "img/labial2.png", desc: "Brillo con destellos brillantes y textura no pegajosa." },
+  { id: 8, name: "Set de Brochas Esenciales", price: 450, category: "accesorios", brand: "luxe", img: "img/brochas.png", desc: "Set profesional de cerdas sintéticas premium." },
+  { id: 9, name: "Iluminador en Polvo", price: 98, category: "iluminador", brand: "bissu", img: "img/iluminador.png", desc: "Polvo compacto para dar luz al rostro." },
+  { id: 10, name: "Rubor Compacto", price: 72, category: "rubor", brand: "bissu", img: "img/rubor.png", desc: "Textura sedosa para un acabado natural." },
+
+  // --- SKINCARE (PARA TUS EXPERIENCIAS) ---
+  { id: 11, name: "Revitalift Limpiador", price: 195, category: "skincare", brand: "loreal", img: "img/limpiador.png", desc: "Gel de limpieza facial con ácido hialurónico." },
+  { id: 12, name: "Sérum Pure Vitamin C10", price: 850, category: "skincare", brand: "loreal", img: "img/serum.png", desc: "Sérum renovador antioxidante para dar luminosidad." },
+  { id: 13, name: "Hydra Touch Primer", price: 340, category: "skincare", brand: "nyx", img: "img/crema.png", desc: "Base de maquillaje hidratante con extractos de plantas." },
+
+  // --- NUEVOS: ROSTRO (BASES Y CORRECTORES) ---
+  { id: 14, name: "Pro Filt'r Soft Matte", price: 790, category: "base", brand: "fenty", img: "img/fenty-base.png", desc: "Base de larga duración en 50 tonos." },
+  { id: 15, name: "Studio Fix Fluid SPF 15", price: 760, category: "base", brand: "mac", img: "img/mac-base.png", desc: "Base con control de aceite y acabado mate natural." },
+  { id: 16, name: "Dior Backstage Face & Body", price: 980, category: "base", brand: "dior", img: "img/dior-base.png", desc: "La base secreta de los maquilladores de Dior." },
+  { id: 17, name: "Fit Me Matte + Poreless", price: 215, category: "base", brand: "maybelline", img: "img/fit-me.png", desc: "Matifica la piel y desvanece los poros." },
+  { id: 18, name: "Infallible Fresh Wear 24H", price: 310, category: "base", brand: "loreal", img: "img/infallible.png", desc: "Cobertura completa que permite que la piel respire." },
+  { id: 19, name: "Liquid Touch Concealer", price: 520, category: "corrector", brand: "rare", img: "img/rare-concealer.png", desc: "Corrector hidratante de cobertura media a total." },
+  { id: 20, name: "Corrector de Larga Duración", price: 110, category: "corrector", brand: "bissu", img: "img/corrector-bissu.png", desc: "Corrector líquido cremoso de alta cobertura." },
+
+  // --- NUEVOS: LABIOS ---
+  { id: 21, name: "SuperStay Matte Ink", price: 260, category: "labial", brand: "maybelline", img: "img/matte-ink.png", desc: "Tinta de labios líquida con hasta 16 horas de duración." },
+  { id: 22, name: "Matte Lipstick Ruby Woo", price: 460, category: "labial", brand: "mac", img: "img/mac-red.png", desc: "El rojo más famoso del mundo con acabado ultra mate." },
+  { id: 23, name: "Soft Pinch Liquid Blush", price: 540, category: "rubor", brand: "rare", img: "img/rare-blush.png", desc: "Rubor líquido de larga duración que se difumina hermoso." },
+  { id: 24, name: "Gloss Bomb Universal", price: 490, category: "labial", brand: "fenty", img: "img/fenty-gloss.png", desc: "Brillo de labios irresistible con aroma a melocotón y vainilla." },
+  { id: 25, name: "Lip Glow Oil", price: 890, category: "labial", brand: "dior", img: "img/dior-oil.png", desc: "Aceite labial brillante que protege y realza." },
+  { id: 26, name: "Fat Oil Lip Drip", price: 220, category: "labial", brand: "nyx", img: "img/fat-oil.png", desc: "Aceite hidratante con color de gran brillo." },
+
+  // --- NUEVOS: OJOS ---
+  { id: 27, name: "Paleta de Sombras 'Mi Tierra'", price: 115, category: "sombra", brand: "bissu", img: "img/mitierra.png", desc: "Quintetos de sombras con colores intensos." },
+  { id: 28, name: "Mascara Lash Paradise", price: 275, category: "ojos", brand: "loreal", img: "img/paradise.png", desc: "Volumen y longitud instantáneos con cepillo suave." },
+  { id: 29, name: "Epic Ink Liner Black", price: 255, category: "ojos", brand: "nyx", img: "img/epic-ink.png", desc: "Delineador líquido con punta de pincel precisa." },
+  { id: 30, name: "Perfect Strokes Eye Liner", price: 480, category: "ojos", brand: "rare", img: "img/rare-liner.png", desc: "Delineador líquido mate con flujo continuo." },
+  { id: 31, name: "Delineador en Gel para Cejas", price: 85, category: "ojos", brand: "bissu", img: "img/cejas-bissu.png", desc: "Define y rellena tus cejas con acabado natural." },
+  { id: 32, name: "Brow Fast Sculpt", price: 195, category: "ojos", brand: "maybelline", img: "img/brow-mascara.png", desc: "Máscara de cejas con color para peinar y fijar." },
+
+  // --- NUEVOS: RUBORES, ILUMINADORES Y POLVOS ---
+  { id: 33, name: "Mineralize Skinfinish", price: 810, category: "iluminador", brand: "mac", img: "img/mac-high.png", desc: "Polvo facial de lujo cocido a fuego lento." },
+  { id: 34, name: "Killawatt Highlighter Duo", price: 820, category: "iluminador", brand: "fenty", img: "img/fenty-high.png", desc: "Dos tonos de iluminador para un brillo personalizado." },
+  { id: 35, name: "Polvo Traslúcido Suelto", price: 95, category: "rubor", brand: "bissu", img: "img/polvo.png", desc: "Polvo fino para sellar el maquillaje y eliminar brillo." },
+  { id: 36, name: "Rouge Blush", price: 1100, category: "rubor", brand: "dior", img: "img/dior-blush.png", desc: "Rubor de larga duración con pigmentos intensos." },
+  { id: 37, name: "Stay Vulnerable Blush", price: 510, category: "rubor", brand: "rare", img: "img/rare-creamblush.png", desc: "Rubor en crema resistente al agua que se funde en la piel." },
+
+  // --- NUEVOS: EXTRAS Y ACCESORIOS ---
+  { id: 38, name: "Agua Micelar Todo en 1", price: 145, category: "skincare", brand: "loreal", img: "img/micelar.png", desc: "Limpia, desmaquilla y tonifica el rostro." },
+  { id: 39, name: "Fat Water Toner Serum", price: 720, category: "skincare", brand: "fenty", img: "img/fat-water.png", desc: "Tratamiento que reduce poros y manchas." },
+  { id: 40, name: "Dior Addict Lip Maximizer", price: 910, category: "labial", brand: "dior", img: "img/maximizer.png", desc: "Brillo de labios con efecto volumen instantáneo." },
+  { id: 41, name: "Esponja Beauty Blender", price: 180, category: "accesorios", brand: "luxe", img: "img/esponja.png", desc: "Esponja para difuminar base y corrector." },
+  { id: 42, name: "Brush Cleanser", price: 390, category: "accesorios", brand: "mac", img: "img/cleaner.png", desc: "Limpiador de brochas de secado rápido." },
+  { id: 43, name: "Prep + Prime Fix+", price: 680, category: "accesorios", brand: "mac", img: "img/fix.png", desc: "Bruma de agua que fija el maquillaje y refresca." },
+  { id: 44, name: "Matte Setting Spray", price: 235, category: "accesorios", brand: "nyx", img: "img/set-spray.png", desc: "Fijador de maquillaje para evitar el brillo." },
+  { id: 45, name: "Sacapuntas de Cosméticos", price: 38, category: "accesorios", brand: "bissu", img: "img/sacapuntas.png", desc: "Mantén tus lápices con punta perfecta." },
+  { id: 46, name: "Pegamento Lash It Loud", price: 190, category: "accesorios", brand: "nyx", img: "img/glue.png", desc: "Adhesivo para pestañas de alta fijación." },
+  { id: 47, name: "Pestañas Postizas 3D", price: 85, category: "ojos", brand: "bissu", img: "img/pestañas.png", desc: "Añade volumen y drama a tus ojos." },
+  { id: 48, name: "Paleta Pro Contour", price: 320, category: "rubor", brand: "nyx", img: "img/contour.png", desc: "Kit para definir y resaltar facciones." },
+  { id: 49, name: "Delineador de Labios Retráctil", price: 55, category: "labial", brand: "bissu", img: "img/lip-liner.png", desc: "Textura cremosa para delinear labios." },
+  { id: 50, name: "Espejo de Bolsillo Luxe", price: 120, category: "accesorios", brand: "luxe", img: "img/espejo.png", desc: "Espejo con aumento para retoques rápidos." }
 ];
 
 let filtered = products;
@@ -76,30 +125,41 @@ function showToast(msg) {
 
 /* CARGAR PRODUCTOS*/
 function renderProducts() {
-    productList.innerHTML = "";
+  productList.innerHTML = "";
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
-    filtered.forEach(p => {
-        const stockClass = p.stock <= 0 ? 'agotado' : '';
-        const botonTexto = p.stock <= 0 ? 'AGOTADO' : 'Agregar 🛒';
-        const botonDisabled = p.stock <= 0 ? 'disabled' : '';
+  if (filtered.length === 0) {
+    productList.innerHTML = "<h2>No se encontraron productos 😥</h2>";
+    return;
+  }
 
-        productList.innerHTML += `
-            <div class="card ${stockClass}">
-                <a href="producto.html?id=${p.id}">
-                    <img src="${p.img}">
-                    <h4>${p.name}</h4>
-                </a>
-                <p>$${p.price}</p>
-                <p style="font-size: 12px; color: ${p.stock > 20 ? '#4CAF50' : (p.stock > 0 ? '#ff9800' : '#f44336')};">
-                    Stock: ${p.stock} unidades
-                </p>
-                <button onclick="addToCart(${p.id})" ${botonDisabled} style="${p.stock <= 0 ? 'background: #ccc; cursor: not-allowed;' : ''}">
-                    ${botonTexto}
-                </button>
-                <button onclick="addToFav(${p.id})">❤️ Favorito</button>
-            </div>
-        `;
-    });
+  filtered.forEach(p => {
+    const isFav = favs.some(f => f.id === p.id);
+
+    productList.innerHTML += `
+      <div class="product-card-luxe">
+        
+       <button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">
+          ❤
+        </button>
+
+        <a href="producto.html?id=${p.id}" class="product-link">
+          <div class="img-container">
+            <img src="${p.img}" alt="${p.name}">
+          </div>
+          <div class="info-luxe">
+            <h4>${p.name.toUpperCase()}</h4>
+            <p class="subtitle-luxe">DISPONIBLE AHORA</p>
+            <p class="price-luxe">$${p.price}</p>
+          </div>
+        </a>
+
+        <button class="btn-buy-luxe" onclick="addToCart(${p.id})">
+          Agregar al carrito
+        </button>
+      </div>
+    `;
+});
 }
 /*favoritos*/
 function toggleFav(event, id) {
@@ -269,12 +329,13 @@ function updateCartCounter() {
 }
 
 function addToCart(id) {
+  let cart = JSON.parse(localStorage.getItem("carrito")) || [];
   let product = products.find(p => p.id == id);
-    
-    if (product.stock <= 0) {
-        showToast("❌ Producto agotado");
-        return;
-    }
+
+  if (!product) {
+    console.log("Producto no encontrado:", id);
+    return;
+  }
 
   let existing = cart.find(x => x.id == id);
 
@@ -334,42 +395,12 @@ function addToFav(id) {
   updateFavCounter(); // Identificador: Llamada a animación
 }
 
-/*por marcas*/ 
-let categoriaActual = 'all';
-let marcaActual = 'all';
-
-// Función para filtrar por categoría
-function filterCategory(cat) {
-    categoriaActual = cat;
-    filtrarProductos();
-}
-
-// Función para filtrar por marca
 function filterBrand(brand) {
-    marcaActual = brand;
-    filtrarProductos();
-}
-
-// Función principal que decide qué mostrar
-function filtrarProductos() {
-    // Selecciona todos tus elementos de producto (asegúrate de que tengan la clase 'producto')
-    const productos = document.querySelectorAll('.producto'); 
+    filtered = brand === "all" 
+        ? products 
+        : products.filter(p => p.brand.toLowerCase() === brand.toLowerCase());
     
-    productos.forEach(producto => {
-        // Obtiene las categorías y marcas desde los atributos data- en tu HTML
-        const cat = producto.getAttribute('data-category');
-        const brand = producto.getAttribute('data-brand');
-        
-        const cumpleCategoria = (categoriaActual === 'all' || cat === categoriaActual);
-        const cumpleMarca = (marcaActual === 'all' || brand === marcaActual);
-        
-        // Si cumple ambas condiciones, lo mostramos, si no, lo ocultamos
-        if (cumpleCategoria && cumpleMarca) {
-            producto.style.display = 'block';
-        } else {
-            producto.style.display = 'none';
-        }
-    });
+    renderProducts();
 }
 
 /* BUSCADOR, FILTROS Y ORDEN*/

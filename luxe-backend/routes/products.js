@@ -23,7 +23,14 @@ const verificarToken = (req, res, next) => {
 };
 
 // ============================================
-// RUTA 1: Obtener todos los productos
+// RUTA DE PRUEBA (para verificar que funciona)
+// ============================================
+router.get('/test', (req, res) => {
+    res.json({ mensaje: '📦 Ruta de productos funcionando correctamente' });
+});
+
+// ============================================
+// Obtener todos los productos
 // ============================================
 router.get('/', async (req, res) => {
     try {
@@ -35,7 +42,7 @@ router.get('/', async (req, res) => {
 });
 
 // ============================================
-// RUTA 2: Cargar productos iniciales (seed)
+// Cargar productos iniciales (seed)
 // ============================================
 router.post('/seed', async (req, res) => {
     try {
@@ -54,14 +61,14 @@ router.post('/seed', async (req, res) => {
         await Product.deleteMany({});
         await Product.insertMany(productosIniciales);
         
-        res.json({ mensaje: '✅ Productos cargados exitosamente (stock=100)' });
+        res.json({ mensaje: '✅ Productos cargados exitosamente' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
 
 // ============================================
-// RUTA 3: Obtener producto por ID
+// Obtener producto por ID
 // ============================================
 router.get('/:id', async (req, res) => {
     try {
@@ -76,7 +83,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // ============================================
-// RUTA 4: REDUCIR STOCK (¡NUEVA!)
+// REDUCIR STOCK
 // ============================================
 router.put('/reducir-stock/:productoId', verificarToken, async (req, res) => {
     try {
@@ -103,4 +110,7 @@ router.put('/reducir-stock/:productoId', verificarToken, async (req, res) => {
     }
 });
 
+// ============================================
+// EXPORTAR ROUTER
+// ============================================
 module.exports = router;

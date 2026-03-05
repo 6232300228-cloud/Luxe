@@ -115,45 +115,41 @@ document.addEventListener("DOMContentLoaded", () => {
             // ============================================
             console.log("🔄 Reduciendo stock de productos...");
 
-            for (const item of carrito) {
-                try {
-                    // Usar el id numérico del producto
-                    const productoId = item.id;
-                    
-                    if (!productoId) {
-                        console.warn(`⚠️ Producto sin ID: ${item.nombre}`);
-                        continue;
-                    }
+for (const item of carrito) {
+    try {
+        const productoId = item.id;
+        
+        if (!productoId) {
+            console.warn(`⚠️ Producto sin ID: ${item.nombre}`);
+            continue;
+        }
 
-                    console.log(`➖ Reduciendo stock de ${item.nombre} (ID: ${productoId}) en ${item.cantidad} unidades`);
+        console.log(`➖ Enviando petición para ${item.nombre} (ID: ${productoId})`);
 
-                    const stockResponse = await fetch(`http://localhost:3000/api/products/reducir-stock/${productoId}`, {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${token}`
-                        },
-                        body: JSON.stringify({ 
-                            cantidad: item.cantidad || 1 
-                        })
-                    });
+        const stockResponse = await fetch(`http://localhost:3000/api/products/reducir-stock/${productoId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ 
+                cantidad: item.cantidad || 1 
+            })
+        });
 
-                    if (stockResponse.ok) {
-                        const stockData = await stockResponse.json();
-                        console.log(`✅ Stock actualizado para ${item.nombre}: ${stockData.nuevoStock} unidades restantes`);
-                    } else {
-                        const error = await stockResponse.json();
-                        console.error(`❌ Error actualizando stock de ${item.nombre}:`, error);
-                    }
-                } catch (error) {
-                    console.error(`❌ Error de red para ${item.nombre}:`, error);
-                }
-                
-                // Pequeña pausa para no saturar el servidor
-                await new Promise(resolve => setTimeout(resolve, 100));
-            }
+        if (stockResponse.ok) {
+            const stockData = await stockResponse.json();
+            console.log(`✅ Stock actualizado: ${item.nombre} ahora tiene ${stockData.nuevoStock} unidades`);
+        } else {
+            const error = await stockResponse.json();
+            console.error(`❌ Error con ${item.nombre}:`, error);
+        }
+    } catch (error) {
+        console.error(`❌ Error de red para ${item.nombre}:`, error);
+    }
+}
 
-            console.log("✅ Reducción de stock completada");
+console.log("✅ Reducción de stock completada");
             // ============================================
             // FIN REDUCCIÓN DE STOCK
             // ============================================

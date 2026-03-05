@@ -1,10 +1,10 @@
 // ============================================
-// 1. VALIDAR USUARIO Y ROL (CON LAS VARIABLES CORRECTAS)
+// 1. VALIDAR USUARIO Y ROL
 // ============================================
 const user = JSON.parse(localStorage.getItem("user"));
 const token = localStorage.getItem("token");
 
-// Verificar si hay sesión y rol válido
+// Si no hay sesión o el usuario es cliente, redirigir
 if (!user || !token || (user.role !== "admin" && user.role !== "empleado")) {
     alert("⛔ Acceso restringido solo para personal autorizado");
     window.location.href = "login.html";
@@ -25,29 +25,53 @@ document.addEventListener("DOMContentLoaded", async () => {
         document.getElementById("btn-agregar").classList.remove("hidden");
     }
 
-    // Cargar datos reales desde MongoDB
+    // Cargar datos
     await cargarProductos();
     await cargarEstadisticas();
-    crearGrafica();
+    await crearGrafica();
 });
 
 // ============================================
-// 3. CARGAR PRODUCTOS DESDE MONGODB
+// 3. CARGAR PRODUCTOS
 // ============================================
 async function cargarProductos() {
+    const tabla = document.getElementById("lista-inventario");
+    tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">Cargando productos...</td></tr>';
+    
     try {
-        const response = await fetch('http://localhost:3000/api/products');
-        const productos = await response.json();
+        console.log('📦 Intentando cargar productos...');
         
-        const tabla = document.getElementById("lista-inventario");
+        // Verificar que el servidor responde
+        const testResponse = await fetch('http://localhost:3000');
+        if (!testResponse.ok) {
+            throw new Error('Servidor no disponible');
+        }
+        
+        const response = await fetch('http://localhost:3000/api/products');
+        
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+        
+        const productos = await response.json();
+        console.log('✅ Productos cargados:', productos.length);
+        
+        if (productos.length === 0) {
+            tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay productos cargados</td></tr>';
+            return;
+        }
+
         tabla.innerHTML = "";
 
         productos.forEach(p => {
             const tr = document.createElement("tr");
             
             // Color según stock
-            const stockColor = p.stock <= 0 ? '#f44336' : (p.stock <= 20 ? '#ff9800' : '#4CAF50');
+            let stockColor = '#4CAF50';
+            if (p.stock <= 0) stockColor = '#f44336';
+            else if (p.stock <= 20) stockColor = '#ff9800';
             
+            // Botones según rol
             let btns = '';
             if (user.role === "admin") {
                 btns = `
@@ -59,11 +83,11 @@ async function cargarProductos() {
             }
 
             tr.innerHTML = `
-                <td><img src="${p.img}" width="40" style="border-radius: 5px;"></td>
+                <td><img src="${p.img}" width="40" style="border-radius: 5px;" onerror="this.src='img/logo.png'"></td>
                 <td><b>${p.name}</b><br><small style="color: #888;">ID: ${p.id}</small></td>
                 <td>${p.category || 'Sin categoría'}</td>
                 <td style="font-weight: bold; color: #ff4d6d;">$${p.price}</td>
-                <td style="color: ${stockColor}; font-weight: bold;">${p.stock} unidades</td>
+                <td style="color: ${stockColor}; font-weight: bold;">${p.stock || 0} unidades</td>
                 <td>${btns}</td>
             `;
             tabla.appendChild(tr);
@@ -71,15 +95,23 @@ async function cargarProductos() {
         
     } catch (error) {
         console.error('❌ Error cargando productos:', error);
+        tabla.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; color: red; padding: 40px;">
+                    ❌ Error al cargar productos<br>
+                    <small>${error.message}</small><br>
+                    <button onclick="cargarProductos()" style="margin-top: 10px; padding: 5px 15px;">Reintentar</button>
+                </td>
+            </tr>
+        `;
     }
 }
 
 // ============================================
-// 4. CARGAR ESTADÍSTICAS REALES
+// 4. CARGAR ESTADÍSTICAS
 // ============================================
 async function cargarEstadisticas() {
     try {
-        // Obtener pedidos
         const response = await fetch('http://localhost:3000/api/orders/mis-pedidos', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -90,33 +122,31 @@ async function cargarEstadisticas() {
         
         const pedidos = await response.json();
         
-        // Calcular ventas del mes
+        const hoy = new Date();
+        const mesActual = hoy.getMonth();
+        const añoActual = hoy.getFullYear();
+        
         const ventasMes = pedidos
             .filter(p => {
-                const fechaPedido = new Date(p.fechaPedido);
-                const hoy = new Date();
-                return fechaPedido.getMonth() === hoy.getMonth() 
-                    && fechaPedido.getFullYear() === hoy.getFullYear();
+                const fecha = new Date(p.fechaPedido);
+                return fecha.getMonth() === mesActual && fecha.getFullYear() === añoActual;
             })
-            .reduce((sum, p) => sum + p.total, 0);
+            .reduce((sum, p) => sum + (p.total || 0), 0);
         
-        // Calcular productos vendidos
         const productosVendidos = pedidos
-            .flatMap(p => p.productos)
-            .reduce((sum, prod) => sum + prod.cantidad, 0);
+            .flatMap(p => p.productos || [])
+            .reduce((sum, prod) => sum + (prod.cantidad || 0), 0);
         
         document.getElementById("total-ventas").innerText = `$${ventasMes.toFixed(2)}`;
         document.getElementById("cantidad-vendida").innerText = productosVendidos;
         
     } catch (error) {
         console.error('Error cargando estadísticas:', error);
-        document.getElementById("total-ventas").innerText = "$0.00";
-        document.getElementById("cantidad-vendida").innerText = "0";
     }
 }
 
 // ============================================
-// 5. CREAR GRÁFICA DE VENTAS
+// 5. CREAR GRÁFICA
 // ============================================
 async function crearGrafica() {
     try {
@@ -126,20 +156,25 @@ async function crearGrafica() {
         
         const pedidos = await response.json();
         
-        // Organizar ventas por día de la semana
         const ventasPorDia = [0, 0, 0, 0, 0, 0, 0];
+        const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
         
         pedidos.forEach(p => {
             const fecha = new Date(p.fechaPedido);
             const dia = fecha.getDay();
-            ventasPorDia[dia] += p.total;
+            ventasPorDia[dia] += p.total || 0;
         });
 
         const ctx = document.getElementById('graficaVentas').getContext('2d');
-        new Chart(ctx, {
+        
+        if (window.miGrafica) {
+            window.miGrafica.destroy();
+        }
+        
+        window.miGrafica = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'],
+                labels: diasSemana,
                 datasets: [{
                     label: 'Ventas de la semana ($)',
                     data: ventasPorDia,
@@ -154,93 +189,14 @@ async function crearGrafica() {
                 plugins: { legend: { display: false } }
             }
         });
+        
     } catch (error) {
         console.error('Error creando gráfica:', error);
     }
 }
 
 // ============================================
-// 6. FUNCIONES DE ADMIN (editar, eliminar, agregar)
-// ============================================
-async function eliminarProducto(id) {
-    if (user.role !== "admin") return;
-    
-    if (!confirm("¿Estás seguro de eliminar este producto?")) return;
-    
-    try {
-        const productosRes = await fetch('http://localhost:3000/api/products');
-        const productos = await productosRes.json();
-        const productosActualizados = productos.filter(p => p._id !== id && p.id !== parseInt(id));
-        
-        const response = await fetch('http://localhost:3000/api/products/seed', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify(productosActualizados)
-        });
-        
-        if (response.ok) {
-            alert('✅ Producto eliminado');
-            cargarProductos();
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-}
-
-async function editarProducto(id) {
-    if (user.role !== "admin") return;
-    
-    const productosRes = await fetch('http://localhost:3000/api/products');
-    const productos = await productosRes.json();
-    const producto = productos.find(p => p._id === id || p.id === parseInt(id));
-    
-    if (!producto) return;
-    
-    const nuevoNombre = prompt("Nuevo nombre:", producto.name);
-    if (nuevoNombre === null) return;
-    
-    const nuevoPrecio = prompt("Nuevo precio:", producto.price);
-    if (nuevoPrecio === null) return;
-    
-    producto.name = nuevoNombre || producto.name;
-    producto.price = parseFloat(nuevoPrecio) || producto.price;
-    
-    const response = await fetch('http://localhost:3000/api/products/seed', {
-        method: 'POST',
-        headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(productos)
-    });
-    
-    if (response.ok) {
-        alert('✅ Producto actualizado');
-        cargarProductos();
-    }
-}
-
-document.getElementById("btn-agregar")?.addEventListener("click", () => {
-    if (user.role !== "admin") return;
-    
-    const nombre = prompt("Nombre del producto:");
-    if (!nombre) return;
-    
-    const precio = prompt("Precio:");
-    if (!precio) return;
-    
-    const categoria = prompt("Categoría:");
-    const imagen = prompt("URL de la imagen:");
-    
-    // Implementar agregar producto
-    alert("Función de agregar en desarrollo 🚧");
-});
-
-// ============================================
-// 7. CERRAR SESIÓN
+// 6. CERRAR SESIÓN
 // ============================================
 document.getElementById("btn-cerrar-sesion").onclick = () => {
     localStorage.removeItem("user");
@@ -248,6 +204,14 @@ document.getElementById("btn-cerrar-sesion").onclick = () => {
     window.location.href = "login.html";
 };
 
-// Exponer funciones globales
-window.eliminarProducto = eliminarProducto;
+// Funciones vacías para evitar errores
+function editarProducto(id) {
+    alert('Función en desarrollo');
+}
+
+function eliminarProducto(id) {
+    alert('Función en desarrollo');
+}
+
 window.editarProducto = editarProducto;
+window.eliminarProducto = eliminarProducto;

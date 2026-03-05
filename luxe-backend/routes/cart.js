@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const Cart = require('../models/Cart');
-const Product = require('../models/Product');
+
 const router = express.Router();
 
 // Middleware para verificar token
@@ -17,6 +17,13 @@ const verificarToken = (req, res, next) => {
         res.status(401).json({ error: 'Token inválido' });
     }
 };
+
+// ============================================
+// RUTA DE PRUEBA (para verificar que funciona)
+// ============================================
+router.get('/test', (req, res) => {
+    res.json({ mensaje: '🛒 Ruta de carrito funcionando correctamente' });
+});
 
 // ============================================
 // OBTENER CARRITO DEL USUARIO
@@ -46,7 +53,6 @@ router.post('/agregar', verificarToken, async (req, res) => {
     try {
         const { productoId, nombre, precio, cantidad, imagen } = req.body;
         
-        // Buscar o crear carrito
         let carrito = await Cart.findOne({ usuarioId: req.usuarioId });
         if (!carrito) {
             carrito = new Cart({ 
@@ -55,14 +61,11 @@ router.post('/agregar', verificarToken, async (req, res) => {
             });
         }
         
-        // Verificar si el producto ya existe
         const existeProducto = carrito.productos.find(p => p.productoId.toString() === productoId);
         
         if (existeProducto) {
-            // Actualizar cantidad
             existeProducto.cantidad += cantidad || 1;
         } else {
-            // Agregar nuevo producto
             carrito.productos.push({
                 productoId,
                 nombre,
@@ -72,7 +75,6 @@ router.post('/agregar', verificarToken, async (req, res) => {
             });
         }
         
-        // Calcular total
         carrito.total = carrito.productos.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
         
         await carrito.save();
@@ -80,37 +82,6 @@ router.post('/agregar', verificarToken, async (req, res) => {
         
     } catch (error) {
         console.error('Error agregando al carrito:', error);
-        res.status(500).json({ error: 'Error interno del servidor' });
-    }
-});
-
-// ============================================
-// ACTUALIZAR CANTIDAD DE UN PRODUCTO
-// ============================================
-router.put('/actualizar/:productoId', verificarToken, async (req, res) => {
-    try {
-        const { cantidad } = req.body;
-        const carrito = await Cart.findOne({ usuarioId: req.usuarioId });
-        
-        if (!carrito) {
-            return res.status(404).json({ error: 'Carrito no encontrado' });
-        }
-        
-        const producto = carrito.productos.find(p => p._id.toString() === req.params.productoId);
-        if (!producto) {
-            return res.status(404).json({ error: 'Producto no encontrado' });
-        }
-        
-        producto.cantidad = cantidad;
-        
-        // Recalcular total
-        carrito.total = carrito.productos.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
-        
-        await carrito.save();
-        res.json(carrito);
-        
-    } catch (error) {
-        console.error('Error actualizando carrito:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
@@ -126,10 +97,7 @@ router.delete('/eliminar/:productoId', verificarToken, async (req, res) => {
             return res.status(404).json({ error: 'Carrito no encontrado' });
         }
         
-        // Filtrar el producto a eliminar
         carrito.productos = carrito.productos.filter(p => p._id.toString() !== req.params.productoId);
-        
-        // Recalcular total
         carrito.total = carrito.productos.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
         
         await carrito.save();
@@ -162,4 +130,7 @@ router.delete('/vaciar', verificarToken, async (req, res) => {
     }
 });
 
+// ============================================
+// EXPORTAR ROUTER (¡LO MÁS IMPORTANTE!)
+// ============================================
 module.exports = router;

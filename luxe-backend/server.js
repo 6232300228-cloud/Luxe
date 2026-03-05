@@ -21,16 +21,16 @@ mongoose.connect(process.env.MONGODB_URI)
         console.error(err);
     });
 
-// Importar rutas (UNA SOLA VEZ CADA UNA)
+// Importar rutas
 const authRoutes = require('./routes/auth');
 const productRoutes = require('./routes/products');
-const cartRoutes = require('./routes/cart');      // ← SOLO UNA VEZ
+const cartRoutes = require('./routes/cart');
 const orderRoutes = require('./routes/orders');
 
 // Usar rutas
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
-app.use('/api/cart', cartRoutes);                 // ← SOLO UNA VEZ
+app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 
 // Ruta de prueba

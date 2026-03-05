@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return; 
         }
 
-        // Calcular total (usando pagoInfo o calculando directamente)
+        // Calcular total
         const total = pagoInfo ? pagoInfo.total : carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
 
         console.log("🛒 Carrito a pagar:", carrito);
@@ -92,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             console.log("📦 Enviando pedido:", pedidoData);
 
-            // Enviar al backend
+            // Enviar al backend para guardar el pedido
             const response = await fetch('http://localhost:3000/api/orders/crear', {
                 method: 'POST',
                 headers: {
@@ -110,25 +110,55 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json();
             console.log("✅ Pedido guardado:", data);
 
+            // ============================================
+            // 🔥 REDUCIR STOCK DE CADA PRODUCTO VENDIDO
+            // ============================================
+            console.log("🔄 Reduciendo stock de productos...");
 
-
-
-            // En checkout.js, dentro del try después de guardar el pedido:
-
-            // Reducir stock de cada producto
             for (const item of carrito) {
-                await fetch(`http://localhost:3000/api/products/reducir-stock/${item.id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-             },
-            body: JSON.stringify({ cantidad: item.cantidad })
-        });
-}
+                try {
+                    // Usar el id numérico del producto
+                    const productoId = item.id;
+                    
+                    if (!productoId) {
+                        console.warn(`⚠️ Producto sin ID: ${item.nombre}`);
+                        continue;
+                    }
+
+                    console.log(`➖ Reduciendo stock de ${item.nombre} (ID: ${productoId}) en ${item.cantidad} unidades`);
+
+                    const stockResponse = await fetch(`http://localhost:3000/api/products/reducir-stock/${productoId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}`
+                        },
+                        body: JSON.stringify({ 
+                            cantidad: item.cantidad || 1 
+                        })
+                    });
+
+                    if (stockResponse.ok) {
+                        const stockData = await stockResponse.json();
+                        console.log(`✅ Stock actualizado para ${item.nombre}: ${stockData.nuevoStock} unidades restantes`);
+                    } else {
+                        const error = await stockResponse.json();
+                        console.error(`❌ Error actualizando stock de ${item.nombre}:`, error);
+                    }
+                } catch (error) {
+                    console.error(`❌ Error de red para ${item.nombre}:`, error);
+                }
+                
+                // Pequeña pausa para no saturar el servidor
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            console.log("✅ Reducción de stock completada");
             // ============================================
-            // GUARDAR TICKET CON TODOS LOS DATOS
+            // FIN REDUCCIÓN DE STOCK
             // ============================================
+
+            // Guardar ticket
             localStorage.setItem("ticket", JSON.stringify({
                 id: data.pedido?.id || Date.now(),
                 fecha: new Date().toISOString(),
@@ -159,3 +189,4 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+

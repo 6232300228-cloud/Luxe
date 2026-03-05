@@ -20,9 +20,11 @@
     </div>
 
     <a href="index.html" class="logo-link">
-      <img src="img/logo.png" alt="Logo Luxe" class="logo">
-      <span class="slogan">Tus marcas favoritas en un solo lugar</span>
-    </a>
+  <img src="img/logo.png" alt="Logo Luxe" class="logo">
+  <div class="logo-text-group">
+    <span class="slogan-minimal">Tu destino de belleza</span>
+  </div>
+</a>
   </div>
 
   <div class="header-center">
@@ -120,33 +122,37 @@
   </div>
 </section>
 <section class="brand-menu-sticky">
-    <div class="brand-carousel-compact">        
-        <div class="brand-item-mini" onclick="filterBrand('bissu')">
+    <div class="brand-instruction">Elije tu marca favorita ✨</div>
+    
+    <div class="brand-carousel-compact">
+        <div class="brand-item-mini todo-btn" onclick="filterBrand('all', this)">TODAS</div>
+        <div class="brand-item-mini" onclick="filterBrand('bissu', this)">
             <img src="img/logobissu.png" alt="Bissu">
         </div>
-        <div class="brand-item-mini" onclick="filterBrand('nyx')">
+        <div class="brand-item-mini" onclick="filterBrand('nyx', this)">
             <img src="img/logonyx.png" alt="NYX">
         </div>
-        <div class="brand-item-mini" onclick="filterBrand('maybelline')">
+        <div class="brand-item-mini" onclick="filterBrand('maybelline', this)">
             <img src="img/logomay.png" alt="Maybelline">
         </div>
-        <div class="brand-item-mini" onclick="filterBrand('loreal')">
+        <div class="brand-item-mini" onclick="filterBrand('loreal', this)">
             <img src="img/logoloreal.png" alt="L'Oréal">
         </div>
-        <div class="brand-item-mini" onclick="filterBrand('rare')">
+                <div class="brand-item-mini" onclick="filterBrand('rare', this)">
             <img src="img/logorare.png" alt="Rare Beauty">
         </div>
-        <div class="brand-item-mini" onclick="filterBrand('fenty')">
+                <div class="brand-item-mini" onclick="filterBrand('fenty', this)">
             <img src="img/logofenty.png" alt="Fenty">
         </div>
-        <div class="brand-item-mini" onclick="filterBrand('dior')">
+        <div class="brand-item-mini" onclick="filterBrand('dior', this)">
             <img src="img/logodior.png" alt="Dior">
         </div>
-        <div class="brand-item-mini" onclick="filterBrand('mac')">
-            <img src="img/logomac.png" alt="Mac">
+        <div class="brand-item-mini" onclick="filterBrand('mac', this)">
+            <img src="img/logomac.png" alt="MAC">
         </div>
     </div>
 </section>
+
 
 <!--look-->
 <section class="triple-banner-section">
@@ -186,7 +192,7 @@
 
 
 <section class="category-menu">
-  <button onclick="filterCategory('all')">Todos</button>
+  <button onclick="filterCategory('all')">Todo</button>
   <button onclick="filterCategory('accesorios')">Accesorios</button>
   <button onclick="filterCategory('skincare')">Skincare</button>
   <button onclick="filterCategory('labial')">Labios</button>

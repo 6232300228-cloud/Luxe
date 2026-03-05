@@ -2,11 +2,7 @@
   box-sizing: border-box;
 }
 
-html, body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
+
 body {
   margin: 0;
  font-family: 'Poppins', sans-serif;  
@@ -77,16 +73,6 @@ h1, h2, h3 {
 .header-right {
   gap: 20px;
 }
-
-
-
-.slogan {
-  font-size: 14px;
-  font-weight: 500;
-  color: #555;
-  margin-left: 10px;
-}
-
 .icons a {
   text-decoration: none;
   color: #333;
@@ -105,20 +91,6 @@ h1, h2, h3 {
     gap: 15px;
 }
 
-.slogan-box {
-    display: flex;
-    flex-direction: column;
-    border-left: 1px solid rgba(109, 59, 59, 0.4);
-    padding-left: 15px;
-}
-
-.slogan-text {
-    font-size: 15px;
-    color: #664343;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 300;
-}
 @media (max-width: 768px) {
 
   .slogan {
@@ -134,6 +106,15 @@ h1, h2, h3 {
     height: 70px;
   }
 
+}
+.slogan-minimal {
+    font-family: 'Poppins', sans-serif;
+    font-size: 11px; /* Slogan más pequeño para que no compita */
+    font-weight: 400;
+    color: #92524f;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
 }
 
 /* buscador y filtro*/
@@ -808,7 +789,7 @@ input:focus {
     /* Ajusta este número: si tu header mide 70px de alto, aquí pon 70px */
     top: 80px; 
     z-index: 990; /* Un poquito menos que el header para que no se encime si hay sombras */
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(243, 131, 193, 0.664);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid rgba(0,0,0,0.1);
     padding: 5px 0;
@@ -824,8 +805,8 @@ input:focus {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 40px; /* Más espacio entre logos */
-    width: 100%;
+    gap: 30px; /* Más espacio entre logos */
+    width: 55%;
     padding: 0 30px;
 }
 
@@ -836,28 +817,47 @@ input:focus {
     flex-shrink: 0;
 }
 
-.brand-item-mini img {
-    height: 35px; /* LOGOS MÁS GRANDES */
-    width: auto;
-    filter: grayscale(100%);
-    opacity: 0.7;
-    transition: 0.3s ease;
-}
-
-/* Efecto al pasar el mouse */
-.brand-item-mini:hover img {
-    filter: grayscale(0%);
-    opacity: 1;
-    transform: scale(1.1);
-}
 
 .todo-btn {
     font-size: 12px;
-    font-weight: 700;
+    font-weight: 500;
     letter-spacing: 2px;
     color: #333;
-    border-right: 1px solid #ddd;
+    border-right: 1px solid #c0568b;
     padding-right: 20px;
+}
+/* Estilo del texto "Elije tu marca" */
+.brand-instruction {
+    text-align:center;
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    width: 22%;
+}
+
+/* Logos más grandes y centrados */
+.brand-item-mini img {
+    height: 45px !important; /* Forzamos un tamaño mayor */
+    width: auto;
+    filter: grayscale(100%); /* Empiezan en gris */
+    opacity: 0.5;
+    transition: all 0.3s ease;
+}
+
+/* Cuando pasas el mouse o cuando está SELECCIONADA */
+.brand-item-mini:hover img,
+.brand-item-mini.selected img {
+    filter: grayscale(0%); /* Se pintan con su color original / negro */
+    opacity: 1;
+    transform: scale(1.15); /* Crecen un poquito */
+}
+
+/* Ajuste para el botón "TODO" */
+.brand-item-mini.todo-btn.selected {
+    color: #000000;
+    border-bottom: 2px solid #111111;
 }
 
 

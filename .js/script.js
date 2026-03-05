@@ -394,30 +394,43 @@ function addToFav(id) {
   showToast("Agregado a favoritos ✨");
   updateFavCounter(); // Identificador: Llamada a animación
 }
+let selectedBrand = "all";
+let selectedCategory = "all";
 
-function filterBrand(brand) {
-    filtered = brand === "all" 
-        ? products 
-        : products.filter(p => p.brand.toLowerCase() === brand.toLowerCase());
-    
-    renderProducts();
+function filterBrand(brand, element) {
+    selectedBrand = brand;
+
+    // Quitar la clase 'selected' de todos los logos y ponerla al que clicamos
+    document.querySelectorAll('.brand-item-mini').forEach(item => item.classList.remove('selected'));
+    if (element) {
+        element.classList.add('selected');
+    }
+
+    aplicarFiltrosCombinados();
 }
 
 /* BUSCADOR, FILTROS Y ORDEN*/
 
 function filterCategory(cat) {
-  filtered = cat === "all"
-    ? products
-    : products.filter(p => p.category === cat);
+    selectedCategory = cat;
 
-  renderProducts();
+    // Manejo visual de botones de categoría
+    document.querySelectorAll(".category-menu button").forEach(btn => btn.classList.remove("active"));
+    if (event && event.target) {
+        event.target.classList.add("active");
+    }
 
-  document.querySelectorAll(".category-menu button")
-    .forEach(btn => btn.classList.remove("active"));
+    aplicarFiltrosCombinados();
+}
+function aplicarFiltrosCombinados() {
+    filtered = products.filter(p => {
+        const coincideMarca = (selectedBrand === "all" || p.brand.toLowerCase() === selectedBrand.toLowerCase());
+        const coincideCat = (selectedCategory === "all" || p.category === selectedCategory);
+        return coincideMarca && coincideCat;
+    });
 
-  event.target.classList.add("active");
-
-};
+    renderProducts();
+}
 
 function showOnlyFavs() {
   let favs = JSON.parse(localStorage.getItem("favs")) || [];

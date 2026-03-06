@@ -31,7 +31,7 @@ function renderFavs() {
   if (favs.length === 0) {
     favItems.innerHTML = `
         <div style="text-align:center; padding: 50px;">
-            <h2>Aún no tienes favoritos ❤️</h2>
+            <h2>Aún no tienes favoritos </h2>
             <a href="index.html" style="color: #ff4d6d; font-weight:bold;">Ir a la tienda</a>
         </div>`;
     return;
@@ -44,7 +44,7 @@ function renderFavs() {
         <img src="${p.img}">
         <h4>${p.name}</h4>
         <p>$${p.price}</p>
-        <button onclick="removeFav(${index})">❌ Quitar</button>
+        <button onclick="removeFav(${index})">❌Quitar</button>
       </div>
     `;
   });

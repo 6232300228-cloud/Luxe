@@ -14,13 +14,13 @@ router.post('/register', async (req, res) => {
 
         // Validar campos obligatorios
         if (!nombre || !correo || !correo.includes('@') || !contraseña) {
-            return res.status(400).json({ error: '❌ Faltan campos obligatorios' });
+            return res.status(400).json({ error: ' Faltan campos obligatorios' });
         }
 
         // Verificar si el correo ya está registrado
         const existeUsuario = await User.findOne({ correo });
         if (existeUsuario) {
-            return res.status(400).json({ error: '❌ El correo ya está registrado' });
+            return res.status(400).json({ error: ' El correo ya está registrado' });
         }
 
         // Encriptar contraseña
@@ -75,13 +75,13 @@ router.post('/login', async (req, res) => {
 
         // Validar existencia
         if (!usuario) {
-            return res.status(401).json({ error: '❌ Correo no registrado' });
+            return res.status(401).json({ error: ' Correo no registrado' });
         }
 
         // Validar contraseña
         const contraseñaValida = await bcrypt.compare(contraseña, usuario.contraseña);
         if (!contraseñaValida) {
-            return res.status(401).json({ error: '❌ Contraseña incorrecta' });
+            return res.status(401).json({ error: 'Contraseña incorrecta' });
         }
 
         // Generar token

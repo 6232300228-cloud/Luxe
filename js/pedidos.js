@@ -11,7 +11,7 @@ async function cargarPedidos() {
     if (!token || !user) {
         contenedor.innerHTML = `
             <div class="card" style="padding: 40px; text-align: center;">
-                <h2 style="color: #ff4d6d;">🔒 Inicia sesión para ver tus pedidos</h2>
+                <h2 style="color: #ff4d6d;"> Inicia sesión para ver tus pedidos</h2>
                 <p>Necesitas iniciar sesión para ver el historial de tus compras.</p>
                 <a href="login.html" style="display: inline-block; background: #ff4d6d; color: white; padding: 12px 30px; text-decoration: none; border-radius: 25px; margin-top: 20px;">
                     Ir a iniciar sesión
@@ -23,7 +23,7 @@ async function cargarPedidos() {
 
     try {
         // Mostrar carga
-        contenedor.innerHTML = `<div style="text-align: center; padding: 40px;">Cargando tus pedidos... ⏳</div>`;
+        contenedor.innerHTML = `<div style="text-align: center; padding: 40px;">Cargando tus pedidos... </div>`;
 
         // 🔥 Llamar al backend para obtener los pedidos REALES desde MongoDB
         const response = await fetch('http://localhost:3000/api/orders/mis-pedidos', {
@@ -42,7 +42,7 @@ async function cargarPedidos() {
         if (pedidos.length === 0) {
             contenedor.innerHTML = `
                 <div class="card" style="padding: 50px; text-align: center;">
-                    <h2 style="color: #ff4d6d;">Aún no tienes pedidos 💔</h2>
+                    <h2 style="color: #ff4d6d;">Aún no tienes pedidos </h2>
                     <p>Hola ${user.nombre}, cuando realices tu primera compra, aparecerá aquí.</p>
                     <a href="index.html" style="display: inline-block; background: #ff4d6d; color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; margin-top: 20px;">
                         Ir a la tienda
@@ -123,7 +123,7 @@ async function cargarPedidos() {
         console.error('Error cargando pedidos:', error);
         contenedor.innerHTML = `
             <div class="card" style="padding: 40px; text-align: center;">
-                <h2 style="color: #ff4d6d;">❌ Error al cargar los pedidos</h2>
+                <h2 style="color: #ff4d6d;"> Error al cargar los pedidos</h2>
                 <p>Hubo un problema al cargar tu historial. Por favor intenta de nuevo.</p>
                 <button onclick="cargarPedidos()" style="background: #ff4d6d; color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; margin-top: 20px;">
                     Reintentar

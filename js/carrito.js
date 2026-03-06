@@ -40,7 +40,7 @@ function renderCarrito() {
     if (carrito.length === 0) {
         cartItems.innerHTML = `
             <div style="text-align:center; padding: 50px;">
-                <h2>Tu carrito está vacío 💄</h2>
+                <h2>Tu carrito está vacío </h2>
                 <a href="index.html" style="color: #ff4d6d; font-weight:bold;">Ir de compras</a>
             </div>`;
         totalText.innerHTML = "Total: $0.00";
@@ -81,7 +81,7 @@ function renderCarrito() {
                 <b>${producto.cantidad}</b>
                 <button onclick="cambiarCantidad(${index}, 1)" style="width:30px; padding:2px;">➕</button>
             </div>
-            <button onclick="eliminarProducto(${index})" style="background:none; color:red; border:none; width:auto; font-size:18px;">🗑️</button>
+            <button onclick="eliminarProducto(${index})" style="background:none; color:red; border:none; width:auto; font-size:18px;"></button>
           </div>
         `;
         cartItems.appendChild(card);
@@ -102,7 +102,7 @@ function renderCarrito() {
             let faltante = envioGratisMin - subtotal;
             let porcentaje = (subtotal / envioGratisMin) * 100;
             shippingBox.innerHTML = `
-                Te faltan <b>$${faltante.toFixed(2)}</b> para envío gratis 💖
+                Te faltan <b>$${faltante.toFixed(2)}</b> para envío gratis 
                 <div class="shipping-bar"><div class="shipping-progress" style="width:${porcentaje}%"></div></div>`;
         }
     }

@@ -122,7 +122,7 @@ router.delete('/vaciar', verificarToken, async (req, res) => {
             await carrito.save();
         }
         
-        res.json({ mensaje: '✅ Carrito vaciado' });
+        res.json({ mensaje: ' Carrito vaciado' });
         
     } catch (error) {
         console.error('Error vaciando carrito:', error);

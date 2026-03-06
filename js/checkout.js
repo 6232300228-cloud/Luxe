@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log("💰 Total:", total);
 
         // Deshabilitar botón
-        btnPagar.innerText = "Procesando... ✨";
+        btnPagar.innerText = "Procesando... ";
         btnPagar.disabled = true;
 
         try {
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             const data = await response.json();
-            console.log("✅ Pedido guardado:", data);
+            console.log(" Pedido guardado:", data);
 
             // ============================================
             // 🔥 REDUCIR STOCK DE CADA PRODUCTO VENDIDO
@@ -174,13 +174,13 @@ console.log("✅ Reducción de stock completada");
             localStorage.removeItem("carrito");
             localStorage.removeItem("totalAPagar");
 
-            alert("✅ ¡Compra confirmada! 💖");
+            alert(" ¡Compra confirmada! ");
             window.location.href = "ticket.html";
 
         } catch (error) {
             console.error("❌ Error completo:", error);
             alert(`❌ Error: ${error.message}`);
-            btnPagar.innerText = "Confirmar Pago 💖";
+            btnPagar.innerText = "Confirmar Pago ";
             btnPagar.disabled = false;
         }
     });

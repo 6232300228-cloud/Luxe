@@ -51,7 +51,7 @@ async function loadProduct() {
         <h2>${product.name}</h2>
         <p><strong>Precio:</strong> $${product.price}</p>
         <p class="desc">
-          Producto de alta calidad, ideal para tu rutina de maquillaje 💖
+          Producto de alta calidad, ideal para tu rutina de maquillaje 
         </p>
         <button onclick="addToCart(${product.id}, '${product.name}', '${product.img}', ${product.price})" class="btn-pagar">
           Agregar al carrito 🛒
@@ -75,7 +75,7 @@ window.addToCart = function(id, name, img, price) {
   localStorage.setItem("carrito", JSON.stringify(cart));
   
   // Aquí se agrga
-  showToast("Producto agregado 🛒");
+  showToast("Producto agregado ");
   actualizarContadorCarrito(); 
 };
 

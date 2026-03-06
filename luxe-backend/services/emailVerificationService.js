@@ -20,7 +20,7 @@ const verificarEmail = async (email) => {
         });
 
         const data = response.data;
-        console.log('📧 Respuesta de Abstract:', data); // Para depuración
+        console.log(' Respuesta de Abstract:', data); // Para depuración
 
         // La API devuelve varios campos útiles [citation:2]
         const resultado = {
@@ -39,27 +39,27 @@ const verificarEmail = async (email) => {
         // Lógica de decisión: ¿consideramos el email válido?
         if (data.deliverability === 'DELIVERABLE') {
             resultado.valido = true;
-            resultado.mensaje = '✅ Email válido y entregable';
+            resultado.mensaje = ' Email válido y entregable';
         } 
         else if (data.deliverability === 'RISKY') {
             resultado.valido = false;
-            resultado.mensaje = '⚠️ Email riesgoso (podría rebotar)';
+            resultado.mensaje = ' Email riesgoso (podría rebotar)';
         }
         else if (data.deliverability === 'UNDELIVERABLE') {
             resultado.valido = false;
-            resultado.mensaje = '❌ El email no existe o no es entregable';
+            resultado.mensaje = ' El email no existe o no es entregable';
         }
         else if (!data.is_valid_format?.value) {
             resultado.valido = false;
-            resultado.mensaje = '❌ Formato de correo inválido';
+            resultado.mensaje = ' Formato de correo inválido';
         }
         else if (data.is_disposable_email?.value) {
             resultado.valido = false;
-            resultado.mensaje = '❌ No se permiten correos desechables (temporales)';
+            resultado.mensaje = ' No se permiten correos desechables (temporales)';
         }
         else {
             resultado.valido = false;
-            resultado.mensaje = '❌ No se pudo verificar el email';
+            resultado.mensaje = ' No se pudo verificar el email';
         }
 
         return resultado;
@@ -68,7 +68,7 @@ const verificarEmail = async (email) => {
         console.error('Error verificando email:', error.response?.data || error.message);
         return {
             valido: false,
-            mensaje: '❌ Error en el servicio de verificación',
+            mensaje: 'Error en el servicio de verificación',
             data: null
         };
     }

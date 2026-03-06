@@ -9,7 +9,7 @@ const router = express.Router();
 const verificarToken = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-        return res.status(401).json({ error: '❌ No autorizado' });
+        return res.status(401).json({ error: ' No autorizado' });
     }
 
     try {
@@ -17,7 +17,7 @@ const verificarToken = (req, res, next) => {
         req.usuarioId = decoded.id;
         next();
     } catch (error) {
-        return res.status(401).json({ error: '❌ Token inválido' });
+        return res.status(401).json({ error: ' Token inválido' });
     }
 };
 
@@ -25,7 +25,7 @@ const verificarToken = (req, res, next) => {
 // RUTA DE PRUEBA (para verificar que funciona)
 // ============================================
 router.get('/test', (req, res) => {
-    res.json({ mensaje: '📦 Ruta de pedidos funcionando correctamente' });
+    res.json({ mensaje: ' Ruta de pedidos funcionando correctamente' });
 });
 
 // ============================================
@@ -36,7 +36,7 @@ router.post('/crear', verificarToken, async (req, res) => {
         const { usuario, productos, total, metodoPago } = req.body;
         const usuarioId = req.usuarioId;
 
-        console.log('📥 Recibiendo pedido:', { usuarioId, productos, total });
+        console.log(' Recibiendo pedido:', { usuarioId, productos, total });
 
         const nuevoPedido = new Order({
             usuarioId: usuarioId,
@@ -58,10 +58,10 @@ router.post('/crear', verificarToken, async (req, res) => {
         });
 
         await nuevoPedido.save();
-        console.log('✅ Pedido guardado con ID:', nuevoPedido._id);
+        console.log(' Pedido guardado con ID:', nuevoPedido._id);
 
         res.status(201).json({
-            mensaje: '✅ Pedido creado exitosamente',
+            mensaje: ' Pedido creado exitosamente',
             pedido: {
                 id: nuevoPedido._id,
                 total: nuevoPedido.total,
@@ -71,7 +71,7 @@ router.post('/crear', verificarToken, async (req, res) => {
         });
 
     } catch (error) {
-        console.error('❌ Error creando pedido:', error);
+        console.error('Error creando pedido:', error);
         res.status(500).json({ error: 'Error interno del servidor' });
     }
 });
@@ -87,7 +87,7 @@ router.get('/mis-pedidos', verificarToken, async (req, res) => {
         
         if (usuario.role === 'admin' || usuario.role === 'empleado') {
             pedidos = await Order.find().sort({ fechaPedido: -1 });
-            console.log(`👑 Admin ${usuario.nombre} viendo ${pedidos.length} pedidos`);
+            console.log(` Admin ${usuario.nombre} viendo ${pedidos.length} pedidos`);
         } else {
             pedidos = await Order.find({ usuarioId: req.usuarioId })
                 .sort({ fechaPedido: -1 });

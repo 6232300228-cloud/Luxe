@@ -10,7 +10,7 @@ const router = express.Router();
 const verificarToken = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) {
-        return res.status(401).json({ error: '❌ No autorizado' });
+        return res.status(401).json({ error: ' No autorizado' });
     }
 
     try {
@@ -18,7 +18,7 @@ const verificarToken = (req, res, next) => {
         req.usuarioId = decoded.id;
         next();
     } catch (error) {
-        return res.status(401).json({ error: '❌ Token inválido' });
+        return res.status(401).json({ error: ' Token inválido' });
     }
 };
 
@@ -26,7 +26,7 @@ const verificarToken = (req, res, next) => {
 // RUTA DE PRUEBA (para verificar que funciona)
 // ============================================
 router.get('/test', (req, res) => {
-    res.json({ mensaje: '📦 Ruta de productos funcionando correctamente' });
+    res.json({ mensaje: '📦Ruta de productos funcionando correctamente' });
 });
 
 // ============================================
@@ -61,7 +61,7 @@ router.post('/seed', async (req, res) => {
         await Product.deleteMany({});
         await Product.insertMany(productosIniciales);
         
-        res.json({ mensaje: '✅ Productos cargados exitosamente' });
+        res.json({ mensaje: ' Productos cargados exitosamente' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -102,7 +102,7 @@ router.put('/reducir-stock/:productoId', verificarToken, async (req, res) => {
         await producto.save();
         
         res.json({ 
-            mensaje: '✅ Stock actualizado', 
+            mensaje: ' Stock actualizado', 
             nuevoStock: producto.stock 
         });
     } catch (error) {

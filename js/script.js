@@ -129,7 +129,7 @@ function renderProducts() {
   let favs = JSON.parse(localStorage.getItem("favs")) || [];
 
   if (filtered.length === 0) {
-    productList.innerHTML = "<h2>No se encontraron productos 😥</h2>";
+    productList.innerHTML = "<h2>No se encontraron productos </h2>";
     return;
   }
 
@@ -181,13 +181,13 @@ function toggleFav(event, id) {
         if (productToAdd) {
             favs.push(productToAdd);
             // --- AQUÍ VOLVEMOS A AVISAR ---
-            showToast("Agregado a favoritos ✨");
+            showToast("Agregado a favoritos ");
         }
     } else {
         // ELIMINAR
         favs.splice(index, 1);
         // --- AVISO DE ELIMINADO ---
-        showToast("Quitado de favoritos 💔");
+        showToast("Quitado de favoritos ");
     }
 
     // 3. GUARDAR
@@ -232,19 +232,19 @@ function openExperience(tipo) {
   // Configuración de Estilos
   const config = {
     'pro': { 
-        titulo: "FAVORITOS PRO 💜", 
+        titulo: "FAVORITOS PRO ", 
         bgColor: "#fdf2f5", 
         textColor: "#333333", 
         btn: "#ff4d6d" 
     },
     'kit': { 
-        titulo: "KITS DE REGALO 🎁", 
+        titulo: "KITS DE REGALO ", 
         bgColor: "#fff9fb", 
         textColor: "#333333", 
         btn: "#ff4d6d" 
     },
     'skincare': { 
-        titulo: "RITUAL SKINCARE ✨", 
+        titulo: "RITUAL SKINCARE ", 
         bgColor: "#f0f9f1", 
         textColor: "#2d5a27", 
         btn: "#4caf50" 
@@ -278,7 +278,7 @@ function openExperience(tipo) {
       <button class="btn-add-all-luxe" 
               style="background:${setup.btn}; color:white; padding:15px 35px; border:none; border-radius:50px; cursor:pointer; font-weight:bold; width:100%;" 
               onclick="completeExperience()">
-        🛒 AÑADIR TODO AL CARRITO
+         AÑADIR TODO AL CARRITO
       </button>
     </div>
   `;
@@ -303,7 +303,7 @@ function completeExperience() {
     if (!window.currentExperience) return;
     window.currentExperience.forEach(p => addToCart(p.id));
     // Si tienes showToast úsalo, si no, un alert:
-    alert("¡Selección añadida al carrito! 💄✨");
+    alert("¡Selección añadida al carrito! ");
     closeLook();
 }
 /* CARRITO (CON ANIMACIÓN)*/
@@ -353,7 +353,7 @@ function addToCart(id) {
 
   localStorage.setItem("carrito", JSON.stringify(cart));
   updateCartCounter();
-  showToast("¡Añadido al carrito! 🛒✨");
+  showToast("¡Añadido al carrito! ");
 }
 
 
@@ -384,14 +384,14 @@ function addToFav(id) {
   let exists = favs.find(x => x.id === id);
 
   if (exists) {
-    showToast("Ya está en favoritos ❤️");
+    showToast("Ya está en favoritos ");
     return;
   }
 
   favs.push(product);
   localStorage.setItem("favs", JSON.stringify(favs));
 
-  showToast("Agregado a favoritos ✨");
+  showToast("Agregado a favoritos ");
   updateFavCounter(); // Identificador: Llamada a animación
 }
 let selectedBrand = "all";
@@ -436,12 +436,12 @@ function showOnlyFavs() {
   let favs = JSON.parse(localStorage.getItem("favs")) || [];
   
   if (favs.length === 0) {
-    showToast("No tienes favoritos 💔");
+    showToast("No tienes favoritos ");
     return;
   }
   filtered = favs;
   renderProducts();
-  showToast("Viendo tus favoritos ❤️");
+  showToast("Viendo tus favoritos ");
 }
 /* LÓGICA DEL FOOTER*/
 
@@ -454,10 +454,10 @@ document.addEventListener('DOMContentLoaded', () => {
         newsletterBtn.onclick = () => {
             const email = newsletterInput.value;
             if (email.includes('@')) {
-                showToast("¡Bienvenida al Club Luxe! 💌");
+                showToast("¡Bienvenida al Club Luxe! ");
                 newsletterInput.value = "";
             } else {
-                showToast("Por favor, ingresa un email válido ❌");
+                showToast("Por favor, ingresa un email válido ");
             }
         };
     }

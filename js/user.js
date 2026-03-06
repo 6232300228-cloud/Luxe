@@ -18,7 +18,7 @@ function checkUser() {
     if (logoutBtn) {
       logoutBtn.onclick = () => {
         localStorage.removeItem("user");
-        alert("Sesión cerrada 👋");
+        alert("Sesión cerrada ");
         window.location.href = "index.html";
       };
     }

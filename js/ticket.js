@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const contenedor = document.getElementById("ticketInfo");
 
     if (!ticket) {
-        contenedor.innerHTML = "❌ No hay información del ticket";
+        contenedor.innerHTML = " No hay información del ticket";
         return;
     }
 
@@ -29,10 +29,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     contenedor.innerHTML = `
         <div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 800px; margin: 0 auto;">
-            <h2 style="color: #ff4d6d; text-align: center; margin-bottom: 30px;">🎉 ¡Gracias por tu compra!</h2>
+            <h2 style="color: #ff4d6d; text-align: center; margin-bottom: 30px;"> ¡Gracias por tu compra!</h2>
             
             <div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
-                <h3 style="color: #333; margin-top: 0;">📦 Detalles del pedido</h3>
+                <h3 style="color: #333; margin-top: 0;"> Detalles del pedido</h3>
                 <p><strong>Pedido #:</strong> ${ticket.id}</p>
                 <p><strong>Fecha:</strong> ${fecha}</p>
                 <p><strong>Cliente:</strong> ${ticket.cliente || 'No especificado'}</p>
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p><strong>Método de pago:</strong> ${ticket.metodoPago === 'tarjeta' ? '💳 Tarjeta' : '🅿️ PayPal'}</p>
             </div>
 
-            <h3 style="color: #333;">🛍️ Productos</h3>
+            <h3 style="color: #333;"> Productos</h3>
             <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
                 <thead>
                     <tr style="background: #ff4d6d; color: white;">
@@ -65,8 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
             </table>
 
             <div style="margin-top: 40px; text-align: center;">
-                <p style="color: #666;">📧 Hemos enviado la confirmación a tu correo</p>
-                <p style="color: #666;">💄 Puedes ver tus pedidos en "Mi Perfil"</p>
+                <p style="color: #666;"> Hemos enviado la confirmación a tu correo</p>
+                <p style="color: #666;"> Puedes ver tus pedidos en "Mi Perfil"</p>
                 
                 <div style="margin-top: 30px;">
                     <a href="index.html" 

@@ -3,7 +3,7 @@ let user = JSON.parse(localStorage.getItem("user"));
 
 // Verificación de sesión: si no hay usuario, redirige al login
 if (!user) {
-    alert("⚠️ No has iniciado sesión");
+    alert(" No has iniciado sesión");
     window.location.href = "login.html";
 } else {
     // Referencias a los elementos del HTML (asegúrate de que los IDs coincidan en perfil.html)
@@ -28,7 +28,7 @@ if (!user) {
     btnGuardar.onclick = () => {
         // Validación de campos obligatorios para mantener la integridad de la cuenta
         if (nombreInput.value.trim() === "" || correoInput.value.trim() === "") {
-            alert("❌ El nombre y el correo electrónico son obligatorios");
+            alert(" El nombre y el correo electrónico son obligatorios");
             return;
         }
 
@@ -42,7 +42,7 @@ if (!user) {
         // Guardamos la versión actualizada en la memoria del navegador (localStorage)
         localStorage.setItem("user", JSON.stringify(user));
         
-        alert("✅ ¡Tus datos de Luxe Maquillaje se han actualizado! 💖");
+        alert(" ¡Tus datos de Luxe Maquillaje se han actualizado! ");
         
         // Recargamos la página para que los cambios se reflejen en toda la interfaz (como el saludo en el header)
         window.location.reload();

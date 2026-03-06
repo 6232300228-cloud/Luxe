@@ -6,7 +6,7 @@ const token = localStorage.getItem("token");
 
 // Si no hay sesión o el usuario es cliente, redirigir
 if (!user || !token || (user.role !== "admin" && user.role !== "empleado")) {
-    alert("⛔ Acceso restringido solo para personal autorizado");
+    alert(" Acceso restringido solo para personal autorizado");
     window.location.href = "login.html";
 }
 
@@ -39,7 +39,7 @@ async function cargarProductos() {
     tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">Cargando productos...</td></tr>';
     
     try {
-        console.log('📦 Intentando cargar productos...');
+        console.log(' Intentando cargar productos...');
         
         // Verificar que el servidor responde
         const testResponse = await fetch('http://localhost:3000');
@@ -54,7 +54,7 @@ async function cargarProductos() {
         }
         
         const productos = await response.json();
-        console.log('✅ Productos cargados:', productos.length);
+        console.log(' Productos cargados:', productos.length);
         
         if (productos.length === 0) {
             tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay productos cargados</td></tr>';
@@ -75,11 +75,11 @@ async function cargarProductos() {
             let btns = '';
             if (user.role === "admin") {
                 btns = `
-                    <button class="btn-accion btn-editar" onclick="editarProducto('${p._id}')">✏️</button>
-                    <button class="btn-accion btn-borrar" onclick="eliminarProducto('${p._id}')">🗑️</button>
+                    <button class="btn-accion btn-editar" onclick="editarProducto('${p._id}')">Editar</button>
+                    <button class="btn-accion btn-borrar" onclick="eliminarProducto('${p._id}')">Eliminar</button>
                 `;
             } else {
-                btns = `<span style="color: #888;">👁️ Solo lectura</span>`;
+                btns = `<span style="color: #888;"> Solo lectura</span>`;
             }
 
             tr.innerHTML = `
@@ -94,11 +94,11 @@ async function cargarProductos() {
         });
         
     } catch (error) {
-        console.error('❌ Error cargando productos:', error);
+        console.error(' Error cargando productos:', error);
         tabla.innerHTML = `
             <tr>
                 <td colspan="6" style="text-align: center; color: red; padding: 40px;">
-                    ❌ Error al cargar productos<br>
+                     Error al cargar productos<br>
                     <small>${error.message}</small><br>
                     <button onclick="cargarProductos()" style="margin-top: 10px; padding: 5px 15px;">Reintentar</button>
                 </td>

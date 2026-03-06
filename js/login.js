@@ -1,4 +1,29 @@
+// ============================================
+// REFERENCIAS A LOS FORMULARIOS
+// ============================================
+const loginSection = document.getElementById("login-section");
+const registerSection = document.getElementById("register-section");
+const toRegister = document.getElementById("to-register");
+const toLogin = document.getElementById("to-login");
+const btnLogin = document.getElementById("btnLogin");
+const btnRegister = document.getElementById("btnRegister");
+
+// ============================================
+// CAMBIO ENTRE FORMULARIOS
+// ============================================
+toRegister.addEventListener("click", () => {
+    loginSection.classList.add("hidden");
+    registerSection.classList.remove("hidden");
+});
+
+toLogin.addEventListener("click", () => {
+    registerSection.classList.add("hidden");
+    loginSection.classList.remove("hidden");
+});
+
+// ============================================
 // LOGIN
+// ============================================
 btnLogin.addEventListener("click", async () => {
     let correo = document.getElementById("login-correo").value;
     let contraseña = document.getElementById("login-pass").value;
@@ -36,5 +61,43 @@ btnLogin.addEventListener("click", async () => {
     } catch (error) {
         console.error('❌ Error completo:', error);
         alert("❌ Error de conexión con el servidor. Asegúrate de que el backend esté corriendo en http://localhost:3000");
+    }
+});
+
+// ============================================
+// REGISTRO
+// ============================================
+btnRegister.addEventListener("click", async () => {
+    const nombre = document.getElementById("reg-nombre").value;
+    const telefono = document.getElementById("reg-telefono").value;
+    const direccion = document.getElementById("reg-direccion").value;
+    const correo = document.getElementById("reg-correo").value;
+    const contraseña = document.getElementById("reg-pass").value;
+
+    if (nombre === "" || telefono === "" || direccion === "" || !correo.includes("@") || contraseña === "") {
+        alert("⚠️ Por favor, llena todos los campos de tu registro Luxe");
+        return;
+    }
+
+    try {
+        const response = await fetch('http://localhost:3000/api/auth/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ nombre, correo, telefono, direccion, contraseña })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
+            alert("✨ ¡Cuenta creada con éxito!");
+            window.location.href = "index.html";
+        } else {
+            alert(data.error || "Error al registrarse");
+        }
+    } catch (error) {
+        alert("Error de conexión con el servidor");
+        console.error(error);
     }
 });

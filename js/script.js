@@ -55,7 +55,7 @@ let products = [
   { id: 42, name: "Brush Cleanser", price: 390, category: "accesorios", brand: "mac", img: "img/cleaner.png", desc: "Limpiador de brochas de secado rápido." },
   { id: 43, name: "Prep + Prime Fix+", price: 680, category: "accesorios", brand: "mac", img: "img/fix.png", desc: "Bruma de agua que fija el maquillaje y refresca." },
   { id: 44, name: "Matte Setting Spray", price: 235, category: "accesorios", brand: "nyx", img: "img/set-spray.png", desc: "Fijador de maquillaje para evitar el brillo." },
-  { id: 45, name: "Sacapuntas de Cosméticos", price: 38, category: "accesorios", brand: "bissu", img: "img/sacapuntas.png", desc: "Mantén tus lápices con punta perfecta." },
+  { id: 45, name: "Sacapuntas de Cosméticos", price: 1, category: "accesorios", brand: "bissu", img: "img/sacapuntas.png", desc: "Mantén tus lápices con punta perfecta." },
   { id: 46, name: "Pegamento Lash It Loud", price: 190, category: "accesorios", brand: "nyx", img: "img/glue.png", desc: "Adhesivo para pestañas de alta fijación." },
   { id: 47, name: "Pestañas Postizas 3D", price: 85, category: "ojos", brand: "bissu", img: "img/pestañas.png", desc: "Añade volumen y drama a tus ojos." },
   { id: 48, name: "Paleta Pro Contour", price: 320, category: "rubor", brand: "nyx", img: "img/contour.png", desc: "Kit para definir y resaltar facciones." },

@@ -97,7 +97,7 @@ function renderCarrito() {
 
     if (shippingBox) {
         if (subtotal >= envioGratisMin) {
-            shippingBox.innerHTML = `🎉 ¡Envío GRATIS! <div class="shipping-bar"><div class="shipping-progress" style="width:100%; background:#2ecc71;"></div></div>`;
+            shippingBox.innerHTML = `¡Envío GRATIS! <div class="shipping-bar"><div class="shipping-progress" style="width:100%; background:#2ecc71;"></div></div>`;
         } else {
             let faltante = envioGratisMin - subtotal;
             let porcentaje = (subtotal / envioGratisMin) * 100;
@@ -118,7 +118,7 @@ function renderCarrito() {
     } else {
         totalText.innerHTML = `
             <div style="font-size: 24px; font-weight: bold; color: #ff4d6d;">Total: $${totalFinal.toFixed(2)}</div>
-            <small style="color: #2ecc71; font-weight: bold;">✨ Envío Gratis Aplicado</small>
+            <small style="color: #2ecc71; font-weight: bold;"> Envío Gratis Aplicado</small>
         `;
     }
 

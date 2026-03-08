@@ -1450,13 +1450,13 @@ padding: 15px;
 }
 
 .footer-column h3 {
+    margin-top: 30px; /* Espacio extra arriba del título "Encuéntranos" */
     font-family: 'Playfair Display', serif;
     font-size: 20px;
     margin-bottom: 25px;
     color: #333;
     position: relative;
 }
-
 .footer-column h3::after {
     content: "";
     position: absolute;
@@ -1498,7 +1498,53 @@ padding: 15px;
     color: #ff4d6d;
     padding-left: 8px;
 }
+/*q*/
+/* Contenedor de los iconos */
+.social-links {
+    display: flex;
+    gap: 15px; /* Espacio entre las bolitas */
+    align-items: center;
+    margin-top: 25px; /* Separación con el texto superior */
+}
 
+/* Estilo para los círculos (el <a>) - AHORA MÁS GRANDES */
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px; /* Aumentado de 40px a 50px */
+    height: 50px; /* Aumentado de 40px a 50px */
+    background-color: #fff0f3; /* Rosa clarito de fondo */
+    border-radius: 50%;
+    text-decoration: none;
+    color: #ff4d6d; /* Color para FB y TK */
+    font-weight: bold;
+    font-size: 14px; /* Texto FB/TK un poco más grande */
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Sombra suave opcional */
+}
+
+/* Estilo específico para la imagen del logo (IG) - AHORA MÁS GRANDE */
+.social-links a img.logo {
+    width: 30px;  /* Aumentado de 20px a 30px */
+    height: 30px; /* Aumentado de 20px a 30px */
+    object-fit: contain;
+    transition: all 0.3s ease; /* Para que la transición de hover sea suave */
+}
+
+/* Efecto hover para todos - CORREGIDO PARA QUE NO DESAPAREZCA EL LOGO */
+.social-links a:hover {
+    background-color: #ffe0e6; /* Cambia a un rosa ligeramente más oscuro en hover */
+    color: #ff2d55; /* FB/TK se vuelven más intensos */
+    transform: translateY(-4px); /* Pequeño salto hacia arriba */
+    box-shadow: 0 5px 10px rgba(255, 77, 109, 0.2); /* Sombra más pronunciada al pasar el mouse */
+}
+
+/* EFECTO HOVER ESPECÍFICO PARA EL LOGO (Opcional: un ligero aumento) */
+.social-links a:hover img.logo {
+    /* Aquí no ponemos filtro, así el logo de IG sigue siendo visible */
+    transform: scale(1.1); /* Hace que el logo de IG crezca un 10% en hover */
+}
 /* Newsletter con Estilo */
 .newsletter-form {
     display: flex;

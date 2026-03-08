@@ -47,7 +47,7 @@ async function cargarProductos() {
             throw new Error('Servidor no disponible');
         }
         
-        const response = await fetch('http://api.luxecollection.org/api/products');
+        const response = await fetch('https://api.luxecollection.org/api/products');
         
         if (!response.ok) {
             throw new Error(`Error HTTP: ${response.status}`);
@@ -112,7 +112,7 @@ async function cargarProductos() {
 // ============================================
 async function cargarEstadisticas() {
     try {
-        const response = await fetch('http://api.luxecollection.org/api/orders/mis-pedidos', {
+        const response = await fetch('https://api.luxecollection.org/api/orders/mis-pedidos', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -150,7 +150,7 @@ async function cargarEstadisticas() {
 // ============================================
 async function crearGrafica() {
     try {
-        const response = await fetch('http://api.luxecollection.org/api/orders/mis-pedidos', {
+        const response = await fetch('https://api.luxecollection.org/api/orders/mis-pedidos', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         

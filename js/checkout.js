@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log("📦 Enviando pedido:", pedidoData);
 
             // Enviar al backend para guardar el pedido
-            const response = await fetch('http://api.luxecollection.org/api/orders/crear', {
+            const response = await fetch('https://api.luxecollection.org/api/orders/crear', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ for (const item of carrito) {
 
         console.log(`➖ Enviando petición para ${item.nombre} (ID: ${productoId})`);
 
-        const stockResponse = await fetch(`http://api.luxecollection.org/api/products/reducir-stock/${productoId}`, {
+        const stockResponse = await fetch(`https://api.luxecollection.org/api/products/reducir-stock/${productoId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

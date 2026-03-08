@@ -6,16 +6,17 @@ require('dotenv').config();
 const app = express();
 
 // Configurar CORS
-// Configurar CORS
+// Configurar CORS para producción y local
 app.use(cors({
     origin: [
-        'https://luxecollection.org',        // Tu dominio principal en producción
-        'https://www.luxecollection.org',    // Por si entran con www
-        'http://127.0.0.1:5500',             // Para que sigas pudiendo probar en local
+        'https://luxecollection.org',        // Tu web real
+        'https://www.luxecollection.org',    // Tu web con www
+        'http://127.0.0.1:5500',             // Para que sigas probando en VS Code
         'http://localhost:5500'
     ],
     credentials: true
 }));
+
 // Conectar a MongoDB
 console.log('🔌 Conectando a MongoDB...');
 mongoose.connect(process.env.MONGODB_URI)

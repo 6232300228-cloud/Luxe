@@ -34,9 +34,9 @@ btnLogin.addEventListener("click", async () => {
     }
 
     try {
-        console.log('📤 Intentando conectar a:', 'http://localhost:3000/api/auth/login');
+        console.log('📤 Intentando conectar a:', 'http://api.luxecollection.org/api/auth/login');
         
-        const response = await fetch('http://localhost:3000/api/auth/login', {
+        const response = await fetch('http://api.luxecollection.org/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ correo, contraseña })
@@ -60,7 +60,7 @@ btnLogin.addEventListener("click", async () => {
         }
     } catch (error) {
         console.error('Error completo:', error);
-        alert("Error de conexión con el servidor. Asegúrate de que el backend esté corriendo en http://localhost:3000");
+        alert("Error de conexión con el servidor. Asegúrate de que el backend esté corriendo en http://api.luxecollection.org");
     }
 });
 
@@ -80,7 +80,7 @@ btnRegister.addEventListener("click", async () => {
     }
 
     try {
-        const response = await fetch('http://localhost:3000/api/auth/register', {
+        const response = await fetch('http://api.luxecollection.org/api/auth/register', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre, correo, telefono, direccion, contraseña })

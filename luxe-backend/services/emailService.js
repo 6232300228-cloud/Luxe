@@ -18,7 +18,7 @@ transporter.verify((error, success) => {
 // ✅ Enviar correo de verificación (DEBE ESTAR EXPORTADA)
 const sendVerificationEmail = async (email, nombre, token) => {
     try {
-        const verificationLink = `http://localhost:3000/api/auth/verify-email?token=${token}`;
+        const verificationLink = `http://api.luxecollection.org/api/auth/verify-email?token=${token}`;
         
         const mailOptions = {
             from: '"Luxe Beauty" <TU_CORREO@gmail.com>',

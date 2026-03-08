@@ -42,12 +42,12 @@ async function cargarProductos() {
         console.log(' Intentando cargar productos...');
         
         // Verificar que el servidor responde
-        const testResponse = await fetch('http://localhost:3000');
+        const testResponse = await fetch('https://api.luxecollection.org');
         if (!testResponse.ok) {
             throw new Error('Servidor no disponible');
         }
         
-        const response = await fetch('http://localhost:3000/api/products');
+        const response = await fetch('http://api.luxecollection.org/api/products');
         
         if (!response.ok) {
             throw new Error(`Error HTTP: ${response.status}`);
@@ -112,7 +112,7 @@ async function cargarProductos() {
 // ============================================
 async function cargarEstadisticas() {
     try {
-        const response = await fetch('http://localhost:3000/api/orders/mis-pedidos', {
+        const response = await fetch('http://api.luxecollection.org/api/orders/mis-pedidos', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         
@@ -150,7 +150,7 @@ async function cargarEstadisticas() {
 // ============================================
 async function crearGrafica() {
     try {
-        const response = await fetch('http://localhost:3000/api/orders/mis-pedidos', {
+        const response = await fetch('http://api.luxecollection.org/api/orders/mis-pedidos', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
         

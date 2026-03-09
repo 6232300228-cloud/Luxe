@@ -7,10 +7,12 @@ const toRegister = document.getElementById("to-register");
 const toLogin = document.getElementById("to-login");
 const btnLogin = document.getElementById("btnLogin");
 const btnRegister = document.getElementById("btnRegister");
+
 // ============================================
 // VARIABLE DE CONFIGURACIÓN
 // ============================================
 const API_URL = 'https://luxe-api-frr5.onrender.com/api';
+
 // ============================================
 // CAMBIO ENTRE FORMULARIOS
 // ============================================
@@ -37,9 +39,9 @@ btnLogin.addEventListener("click", async () => {
     }
 
     try {
-        console.log('📤 Intentando conectar a:', 'https://luxe-api-frr5.onrender.com/api/auth/login');
+        console.log('📤 Intentando conectar a:', `${API_URL}/auth/login`);
         
-        const response = await fetch('https://luxe-api-frr5.onrender.com/api/auth/login', {
+        const response = await fetch(`${API_URL}/auth/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ correo, contraseña })
@@ -63,7 +65,7 @@ btnLogin.addEventListener("click", async () => {
         }
     } catch (error) {
         console.error('Error completo:', error);
-        alert("Error de conexión con el servidor. Asegúrate de que el backend esté corriendo en https://luxe-api-frr5.onrender.com");
+        alert("Error de conexión con el servidor");
     }
 });
 
@@ -83,7 +85,7 @@ btnRegister.addEventListener("click", async () => {
     }
 
     try {
-        const response = await fetch('https://luxe-api-frr5.onrender.com/api/auth/register', {
+        const response = await fetch(`${API_URL}/auth/register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ nombre, correo, telefono, direccion, contraseña })
@@ -104,6 +106,7 @@ btnRegister.addEventListener("click", async () => {
         console.error(error);
     }
 });
+
 // ============================================
 // LOGIN CON GOOGLE
 // ============================================
@@ -115,27 +118,36 @@ if (btnGoogle) {
 }
 
 // ============================================
-// MANEJAR RETORNO DE GOOGLE
+// FUNCIÓN PARA PROCESAR TOKEN DE GOOGLE
 // ============================================
-function handleGoogleSuccess() {
+function procesarTokenGoogle() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     const error = urlParams.get('error');
 
     if (error) {
         alert("Error al iniciar sesión con Google. Intenta de nuevo.");
+        // Limpiar URL
+        window.history.replaceState({}, document.title, window.location.pathname);
         return;
     }
 
     if (token) {
-        localStorage.setItem("token", token);
+        console.log('✅ Token recibido de Google, obteniendo usuario...');
         
         fetch(`${API_URL}/auth/me`, {
             headers: { 'Authorization': `Bearer ${token}` }
         })
-        .then(res => res.json())
+        .then(res => {
+            if (!res.ok) throw new Error('Error al obtener usuario');
+            return res.json();
+        })
         .then(user => {
+            localStorage.setItem("token", token);
             localStorage.setItem("user", JSON.stringify(user));
+            
+            // Limpiar URL
+            window.history.replaceState({}, document.title, window.location.pathname);
             
             if (user.role === "admin" || user.role === "empleado") {
                 window.location.href = "dashboard.html";
@@ -146,11 +158,15 @@ function handleGoogleSuccess() {
         .catch(err => {
             console.error("Error obteniendo usuario:", err);
             alert("Error al obtener datos del usuario");
+            // Limpiar URL
+            window.history.replaceState({}, document.title, window.location.pathname);
         });
     }
 }
 
-// Ejecutar si venimos del callback de Google (ahora en login.html)
-if (window.location.pathname.includes('login') && window.location.search.includes('token')) {
-    handleGoogleSuccess();
-}
+// ============================================
+// EJECUTAR AL CARGAR LA PÁGINA
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    procesarTokenGoogle();
+});

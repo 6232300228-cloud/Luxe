@@ -7,12 +7,10 @@ const toRegister = document.getElementById("to-register");
 const toLogin = document.getElementById("to-login");
 const btnLogin = document.getElementById("btnLogin");
 const btnRegister = document.getElementById("btnRegister");
-
 // ============================================
 // VARIABLE DE CONFIGURACIÓN
 // ============================================
 const API_URL = 'https://luxe-api-frr5.onrender.com/api';
-
 // ============================================
 // CAMBIO ENTRE FORMULARIOS
 // ============================================
@@ -38,7 +36,7 @@ btnLogin.addEventListener("click", async () => {
         return;
     }
 
-    try {
+       try {
         console.log('📤 Intentando conectar a:', `${API_URL}/auth/login`);
         
         const response = await fetch(`${API_URL}/auth/login`, {
@@ -46,6 +44,7 @@ btnLogin.addEventListener("click", async () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ correo, contraseña })
         });
+
 
         const data = await response.json();
         console.log('📥 Respuesta:', data);
@@ -65,7 +64,7 @@ btnLogin.addEventListener("click", async () => {
         }
     } catch (error) {
         console.error('Error completo:', error);
-        alert("Error de conexión con el servidor");
+        alert("Error de conexión con el servidor. Asegúrate de que el backend esté corriendo en https://luxe-api-frr5.onrender.com");
     }
 });
 
@@ -80,7 +79,7 @@ btnRegister.addEventListener("click", async () => {
     const contraseña = document.getElementById("reg-pass").value;
 
     if (nombre === "" || telefono === "" || direccion === "" || !correo.includes("@") || contraseña === "") {
-        alert("⚠️ Por favor, llena todos los campos de tu registro Luxe");
+        alert("Por favor, llena todos los campos de tu registro Luxe");
         return;
     }
 
@@ -91,12 +90,13 @@ btnRegister.addEventListener("click", async () => {
             body: JSON.stringify({ nombre, correo, telefono, direccion, contraseña })
         });
 
+
         const data = await response.json();
 
         if (response.ok) {
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
-            alert("✨ ¡Cuenta creada con éxito!");
+            alert(" ¡Cuenta creada con éxito!");
             window.location.href = "index.html";
         } else {
             alert(data.error || "Error al registrarse");
@@ -106,7 +106,6 @@ btnRegister.addEventListener("click", async () => {
         console.error(error);
     }
 });
-
 // ============================================
 // LOGIN CON GOOGLE
 // ============================================
@@ -118,16 +117,15 @@ if (btnGoogle) {
 }
 
 // ============================================
-// FUNCIÓN PARA PROCESAR TOKEN DE GOOGLE
+// MANEJAR RETORNO DE GOOGLE
 // ============================================
-function procesarTokenGoogle() {
+function handleGoogleSuccess() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     const error = urlParams.get('error');
 
     if (error) {
         alert("Error al iniciar sesión con Google. Intenta de nuevo.");
-        // Limpiar URL
         window.history.replaceState({}, document.title, window.location.pathname);
         return;
     }
@@ -155,7 +153,7 @@ function procesarTokenGoogle() {
                 window.location.href = "index.html";
             }
         })
-        .catch(err => {
+       .catch(err => {
             console.error("Error obteniendo usuario:", err);
             alert("Error al obtener datos del usuario");
             // Limpiar URL
@@ -164,9 +162,6 @@ function procesarTokenGoogle() {
     }
 }
 
-// ============================================
-// EJECUTAR AL CARGAR LA PÁGINA
-// ============================================
 document.addEventListener('DOMContentLoaded', function() {
     procesarTokenGoogle();
 });

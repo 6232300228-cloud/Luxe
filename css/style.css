@@ -765,6 +765,55 @@ input:focus {
   transition: 0.3s;
   margin-top: 10px;
 }
+/*sesion con google*/
+.btn-google {
+    width: 100%;
+    padding: 12px;
+    background-color: white;
+    color: #444;
+    border: 2px solid #ddd;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin: 15px 0;
+    transition: all 0.3s ease;
+}
+
+.btn-google:hover {
+    background-color: #f8f8f8;
+    border-color: #4285f4;
+    color: #4285f4;
+}
+
+.separador {
+    text-align: center;
+    margin: 20px 0;
+    color: #888;
+    position: relative;
+}
+
+.separador span {
+    background-color: white;
+    padding: 0 10px;
+    position: relative;
+    z-index: 2;
+}
+
+.separador::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background-color: #ddd;
+    z-index: 1;
+}
 
 #btnLogin:hover, #btnRegister:hover, #btnGuardar:hover {
   background: #ff4d6d; /* Cambia a rosa al pasar el mouse */

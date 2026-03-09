@@ -7,7 +7,10 @@ const toRegister = document.getElementById("to-register");
 const toLogin = document.getElementById("to-login");
 const btnLogin = document.getElementById("btnLogin");
 const btnRegister = document.getElementById("btnRegister");
-
+// ============================================
+// VARIABLE DE CONFIGURACIÓN
+// ============================================
+const API_URL = 'https://luxe-api-frr5.onrender.com/api';
 // ============================================
 // CAMBIO ENTRE FORMULARIOS
 // ============================================
@@ -101,3 +104,53 @@ btnRegister.addEventListener("click", async () => {
         console.error(error);
     }
 });
+// ============================================
+// LOGIN CON GOOGLE
+// ============================================
+const btnGoogle = document.getElementById("btnGoogle");
+if (btnGoogle) {
+    btnGoogle.addEventListener("click", () => {
+        window.location.href = `${API_URL}/auth/google`;
+    });
+}
+
+// ============================================
+// MANEJAR RETORNO DE GOOGLE
+// ============================================
+function handleGoogleSuccess() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    const error = urlParams.get('error');
+
+    if (error) {
+        alert("Error al iniciar sesión con Google. Intenta de nuevo.");
+        return;
+    }
+
+    if (token) {
+        localStorage.setItem("token", token);
+        
+        fetch(`${API_URL}/auth/me`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(res => res.json())
+        .then(user => {
+            localStorage.setItem("user", JSON.stringify(user));
+            
+            if (user.role === "admin" || user.role === "empleado") {
+                window.location.href = "dashboard.html";
+            } else {
+                window.location.href = "index.html";
+            }
+        })
+        .catch(err => {
+            console.error("Error obteniendo usuario:", err);
+            alert("Error al obtener datos del usuario");
+        });
+    }
+}
+
+// Ejecutar si venimos del callback de Google
+if (window.location.pathname.includes('auth/google-success')) {
+    handleGoogleSuccess();
+}

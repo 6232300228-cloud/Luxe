@@ -263,7 +263,33 @@
 <script src="js/user.js"></script>
 <script src="js/user.js"></script>
 
-
+<script>
+// Procesar token si viene de Google
+(function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+    
+    if (token) {
+        console.log('🎯 Token detectado en index');
+        
+        // Guardar token
+        localStorage.setItem("token", token);
+        
+        // Obtener datos del usuario
+        fetch('https://luxe-api-frr5.onrender.com/api/auth/me', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        })
+        .then(res => res.json())
+        .then(user => {
+            localStorage.setItem("user", JSON.stringify(user));
+            console.log('✅ Sesión iniciada para:', user.nombre);
+            // Recargar para mostrar usuario en navbar
+            window.location.href = 'index.html';
+        })
+        .catch(err => console.error('Error:', err));
+    }
+})();
+</script>
 </body>
 
 </html>

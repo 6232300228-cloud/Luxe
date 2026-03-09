@@ -150,7 +150,7 @@ function handleGoogleSuccess() {
     }
 }
 
-// Ejecutar si venimos del callback de Google
-if (window.location.pathname.includes('auth/google-success')) {
+// Ejecutar si venimos del callback de Google (ahora en login.html)
+if (window.location.pathname.includes('login') && window.location.search.includes('token')) {
     handleGoogleSuccess();
 }

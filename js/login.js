@@ -34,6 +34,9 @@ if (toLogin) {
 // ============================================
 // LOGIN NORMAL (CON SWEETALERT)
 // ============================================
+// ============================================
+// LOGIN NORMAL (CORREGIDO PARA HOSTINGER)
+// ============================================
 if (btnLogin) {
     btnLogin.addEventListener("click", async () => {
         let correo = document.getElementById("login-correo").value;
@@ -66,22 +69,23 @@ if (btnLogin) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
                 
-                // Mensaje de bienvenida con SweetAlert
-                await Swal.fire({
+                // ✅ CORREGIDO: SweetAlert se muestra y LUEGO redirige
+                Swal.fire({
                     icon: 'success',
                     title: ` ¡Bienvenido ${data.user.nombre}!`,
                     timer: 1500,
                     showConfirmButton: false,
                     position: 'top-end',
-                    toast: true
+                    toast: true,
+                    didClose: () => {
+                        // Esta función se ejecuta cuando el mensaje se cierra
+                        if (data.user.role === "admin" || data.user.role === "empleado") {
+                            window.location.href = "dashboard.html";
+                        } else {
+                            window.location.href = "index.html";
+                        }
+                    }
                 });
-
-                // Redirigir según rol
-                if (data.user.role === "admin" || data.user.role === "empleado") {
-                    window.location.href = "dashboard.html";
-                } else {
-                    window.location.href = "index.html";
-                }
             } else {
                 Swal.fire({
                     icon: 'error',

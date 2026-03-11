@@ -32,15 +32,24 @@ if (toLogin) {
 }
 
 // ============================================
-// LOGIN NORMAL
+// LOGIN NORMAL (CON SWEETALERT)
 // ============================================
 if (btnLogin) {
     btnLogin.addEventListener("click", async () => {
         let correo = document.getElementById("login-correo").value;
         let contraseña = document.getElementById("login-pass").value;
 
+        // Validación con SweetAlert
         if (correo === "" || !correo.includes("@") || contraseña === "") {
-            alert(" Por favor, ingresa tu correo y contraseña correctamente");
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Por favor, ingresa tu correo y contraseña correctamente',
+                timer: 2000,
+                showConfirmButton: false,
+                position: 'top-end',
+                toast: true
+            });
             return;
         }
 
@@ -56,25 +65,51 @@ if (btnLogin) {
             if (response.ok) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
-                 alert(` Bienvenido ${data.user.nombre}`);
                 
+                // Mensaje de bienvenida con SweetAlert
+                await Swal.fire({
+                    icon: 'success',
+                    title: `✨ ¡Bienvenido ${data.user.nombre}!`,
+                    timer: 1500,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true
+                });
+
+                // Redirigir según rol
                 if (data.user.role === "admin" || data.user.role === "empleado") {
                     window.location.href = "dashboard.html";
                 } else {
                     window.location.href = "index.html";
                 }
             } else {
-                alert(data.error || "Error al iniciar sesión");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.error || "Error al iniciar sesión",
+                    timer: 2000,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true
+                });
             }
         } catch (error) {
             console.error('Error:', error);
-            alert("Error de conexión con el servidor");
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de conexión',
+                text: 'No se pudo conectar con el servidor',
+                timer: 2000,
+                showConfirmButton: false,
+                position: 'top-end',
+                toast: true
+            });
         }
     });
 }
 
 // ============================================
-// REGISTRO NORMAL
+// REGISTRO NORMAL (CON SWEETALERT)
 // ============================================
 if (btnRegister) {
     btnRegister.addEventListener("click", async () => {
@@ -84,8 +119,17 @@ if (btnRegister) {
         const correo = document.getElementById("reg-correo").value;
         const contraseña = document.getElementById("reg-pass").value;
 
+        // Validación con SweetAlert
         if (nombre === "" || telefono === "" || direccion === "" || !correo.includes("@") || contraseña === "") {
-            alert("⚠️ Por favor, llena todos los campos");
+            Swal.fire({
+                icon: 'error',
+                title: 'Campos incompletos',
+                text: '⚠️ Por favor, llena todos los campos',
+                timer: 2000,
+                showConfirmButton: false,
+                position: 'top-end',
+                toast: true
+            });
             return;
         }
 
@@ -101,14 +145,40 @@ if (btnRegister) {
             if (response.ok) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
-                alert("✨ ¡Cuenta creada con éxito!");
+                
+                // Mensaje de éxito con SweetAlert
+                await Swal.fire({
+                    icon: 'success',
+                    title: '✨ ¡Cuenta creada con éxito!',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true
+                });
+
                 window.location.href = "index.html";
             } else {
-                alert(data.error || "Error al registrarse");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.error || "Error al registrarse",
+                    timer: 2000,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true
+                });
             }
         } catch (error) {
-            alert("Error de conexión con el servidor");
-            console.error(error);
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de conexión',
+                text: 'No se pudo conectar con el servidor',
+                timer: 2000,
+                showConfirmButton: false,
+                position: 'top-end',
+                toast: true
+            });
         }
     });
 }
@@ -123,7 +193,7 @@ if (btnGoogle) {
 }
 
 // ============================================
-// FUNCIÓN PARA INICIAR SESIÓN CON TOKEN
+// FUNCIÓN PARA INICIAR SESIÓN CON TOKEN (GOOGLE)
 // ============================================
 async function loginConToken(token) {
     try {
@@ -153,7 +223,15 @@ async function loginConToken(token) {
         }
     } catch (error) {
         console.error('❌ Error en login con token:', error);
-        alert("Error al iniciar sesión automáticamente");
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al iniciar sesión automáticamente',
+            timer: 2000,
+            showConfirmButton: false,
+            position: 'top-end',
+            toast: true
+        });
     }
 }
 
@@ -161,7 +239,6 @@ async function loginConToken(token) {
 // PROCESAR TOKEN DE GOOGLE AL CARGAR LA PÁGINA
 // ============================================
 (function() {
-    // Obtener token de la URL
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     

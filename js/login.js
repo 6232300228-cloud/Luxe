@@ -66,7 +66,7 @@ if (btnLogin) {
 
                 Swal.fire({
                     icon: 'success',
-                    title: `¡Bienvenido ${primerNombre}!`,
+                    title: `¡Bienvenido ${getPrimerNombre(user.nombre)}!`,
                     timer: 1500,
                     showConfirmButton: false,
                     position: 'top-end',
@@ -143,7 +143,7 @@ if (btnRegister) {
 
                 Swal.fire({
                     icon: 'success',
-                    title: ` ¡Cuenta creada! Bienvenido ${primerNombre}`,
+                    title: ` ¡Cuenta creada! Bienvenido ${getPrimerNombre(user.nombre)}!`,
                     timer: 1500,
                     showConfirmButton: false,
                     position: 'top-end',
@@ -207,7 +207,7 @@ async function loginConToken(token) {
 
         await Swal.fire({
         icon: 'success',
-        title: ` ¡Bienvenido ${primerNombre}!`,  // ← QUÍTALE EL EMOJI SI NO QUIERES
+        title: `¡Bienvenido ${getPrimerNombre(user.nombre)}!`,  // ← QUÍTALE EL EMOJI SI NO QUIERES
         timer: 1500,
         showConfirmButton: false,
         position: 'top-end',

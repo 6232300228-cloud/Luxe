@@ -56,6 +56,7 @@ if (btnLogin) {
             if (response.ok) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
+                 alert(` Bienvenido ${data.user.nombre}`);
                 
                 if (data.user.role === "admin" || data.user.role === "empleado") {
                     window.location.href = "dashboard.html";

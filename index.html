@@ -276,12 +276,10 @@ function getPrimerNombre(nombreCompleto) {
     const token = urlParams.get('token');
     
     if (token) {
-        console.log(' Token detectado en index');
+        console.log('🔑 Token detectado en index');
         
-        // Guardar token
         localStorage.setItem("token", token);
         
-        // Obtener datos del usuario
         fetch('https://luxe-api-frr5.onrender.com/api/auth/me', {
             headers: { 'Authorization': `Bearer ${token}` }
         })
@@ -289,37 +287,30 @@ function getPrimerNombre(nombreCompleto) {
         .then(user => {
             localStorage.setItem("user", JSON.stringify(user));
             
-            // Mostrar SweetAlert de bienvenida (usando la función del login.js)
-            if (typeof loginConToken === 'function') {
-                loginConToken(token);
-            } else {
-                // Fallback si la función no está disponible
-                const primerNombre = user.nombre.split(' ')[0];
+            // 1. Actualizar el nombre en el header
+            const userNameElement = document.getElementById("user-name");
+            if (userNameElement) {
+                userNameElement.textContent = "Hola, " + getPrimerNombre(user.nombre);
+            }
+            
+            // 2. Mostrar SweetAlert de bienvenida
+            if (typeof Swal !== 'undefined') {
                 Swal.fire({
                     icon: 'success',
-                    title: `¡Bienvenido ${primerNombre}!`,
-                    timer: 2000,
+                    title: `¡Bienvenido ${getPrimerNombre(user.nombre)}!`,
+                    timer: 1500,
                     showConfirmButton: false,
                     position: 'top-end',
                     toast: true
                 });
-                
-                const userNameElement = document.getElementById("user-name");
-                if (userNameElement) {
-                    userNameElement.innerText = "Hola, " + primerNombre;
-                }
             }
             
-            // Limpiar URL
+            // 3. Limpiar URL
             window.history.replaceState({}, document.title, window.location.pathname);
         })
         .catch(err => console.error('Error:', err));
     }
 })();
-</script>
-✅ RESUMEN DE CAMBIOS:
-Archivo	
-// ACTUALIZAR TAMBIÉN CUANDO CAMBIA EL USUARIO (por si acaso)
 document.addEventListener('DOMContentLoaded', function() {
     const user = JSON.parse(localStorage.getItem("user"));
     const userNameElement = document.getElementById("user-name");

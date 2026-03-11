@@ -183,8 +183,6 @@ if (btnGoogle) {
         window.location.href = `${API_URL}/auth/google`;
     });
 }
-// FUNCIÓN PARA INICIAR SESIÓN CON TOKEN (GOOGLE)
-// FUNCIÓN PARA INICIAR SESIÓN CON TOKEN (GOOGLE) - CORREGIDA
 async function loginConToken(token) {
     try {
         console.log(' Intentando login con token');
@@ -206,27 +204,20 @@ async function loginConToken(token) {
 
         console.log(' Usuario autenticado:', user.nombre);
 
-        // ✅ SOLO MOSTRAR SWEETALERT, NO REDIRIGIR
-        Swal.fire({
-            icon: 'success',
-            title: `¡Bienvenido ${primerNombre}!`,
-            timer: 2000,
-            showConfirmButton: false,
-            position: 'top-end',
-            toast: true
-        });
+        await Swal.fire({
+        icon: 'success',
+        title: `¡Bienvenido ${getPrimerNombre(user.nombre)}!`,  // ← QUÍTALE EL EMOJI SI NO QUIERES
+        timer: 1500,
+        showConfirmButton: false,
+        position: 'top-end',
+        toast: true
+    });
 
-        // ✅ ACTUALIZAR EL NOMBRE EN EL HEADER DIRECTAMENTE
-        const userNameElement = document.getElementById("user-name");
-        if (userNameElement) {
-            userNameElement.innerText = "Hola, " + primerNombre;
+        if (user.role === "admin" || user.role === "empleado") {
+            window.location.href = "dashboard.html";
+        } else {
+            window.location.href = "index.html";
         }
-
-        // ✅ LIMPIAR LA URL (quitar el token)
-        window.history.replaceState({}, document.title, window.location.pathname);
-
-        // ✅ NO HACER window.location.href = "index.html" PORQUE YA ESTÁS EN INDEX
-
     } catch (error) {
         console.error(' Error en login con token:', error);
         Swal.fire({

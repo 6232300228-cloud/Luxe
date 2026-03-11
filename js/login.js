@@ -69,7 +69,7 @@ if (btnLogin) {
                 // Mensaje de bienvenida con SweetAlert
                 await Swal.fire({
                     icon: 'success',
-                    title: `✨ ¡Bienvenido ${data.user.nombre}!`,
+                    title: ` ¡Bienvenido ${data.user.nombre}!`,
                     timer: 1500,
                     showConfirmButton: false,
                     position: 'top-end',

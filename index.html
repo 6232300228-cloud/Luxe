@@ -264,31 +264,63 @@
 <script src="js/user.js"></script>
 
 <script>
-// Procesar token si viene de Google
+// FUNCIÓN PARA OBTENER EL PRIMER NOMBRE
+function getPrimerNombre(nombreCompleto) {
+    if (!nombreCompleto) return "Usuario";
+    return nombreCompleto.split(' ')[0];
+}
+
+// PROCESAR TOKEN DE GOOGLE
 (function() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     
     if (token) {
-        console.log('🎯 Token detectado en index');
+        console.log('🔑 Token detectado en index');
         
-        // Guardar token
         localStorage.setItem("token", token);
         
-        // Obtener datos del usuario
         fetch('https://luxe-api-frr5.onrender.com/api/auth/me', {
             headers: { 'Authorization': `Bearer ${token}` }
         })
         .then(res => res.json())
         .then(user => {
             localStorage.setItem("user", JSON.stringify(user));
-            console.log('✅ Sesión iniciada para:', user.nombre);
-            // Recargar para mostrar usuario en navbar
-            window.location.href = 'index.html';
+            
+            // 1. Actualizar el nombre en el header
+            const userNameElement = document.getElementById("user-name");
+            if (userNameElement) {
+                userNameElement.textContent = "Hola, " + getPrimerNombre(user.nombre);
+            }
+            
+            // 2. Mostrar SweetAlert de bienvenida
+            if (typeof Swal !== 'undefined') {
+                Swal.fire({
+                    icon: 'success',
+                    title: `¡Bienvenido ${getPrimerNombre(user.nombre)}!`,
+                    timer: 1500,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true
+                });
+            }
+            
+            // 3. Limpiar URL
+            window.history.replaceState({}, document.title, window.location.pathname);
         })
         .catch(err => console.error('Error:', err));
     }
 })();
+
+// ACTUALIZAR TAMBIÉN CUANDO CAMBIA EL USUARIO (por si acaso)
+document.addEventListener('DOMContentLoaded', function() {
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userNameElement = document.getElementById("user-name");
+    
+    if (user && userNameElement) {
+        userNameElement.textContent = "Hola, " + getPrimerNombre(user.nombre);
+    }
+});
 </script>
 </body>
 

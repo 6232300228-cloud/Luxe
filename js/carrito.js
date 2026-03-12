@@ -81,7 +81,7 @@ function renderCarrito() {
                 <b>${producto.cantidad}</b>
                 <button onclick="cambiarCantidad(${index}, 1)" style="width:30px; padding:2px;">➕</button>
             </div>
-            <button onclick="eliminarProducto(${index})" style="background:none; color:red; border:none; width:auto; font-size:18px;"></button>
+            <button onclick="eliminarProducto(${index})" style="background:none; color:red; border:none; width:auto; font-size:18px;">Eliminar</button>
           </div>
         `;
         cartItems.appendChild(card);

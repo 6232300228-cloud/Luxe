@@ -1,4 +1,4 @@
-// login.js - Versión original funcional
+// login.js - Versión para producción (con manejo de CORS)
 
 const loginSection = document.getElementById("login-section");
 const registerSection = document.getElementById("register-section");
@@ -8,7 +8,7 @@ const btnLogin = document.getElementById("btnLogin");
 const btnRegister = document.getElementById("btnRegister");
 const btnGoogle = document.getElementById("btnGoogle");
 
-// VARIABLE DE CONFIGURACIÓN
+// VARIABLE DE CONFIGURACIÓN - DETECCIÓN AUTOMÁTICA DE ENTORNO
 const API_URL = 'https://luxe-api-frr5.onrender.com/api';
 
 // FUNCIÓN PARA OBTENER EL PRIMER NOMBRE
@@ -32,6 +32,34 @@ if (toLogin) {
     });
 }
 
+// FUNCIÓN PARA HACER FETCH CON SOPORTE CORS
+async function fetchConCORS(url, options = {}) {
+    const defaultOptions = {
+        mode: 'cors',
+        credentials: 'omit',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    };
+    
+    const fetchOptions = {
+        ...defaultOptions,
+        ...options,
+        headers: {
+            ...defaultOptions.headers,
+            ...options.headers
+        }
+    };
+    
+    try {
+        const response = await fetch(url, fetchOptions);
+        return response;
+    } catch (error) {
+        console.error('Error de fetch:', error);
+        throw error;
+    }
+}
+
 // LOGIN NORMAL
 if (btnLogin) {
     btnLogin.addEventListener("click", async () => {
@@ -52,9 +80,10 @@ if (btnLogin) {
         }
 
         try {
-            const response = await fetch(`${API_URL}/auth/login`, {
+            console.log('Intentando login con:', correo);
+            
+            const response = await fetchConCORS(`${API_URL}/auth/login`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ correo, contraseña })
             });
 
@@ -93,15 +122,23 @@ if (btnLogin) {
                 });
             }
         } catch (error) {
-            console.error('Error:', error);
+            console.error('Error completo:', error);
+            
+            // Mensaje más específico según el error
+            let mensajeError = 'No se pudo conectar con el servidor';
+            
+            if (error.message.includes('Failed to fetch')) {
+                mensajeError = 'Error de CORS o servidor no disponible';
+            }
+            
             Swal.fire({
                 icon: 'error',
                 title: 'Error de conexión',
-                text: 'No se pudo conectar con el servidor',
-                timer: 2000,
-                showConfirmButton: false,
-                position: 'top-end',
-                toast: true
+                text: mensajeError,
+                timer: 3000,
+                showConfirmButton: true,
+                confirmButtonColor: '#ff4d6d',
+                position: 'center'
             });
         }
     });
@@ -117,7 +154,6 @@ if (btnRegister) {
         const correo = document.getElementById("reg-correo").value;
         const contraseña = document.getElementById("reg-pass").value;
 
-        // Nota: En tu registro original, el nombre completo se forma con nombre + apellido
         const nombreCompleto = `${nombre} ${apellido}`.trim();
 
         if (nombre === "" || apellido === "" || telefono === "" || direccion === "" || !correo.includes("@") || contraseña === "") {
@@ -134,9 +170,8 @@ if (btnRegister) {
         }
 
         try {
-            const response = await fetch(`${API_URL}/auth/register`, {
+            const response = await fetchConCORS(`${API_URL}/auth/register`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     nombre: nombreCompleto, 
                     correo, 
@@ -203,7 +238,7 @@ async function loginConToken(token) {
     try {
         console.log('Intentando login con token');
 
-        const response = await fetch(`${API_URL}/auth/me`, {
+        const response = await fetchConCORS(`${API_URL}/auth/me`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -261,7 +296,7 @@ async function loginConToken(token) {
     }
 })();
 
-// Función para newsletter (si existe)
+// Función para newsletter
 function suscribirse() {
     const email = document.getElementById('newsletter-email').value;
     if (email && email.includes('@')) {

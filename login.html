@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Acceso - Luxe Maquillaje</title>
   <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -16,55 +16,52 @@
     <img src="img/logo.png" alt="Logo" class="logo">
   </a>  
   <div class="icons">
-    <a href="index.html" class="back-btn"></a>
+    <a href="index.html">Volver</a>
   </div>
 </header>
 
-<main class="auth-main">
+<main style="padding: 20px; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
   <div class="auth-container">
     
-    <!-- SECCIÓN LOGIN (Mantiene tus IDs exactos) -->
+    <!-- SECCIÓN LOGIN (CON LOS IDs ORIGINALES) -->
     <div id="login-section" class="auth-box">
-      <h2 class="auth-title">Iniciar sesión</h2>
+      <h2>Iniciar sesión</h2>
       
-      <input type="email" id="login-correo" placeholder="Correo electrónico" required>
-      <input type="password" id="login-pass" placeholder="Contraseña" required>
+      <!-- ¡IMPORTANTE! Estos IDs deben coincidir EXACTAMENTE con tu JS -->
+      <input type="email" id="login-correo" placeholder="Correo electrónico" required><br>
+      <input type="password" id="login-pass" placeholder="Contraseña" required><br>
       
-      <button id="btnLogin" class="auth-btn">Entrar</button>
+      <button id="btnLogin">Entrar</button>
       
       <div class="separador">
         <span>o</span>
       </div>
       
       <button id="btnGoogle" class="btn-google">
-        <img src="img/google-icon.png" alt="Google" width="20" onerror="this.src='https://via.placeholder.com/20'">
+        <img src="img/google-icon.png" alt="Google" width="20">
         Iniciar sesión con Google
       </button>
       
-      <p class="toggle-text">
-        ¿No tienes cuenta? <span id="to-register">Regístrate</span>
-      </p>
+      <p class="toggle-text">¿No tienes cuenta? <span id="to-register">Regístrate</span></p>
     </div>
 
-    <!-- SECCIÓN REGISTRO (Mantiene tus IDs exactos) -->
+    <!-- SECCIÓN REGISTRO (CON LOS IDs ORIGINALES) -->
     <div id="register-section" class="auth-box hidden card">
-      <h2 class="auth-title">Crear cuenta</h2>
+      <h2>Crear cuenta</h2>
       
-      <input type="text" id="reg-nombre" placeholder="Nombre" required>
-      <input type="text" id="reg-apellido" placeholder="Apellido" required>
-      <input type="email" id="reg-correo" placeholder="Correo electrónico" required>
-      <input type="password" id="reg-pass" placeholder="Contraseña" required>
+      <input type="text" id="reg-nombre" placeholder="Nombre" required><br>
+      <input type="text" id="reg-apellido" placeholder="Apellido" required><br>
+      <input type="email" id="reg-correo" placeholder="Correo electrónico" required><br>
+      <input type="password" id="reg-pass" placeholder="Contraseña" required><br>
       
-      <h3 class="section-subtitle">Contacto y Envío:</h3>
+      <h2>Contacto y Envío:</h2>
       
-      <input type="tel" id="reg-telefono" placeholder="Número de teléfono" required>
-      <input type="text" id="reg-direccion" placeholder="Calle, ciudad, código postal..." required>
+      <input type="tel" id="reg-telefono" placeholder="Número de teléfono" required><br>
+      <input type="text" id="reg-direccion" placeholder="Calle, ciudad, código postal..." required><br>
 
-      <button id="btnRegister" class="auth-btn">Registrarme</button>
+      <button id="btnRegister">Registrarme</button>
       
-      <p class="toggle-text">
-        ¿Ya tienes cuenta? <span id="to-login">Inicia sesión</span>
-      </p>
+      <p class="toggle-text">¿Ya tienes cuenta? <span id="to-login">Inicia sesión</span></p>
     </div>
   </div>
 </main>

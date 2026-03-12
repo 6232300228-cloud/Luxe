@@ -61,6 +61,7 @@ async function fetchConCORS(url, options = {}) {
 }
 
 // LOGIN NORMAL
+// LOGIN NORMAL - CORREGIDO
 if (btnLogin) {
     btnLogin.addEventListener("click", async () => {
         let correo = document.getElementById("login-correo").value;
@@ -80,10 +81,9 @@ if (btnLogin) {
         }
 
         try {
-            console.log('Intentando login con:', correo);
-            
-            const response = await fetchConCORS(`${API_URL}/auth/login`, {
+            const response = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ correo, contraseña })
             });
 
@@ -93,7 +93,7 @@ if (btnLogin) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
 
-                const primerNombre = getPrimerNombre(data.user.nombre);
+                const primerNombre = getPrimerNombre(data.user.nombre); // ✅ CORREGIDO: era user, ahora es data.user
 
                 Swal.fire({
                     icon: 'success',
@@ -101,15 +101,16 @@ if (btnLogin) {
                     timer: 1500,
                     showConfirmButton: false,
                     position: 'top-end',
-                    toast: true,
-                    didClose: () => {
-                        if (data.user.role === "admin" || data.user.role === "empleado") {
-                            window.location.href = "dashboard.html";
-                        } else {
-                            window.location.href = "index.html";
-                        }
-                    }
+                    toast: true
                 });
+                
+                // ✅ REDIRECCIÓN INMEDIATA (sin esperar a que se cierre el toast)
+                if (data.user.role === "admin" || data.user.role === "empleado") {
+                    window.location.href = "dashboard.html";
+                } else {
+                    window.location.href = "index.html";
+                }
+                
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -122,29 +123,22 @@ if (btnLogin) {
                 });
             }
         } catch (error) {
-            console.error('Error completo:', error);
-            
-            // Mensaje más específico según el error
-            let mensajeError = 'No se pudo conectar con el servidor';
-            
-            if (error.message.includes('Failed to fetch')) {
-                mensajeError = 'Error de CORS o servidor no disponible';
-            }
-            
+            console.error('Error:', error);
+            // Este catch SOLO se ejecuta si hay error de red, no si el login falla
             Swal.fire({
                 icon: 'error',
                 title: 'Error de conexión',
-                text: mensajeError,
-                timer: 3000,
-                showConfirmButton: true,
-                confirmButtonColor: '#ff4d6d',
-                position: 'center'
+                text: 'No se pudo conectar con el servidor',
+                timer: 2000,
+                showConfirmButton: false,
+                position: 'top-end',
+                toast: true
             });
         }
     });
 }
-
 // REGISTRO NORMAL
+// REGISTRO NORMAL - CORREGIDO
 if (btnRegister) {
     btnRegister.addEventListener("click", async () => {
         const nombre = document.getElementById("reg-nombre").value;
@@ -170,8 +164,9 @@ if (btnRegister) {
         }
 
         try {
-            const response = await fetchConCORS(`${API_URL}/auth/register`, {
+            const response = await fetch(`${API_URL}/auth/register`, {
                 method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     nombre: nombreCompleto, 
                     correo, 
@@ -187,7 +182,7 @@ if (btnRegister) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
 
-                const primerNombre = getPrimerNombre(data.user.nombre);
+                const primerNombre = getPrimerNombre(data.user.nombre); // ✅ CORREGIDO
 
                 Swal.fire({
                     icon: 'success',
@@ -195,11 +190,12 @@ if (btnRegister) {
                     timer: 1500,
                     showConfirmButton: false,
                     position: 'top-end',
-                    toast: true,
-                    didClose: () => {
-                        window.location.href = "index.html";
-                    }
+                    toast: true
                 });
+                
+                // ✅ REDIRECCIÓN INMEDIATA
+                window.location.href = "index.html";
+                
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -225,7 +221,6 @@ if (btnRegister) {
         }
     });
 }
-
 // LOGIN CON GOOGLE
 if (btnGoogle) {
     btnGoogle.addEventListener("click", () => {
@@ -234,11 +229,12 @@ if (btnGoogle) {
 }
 
 // FUNCIÓN PARA LOGIN CON TOKEN (Google callback)
+// FUNCIÓN PARA LOGIN CON TOKEN (Google callback)
 async function loginConToken(token) {
     try {
-        console.log('Intentando login con token');
+        console.log(' Intentando login con token');
 
-        const response = await fetchConCORS(`${API_URL}/auth/me`, {
+        const response = await fetch(`${API_URL}/auth/me`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
 
@@ -253,9 +249,9 @@ async function loginConToken(token) {
 
         const primerNombre = getPrimerNombre(user.nombre);
 
-        console.log('Usuario autenticado:', user.nombre);
+        console.log(' Usuario autenticado:', user.nombre);
 
-        await Swal.fire({
+        Swal.fire({
             icon: 'success',
             title: `¡Bienvenido ${primerNombre}!`,
             timer: 1500,
@@ -264,13 +260,15 @@ async function loginConToken(token) {
             toast: true
         });
 
+        // ✅ REDIRECCIÓN INMEDIATA
         if (user.role === "admin" || user.role === "empleado") {
             window.location.href = "dashboard.html";
         } else {
             window.location.href = "index.html";
         }
+        
     } catch (error) {
-        console.error('Error en login con token:', error);
+        console.error(' Error en login con token:', error);
         Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -282,7 +280,6 @@ async function loginConToken(token) {
         });
     }
 }
-
 // PROCESAR TOKEN DE GOOGLE AL CARGAR LA PÁGINA
 (function() {
     const urlParams = new URLSearchParams(window.location.search);

@@ -62,6 +62,7 @@ async function fetchConCORS(url, options = {}) {
 
 // LOGIN NORMAL
 // LOGIN NORMAL - CORREGIDO
+// LOGIN NORMAL - VERSIÓN CORREGIDA (solo cambiar user por data.user)
 if (btnLogin) {
     btnLogin.addEventListener("click", async () => {
         let correo = document.getElementById("login-correo").value;
@@ -93,7 +94,8 @@ if (btnLogin) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
 
-                const primerNombre = getPrimerNombre(data.user.nombre); // ✅ CORREGIDO: era user, ahora es data.user
+                // ✅ ÚNICO CAMBIO: user → data.user
+                const primerNombre = getPrimerNombre(data.user.nombre);
 
                 Swal.fire({
                     icon: 'success',
@@ -103,8 +105,8 @@ if (btnLogin) {
                     position: 'top-end',
                     toast: true
                 });
-                
-                // ✅ REDIRECCIÓN INMEDIATA (sin esperar a que se cierre el toast)
+
+                // Redirección inmediata
                 if (data.user.role === "admin" || data.user.role === "empleado") {
                     window.location.href = "dashboard.html";
                 } else {
@@ -124,7 +126,6 @@ if (btnLogin) {
             }
         } catch (error) {
             console.error('Error:', error);
-            // Este catch SOLO se ejecuta si hay error de red, no si el login falla
             Swal.fire({
                 icon: 'error',
                 title: 'Error de conexión',
@@ -136,8 +137,7 @@ if (btnLogin) {
             });
         }
     });
-}
-// REGISTRO NORMAL
+}// REGISTRO NORMAL
 // REGISTRO NORMAL - CORREGIDO
 if (btnRegister) {
     btnRegister.addEventListener("click", async () => {

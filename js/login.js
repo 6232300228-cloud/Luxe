@@ -1,5 +1,4 @@
-// login.js - Versión para producción (con manejo de CORS)
-
+// login.js - VERSIÓN 100% CORREGIDA
 const loginSection = document.getElementById("login-section");
 const registerSection = document.getElementById("register-section");
 const toRegister = document.getElementById("to-register");
@@ -8,7 +7,7 @@ const btnLogin = document.getElementById("btnLogin");
 const btnRegister = document.getElementById("btnRegister");
 const btnGoogle = document.getElementById("btnGoogle");
 
-// VARIABLE DE CONFIGURACIÓN - DETECCIÓN AUTOMÁTICA DE ENTORNO
+// VARIABLE DE CONFIGURACIÓN
 const API_URL = 'https://luxe-api-frr5.onrender.com/api';
 
 // FUNCIÓN PARA OBTENER EL PRIMER NOMBRE
@@ -32,37 +31,7 @@ if (toLogin) {
     });
 }
 
-// FUNCIÓN PARA HACER FETCH CON SOPORTE CORS
-async function fetchConCORS(url, options = {}) {
-    const defaultOptions = {
-        mode: 'cors',
-        credentials: 'omit',
-        headers: {
-            'Content-Type': 'application/json',
-        }
-    };
-    
-    const fetchOptions = {
-        ...defaultOptions,
-        ...options,
-        headers: {
-            ...defaultOptions.headers,
-            ...options.headers
-        }
-    };
-    
-    try {
-        const response = await fetch(url, fetchOptions);
-        return response;
-    } catch (error) {
-        console.error('Error de fetch:', error);
-        throw error;
-    }
-}
-
-// LOGIN NORMAL
 // LOGIN NORMAL - CORREGIDO
-// LOGIN NORMAL - VERSIÓN CORREGIDA (solo cambiar user por data.user)
 if (btnLogin) {
     btnLogin.addEventListener("click", async () => {
         let correo = document.getElementById("login-correo").value;
@@ -94,7 +63,7 @@ if (btnLogin) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
 
-                // ✅ ÚNICO CAMBIO: user → data.user
+                // ✅ CORREGIDO: user → data.user
                 const primerNombre = getPrimerNombre(data.user.nombre);
 
                 Swal.fire({
@@ -103,16 +72,15 @@ if (btnLogin) {
                     timer: 1500,
                     showConfirmButton: false,
                     position: 'top-end',
-                    toast: true
+                    toast: true,
+                    didClose: () => {
+                        if (data.user.role === "admin" || data.user.role === "empleado") {
+                            window.location.href = "dashboard.html";
+                        } else {
+                            window.location.href = "index.html";
+                        }
+                    }
                 });
-
-                // Redirección inmediata
-                if (data.user.role === "admin" || data.user.role === "empleado") {
-                    window.location.href = "dashboard.html";
-                } else {
-                    window.location.href = "index.html";
-                }
-                
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -137,7 +105,8 @@ if (btnLogin) {
             });
         }
     });
-}// REGISTRO NORMAL
+}
+
 // REGISTRO NORMAL - CORREGIDO
 if (btnRegister) {
     btnRegister.addEventListener("click", async () => {
@@ -182,7 +151,8 @@ if (btnRegister) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
 
-                const primerNombre = getPrimerNombre(data.user.nombre); // ✅ CORREGIDO
+                // ✅ CORREGIDO: user → data.user
+                const primerNombre = getPrimerNombre(data.user.nombre);
 
                 Swal.fire({
                     icon: 'success',
@@ -190,12 +160,11 @@ if (btnRegister) {
                     timer: 1500,
                     showConfirmButton: false,
                     position: 'top-end',
-                    toast: true
+                    toast: true,
+                    didClose: () => {
+                        window.location.href = "index.html";
+                    }
                 });
-                
-                // ✅ REDIRECCIÓN INMEDIATA
-                window.location.href = "index.html";
-                
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -221,6 +190,7 @@ if (btnRegister) {
         }
     });
 }
+
 // LOGIN CON GOOGLE
 if (btnGoogle) {
     btnGoogle.addEventListener("click", () => {
@@ -228,11 +198,10 @@ if (btnGoogle) {
     });
 }
 
-// FUNCIÓN PARA LOGIN CON TOKEN (Google callback)
-// FUNCIÓN PARA LOGIN CON TOKEN (Google callback)
+// FUNCIÓN PARA LOGIN CON TOKEN - CORREGIDA
 async function loginConToken(token) {
     try {
-        console.log(' Intentando login con token');
+        console.log('Intentando login con token');
 
         const response = await fetch(`${API_URL}/auth/me`, {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -247,9 +216,10 @@ async function loginConToken(token) {
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
 
+        // ✅ user SÍ existe aquí (es el resultado del fetch)
         const primerNombre = getPrimerNombre(user.nombre);
 
-        console.log(' Usuario autenticado:', user.nombre);
+        console.log('Usuario autenticado:', user.nombre);
 
         Swal.fire({
             icon: 'success',
@@ -260,15 +230,13 @@ async function loginConToken(token) {
             toast: true
         });
 
-        // ✅ REDIRECCIÓN INMEDIATA
         if (user.role === "admin" || user.role === "empleado") {
             window.location.href = "dashboard.html";
         } else {
             window.location.href = "index.html";
         }
-        
     } catch (error) {
-        console.error(' Error en login con token:', error);
+        console.error('Error en login con token:', error);
         Swal.fire({
             icon: 'error',
             title: 'Error',
@@ -280,7 +248,8 @@ async function loginConToken(token) {
         });
     }
 }
-// PROCESAR TOKEN DE GOOGLE AL CARGAR LA PÁGINA
+
+// PROCESAR TOKEN DE GOOGLE
 (function() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
@@ -288,12 +257,10 @@ async function loginConToken(token) {
     if (token) {
         console.log('Token detectado en URL, procesando...');
         loginConToken(token);
-    } else {
-        console.log('No hay token en URL');
     }
 })();
 
-// Función para newsletter
+// Suscripción newsletter
 function suscribirse() {
     const email = document.getElementById('newsletter-email').value;
     if (email && email.includes('@')) {

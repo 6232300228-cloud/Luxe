@@ -2,53 +2,78 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Carrito - Luxe</title>
   <link rel="stylesheet" href="css/style.css">
-</head><!--hosting listo-->
+</head>
 
 <body>
 
 <header class="header">
-   <a href="index.html">
-      <img src="img/logo.png" alt="Logo de la empresa" class="logo">
-   </a>
+  <a href="index.html">
+    <img src="img/logo.png" alt="Logo de la empresa" class="logo">
+  </a>
+  
   <div class="icons">
     <a href="login.html" id="login-btn">👤 Iniciar sesión</a>
     <span id="user-name" style="display:none;"></span>
     <button id="logout-btn" style="display:none;">Salir</button>
-
     <a href="favoritos.html">❤️ <span id="fav-count">0</span></a>
-    <a href="index.html">Inicio </a>
+    <a href="index.html">Inicio</a>
   </div>
 </header>
+
 <main class="container cart-page-wrapper">
     
     <section class="cart-main-content">
-        <h2 style="color: #ff4d6d; margin-left: 20px;">Tu Carrito </h2>
-        <section class="products" id="cart-items"></section>
+        <div class="cart-header-mobile">
+          <h2 style="color: #ff4d6d; margin: 0;">Tu Carrito</h2>
+          <button class="btn-vaciar-mobile" id="vaciar-carrito-mobile" style="display: none;">Vaciar</button>
+        </div>
+        
+        <section class="products" id="cart-items">
+          <!-- Los productos se cargarán dinámicamente -->
+          <div class="empty-cart-message" id="empty-cart-message">
+            <p>Tu carrito está vacío</p>
+            <a href="index.html" class="btn-continuar">Seguir comprando</a>
+          </div>
+        </section>
     </section>
 
     <aside class="cart-sidebar">
-        
         <div class="card summary-card" style="padding: 20px; margin-bottom: 20px;">
-            <div id="shipping-message" class="shipping-box"></div>
+            <div id="shipping-message" class="shipping-box">
+              <div class="shipping-text"></div>
+              <div class="shipping-bar">
+                <div class="shipping-progress" style="width: 0%;"></div>
+              </div>
+            </div>
             
+            <div class="summary-details">
+              <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="subtotal">$0.00</span>
+              </div>
+              <div class="summary-row">
+                <span>Envío:</span>
+                <span id="shipping-cost">$5.99</span>
+              </div>
+              <h2 id="total" style="font-size: 24px; margin: 15px 0 20px 0;">Total: $0.00</h2>
+            </div>
 
-            <h2 id="total" style="font-size: 24px; margin-top: 0;">Total: $0.00</h2>
             <div id="btn-pagar-container">
-                <a href="checkout.html">
-                    <button class="btn-pagar" style="width: 100%;">Ir a pagar </button>
-                </a>
+              <a href="checkout.html">
+                <button class="btn-pagar" style="width: 100%;">Ir a pagar</button>
+              </a>
             </div>
         </div>
 
         <div class="sugerencias-sidebar" style="background: white; padding: 20px; border-radius: 18px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1);">
-            <h3 style="color: #ff4d6d; font-size: 18px; margin-top: 0;">¡Completa tu look! </h3>
+            <h3 style="color: #ff4d6d; font-size: 18px; margin-top: 0;">¡Completa tu look!</h3>
             <p style="font-size: 13px; color: #888;">Agregados recientemente:</p>
             
-            <div id="productos-sugeridos"></div>
+            <div id="productos-sugeridos" class="sugerencias-grid"></div>
         </div>
-
     </aside>
 </main>
 
@@ -56,7 +81,7 @@
     <div class="footer-container">
         <div class="footer-column">
             <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
-            <p class="footer-description">Realzando tu belleza natural con productos de alta gama. </p>
+            <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
            <h3>Encuéntranos en</h3>
             <div class="social-links">
             <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Logo Luxe" class="logo"></a>                
@@ -79,6 +104,7 @@
         <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
     </div>
 </footer>
+
 <script src="js/carrito.js"></script>
 <script src="js/user.js"></script>
 </body>

@@ -19,7 +19,11 @@ function actualizarHeader() {
         favCount.setAttribute("data-count", favsActual.length);
     }
 }
-
+// Función para el menú hamburguesa (agrega al final)
+function toggleMenu() {
+  const menu = document.getElementById('side-menu');
+  if (menu) menu.classList.toggle('active');
+}
 // ============================================
 // 3. CATÁLOGO DE SUGERENCIAS
 // ============================================

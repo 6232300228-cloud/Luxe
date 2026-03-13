@@ -6,12 +6,11 @@
   <title>MakeupStore</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
-</head><!--ya?-->
+</head>
 
 <body>
 
 <header class="header">
-
   <div class="header-left">
     <div class="menu-hamburger" onclick="toggleMenu()">
       <span></span>
@@ -20,11 +19,11 @@
     </div>
 
     <a href="index.html" class="logo-link">
-  <img src="img/logo.png" alt="Logo Luxe" class="logo">
-  <div class="logo-text-group">
-    <span class="slogan-minimal">Tu destino de belleza</span>
-  </div>
-</a>
+      <img src="img/logo.png" alt="Logo Luxe" class="logo">
+      <div class="logo-text-group">
+        <span class="slogan-minimal">Tu destino de belleza</span>
+      </div>
+    </a>
   </div>
 
   <div class="header-center">
@@ -41,14 +40,19 @@
   </div>
 
   <div class="header-right icons">
-    <a href="favoritos.html">❤️ <span id="fav-count">0</span></a>
-    <a href="carrito.html">🛒 <span id="cart-count">0</span></a>
-
-    <a href="login.html" id="login-btn">👤 Iniciar sesión</a>
+    <a href="favoritos.html">
+      <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
+    </a>
+    <a href="carrito.html">
+      <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
+    </a>
+    <a href="login.html" id="login-btn">
+      <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
+    </a>
 
     <div id="user-menu" class="dropdown" style="display: none;">
       <button class="dropbtn">
-        <span id="user-name"></span> <i class="arrow">▼</i>
+        <span id="user-name"></span> <i class="arrow"></i>
       </button>
       <div class="dropdown-content">
         <a href="perfil.html"> Mi Perfil</a>
@@ -58,8 +62,8 @@
       </div>
     </div>
   </div>
-
 </header>
+
 <nav id="side-menu" class="side-nav">
   <span class="close-btn" onclick="toggleMenu()">&times;</span>
   <div class="menu-section">
@@ -70,29 +74,21 @@
   </div>
 </nav>
 
-
 <!-- SLIDER PRINCIPAL -->
- <section class="slider">
-
+<section class="slider">
   <button class="prev" onclick="prevSlide()">◀</button>
-
   <div class="slides">
     <img src="img/slider1.jpg" class="slide active">
     <img src="img/slider2.png" class="slide">
     <img src="img/slider3.jpg" class="slide">
   </div>
-
   <button class="next" onclick="nextSlide()">▶</button>
-
 </section>
 
- <!--probado-->
+<!-- Probado en cámara -->
 <section class="video-showcase">
   <h2 class="video-title"> Probado en cámara</h2>
-
   <div class="video-grid">
-
-    <!-- Video1 -->
     <div class="video-card">
       <video src="videos/rubor.mp4" muted loop></video>
       <div class="overlay">
@@ -100,8 +96,6 @@
         <p>$225</p>
       </div>
     </div>
-
-    <!-- Video2 -->
     <div class="video-card">
       <video src="videos/gloss.mp4" muted loop></video>
       <div class="overlay">
@@ -109,8 +103,6 @@
         <p>$250</p>
       </div>
     </div>
-
-    <!-- Video3 -->
     <div class="video-card">
       <video src="videos/swatch.mp4" muted loop></video>
       <div class="overlay">
@@ -118,51 +110,50 @@
         <p>$400</p>
       </div>
     </div>
-
   </div>
 </section>
+
+<!-- Menú de marcas -->
 <section class="brand-menu-sticky">
-    <div class="brand-instruction">Elije tu marca favorita </div>
-    
-    <div class="brand-carousel-compact">
-        <div class="brand-item-mini todo-btn" onclick="filterBrand('all', this)">TODAS</div>
-        <div class="brand-item-mini" onclick="filterBrand('bissu', this)">
-            <img src="img/logobissu.png" alt="Bissu">
-        </div>
-        <div class="brand-item-mini" onclick="filterBrand('nyx', this)">
-            <img src="img/logonyx.png" alt="NYX">
-        </div>
-        <div class="brand-item-mini" onclick="filterBrand('maybelline', this)">
-            <img src="img/logomay.png" alt="Maybelline">
-        </div>
-        <div class="brand-item-mini" onclick="filterBrand('loreal', this)">
-            <img src="img/logoloreal.png" alt="L'Oréal">
-        </div>
-                <div class="brand-item-mini" onclick="filterBrand('rare', this)">
-            <img src="img/logorare.png" alt="Rare Beauty">
-        </div>
-                <div class="brand-item-mini" onclick="filterBrand('fenty', this)">
-            <img src="img/logofenty.png" alt="Fenty">
-        </div>
-        <div class="brand-item-mini" onclick="filterBrand('dior', this)">
-            <img src="img/logodior.png" alt="Dior">
-        </div>
-        <div class="brand-item-mini" onclick="filterBrand('mac', this)">
-            <img src="img/logomac.png" alt="MAC">
-        </div>
+  <div class="brand-instruction">Elije tu marca favorita</div>
+  <div class="brand-carousel-compact">
+    <div class="brand-item-mini todo-btn" onclick="filterBrand('all', this)">TODAS</div>
+    <div class="brand-item-mini" onclick="filterBrand('bissu', this)">
+      <img src="img/logobissu.png" alt="Bissu">
     </div>
+    <div class="brand-item-mini" onclick="filterBrand('nyx', this)">
+      <img src="img/logonyx.png" alt="NYX">
+    </div>
+    <div class="brand-item-mini" onclick="filterBrand('maybelline', this)">
+      <img src="img/logomay.png" alt="Maybelline">
+    </div>
+    <div class="brand-item-mini" onclick="filterBrand('loreal', this)">
+      <img src="img/logoloreal.png" alt="L'Oréal">
+    </div>
+    <div class="brand-item-mini" onclick="filterBrand('rare', this)">
+      <img src="img/logorare.png" alt="Rare Beauty">
+    </div>
+    <div class="brand-item-mini" onclick="filterBrand('fenty', this)">
+      <img src="img/logofenty.png" alt="Fenty">
+    </div>
+    <div class="brand-item-mini" onclick="filterBrand('dior', this)">
+      <img src="img/logodior.png" alt="Dior">
+    </div>
+    <div class="brand-item-mini" onclick="filterBrand('mac', this)">
+      <img src="img/logomac.png" alt="MAC">
+    </div>
+  </div>
 </section>
 
-
-<!--look-->
+<!-- Banners triples -->
 <section class="triple-banner-section">
   <div class="triple-container-full">
-    
     <div class="banner-box-luxe pro-box">
       <div class="banner-info-luxe">
-        <h3>FAVORITOS PRO </h3>
+        <h3>FAVORITOS PRO</h3>
         <p>La selección exclusiva de nuestros maquilladores profesionales.</p>
-        <button class="btn-luxe" onclick="openExperience('pro')">Ver Selección</button>      </div>
+        <button class="btn-luxe" onclick="openExperience('pro')">Ver Selección</button>
+      </div>
       <div class="banner-img-luxe">
         <img src="img/modelo.png" alt="Favoritos Pro">
       </div>
@@ -170,9 +161,10 @@
 
     <div class="banner-box-luxe gift-box">
       <div class="banner-info-luxe">
-        <h3>KITS DE REGALO </h3>
+        <h3>KITS DE REGALO</h3>
         <p>Sets armados listos para regalar o para consentirte a ti misma.</p>
-        <button class="btn-luxe" onclick="openExperience('kit')">Ver Regalos</button>      </div>
+        <button class="btn-luxe" onclick="openExperience('kit')">Ver Regalos</button>
+      </div>
       <div class="banner-img-luxe">
         <img src="img/kit.png" alt="Kits de Regalo">
       </div>
@@ -180,17 +172,18 @@
 
     <div class="banner-box-luxe skin-box">
       <div class="banner-info-luxe">
-        <h3>RITUAL SKINCARE </h3>
+        <h3>RITUAL SKINCARE</h3>
         <p>Prepara tu piel con lo mejor en cuidado facial antes del maquillaje.</p>
-        <button class="btn-luxe" onclick="openExperience('skincare')">Ver Rutina</button>      </div>
+        <button class="btn-luxe" onclick="openExperience('skincare')">Ver Rutina</button>
+      </div>
       <div class="banner-img-luxe">
         <img src="img/skincare.png" alt="Cuidado de la piel">
       </div>
     </div>
   </div>
-</section> 
+</section>
 
-
+<!-- Menú de categorías -->
 <section class="category-menu">
   <button onclick="filterCategory('all')">Todo</button>
   <button onclick="filterCategory('accesorios')">Accesorios</button>
@@ -202,65 +195,65 @@
   <button onclick="filterCategory('corrector')">Correctores</button>
   <button onclick="filterCategory('rubor')">Rubores</button>
   <button onclick="filterCategory('iluminador')">Iluminador</button>
-  
+</section>
 
-  </section>
+<!-- Productos -->
+<section class="products" id="product-list"></section>
 
-  <section class="products" id="product-list"></section>
-
+<!-- Toast -->
 <div id="toast" class="toast"></div>
 
-
-
-<!--modal dellook-->
+<!-- Modal del look -->
 <div id="lookModal" class="look-modal">
-    <div class="look-modal-content">
-        <span class="close-look" onclick="closeLook()">×</span>
-        <div id="look-products" class="products"></div>
-    </div>
+  <div class="look-modal-content">
+    <span class="close-look" onclick="closeLook()">×</span>
+    <div id="look-products" class="products"></div>
+  </div>
 </div>
+
+<!-- Footer -->
 <footer class="footer-luxe">
-    <div class="footer-container">
-        <div class="footer-column">
-            <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
-            <p class="footer-description">Realzando tu belleza natural con productos de alta gama. </p>
-           <h3>Encuéntranos en</h3>
-            <div class="social-links">
-            <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Logo Luxe" class="logo"></a>                
-            <a href="https://facebook.com" target="_blank">FB</a>
-            <a href="https://tiktok.com" target="_blank">TK</a>
-            </div>
-        </div>
-
-        <div class="footer-column">
-            <h3>Explorar</h3>
-            <ul>
-                <li><a href="javascript:void(0)" onclick="filterCategory('all'); window.scrollTo(0,0)">Tienda</a></li>
-                <li><a href="javascript:void(0)" onclick="openExperience('pro')">Favoritos Pro</a></li>
-                <li><a href="javascript:void(0)" onclick="openExperience('kit')">Kits de Regalo</a></li>
-                <li><a href="javascript:void(0)" onclick="openExperience('skincare')">Rituales Skincare</a></li>
-                <li><a href="javascript:void(0)" onclick="showOnlyFavs()">Mis Favoritos ❤️</a></li>
-                
-            </ul>
-        </div>
-
-        <div class="footer-column newsletter">
-            <h3>Únete al Club Luxe</h3>
-            <p>Recibe ofertas exclusivas.</p>
-            <div class="newsletter-form">
-                <input type="email" id="newsletter-email" placeholder="Tu email...">
-                <button onclick="suscribirse()">Unirse</button>
-            </div>
-        </div>
+  <div class="footer-container">
+    <div class="footer-column">
+      <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
+      <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
+      <h3>Encuéntranos en</h3>
+      <div class="social-links">
+        <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Logo Luxe" class="logo"></a>                
+        <a href="https://facebook.com" target="_blank">FB</a>
+        <a href="https://tiktok.com" target="_blank">TK</a>
+      </div>
     </div>
 
-    <div class="footer-bottom">
-        <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+    <div class="footer-column">
+      <h3>Explorar</h3>
+      <ul>
+        <li><a href="javascript:void(0)" onclick="filterCategory('all'); window.scrollTo(0,0)">Tienda</a></li>
+        <li><a href="javascript:void(0)" onclick="openExperience('pro')">Favoritos Pro</a></li>
+        <li><a href="javascript:void(0)" onclick="openExperience('kit')">Kits de Regalo</a></li>
+        <li><a href="javascript:void(0)" onclick="openExperience('skincare')">Rituales Skincare</a></li>
+        <li><a href="javascript:void(0)" onclick="showOnlyFavs()">Mis Favoritos ❤️</a></li>
+      </ul>
     </div>
+
+    <div class="footer-column newsletter">
+      <h3>Únete al Club Luxe</h3>
+      <p>Recibe ofertas exclusivas.</p>
+      <div class="newsletter-form">
+        <input type="email" id="newsletter-email" placeholder="Tu email...">
+        <button onclick="suscribirse()">Unirse</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+  </div>
 </footer>
+
+<!-- Scripts -->
 <script src="js/script.js"></script>
 <script src="js/slider.js"></script>
-<script src="js/user.js"></script>
 <script src="js/user.js"></script>
 
 <script>
@@ -287,13 +280,11 @@ function getPrimerNombre(nombreCompleto) {
         .then(user => {
             localStorage.setItem("user", JSON.stringify(user));
             
-            // 1. Actualizar el nombre en el header
             const userNameElement = document.getElementById("user-name");
             if (userNameElement) {
-                userNameElement.textContent = "Hola, " + getPrimerNombre(user.nombre);
+                userNameElement.textContent = ">, " + getPrimerNombre(user.nombre);
             }
             
-            // 2. Mostrar SweetAlert de bienvenida
             if (typeof Swal !== 'undefined') {
                 Swal.fire({
                     icon: 'success',
@@ -305,12 +296,12 @@ function getPrimerNombre(nombreCompleto) {
                 });
             }
             
-            // 3. Limpiar URL
             window.history.replaceState({}, document.title, window.location.pathname);
         })
         .catch(err => console.error('Error:', err));
     }
 })();
+
 document.addEventListener('DOMContentLoaded', function() {
     const user = JSON.parse(localStorage.getItem("user"));
     const userNameElement = document.getElementById("user-name");
@@ -321,5 +312,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 </body>
-
 </html>

@@ -227,6 +227,16 @@ h1, h2, h3 {
 /* Para que se vea mejor */
 .dropdown:hover #user-name {
   color: #ff4d6d;
+}/* ============================================
+   FLECHA QUE GIRA - VERSIÓN ULTRA SIMPLE
+   ============================================ */
+#user-name {
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.dropdown:hover #user-name {
+  transform: rotate(90deg);
 }
 /* Menú desplegable usuario */
 .dropdown {

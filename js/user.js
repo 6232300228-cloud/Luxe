@@ -13,7 +13,7 @@ function checkUser() {
     if (userName) {
       // ✅ SOLO PRIMER NOMBRE
       const primerNombre = user.nombre.split(' ')[0];
-      userName.textContent = "Hola, " + primerNombre;
+      userName.textContent = "> " + primerNombre;
     }
 
     if (logoutBtn) {

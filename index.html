@@ -307,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const userNameElement = document.getElementById("user-name");
     
     if (user && userNameElement) {
-        userNameElement.textContent = "Hola, " + getPrimerNombre(user.nombre);
+        userNameElement.textContent = "> " + getPrimerNombre(user.nombre);
     }
 });
 </script>

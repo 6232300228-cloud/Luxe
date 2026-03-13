@@ -204,7 +204,38 @@ h1, h2, h3 {
   font-weight: bold;
   margin-left: 2px;
 }
+/* ============================================
+   FLECHA DE USUARIO - GIRA HACIA ABAJO EN HOVER
+   ============================================ */
+.dropbtn {
+  background: none;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
 
+.arrow {
+  font-size: 14px;
+  display: inline-block;
+  transition: transform 0.3s ease; /* Transición suave */
+}
+
+/* Cuando el dropdown está en hover, la flecha gira */
+.dropdown:hover .arrow {
+  transform: rotate(90deg); /* Gira 90 grados para apuntar hacia abajo */
+}
+
+/* También cuando el menú está abierto (si tienes clase active) */
+/* Para que apunte completamente hacia abajo como una V */
+.dropdown:hover .arrow {
+  transform: rotate(180deg); /* 180 grados = completamente hacia abajo */
+}
 /* Menú desplegable usuario */
 .dropdown {
   position: relative;

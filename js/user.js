@@ -9,12 +9,10 @@ function checkUser() {
   if (user) {
     if (loginBtn) loginBtn.style.display = "none";
     if (userMenu) userMenu.style.display = "inline-block";
-    
     if (userName) {
-      // ✅ SOLO PRIMER NOMBRE CON FLECHA EN SPAN
-      const primerNombre = user.nombre.split(' ')[0];
-userName.textContent = primerNombre; // Solo el nombre, sin >
-    }
+  const primerNombre = user.nombre.split(' ')[0];
+  userName.innerHTML = '❯ ' + primerNombre;  // Usa este símbolo ❯ en lugar de >
+}
 
     if (logoutBtn) {
       logoutBtn.onclick = () => {

@@ -205,26 +205,20 @@ h1, h2, h3 {
   margin-left: 2px;
 }
 /* ============================================
-   FLECHA > QUE GIRA AL PASAR EL RATÓN - VERSIÓN CORREGIDA
+   VERSIÓN ULTRA SIMPLE - 100% FUNCIONAL
    ============================================ */
-#user-name {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
+.dropdown:hover #user-name {
+  transform: rotate(0deg); /* No hace nada, pero activa algo */
 }
 
-/* El símbolo > específicamente */
-#user-name::before {
-  content: ">";
+/* Si esto no funciona, el problema es otro */
+#user-name {
   display: inline-block;
   transition: transform 0.3s ease;
-  font-weight: bold;
-  margin-right: 2px;
 }
 
-/* Al pasar el ratón sobre el dropdown, el > gira */
-.dropdown:hover #user-name::before {
-  transform: rotate(90deg); /* O 180deg si prefieres */
+.dropdown:hover #user-name {
+  transform: rotate(360deg); /* Gira completamente */
 }
 /* Menú desplegable usuario */
 .dropdown {

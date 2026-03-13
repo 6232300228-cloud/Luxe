@@ -9,10 +9,12 @@ function checkUser() {
   if (user) {
     if (loginBtn) loginBtn.style.display = "none";
     if (userMenu) userMenu.style.display = "inline-block";
+    
     if (userName) {
-  const primerNombre = user.nombre.split(' ')[0];
-  userName.innerHTML = '❯ ' + primerNombre;  // Usa este símbolo ❯ en lugar de >
-}
+      // ✅ SOLO PRIMER NOMBRE CON FLECHA EN SPAN
+      const primerNombre = user.nombre.split(' ')[0];
+      userName.innerHTML = '<span class="arrow-symbol">></span> ' + primerNombre;
+    }
 
     if (logoutBtn) {
       logoutBtn.onclick = () => {
@@ -27,4 +29,5 @@ function checkUser() {
     if (userMenu) userMenu.style.display = "none";
   }
 }
+
 document.addEventListener("DOMContentLoaded", checkUser);

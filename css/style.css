@@ -205,20 +205,28 @@ h1, h2, h3 {
   margin-left: 2px;
 }
 /* ============================================
-   VERSIÓN ULTRA SIMPLE - 100% FUNCIONAL
+   FLECHA QUE GIRA - CORREGIDA
    ============================================ */
-.dropdown:hover #user-name {
-  transform: rotate(0deg); /* No hace nada, pero activa algo */
+.user-name-with-arrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
-/* Si esto no funciona, el problema es otro */
-#user-name {
+.arrow-symbol {
   display: inline-block;
   transition: transform 0.3s ease;
+  font-weight: bold;
 }
 
+/* CORRECCIÓN: El hover debe estar en el dropdown, pero afectar al arrow-symbol */
+.dropdown:hover .arrow-symbol {
+  transform: rotate(90deg);
+}
+
+/* Para que se vea mejor */
 .dropdown:hover #user-name {
-  transform: rotate(360deg); /* Gira completamente */
+  color: #ff4d6d;
 }
 /* Menú desplegable usuario */
 .dropdown {

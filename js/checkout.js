@@ -185,4 +185,3 @@ console.log("✅ Reducción de stock completada");
         }
     });
 });
-

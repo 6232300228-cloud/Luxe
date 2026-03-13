@@ -11,9 +11,9 @@ function checkUser() {
     if (userMenu) userMenu.style.display = "inline-block";
     
     if (userName) {
-      // ✅ SOLO PRIMER NOMBRE
+      // ✅ SOLO PRIMER NOMBRE CON FLECHA EN SPAN
       const primerNombre = user.nombre.split(' ')[0];
-      userName.textContent = "> " + primerNombre;
+      userName.innerHTML = '<span class="arrow-symbol">></span> ' + primerNombre;
     }
 
     if (logoutBtn) {
@@ -29,5 +29,3 @@ function checkUser() {
     if (userMenu) userMenu.style.display = "none";
   }
 }
-
-document.addEventListener("DOMContentLoaded", checkUser);

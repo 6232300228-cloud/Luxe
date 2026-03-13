@@ -205,23 +205,26 @@ h1, h2, h3 {
   margin-left: 2px;
 }
 /* ============================================
-   FLECHA > QUE GIRA AL PASAR EL RATÓN
+   FLECHA > QUE GIRA AL PASAR EL RATÓN - VERSIÓN CORREGIDA
    ============================================ */
-.arrow-symbol {
+#user-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* El símbolo > específicamente */
+#user-name::before {
+  content: ">";
   display: inline-block;
   transition: transform 0.3s ease;
   font-weight: bold;
   margin-right: 2px;
 }
 
-/* El dropdown completo activa el giro */
-.dropdown:hover .arrow-symbol {
-  transform: rotate(90deg); /* Gira 90 grados */
-}
-
-/* O si prefieres que gire 180 grados (como una V) */
-.dropdown:hover .arrow-symbol {
-  transform: rotate(180deg); /* Apunta hacia abajo */
+/* Al pasar el ratón sobre el dropdown, el > gira */
+.dropdown:hover #user-name::before {
+  transform: rotate(90deg); /* O 180deg si prefieres */
 }
 /* Menú desplegable usuario */
 .dropdown {

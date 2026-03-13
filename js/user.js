@@ -13,7 +13,7 @@ function checkUser() {
     if (userName) {
       // ✅ SOLO PRIMER NOMBRE CON FLECHA EN SPAN
       const primerNombre = user.nombre.split(' ')[0];
-      userName.innerHTML = '<span class="arrow-symbol">></span> ' + primerNombre;
+userName.textContent = primerNombre; // Solo el nombre, sin >
     }
 
     if (logoutBtn) {

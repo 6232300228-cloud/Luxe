@@ -2,127 +2,168 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MakeupStore</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Finalizar Compra - Luxe</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20250313">
 </head>
 
 <body>
 
 <header class="header">
   <div style="display: flex; align-items: center; gap: 15px;">
-    <div class="menu-hamburger" onclick="toggleMenu()">
-     
-    </div>
-
     <a href="index.html">
-        <img src="img/logo.png" alt="Logo Luxe" class="logo">
+      <img src="img/logo.png" alt="Logo Luxe" class="logo">
     </a>
   </div>
 
   <div class="icons">
-    <a href="carrito.html">Volver al carrito <span id="cart-count"></span></a>
+    <a href="carrito.html" class="back-to-cart">← Volver al carrito <span id="cart-count"></span></a>
 
     <div id="user-menu" class="dropdown" style="display: none;">
-        <button class="dropbtn">
-            <span id="user-name"></span> <i class="arrow">▼</i>
-        </button>
-        <div class="dropdown-content">
-            <a href="perfil.html">👤 Mi Perfil</a>
-            <a href="pedidos.html">📦 Mis Pedidos</a>
-            <hr>
-            <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
-        </div>
+      <button class="dropbtn">
+        <span id="user-name"></span> <i class="arrow">▼</i>
+      </button>
+      <div class="dropdown-content">
+        <a href="perfil.html">👤 Mi Perfil</a>
+        <a href="pedidos.html">📦 Mis Pedidos</a>
+        <hr>
+        <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
+      </div>
     </div>
   </div>
 </header>
 
-
 <main class="checkout-container">
-    <div class="checkout-card">
-        <h2 class="checkout-title">Finalizar Compra </h2>
+  <div class="checkout-card">
+    <h2 class="checkout-title">Finalizar Compra</h2>
+    
+    <!-- Barra de progreso del checkout -->
+    <div class="checkout-progress">
+      <div class="progress-step active">
+        <span class="step-number">1</span>
+        <span class="step-label">Envío</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step">
+        <span class="step-number">2</span>
+        <span class="step-label">Pago</span>
+      </div>
+      <div class="progress-line"></div>
+      <div class="progress-step">
+        <span class="step-number">3</span>
+        <span class="step-label">Confirmar</span>
+      </div>
+    </div>
+    
+    <!-- Paso 1: Información de Envío -->
+    <section class="checkout-section" id="shipping-section">
+      <h3><span class="step-badge">1</span> Información de Envío</h3>
+      <div class="input-group">
+        <input type="text" id="nombre" placeholder="Nombre completo" required>
+        <input type="text" id="direccion" placeholder="Dirección de entrega" required>
+        <input type="email" id="correo" placeholder="Correo electrónico" required>
+      </div>
+    </section>
+
+    <!-- Paso 2: Método de Pago -->
+    <section class="checkout-section" id="payment-section">
+      <h3><span class="step-badge">2</span> Método de Pago</h3>
+      
+      <div class="payment-methods">
+        <label class="payment-option">
+          <input type="radio" name="metodoPago" value="tarjeta" checked>
+          <span class="payment-label">
+            <span class="payment-icon">💳</span>
+            Tarjeta de Crédito / Débito
+          </span>
+        </label>
         
-        <section class="checkout-section">
-            <h3><span class="step">1</span> Información de Envío</h3>
-            <div class="input-group">
-                <input type="text" id="nombre" placeholder="Nombre completo" required>
-                <input type="text" id="direccion" placeholder="Dirección de entrega" required>
-                <input type="email" id="correo" placeholder="Correo electrónico" required>
-            </div>
-        </section>
+        <label class="payment-option">
+          <input type="radio" name="metodoPago" value="paypal">
+          <span class="payment-label">
+            <span class="payment-icon">🅿️</span>
+            PayPal
+          </span>
+        </label>
+      </div>
 
-        <section class="checkout-section">
-            <h3><span class="step">2</span> Método de Pago</h3>
-            <select id="metodoPago" class="luxe-select">
-                <option value="">-- Selecciona cómo pagar --</option>
-                <option value="tarjeta">Tarjeta de Crédito / Débito 💳</option>
-                <option value="paypal">PayPal 🅿️</option>
-            </select>
+      <div id="tarjetaBox" class="payment-details-box">
+        <h4>Datos de la Tarjeta</h4>
+        <input type="text" id="numeroTarjeta" placeholder="0000 0000 0000 0000" maxlength="19">
+        <div class="input-row">
+          <input type="text" id="expira" placeholder="MM/AA">
+          <input type="text" id="cvvTarjeta" placeholder="CVV" maxlength="3">
+        </div>
+      </div>
 
-            <div id="tarjetaBox" class="payment-box">
-                <h4>Datos de la Tarjeta</h4>
-                <input type="text" id="numeroTarjeta" placeholder="0000 0000 0000 0000" maxlength="16">
-                <div class="input-row">
-                    <input type="text" id="expira" placeholder="MM/AA">
-                    <input type="text" id="cvvTarjeta" placeholder="CVV" maxlength="3">
-                </div>
-            </div>
+      <div id="paypalBox" class="payment-details-box hidden">
+        <h4>Cuenta PayPal</h4>
+        <p class="payment-info">Serás redirigido a PayPal para completar tu pago de forma segura.</p>
+        <input type="email" id="correoPaypal" placeholder="Correo de tu cuenta PayPal">
+      </div>
+    </section>
 
-            <div id="paypalBox" class="payment-box">
-                <h4>Cuenta PayPal</h4>
-                <p>Serás redirigido a PayPal para completar tu pago de forma segura.</p>
-                <input type="email" id="correoPaypal" placeholder="Correo de tu cuenta PayPal">
-            </div>
-        </section>
-
-        <div class="checkout-summary" style="margin: 20px 0; padding: 15px; background: #fff5f7; border-radius: 12px;">
-    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+    <!-- Resumen de compra -->
+    <div class="checkout-summary">
+      <h3>Resumen de compra</h3>
+      <div class="summary-row">
         <span>Subtotal:</span>
         <span id="resumen-subtotal">$0.00</span>
-    </div>
-    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+      </div>
+      <div class="summary-row">
         <span>Envío:</span>
         <span id="resumen-envio">$0.00</span>
-    </div>
-    <hr style="border: 0; border-top: 1px solid #ffccd5;">
-    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.2rem; color: #ff4d6d;">
+      </div>
+      <div class="summary-row discount-row" id="discount-row" style="display: none;">
+        <span>Descuento:</span>
+        <span id="resumen-descuento">-$0.00</span>
+      </div>
+      <div class="summary-divider"></div>
+      <div class="summary-row total-row">
         <span>Total a Pagar:</span>
         <span id="resumen-total">$0.00</span>
+      </div>
     </div>
-</div>
 
-        <button id="btnPagar" class="btn-luxe-pay">Confirmar Pago 💖</button>
-        <p class="secure-text">🔒 Pago procesado de forma segura y encriptada</p>
+    <!-- Botones de acción -->
+    <div class="checkout-actions">
+      <button id="btnContinuar" class="btn-luxe-pay">Continuar</button>
+      <button id="btnPagar" class="btn-luxe-pay" style="display: none;">Confirmar Pago</button>
     </div>
+    
+    <p class="secure-text">🔒 Pago procesado de forma segura y encriptada</p>
+  </div>
 </main>
-<script src="js/checkout.js"></script>
 
-</body>
 <footer class="footer-luxe">
-    <div class="footer-container">
-        <div class="footer-column">
-            <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
-            <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
-            <div class="social-links">
-                <a href="https://instagram.com" target="_blank">IG</a>
-                <a href="https://facebook.com" target="_blank">FB</a>
-                <a href="https://tiktok.com" target="_blank">TK</a>
-            </div>
-        </div>
-
-        <div class="footer-column newsletter">
-            <h3>Únete al Club Luxe</h3>
-            <p>Recibe ofertas exclusivas.</p>
-            <div class="newsletter-form">
-                <input type="email" id="newsletter-email" placeholder="Tu email...">
-                <button onclick="suscribirse()">Unirse</button>
-            </div>
-        </div>
+  <div class="footer-container">
+    <div class="footer-column">
+      <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
+      <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
+      <h3>Encuéntranos en</h3>
+      <div class="social-links">
+        <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Instagram" class="logo"></a>                
+        <a href="https://facebook.com" target="_blank">FB</a>
+        <a href="https://tiktok.com" target="_blank">TK</a>
+      </div>
     </div>
 
-    <div class="footer-bottom">
-        <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+    <div class="footer-column newsletter">
+      <h3>Únete al Club Luxe</h3>
+      <p>Recibe ofertas exclusivas.</p>
+      <div class="newsletter-form">
+        <input type="email" id="newsletter-email" placeholder="Tu email...">
+        <button onclick="suscribirse()">Unirse</button>
+      </div>
     </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+  </div>
 </footer>
+
+<script src="js/checkout.js?v=20250313"></script>
+</body>
 </html>

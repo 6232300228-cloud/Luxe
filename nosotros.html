@@ -5,49 +5,54 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sobre Nosotros | Luxe</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20250313">
 </head>
 
 <body>
 
 <header class="header">
-  <div style="display: flex; align-items: center; gap: 15px;">
+
+  <div class="header-left">
     <div class="menu-hamburger" onclick="toggleMenu()">
       <span></span>
       <span></span>
       <span></span>
     </div>
 
-    <a href="index.html">
-        <img src="img/logo.png" alt="Logo Luxe" class="logo">
-    </a>
+    <a href="index.html" class="logo-link">
+  <img src="img/logo.png" alt="Logo Luxe" class="logo">
+  <div class="logo-text-group">
+    <span class="slogan-minimal">Tu destino de belleza</span>
+  </div>
+</a>
   </div>
    
-  <div class="icons">
+   <div class="header-right icons">
     <a href="favoritos.html">❤️ <span id="fav-count">0</span></a>
     <a href="carrito.html">🛒 <span id="cart-count">0</span></a>
 
     <a href="login.html" id="login-btn">👤 Iniciar sesión</a>
 
     <div id="user-menu" class="dropdown" style="display: none;">
-        <button class="dropbtn">
-            <span id="user-name"></span> <i class="arrow">▼</i>
-        </button>
-        <div class="dropdown-content">
-            <a href="perfil.html"> Mi Perfil</a>
-            <a href="pedidos.html"> Mis Pedidos</a>
-            <hr>
-            <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
-        </div>
+      <button class="dropbtn">
+        <span id="user-name"></span> <i class="arrow">▼</i>
+      </button>
+      <div class="dropdown-content">
+        <a href="perfil.html"> Mi Perfil</a>
+        <a href="pedidos.html"> Mis Pedidos</a>
+        <hr>
+        <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
+      </div>
     </div>
   </div>
+
 </header>
 
 <nav id="side-menu" class="side-nav">
   <span class="close-btn" onclick="toggleMenu()">&times;</span>
   <div class="menu-section">
     <h3 style="color: #ff4d6d; padding-left: 20px;">Menú Principal</h3>
-    <a href="nosotros.html">📖 Sobre Nosotros</a>
+    <a href="nosotros.html"> Sobre Nosotros</a>
     <a href="#"> Lo más nuevo</a>
     <a href="#"> Ofertas</a>
   </div>
@@ -89,21 +94,19 @@
     </div>
   </section>
 </main>
-
-<script src="js/script.js"></script>
-</body>
-</html>
 <footer class="footer-luxe">
     <div class="footer-container">
         <div class="footer-column">
             <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
-            <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
+            <p class="footer-description">Realzando tu belleza natural con productos de alta gama. </p>
+           <h3>Encuéntranos en</h3>
             <div class="social-links">
-                <a href="https://instagram.com" target="_blank">IG</a>
-                <a href="https://facebook.com" target="_blank">FB</a>
-                <a href="https://tiktok.com" target="_blank">TK</a>
+            <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Logo Luxe" class="logo"></a>                
+            <a href="https://facebook.com" target="_blank">FB</a>
+            <a href="https://tiktok.com" target="_blank">TK</a>
             </div>
         </div>
+
         <div class="footer-column newsletter">
             <h3>Únete al Club Luxe</h3>
             <p>Recibe ofertas exclusivas.</p>
@@ -118,3 +121,6 @@
         <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
     </div>
 </footer>
+<script src="js/script.js?v=20250313"></script>
+</body>
+</html>

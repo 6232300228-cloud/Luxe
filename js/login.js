@@ -1,103 +1,287 @@
-// ============================================
-// REFERENCIAS A LOS FORMULARIOS
-// ============================================
+// login.js - VERSIÓN 100% CORREGIDA
 const loginSection = document.getElementById("login-section");
 const registerSection = document.getElementById("register-section");
 const toRegister = document.getElementById("to-register");
 const toLogin = document.getElementById("to-login");
 const btnLogin = document.getElementById("btnLogin");
 const btnRegister = document.getElementById("btnRegister");
+const btnGoogle = document.getElementById("btnGoogle");
 
-// ============================================
+// VARIABLE DE CONFIGURACIÓN
+const API_URL = 'https://luxe-api-frr5.onrender.com/api';
+
+// FUNCIÓN PARA OBTENER EL PRIMER NOMBRE
+function getPrimerNombre(nombreCompleto) {
+    if (!nombreCompleto) return 'Usuario';
+    return nombreCompleto.split(' ')[0];
+}
+
 // CAMBIO ENTRE FORMULARIOS
-// ============================================
-toRegister.addEventListener("click", () => {
-    loginSection.classList.add("hidden");
-    registerSection.classList.remove("hidden");
-});
+if (toRegister) {
+    toRegister.addEventListener("click", () => {
+        loginSection.classList.add("hidden");
+        registerSection.classList.remove("hidden");
+    });
+}
 
-toLogin.addEventListener("click", () => {
-    registerSection.classList.add("hidden");
-    loginSection.classList.remove("hidden");
-});
+if (toLogin) {
+    toLogin.addEventListener("click", () => {
+        registerSection.classList.add("hidden");
+        loginSection.classList.remove("hidden");
+    });
+}
 
-// ============================================
-// LOGIN
-// ============================================
-btnLogin.addEventListener("click", async () => {
-    let correo = document.getElementById("login-correo").value;
-    let contraseña = document.getElementById("login-pass").value;
+// LOGIN NORMAL - CORREGIDO
+if (btnLogin) {
+    btnLogin.addEventListener("click", async () => {
+        let correo = document.getElementById("login-correo").value;
+        let contraseña = document.getElementById("login-pass").value;
 
-    if (correo === "" || !correo.includes("@") || contraseña === "") {
-        alert(" Por favor, ingresa tu correo y contraseña correctamente");
-        return;
-    }
+        if (correo === "" || !correo.includes("@") || contraseña === "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Por favor, ingresa tu correo y contraseña correctamente',
+                timer: 2000,
+                showConfirmButton: false,
+                position: 'top-end',
+                toast: true
+            });
+            return;
+        }
 
-    try {
-        console.log('📤 Intentando conectar a:', 'http://localhost:3000/api/auth/login');
-        
-        const response = await fetch('http://localhost:3000/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ correo, contraseña })
-        });
+        try {
+            const response = await fetch(`${API_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ correo, contraseña })
+            });
 
-        const data = await response.json();
-        console.log('📥 Respuesta:', data);
+            const data = await response.json();
 
-        if (response.ok) {
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("user", JSON.stringify(data.user));
-            alert(` Bienvenido ${data.user.nombre}`);
+            if (response.ok) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("user", JSON.stringify(data.user));
 
-            if (data.user.role === "admin" || data.user.role === "empleado") {
-                window.location.href = "dashboard.html";
+                // ✅ CORREGIDO: user → data.user
+                const primerNombre = getPrimerNombre(data.user.nombre);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: `¡Bienvenido ${primerNombre}!`,
+                    timer: 1500,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true,
+                    didClose: () => {
+                        if (data.user.role === "admin" || data.user.role === "empleado") {
+                            window.location.href = "dashboard.html";
+                        } else {
+                            window.location.href = "index.html";
+                        }
+                    }
+                });
             } else {
-                window.location.href = "index.html";
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.error || "Error al iniciar sesión",
+                    timer: 2000,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true
+                });
             }
-        } else {
-            alert(data.error || "Error al iniciar sesión");
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de conexión',
+                text: 'No se pudo conectar con el servidor',
+                timer: 2000,
+                showConfirmButton: false,
+                position: 'top-end',
+                toast: true
+            });
         }
-    } catch (error) {
-        console.error('Error completo:', error);
-        alert("Error de conexión con el servidor. Asegúrate de que el backend esté corriendo en http://localhost:3000");
-    }
-});
+    });
+}
 
-// ============================================
-// REGISTRO
-// ============================================
-btnRegister.addEventListener("click", async () => {
-    const nombre = document.getElementById("reg-nombre").value;
-    const telefono = document.getElementById("reg-telefono").value;
-    const direccion = document.getElementById("reg-direccion").value;
-    const correo = document.getElementById("reg-correo").value;
-    const contraseña = document.getElementById("reg-pass").value;
+// REGISTRO NORMAL - CORREGIDO
+if (btnRegister) {
+    btnRegister.addEventListener("click", async () => {
+        const nombre = document.getElementById("reg-nombre").value;
+        const apellido = document.getElementById("reg-apellido").value;
+        const telefono = document.getElementById("reg-telefono").value;
+        const direccion = document.getElementById("reg-direccion").value;
+        const correo = document.getElementById("reg-correo").value;
+        const contraseña = document.getElementById("reg-pass").value;
 
-    if (nombre === "" || telefono === "" || direccion === "" || !correo.includes("@") || contraseña === "") {
-        alert("⚠️ Por favor, llena todos los campos de tu registro Luxe");
-        return;
-    }
+        const nombreCompleto = `${nombre} ${apellido}`.trim();
 
+        if (nombre === "" || apellido === "" || telefono === "" || direccion === "" || !correo.includes("@") || contraseña === "") {
+            Swal.fire({
+                icon: 'error',
+                title: 'Campos incompletos',
+                text: 'Por favor, llena todos los campos',
+                timer: 2000,
+                showConfirmButton: false,
+                position: 'top-end',
+                toast: true
+            });
+            return;
+        }
+
+        try {
+            const response = await fetch(`${API_URL}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    nombre: nombreCompleto, 
+                    correo, 
+                    telefono, 
+                    direccion, 
+                    contraseña 
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("user", JSON.stringify(data.user));
+
+                // ✅ CORREGIDO: user → data.user
+                const primerNombre = getPrimerNombre(data.user.nombre);
+
+                Swal.fire({
+                    icon: 'success',
+                    title: `¡Cuenta creada! Bienvenido ${primerNombre}!`,
+                    timer: 1500,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true,
+                    didClose: () => {
+                        window.location.href = "index.html";
+                    }
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.error || "Error al registrarse",
+                    timer: 2000,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true
+                });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de conexión',
+                text: 'No se pudo conectar con el servidor',
+                timer: 2000,
+                showConfirmButton: false,
+                position: 'top-end',
+                toast: true
+            });
+        }
+    });
+}
+
+// LOGIN CON GOOGLE
+if (btnGoogle) {
+    btnGoogle.addEventListener("click", () => {
+        window.location.href = `${API_URL}/auth/google`;
+    });
+}
+
+// FUNCIÓN PARA LOGIN CON TOKEN - CORREGIDA
+async function loginConToken(token) {
     try {
-        const response = await fetch('http://localhost:3000/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ nombre, correo, telefono, direccion, contraseña })
+        console.log('Intentando login con token');
+
+        const response = await fetch(`${API_URL}/auth/me`, {
+            headers: { 'Authorization': `Bearer ${token}` }
         });
 
-        const data = await response.json();
+        if (!response.ok) {
+            throw new Error('Error al obtener usuario');
+        }
 
-        if (response.ok) {
-            localStorage.setItem("token", data.token);
-            localStorage.setItem("user", JSON.stringify(data.user));
-            alert("✨ ¡Cuenta creada con éxito!");
-            window.location.href = "index.html";
+        const user = await response.json();
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+
+        // ✅ user SÍ existe aquí (es el resultado del fetch)
+        const primerNombre = getPrimerNombre(user.nombre);
+
+        console.log('Usuario autenticado:', user.nombre);
+
+        Swal.fire({
+            icon: 'success',
+            title: `¡Bienvenido ${primerNombre}!`,
+            timer: 1500,
+            showConfirmButton: false,
+            position: 'top-end',
+            toast: true
+        });
+
+        if (user.role === "admin" || user.role === "empleado") {
+            window.location.href = "dashboard.html";
         } else {
-            alert(data.error || "Error al registrarse");
+            window.location.href = "index.html";
         }
     } catch (error) {
-        alert("Error de conexión con el servidor");
-        console.error(error);
+        console.error('Error en login con token:', error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error al iniciar sesión automáticamente',
+            timer: 2000,
+            showConfirmButton: false,
+            position: 'top-end',
+            toast: true
+        });
     }
-});
+}
+
+// PROCESAR TOKEN DE GOOGLE
+(function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
+
+    if (token) {
+        console.log('Token detectado en URL, procesando...');
+        loginConToken(token);
+    }
+})();
+
+// Suscripción newsletter
+function suscribirse() {
+    const email = document.getElementById('newsletter-email').value;
+    if (email && email.includes('@')) {
+        Swal.fire({
+            icon: 'success',
+            title: '¡Gracias por suscribirte!',
+            timer: 1500,
+            showConfirmButton: false,
+            position: 'top-end',
+            toast: true
+        });
+        document.getElementById('newsletter-email').value = '';
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: 'Email inválido',
+            text: 'Por favor ingresa un email válido',
+            timer: 1500,
+            showConfirmButton: false,
+            position: 'top-end',
+            toast: true
+        });
+    }
+}

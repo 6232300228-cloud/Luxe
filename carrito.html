@@ -3,28 +3,59 @@
 <head>
   <meta charset="UTF-8">
   <title>Carrito - Luxe</title>
-  <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/style.css?v=20250313">
 </head><!--hosting listo-->
 
 <body>
 
 <header class="header">
-   <a href="index.html">
-      <img src="img/logo.png" alt="Logo de la empresa" class="logo">
-   </a>
-  <div class="icons">
-    <a href="login.html" id="login-btn">👤 Iniciar sesión</a>
-    <span id="user-name" style="display:none;"></span>
-    <button id="logout-btn" style="display:none;">Salir</button>
+  <div class="header-left">
+    <div class="menu-hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
 
-    <a href="favoritos.html">❤️ <span id="fav-count">0</span></a>
-    <a href="index.html">Inicio </a>
+    <a href="index.html" class="logo-link">
+      <img src="img/logo.png" alt="Logo Luxe" class="logo">
+      <div class="logo-text-group">
+        <span class="slogan-minimal">Tu destino de belleza</span>
+      </div>
+    </a>
+  </div>
+
+  <div class="header-right icons">
+    <a href="favoritos.html"><img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span></a>
+    <a href="carrito.html"><img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span></a>
+    <a href="login.html" id="login-btn"><img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"></a>
+
+    <div id="user-menu" class="dropdown" style="display: none;">
+      <button class="dropbtn">
+        <span id="user-name"></span> <i class="arrow">▼</i>
+      </button>
+      <div class="dropdown-content">
+        <a href="perfil.html">Mi Perfil</a>
+        <a href="pedidos.html">Mis Pedidos</a>
+        <hr>
+        <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
+      </div>
+    </div>
   </div>
 </header>
+
+<nav id="side-menu" class="side-nav">
+  <span class="close-btn" onclick="toggleMenu()">&times;</span>
+  <div class="menu-section">
+    <h3 style="color: #ff4d6d; padding-left: 20px;">Menú Principal</h3>
+    <a href="nosotros.html">Sobre Nosotros</a>
+    <a href="#">Lo más nuevo</a>
+    <a href="#">Ofertas</a>
+  </div>
+</nav>
 <main class="container cart-page-wrapper">
     
     <section class="cart-main-content">
-        <h2 style="color: #ff4d6d; margin-left: 20px;">Tu Carrito 🛒</h2>
+        <h2 style="color: #ff4d6d; margin-left: 20px;">Tu Carrito </h2>
         <section class="products" id="cart-items"></section>
     </section>
 
@@ -37,7 +68,7 @@
             <h2 id="total" style="font-size: 24px; margin-top: 0;">Total: $0.00</h2>
             <div id="btn-pagar-container">
                 <a href="checkout.html">
-                    <button class="btn-pagar" style="width: 100%;">Ir a pagar 💳</button>
+                    <button class="btn-pagar" style="width: 100%;">Ir a pagar </button>
                 </a>
             </div>
         </div>
@@ -52,17 +83,16 @@
     </aside>
 </main>
 
-<script src="js/carrito.js"></script>
-<script src="js/user.js"></script>
 <footer class="footer-luxe">
     <div class="footer-container">
         <div class="footer-column">
             <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
             <p class="footer-description">Realzando tu belleza natural con productos de alta gama. </p>
+           <h3>Encuéntranos en</h3>
             <div class="social-links">
-                <a href="https://instagram.com" target="_blank">IG</a>
-                <a href="https://facebook.com" target="_blank">FB</a>
-                <a href="https://tiktok.com" target="_blank">TK</a>
+            <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Logo Luxe" class="logo"></a>                
+            <a href="https://facebook.com" target="_blank">FB</a>
+            <a href="https://tiktok.com" target="_blank">TK</a>
             </div>
         </div>
 
@@ -80,6 +110,7 @@
         <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
     </div>
 </footer>
+<script src="js/carrito.js?v=20250313"></script>
+<script src="js/user.js?v=20250313"></script>
 </body>
-
 </html>

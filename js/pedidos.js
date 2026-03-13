@@ -26,7 +26,7 @@ async function cargarPedidos() {
         contenedor.innerHTML = `<div style="text-align: center; padding: 40px;">Cargando tus pedidos... </div>`;
 
         // 🔥 Llamar al backend para obtener los pedidos REALES desde MongoDB
-        const response = await fetch('http://localhost:3000/api/orders/mis-pedidos', {
+        const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/mis-pedidos', {
             headers: {
                 'Authorization': `Bearer ${token}`
             }

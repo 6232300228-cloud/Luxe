@@ -29,3 +29,4 @@ function checkUser() {
     if (userMenu) userMenu.style.display = "none";
   }
 }
+document.addEventListener("DOMContentLoaded", checkUser);

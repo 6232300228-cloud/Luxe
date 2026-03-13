@@ -77,9 +77,15 @@ function renderCarrito() {
                 <p style="margin:2px 0; color:#ff4d6d; font-weight:bold;">$${producto.precio}</p>
             </div>
             <div style="display: flex; align-items: center; gap: 10px;">
-                <button onclick="cambiarCantidad(${index}, -1)" style="width:30px; padding:2px;">➖</button>
-                <b>${producto.cantidad}</b>
-                <button onclick="cambiarCantidad(${index}, 1)" style="width:30px; padding:2px;">➕</button>
+            <button onclick="cambiarCantidad(${index}, -1)" style="width:30px; padding:2px; display: flex; align-items: center; justify-content: center;">
+            <img src="/img/icono2.png" alt="Menos" style="width: 100%; height: auto;">
+            </button>
+
+            <b>${producto.cantidad}</b>
+
+            <button onclick="cambiarCantidad(${index}, 1)" style="width:30px; padding:2px; display: flex; align-items: center; justify-content: center;">
+            <img src="/img/icono1.png" alt="Más" style="width: 100%; height: auto;">
+            </button>
             </div>
             <button onclick="eliminarProducto(${index})" style="background:none; color:red; border:none; width:auto; font-size:18px;">Eliminar</button>
           </div>

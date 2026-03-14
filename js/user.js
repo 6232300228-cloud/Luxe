@@ -29,15 +29,12 @@ function checkUser() {
   }
 }
 document.addEventListener("DOMContentLoaded", checkUser);
-// ============================================
-// FUNCIÓN PARA MENÚ EN MÓVIL
-// ============================================
+// Agregar funcionalidad de clic para móvil
 document.addEventListener('DOMContentLoaded', function() {
   const dropbtn = document.querySelector('.dropbtn');
   const dropdown = document.getElementById('user-menu');
   
   if (dropbtn && dropdown) {
-    // Abrir/cerrar al hacer clic en el botón
     dropbtn.addEventListener('click', function(e) {
       e.preventDefault();
       e.stopPropagation();
@@ -49,11 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
       if (!dropdown.contains(e.target)) {
         dropdown.classList.remove('active');
       }
-    });
-    
-    // Evitar que el menú se cierre al hacer clic dentro
-    dropdown.addEventListener('click', function(e) {
-      e.stopPropagation();
     });
   }
 });

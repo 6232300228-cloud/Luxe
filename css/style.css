@@ -204,47 +204,9 @@ h1, h2, h3 {
   font-weight: bold;
   margin-left: 2px;
 }
-/* ============================================
-   FLECHA QUE GIRA - CORREGIDA
-   ============================================ */
-.user-name-with-arrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
 
-.arrow-symbol {
-  display: inline-block;
-  transition: transform 0.3s ease;
-  font-weight: bold;
-}
-
-/* CORRECCIÓN: El hover debe estar en el dropdown, pero afectar al arrow-symbol */
-.dropdown:hover .arrow-symbol {
-  transform: rotate(90deg);
-}
-
-/* Para que se vea mejor */
-.dropdown:hover #user-name {
-  color: #ff4d6d;
-}/* ============================================
-   FLECHA QUE GIRA - VERSIÓN ULTRA SIMPLE
-   ============================================ */
-#user-name {
-  display: inline-block;
-  transition: transform 0.3s ease;
-}
-
-.dropdown:hover #user-name {
-  transform: rotate(90deg);
-}
 /* Menú desplegable usuario */
-/* ============================================
-   FORZAR VISIBILIDAD DEL MENÚ EN MÓVIL
-   ============================================ */
-/* ============================================
-   FIX DEFINITIVO PARA MÓVIL - TEXTO VISIBLE
-   ============================================ */
+
 @media (max-width: 768px) {
   /* Forzar que el dropdown se muestre al hacer clic */
   .dropdown.active .dropdown-content {

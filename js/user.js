@@ -12,7 +12,7 @@ function checkUser() {
     
     if (userName) {
       const primerNombre = user.nombre.split(' ')[0];
-      userName.textContent = primerNombre ;  // SIMPLE: textContent
+      userName.textContent = primerNombre ;  // ✅ BIEN: solo nombre
     } 
 
     if (logoutBtn) {
@@ -29,6 +29,7 @@ function checkUser() {
   }
 }
 document.addEventListener("DOMContentLoaded", checkUser);
+
 // Agregar funcionalidad de clic para móvil
 document.addEventListener('DOMContentLoaded', function() {
   const dropbtn = document.querySelector('.dropbtn');
@@ -41,7 +42,6 @@ document.addEventListener('DOMContentLoaded', function() {
       dropdown.classList.toggle('active');
     });
     
-    // Cerrar al hacer clic fuera
     document.addEventListener('click', function(e) {
       if (!dropdown.contains(e.target)) {
         dropdown.classList.remove('active');

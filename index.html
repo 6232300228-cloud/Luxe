@@ -282,7 +282,7 @@ function getPrimerNombre(nombreCompleto) {
             
             const userNameElement = document.getElementById("user-name");
             if (userNameElement) {
-                userNameElement.textContent = "> " + getPrimerNombre(user.nombre);
+                userNameElement.textContent = getPrimerNombre(user.nombre)+ "▼"  ;
             }
             
             if (typeof Swal !== 'undefined') {

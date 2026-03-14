@@ -12,7 +12,7 @@ function checkUser() {
     
     if (userName) {
       const primerNombre = user.nombre.split(' ')[0];
-      userName.textContent = "> " + primerNombre;  // SIMPLE: textContent
+      userName.textContent = primerNombre +"▼";  // SIMPLE: textContent
     }
 
     if (logoutBtn) {

@@ -279,7 +279,7 @@ h1, h2, h3 {
 }
 
 .dropdown-content a:hover, .logout-link:hover {
-  background: #fff0f3;
+  background: #000000;
   color: #ff4d6d;
 }
 

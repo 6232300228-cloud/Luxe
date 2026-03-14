@@ -206,18 +206,16 @@ h1, h2, h3 {
 }
 
 /* Menú desplegable usuario */
-
+/* Menú desplegable usuario */
 @media (max-width: 768px) {
   /* Forzar que el dropdown se muestre al hacer clic */
   .dropdown.active .dropdown-content {
     display: block !important;
-     color: #000000 !important; /* NEGRO FORZADO */
-    background-color: #ffffff !important;
   }
   
-  /* Forzar que TODOS los textos sean NEGROS y visibles */
-  .dropdown-content a,
-  .dropdown-content button,
+  /* ESPECIFICAR CORRECTAMENTE LOS SELECTORES */
+  div.dropdown-content a,
+  div.dropdown-content button,
   #logout-btn {
     color: #000000 !important; /* NEGRO FORZADO */
     background-color: #ffffff !important; /* Fondo blanco */
@@ -228,6 +226,8 @@ h1, h2, h3 {
     padding: 15px 20px !important;
     border-bottom: 1px solid #f0f0f0 !important;
     text-align: left !important;
+    font-weight: 500 !important; /* Asegurar que se vea bien */
+    line-height: 1.2 !important;
   }
   
   /* El botón de logout específicamente */
@@ -239,6 +239,7 @@ h1, h2, h3 {
     text-align: left !important;
     margin: 0 !important;
     border-radius: 0 !important;
+    cursor: pointer !important;
   }
   
   /* Fondo del menú */
@@ -246,9 +247,21 @@ h1, h2, h3 {
     background: #ffffff !important;
     border: 1px solid #ddd !important;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
+    border-radius: 8px !important; /* Opcional: darle bordes redondeados */
+  }
+  
+  /* ANULAR la regla que oculta el texto */
+  .icons a {
+    font-size: 0; /* Esto está bien para los iconos principales */
+    padding: 8px;
+  }
+  
+  /* Pero asegurar que el dropdown IGNORA esa regla */
+  .dropdown-content a,
+  .dropdown-content button {
+    font-size: 16px !important; /* Forzar tamaño de letra */
   }
 }
-
 /* Menú hamburguesa */
 .menu-hamburger {
   display: flex;

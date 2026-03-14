@@ -240,37 +240,38 @@ h1, h2, h3 {
 }
 /* Menú desplegable usuario */
 /* ============================================
-   FORZAR VISIBILIDAD DEL TEXTO EN MÓVIL
+   FORZAR VISIBILIDAD DEL MENÚ EN MÓVIL
    ============================================ */
 @media (max-width: 768px) {
   /* Forzar que el dropdown se muestre al hacer clic */
-  .dropdown:active .dropdown-content,
-  .dropdown:focus .dropdown-content,
   .dropdown.active .dropdown-content {
     display: block !important;
   }
   
-  /* Forzar que el TEXTO sea visible */
+  /* Forzar que TODAS las opciones sean VISIBLES */
   .dropdown-content a,
   .dropdown-content button {
-    color: #333 !important; /* Color oscuro forzado */
-    background: white !important;
+    color: #333333 !important; /* Color oscuro forzado */
+    background-color: #ffffff !important; /* Fondo blanco forzado */
     display: block !important;
     opacity: 1 !important;
     visibility: visible !important;
     font-size: 16px !important;
     padding: 15px 20px !important;
     border-bottom: 1px solid #f0f0f0 !important;
+    text-align: left !important;
+    font-weight: normal !important;
+    line-height: 1.5 !important;
   }
   
-  /* El hover en móvil no funciona bien, mejor un color al hacer clic */
+  /* El hover en móvil no funciona, mejor color al hacer clic */
   .dropdown-content a:active,
   .dropdown-content button:active {
-    background: #ff4d6d !important;
+    background-color: #ff4d6d !important;
     color: white !important;
   }
   
-  /* Asegurar que el fondo sea blanco */
+  /* Asegurar que el fondo del menú sea blanco */
   .dropdown-content {
     background: white !important;
     box-shadow: 0 8px 16px rgba(0,0,0,0.2) !important;
@@ -278,6 +279,16 @@ h1, h2, h3 {
     width: 200px !important;
     right: 0 !important;
     top: 100% !important;
+    border: 1px solid #eee !important;
+  }
+  
+  /* El botón "Cerrar Sesión" también debe verse */
+  #logout-btn {
+    color: #333333 !important;
+    background: none !important;
+    border: none !important;
+    width: 100% !important;
+    text-align: left !important;
   }
 }
 

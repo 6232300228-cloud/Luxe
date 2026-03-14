@@ -4,6 +4,7 @@ const favItems = document.getElementById("fav-items");
 function actualizarContadorCarrito() {
   const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
   const contador = document.getElementById("cart-count");
+  
 
   if (contador) {
     const total = carrito.length;
@@ -21,6 +22,10 @@ function actualizarContadorCarrito() {
       contador.innerText = "";
     }
   }
+}
+function toggleMenu() {
+  const menu = document.getElementById('side-menu');
+  if (menu) menu.classList.toggle('active');
 }
 
 function renderFavs() {

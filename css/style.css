@@ -22,7 +22,11 @@ img {
 h1, h2, h3 {
   font-family: 'Playfair Display', serif;
 }
-
+/* Reset de estilos para enlaces */
+a, a:link, a:visited, a:hover, a:active {
+  text-decoration: none;
+  color: inherit;
+}
 /* ============================================
    HEADER - ESCRITORIO (COMPLETO)
    ============================================ */
@@ -319,6 +323,18 @@ h1, h2, h3 {
 }
 
 /* Menú lateral */
+@media (min-width: 769px) {
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 15px;
+    height: 100%;
+    z-index: 998;
+    pointer-events: none; /* No interfiere con clics */
+  }
+}
 .side-nav {
   height: 100%;
   width: 280px;
@@ -1128,6 +1144,7 @@ h1, h2, h3 {
   border-top: 1px solid #eee;
   font-size: 12px; /* Reducido de 13px a 12px */
   color: #999;
+  
 }
 /* ============================================
    RESPONSIVE - MÓVIL (TEXTO OCULTO, SOLO PNG)
@@ -1241,13 +1258,6 @@ h1, h2, h3 {
   .video-card {
     flex: 0 0 200px;
     height: 360px;
-  }
-  
-  .overlay {
-    opacity: 1;
-    background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
-    justify-content: flex-end;
-    text-align: left;
   }
   
   .triple-banner-section {
@@ -1371,4 +1381,1777 @@ h1, h2, h3 {
     width: 16px;
     height: 16px;
   }
+}
+/*carrito.html*/
+.cart-page-wrapper {
+  display: flex;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.cart-main-content {
+  flex: 2;
+  min-width: 0;
+}
+
+.cart-sidebar {
+  flex: 1;
+  min-width: 280px;
+}
+
+/* ============================================
+   BOTÓN VACIAR CARRITO - CENTRADO
+   ============================================ */
+.btn-vaciar {
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 13px;
+  cursor: pointer;
+  margin-bottom: 15px;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.btn-vaciar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0%;
+  height: 1px;
+  background: #ff4d6d;
+  transition: 0.3s;
+}
+
+.btn-vaciar:hover {
+  color: #ff4d6d;
+}
+
+.btn-vaciar:hover::after {
+  width: 100%;
+}
+
+
+/* ============================================
+   TARJETAS DE PRODUCTOS EN CARRITO
+   ============================================ */
+#cart-items {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+#cart-items .card {
+  background: white;
+  border-radius: 12px;
+  padding: 15px 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  border: 1px solid #f2f2f2;
+  transition: all 0.3s ease;
+}
+
+#cart-items .card:hover {
+  box-shadow: 0 10px 25px rgba(255,77,109,0.15);
+}
+
+#cart-items .card > div {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+#cart-items .card img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #fff;
+}
+
+#cart-items .card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+#cart-items .card p {
+  color: #ff4d6d;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ============================================
+   BOTONES + y - REDISEÑADOS (SIN IMÁGENES)
+   ============================================ */
+#cart-items .card button[onclick*="cambiarCantidad"] {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: #f0f0f0;
+  color: #333;
+  font-weight: bold;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  line-height: 1;
+}
+
+#cart-items .card button[onclick*="cambiarCantidad"]:hover {
+  background: #ff4d6d;
+  color: white;
+  transform: scale(1.1);
+}
+
+/* Eliminar las imágenes de los botones */
+#cart-items .card button[onclick*="cambiarCantidad"] img {
+  display: none;
+}
+
+/* Reemplazar con texto */
+#cart-items .card button[onclick*="cambiarCantidad"]:first-of-type::before {
+  content: "−";
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#cart-items .card button[onclick*="cambiarCantidad"]:last-of-type::before {
+  content: "+";
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Número de cantidad */
+#cart-items .card b {
+  font-size: 16px;
+  min-width: 30px;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Botón eliminar */
+#cart-items .card button[onclick*="eliminarProducto"] {
+  background: none;
+  color: #ff4d6d;
+  font-size: 14px;
+  font-weight: 600;
+  border: 1px solid #ff4d6d;
+  border-radius: 20px;
+  padding: 6px 15px;
+  width: auto;
+  height: auto;
+  margin-left: 5px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+#cart-items .card button[onclick*="eliminarProducto"]:hover {
+  background: #ff4d6d;
+  color: white;
+}
+
+/* ============================================
+   BARRA DE ENVÍO GRATIS
+   ============================================ */
+.shipping-box {
+  background: #fff0f3;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  font-size: 14px;
+}
+
+.shipping-bar {
+  height: 8px;
+  background: #ffe5ec;
+  border-radius: 10px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.shipping-progress {
+  height: 100%;
+  background: #ff4d6d;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+/* Cuando se alcanza el envío gratis */
+.shipping-progress[style*="width:100%"],
+.shipping-progress[style*="background:#2ecc71"] {
+  background: #2ecc71 !important;
+}
+
+/* ============================================
+   RESUMEN DE COMPRA - CENTRADO
+   ============================================ */
+.summary-card {
+  background: white;
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  border: 1px solid #f2f2f2;
+  text-align: center; /* Esto centra todo el contenido */
+}
+
+#total {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ff4d6d;
+  margin: 15px 0 20px 0;
+  text-align: center; /* Centrar el texto del total */
+}
+
+#total div {
+  line-height: 1.5;
+  text-align: center; /* Asegurar que los divs internos también estén centrados */
+}
+
+#total hr {
+  border: 0;
+  border-top: 1px solid #eee;
+  margin: 10px auto; /* auto en los lados lo centra */
+  width: 80%; /* Un poco más corto para que se vea mejor centrado */
+}
+
+#total small {
+  display: block;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.btn-pagar {
+  background: #000;
+  color: white;
+  width: 100%;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: block;
+  margin: 0 auto; /* Centrar el botón (aunque ya ocupa el 100%) */
+}
+
+.btn-pagar:hover {
+  background: #ff4d6d;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255,77,109,0.3);
+}
+
+/* La barra de envío también centrada */
+.shipping-box {
+  background: #fff0f3;
+  padding: 15px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.shipping-bar {
+  height: 8px;
+  background: #ffe5ec;
+  border-radius: 10px;
+  margin: 8px auto 0 auto;
+  overflow: hidden;
+  width: 90%; /* Un poco más angosta para que se vea mejor centrada */
+}
+/* ============================================
+   SUGERENCIAS
+   ============================================ */
+.sugerencias-sidebar {
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  border: 1px solid #f2f2f2;
+}
+
+.sugerencias-sidebar h3 {
+  color: #ff4d6d;
+  font-size: 18px;
+  margin: 0 0 5px 0;
+}
+
+.sugerencias-sidebar .card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #f0f0f0;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.sugerencias-sidebar .card:hover {
+  border-color: #ff4d6d;
+  box-shadow: 0 5px 15px rgba(255,77,109,0.1);
+}
+
+.sugerencias-sidebar .card img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.sugerencias-sidebar .card h4 {
+  font-size: 13px;
+  margin: 0 0 3px 0;
+  font-weight: 600;
+}
+
+.sugerencias-sidebar .card p {
+  color: #ff4d6d;
+  font-size: 12px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.sugerencias-sidebar .card button {
+  background: #ff4d6d;
+  color: white;
+  border: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: auto;
+}
+
+.sugerencias-sidebar .card button:hover {
+  background: #000;
+  transform: scale(1.1);
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .cart-page-wrapper {
+    flex-direction: column;
+    padding: 10px;
+    gap: 15px;
+  }
+  
+  .cart-main-content,
+  .cart-sidebar {
+    width: 100%;
+  }
+  
+  #cart-items .card {
+    padding: 12px;
+  }
+  
+  #cart-items .card > div {
+    gap: 10px;
+  }
+  
+  #cart-items .card img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  #cart-items .card h3 {
+    font-size: 14px;
+  }
+  
+  #cart-items .card button[onclick*="cambiarCantidad"] {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+  
+  #cart-items .card b {
+    font-size: 14px;
+    min-width: 25px;
+  }
+  
+  #cart-items .card button[onclick*="eliminarProducto"] {
+    padding: 4px 12px;
+    font-size: 12px;
+  }
+  
+  .summary-card {
+    padding: 15px;
+  }
+  
+  #total {
+    font-size: 22px;
+  }
+  
+  .btn-pagar {
+    padding: 14px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  #cart-items .card > div {
+    justify-content: center;
+    text-align: center;
+  }
+  
+  #cart-items .card img {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .btn-vaciar {
+    width: 100%;
+    text-align: center;
+  }
+}
+/*favoritos.html*/
+
+/* Header de favoritos para móvil */
+.favorites-header-mobile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent; /* Sin fondo blanco */
+  padding: 15px 20px;
+  border-radius: 12px;
+  margin: 20px 0 15px 0;
+}
+
+.favorites-title {
+  color: #ff4d6d;
+  font-size: 22px;
+  margin: 0;
+  font-family: 'Playfair Display', serif;
+}
+
+.btn-vaciar-fav-mobile {
+  background: transparent;
+  border: 1px solid #ff4d6d;
+  color: #ff4d6d;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-vaciar-fav-mobile:hover {
+  background: #ff4d6d;
+  color: white;
+}
+
+/* ============================================
+   TARJETAS DE FAVORITOS (MISMO ESTILO QUE INDEX)
+   ============================================ */
+/* ============================================
+   TARJETAS DE FAVORITOS (MISMO ESTILO QUE INDEX)
+   ============================================ */
+#fav-items .card {
+  position: relative;
+  background: white;
+  border: 1px solid #f2f2f2;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  transition: all 0.3s ease;
+  overflow: hidden;
+  height: 100%;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+  padding: 0;
+}
+
+#fav-items .card:hover {
+  box-shadow: 0 10px 25px rgba(255,77,109,0.15);
+  transform: translateY(-5px);
+}
+
+#fav-items .card img {
+  width: 100%;
+  height: 200px;
+  object-fit: contain;
+  background: #fff;
+  padding: 15px;
+  transition: transform 0.5s ease;
+}
+
+#fav-items .card:hover img {
+  transform: scale(1.05);
+}
+
+#fav-items .card h4 {
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #333;
+  line-height: 1.3;
+  padding: 0 12px;
+  text-transform: uppercase;
+}
+
+#fav-items .card p {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ff4d6d;
+  margin: 8px 0;
+  padding: 0 12px;
+}
+
+#fav-items .card button {
+  background: #c97c7ca1;
+  color: white;
+  border: none;
+  width: calc(100% - 24px);
+  margin: 0 12px 12px 12px;
+  padding: 12px;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: background 0.3s;
+  border-radius: 8px;
+}
+
+#fav-items .card button:hover {
+  background: #ff4d6d;
+}
+
+/* Ajustes responsive para las tarjetas */
+@media (max-width: 768px) {
+  #fav-items .card img {
+    height: 130px;
+    padding: 10px;
+  }
+  
+  #fav-items .card h4 {
+    font-size: 11px;
+    padding: 0 8px;
+  }
+  
+  #fav-items .card p {
+    font-size: 14px;
+    padding: 0 8px;
+    margin: 5px 0;
+  }
+  
+  #fav-items .card button {
+    width: calc(100% - 16px);
+    margin: 0 8px 8px 8px;
+    padding: 8px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  #fav-items .card img {
+    height: 110px;
+    padding: 8px;
+  }
+}
+/* ============================================
+   MENSAJE DE FAVORITOS VACÍO (SIN FONDO BLANCO)
+   ============================================ */
+.empty-favorites-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 60px 20px;
+  background: transparent; /* Sin fondo blanco */
+  margin: 20px 0;
+}
+
+.empty-favorites-message p {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 25px;
+  font-family: 'Playfair Display', serif;
+}
+
+.btn-continuar-fav {
+  display: inline-block;
+  background: #ff4d6d;
+  color: white;
+  padding: 14px 35px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+}
+
+.btn-continuar-fav:hover {
+  background: #000;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+/*nosotros.html*/
+/* Hero section */
+.about-hero {
+  text-align: center;
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #fffaf0 0%, #ffe4ec 100%);
+  border-radius: 30px;
+  margin: 20px 0 40px 0;
+}
+
+.about-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 3rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.about-hero .subtitle {
+  font-size: 1.2rem;
+  color: #ff4d6d;
+  font-style: italic;
+}
+
+/* Contenido principal */
+.about-content {
+  max-width: 800px;
+  margin: 0 auto 60px auto;
+  padding: 0 20px;
+}
+
+.about-text {
+  text-align: center;
+}
+
+.about-text h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.2rem;
+  color: #333;
+  margin-bottom: 30px;
+  position: relative;
+}
+
+.about-text h2::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: #ff4d6d;
+  border-radius: 3px;
+}
+
+.about-text p {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Tarjetas de valores */
+.values {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto 60px auto;
+  padding: 0 20px;
+}
+
+.value-card {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  transition: all 0.3s ease;
+  border: 1px solid #f2f2f2;
+}
+
+.value-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(255,77,109,0.1);
+  border-color: #ff4d6d;
+}
+
+.value-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  color: #ff4d6d;
+  margin-bottom: 15px;
+}
+
+.value-card p {
+  color: #666;
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .about-hero h1 {
+    font-size: 2.2rem;
+  }
+  
+  .about-hero .subtitle {
+    font-size: 1rem;
+  }
+  
+  .about-text h2 {
+    font-size: 1.8rem;
+  }
+  
+  .about-text p {
+    font-size: 1rem;
+  }
+  
+  .values {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .value-card {
+    padding: 30px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .about-hero {
+    padding: 40px 15px;
+  }
+  
+  .about-hero h1 {
+    font-size: 1.8rem;
+  }
+}
+/*login.html*/
+
+
+/* ============================================
+   BOTÓN VOLVER - VISIBLE EN MÓVIL
+   ============================================ */
+
+/* Asegurar que el botón Volver sea visible en todas las pantallas */
+.icons a[href="index.html"] {
+  display: inline-flex !important;
+  align-items: center;
+  padding: 8px 15px;
+  background: #f0f0f0;
+  border-radius: 20px;
+  color: #333;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.icons a[href="index.html"]:hover {
+  background: #ff4d6d;
+  color: white;
+}
+
+/* En móvil, mantener el botón visible */
+@media (max-width: 768px) {
+  .icons a[href="index.html"] {
+    display: inline-flex !important;
+    font-size: 13px !important;
+    padding: 6px 12px !important;
+    background: #f0f0f0 !important;
+  }
+  
+  .icons a[href="index.html"]:hover {
+    background: #ff4d6d !important;
+  }
+  
+  /* Anular cualquier regla que oculte el texto */
+  .icons a[href="index.html"] {
+    font-size: 13px !important;
+    text-indent: 0 !important;
+  }
+  
+  .icons a[href="index.html"]::before {
+    display: none !important; /* Eliminar cualquier pseudo-elemento */
+  }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .icons a[href="index.html"] {
+    font-size: 12px !important;
+    padding: 5px 10px !important;
+  }
+}
+.auth-container {
+  max-width: 450px;
+  width: 100%;
+  margin: 0 auto;
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 20px 40px rgba(255, 77, 109, 0.15);
+  padding: 40px;
+  transition: all 0.3s ease;
+}
+
+.auth-box {
+  width: 100%;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.auth-box.hidden {
+  display: none;
+}
+
+.auth-box h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  color: #333;
+  text-align: center;
+  margin: 0 0 20px 0;
+  position: relative;
+}
+
+.auth-box h2::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: #ff4d6d;
+  border-radius: 3px;
+}
+
+.auth-box h2:last-of-type {
+  margin-top: 25px;
+  font-size: 22px;
+}
+
+.auth-box h2:last-of-type::after {
+  width: 40px;
+  height: 2px;
+}
+
+/* Inputs */
+.auth-box input {
+  width: 100%;
+  padding: 14px 18px;
+  margin: 8px 0;
+  border: 2px solid #f0f0f0;
+  border-radius: 15px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+  background: #fafafa;
+  box-sizing: border-box;
+}
+
+.auth-box input:focus {
+  border-color: #ff4d6d;
+  box-shadow: 0 0 8px rgba(255, 77, 109, 0.3);
+  background: white;
+  transform: scale(1.01);
+}
+
+.auth-box input::placeholder {
+  color: #aaa;
+  font-size: 14px;
+}
+
+/* Botones */
+#btnLogin, #btnRegister {
+  width: 100%;
+  background: black;
+  color: white;
+  padding: 16px 30px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 20px 0 15px 0;
+  letter-spacing: 1px;
+}
+
+#btnLogin:hover, #btnRegister:hover {
+  background: #ff4d6d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 77, 109, 0.3);
+}
+
+/* Botón Google */
+.btn-google {
+  width: 100%;
+  padding: 14px 20px;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 25px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin: 15px 0;
+}
+
+.btn-google:hover {
+  border-color: #ff4d6d;
+  background: #fff0f3;
+  transform: translateY(-2px);
+}
+
+.btn-google img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+/* Separador */
+.separador {
+  text-align: center;
+  margin: 20px 0;
+  color: #888;
+  position: relative;
+}
+
+.separador span {
+  background: white;
+  padding: 0 20px;
+  position: relative;
+  z-index: 2;
+  font-size: 14px;
+  color: #999;
+}
+
+.separador::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: #ddd;
+  z-index: 1;
+}
+
+/* Texto toggle (cambiar entre login/registro) */
+.toggle-text {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+.toggle-text span {
+  color: #ff4d6d;
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.toggle-text span:hover {
+  color: #ff2d55;
+}
+
+/* ============================================
+   RESPONSIVE PARA LOGIN
+   ============================================ */
+
+@media (max-width: 768px) {
+  main {
+    min-height: calc(100vh - 70px - 250px);
+    padding: 15px;
+  }
+  
+  .auth-container {
+    padding: 30px 25px;
+  }
+  
+  .auth-box h2 {
+    font-size: 24px;
+  }
+  
+  .auth-box h2:last-of-type {
+    font-size: 20px;
+  }
+  
+  .auth-box input {
+    padding: 13px 16px;
+    font-size: 14px;
+  }
+  
+  #btnLogin, #btnRegister {
+    padding: 15px 25px;
+    font-size: 15px;
+  }
+  
+  .btn-google {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  main {
+    padding: 10px;
+    min-height: calc(100vh - 60px - 200px);
+  }
+  
+  .auth-container {
+    padding: 25px 20px;
+    border-radius: 25px;
+  }
+  
+  .auth-box h2 {
+    font-size: 22px;
+  }
+  
+  .auth-box h2::after {
+    width: 50px;
+    height: 2px;
+    bottom: -8px;
+  }
+  
+  .auth-box h2:last-of-type {
+    font-size: 18px;
+  }
+  
+  .auth-box input {
+    padding: 12px 15px;
+    font-size: 14px;
+    margin: 6px 0;
+    border-radius: 12px;
+  }
+  
+  #btnLogin, #btnRegister {
+    padding: 14px 20px;
+    font-size: 15px;
+    border-radius: 20px;
+    margin: 15px 0 10px 0;
+  }
+  
+  .btn-google {
+    padding: 11px 15px;
+    font-size: 14px;
+    border-radius: 20px;
+    gap: 10px;
+  }
+  
+  .separador {
+    margin: 15px 0;
+  }
+  
+  .separador span {
+    font-size: 13px;
+    padding: 0 15px;
+  }
+  
+  .toggle-text {
+    font-size: 13px;
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .auth-container {
+    padding: 20px 15px;
+  }
+  
+  .auth-box h2 {
+    font-size: 20px;
+  }
+  
+  .auth-box input {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  #btnLogin, #btnRegister {
+    padding: 12px 18px;
+    font-size: 14px;
+  }
+  
+  .btn-google {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  .btn-google img {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .toggle-text {
+    font-size: 12px;
+  }
+}
+/*check.html*/
+/* ==========================================
+   CHECKOUT RESPONSIVE MEJORADO
+   ========================================== */
+
+/* Barra de progreso del checkout */
+.checkout-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 30px 0;
+  padding: 0 10px;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  background: #f0f0f0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #999;
+  margin-bottom: 5px;
+  transition: all 0.3s ease;
+}
+
+.progress-step.active .step-number {
+  background: #ff4d6d;
+  color: white;
+  box-shadow: 0 5px 10px rgba(255, 77, 109, 0.3);
+}
+
+.step-label {
+  font-size: 12px;
+  color: #999;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.progress-step.active .step-label {
+  color: #ff4d6d;
+}
+
+.progress-line {
+  height: 2px;
+  background: #f0f0f0;
+  flex: 1;
+  margin: 0 5px;
+  margin-bottom: 25px;
+}
+
+/* Mejoras para el checkout-card */
+.checkout-card {
+  max-width: 600px;
+  width: 100%;
+  padding: 40px;
+}
+
+/* Step badges */
+.step-badge {
+  background: #ff4d6d;
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+/* Métodos de pago */
+.payment-methods {
+  display: flex;
+  gap: 15px;
+  margin: 15px 0 20px 0;
+  width: 100%;
+}
+
+.payment-option {
+  flex: 1;
+  cursor: pointer;
+}
+
+.payment-option input[type="radio"] {
+  display: none;
+}
+
+.payment-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 15px;
+  background: #f9f9f9;
+  border: 2px solid #eee;
+  border-radius: 15px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.payment-option input[type="radio"]:checked + .payment-label {
+  border-color: #ff4d6d;
+  background: #fff0f3;
+  color: #ff4d6d;
+}
+
+.payment-icon {
+  font-size: 20px;
+}
+
+/* Cajas de detalles de pago */
+.payment-details-box {
+  background: #fff0f3;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 15px;
+  animation: slideDown 0.4s ease;
+}
+
+.payment-details-box.hidden {
+  display: none;
+}
+
+.payment-details-box h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.payment-info {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 15px 0;
+  padding: 10px;
+  background: white;
+  border-radius: 10px;
+}
+
+/* Resumen de compra mejorado */
+.checkout-summary {
+  background: #fff5f7;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 25px 0;
+}
+
+.checkout-summary h3 {
+  font-size: 18px;
+  margin: 0 0 15px 0;
+  color: #333;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 15px;
+  color: #666;
+}
+
+.summary-row.discount-row {
+  color: #4caf50;
+  font-weight: 600;
+}
+
+.summary-divider {
+  height: 1px;
+  background: #ffccd5;
+  margin: 12px 0;
+}
+
+.summary-row.total-row {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ff4d6d;
+  padding-top: 5px;
+}
+
+/* Botones de acción */
+.checkout-actions {
+  display: flex;
+  gap: 15px;
+  margin: 20px 0 10px 0;
+}
+
+.btn-luxe-pay {
+  flex: 1;
+  padding: 16px 25px;
+  font-size: 16px;
+  border-radius: 15px;
+  transition: all 0.3s ease;
+}
+
+/* ==========================================
+   RESPONSIVE PARA CHECKOUT
+   ========================================== */
+
+/* Tablets */
+@media (max-width: 768px) {
+  .checkout-card {
+    padding: 30px 25px;
+  }
+  
+  .checkout-title {
+    font-size: 26px;
+    margin-bottom: 25px;
+  }
+  
+  .step-number {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+  
+  .step-label {
+    font-size: 11px;
+  }
+  
+  .payment-label {
+    padding: 12px;
+    font-size: 13px;
+  }
+  
+  .payment-icon {
+    font-size: 18px;
+  }
+  
+  .checkout-summary {
+    padding: 15px;
+  }
+  
+  .summary-row {
+    font-size: 14px;
+  }
+  
+  .summary-row.total-row {
+    font-size: 18px;
+  }
+  
+  .btn-luxe-pay {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+}
+
+/* Móviles */
+@media (max-width: 480px) {
+  .checkout-container {
+    padding: 20px 15px;
+  }
+  
+  .checkout-card {
+    padding: 25px 20px;
+    border-radius: 25px;
+  }
+  
+  .checkout-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  /* Barra de progreso más compacta */
+  .checkout-progress {
+    margin-bottom: 20px;
+  }
+  
+  .step-number {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+  
+  .step-label {
+    font-size: 10px;
+  }
+  
+  .progress-line {
+    margin-bottom: 20px;
+  }
+  
+  /* Secciones */
+  .checkout-section h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .step-badge {
+    width: 24px;
+    height: 24px;
+    font-size: 12px;
+  }
+  
+  /* Inputs */
+  .input-group input {
+    padding: 14px;
+    font-size: 14px;
+    margin-bottom: 12px;
+  }
+  
+  /* Métodos de pago */
+  .payment-methods {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .payment-label {
+    padding: 14px;
+    font-size: 14px;
+  }
+  
+  .payment-details-box {
+    padding: 15px;
+  }
+  
+  .payment-details-box h4 {
+    font-size: 15px;
+    margin-bottom: 12px;
+  }
+  
+  .input-row {
+    flex-direction: row;
+    gap: 8px;
+  }
+  
+  .input-row input {
+    flex: 1;
+  }
+  
+  /* Resumen */
+  .checkout-summary {
+    padding: 15px;
+    margin: 20px 0;
+  }
+  
+  .checkout-summary h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  
+  .summary-row {
+    font-size: 14px;
+    padding: 6px 0;
+  }
+  
+  .summary-row.total-row {
+    font-size: 18px;
+  }
+  
+  /* Botones */
+  .checkout-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .btn-luxe-pay {
+    width: 100%;
+    padding: 15px;
+    font-size: 15px;
+    border-radius: 12px;
+  }
+  
+  .secure-text {
+    font-size: 11px;
+    margin-top: 12px;
+  }
+  
+  /* Ajustes del header */
+  .back-to-cart {
+    font-size: 0 !important;
+    padding: 8px !important;
+  }
+  
+  .back-to-cart::before {
+    content: "←";
+    font-size: 18px;
+  }
+  
+  .back-to-cart span {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 11px !important;
+  }
+}
+
+/* Móviles pequeños */
+@media (max-width: 360px) {
+  .checkout-card {
+    padding: 20px 15px;
+  }
+  
+  .checkout-title {
+    font-size: 22px;
+  }
+  
+  .step-number {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+  
+  .step-label {
+    font-size: 9px;
+  }
+  
+  .input-group input {
+    padding: 12px;
+    font-size: 13px;
+  }
+  
+  .payment-label {
+    padding: 12px;
+    font-size: 13px;
+  }
+  
+  .payment-icon {
+    font-size: 16px;
+  }
+  
+  .summary-row {
+    font-size: 13px;
+  }
+  
+  .summary-row.total-row {
+    font-size: 17px;
+  }
+  
+  .btn-luxe-pay {
+    padding: 14px;
+    font-size: 14px;
+  }
+}
+
+/* Animaciones */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+  /*notas checkout*/
+  .checkout-container {
+  background: #fdf2f5;
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+.checkout-card {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 30px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+  max-width: 500px;
+  width: 100%;
+  text-align: center;
+}
+.checkout-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #333;
+}
+.checkout-section {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.checkout-section h3 {
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: #555;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+}
+.step {
+  background: #ff4d6d;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  margin-right: 10px;
+}
+
+.input-group, .luxe-select, .payment-box {
+  width: 100%;
+  max-width: 400px;
+}
+
+.input-group input, .luxe-select, .payment-box input {
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 15px;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  background: #f9f9f9;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.btn-luxe-pay {
+  background: #000;
+  color: white;
+  width: 100%;
+  padding: 20px;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-top: 20px;
+}
+
+.btn-luxe-pay:hover {
+  background: #ff4d6d;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
+}
+
+.secure-text {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 15px;
+}
+/* ============================================
+   CAJAS DE DETALLES DE PAGO (CON ESTILO)
+   ============================================ */
+.payment-details-box {
+  background: #fff0f3;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 15px;
+  animation: slideDown 0.3s ease;
+  border: 1px solid #ffd6e0; /* Borde sutil */
+  box-shadow: 0 4px 10px rgba(255, 77, 109, 0.1); /* Sombra suave */
+}
+
+.payment-details-box.hidden {
+  display: none;
+}
+
+.payment-details-box h4 {
+  margin: 0 0 15px 0;
+  color: #ff4d6d; /* Título en rosa */
+  font-size: 16px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.payment-details-box h4::before {
+  content: "💳";
+  font-size: 18px;
+}
+
+#paypalBox h4::before {
+  content: "🅿️";
+}
+
+.payment-info {
+  font-size: 13px;
+  color: #666;
+  margin: 0 0 15px 0;
+  padding: 12px;
+  background: white;
+  border-radius: 10px;
+  border-left: 4px solid #ff4d6d; /* Detalle decorativo */
+  line-height: 1.5;
+}
+
+.input-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.input-row input {
+  flex: 1;
+  padding: 14px;
+  border: 2px solid #ffd6e0;
+  border-radius: 12px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.input-row input:focus {
+  border-color: #ff4d6d;
+  box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.1);
+}
+
+/* Input específico para número de tarjeta */
+#numeroTarjeta {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #ffd6e0;
+  border-radius: 12px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  background: white;
+}
+
+#numeroTarjeta:focus {
+  border-color: #ff4d6d;
+}
+
+/* Input para correo de PayPal */
+#correoPaypal {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #ffd6e0;
+  border-radius: 12px;
+  font-size: 14px;
+  background: white;
+}
+
+#correoPaypal:focus {
+  border-color: #ff4d6d;
 }

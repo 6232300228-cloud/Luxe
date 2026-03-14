@@ -10,14 +10,38 @@
 <body>
 
 <header class="header">
-  <a href="index.html">
-    <img src="img/logo.png" alt="Logo de la empresa" class="logo">
-  </a>
-  <div class="icons">
-    <a href="login.html" id="login-btn">👤 Iniciar sesión</a>
-    <span id="user-name" style="display:none;"></span>
-    <a href="carrito.html">🛒 <span id="cart-count">0</span></a>
-    <a href="index.html">Inicio</a>
+  <div class="header-left">
+    <div class="menu-hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <a href="index.html" class="logo-link">
+      <img src="img/logo.png" alt="Logo Luxe" class="logo">
+      <div class="logo-text-group">
+        <span class="slogan-minimal">Tu destino de belleza</span>
+      </div>
+    </a>
+  </div>
+  <div class="header-right icons">
+    <a href="carrito.html">
+      <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
+    </a>
+    <a href="login.html" id="login-btn">
+      <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
+    </a>
+
+    <div id="user-menu" class="dropdown" style="display: none;">
+  <button class="dropbtn">
+  <span id="user-name"></span> <i class="arrow">▼</i></button>
+      <div class="dropdown-content">
+        <a href="perfil.html"> Mi Perfil</a>
+        <a href="pedidos.html"> Mis Pedidos</a>
+        <hr>
+        <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
+      </div>
+    </div>
   </div>
 </header>
 

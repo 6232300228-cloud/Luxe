@@ -257,7 +257,7 @@ header-icon:hover {
 
 .arrow {
     font-size: 12px;
-    transition: transform 0.3s ease;
+    transition: transform 0.10s ease;
 }
 
 .dropdown:hover .arrow {
@@ -291,7 +291,7 @@ header-icon:hover {
     display: block;
     font-size: 14px;
     border-bottom: 1px solid #fff0f3;
-    transition: all 0.3s ease;
+    transition: all 0.10s ease;
 }
 
 .dropdown-content a:hover {
@@ -311,7 +311,7 @@ header-icon:hover {
     color: #ff4d6d;
     cursor: pointer;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: all 0.10s ease;
 }
 
 #logout-btn:hover {

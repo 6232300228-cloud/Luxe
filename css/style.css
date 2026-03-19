@@ -186,13 +186,27 @@ h1, h2, h3 {
   transform: translateY(-2px);
 }
 
-/* TUS ICONOS PNG */
+/**TUS ICONOS PNG */
 .header-icon {
   width: 20px;
   height: 20px;
   object-fit: contain;
   vertical-align: middle;
+  transition: filter 0.3s ease;  
+  cursor: pointer;                
+
+}*/
+
+header-icon:hover {
+  filter: brightness(0);          
 }
+
+
+
+
+
+
+
 
 /* Contadores */
 #fav-count, #cart-count {
@@ -1342,3 +1356,7 @@ h1, h2, h3 {
     height: 16px;
   }
 }
+
+
+
+

@@ -473,3 +473,48 @@ function navigateAndFilter(category) {
     filterCategory(category);
   }
 }
+//burguer menu
+// ============================================
+// MEJORAS PARA EL MENÚ HAMBURGUESA
+// ============================================
+
+// 1. CERRAR AL HACER CLIC FUERA
+document.addEventListener('click', function(event) {
+  const menu = document.getElementById('side-menu');
+  const hamburger = document.querySelector('.menu-hamburger');
+  
+  // Si el menú está activo y el clic NO fue en el menú NI en el hamburguesa
+  if (menu && menu.classList.contains('active') && 
+      !menu.contains(event.target) && 
+      !hamburger.contains(event.target)) {
+    menu.classList.remove('active');
+  }
+});
+
+// 2. ABRIR AL PASAR EL CURSOR SOBRE EL HAMBURGUESA (SOLO DESKTOP)
+if (window.innerWidth > 768) {
+  const hamburger = document.querySelector('.menu-hamburger');
+  const menu = document.getElementById('side-menu');
+  
+  if (hamburger && menu) {
+    let hoverTimer;
+    
+    // Al entrar al hamburguesa
+    hamburger.addEventListener('mouseenter', function() {
+      hoverTimer = setTimeout(() => {
+        menu.classList.add('active');
+      }, 200); // Pequeño delay
+    });
+    
+    // Al salir del hamburguesa, cancelar si no se abrió
+    hamburger.addEventListener('mouseleave', function() {
+      clearTimeout(hoverTimer);
+    });
+    
+    // Opcional: cerrar al salir del menú (si quieres)
+    menu.addEventListener('mouseleave', function() {
+      // Si quieres que se cierre al salir, descomenta:
+      // menu.classList.remove('active');
+    });
+  }
+}

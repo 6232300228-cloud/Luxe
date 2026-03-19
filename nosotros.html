@@ -11,8 +11,8 @@
 
 <body>
 
-<header class="header">
 
+<header class="header">
   <div class="header-left">
     <div class="menu-hamburger" onclick="toggleMenu()">
       <span></span>
@@ -21,23 +21,27 @@
     </div>
 
     <a href="index.html" class="logo-link">
-  <img src="img/logo.png" alt="Logo Luxe" class="logo">
-  <div class="logo-text-group">
-    <span class="slogan-minimal">Tu destino de belleza</span>
+      <img src="img/logo.png" alt="Logo Luxe" class="logo">
+      <div class="logo-text-group">
+        <span class="slogan-minimal">Tu destino de belleza</span>
+      </div>
+    </a>
   </div>
-</a>
-  </div>
-   
-   <div class="header-right icons">
-    <a href="favoritos.html">❤️ <span id="fav-count">0</span></a>
-    <a href="carrito.html">🛒 <span id="cart-count">0</span></a>
 
-    <a href="login.html" id="login-btn">👤 Iniciar sesión</a>
+  <div class="header-right icons">
+    <a href="favoritos.html">
+      <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
+    </a>
+    <a href="carrito.html">
+      <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
+    </a>
+    <a href="login.html" id="login-btn">
+      <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
+    </a>
 
     <div id="user-menu" class="dropdown" style="display: none;">
-      <button class="dropbtn">
-        <span id="user-name"></span> <i class="arrow">▼</i>
-      </button>
+  <button class="dropbtn">
+  <span id="user-name"></span> <i class="arrow">▼</i></button>
       <div class="dropdown-content">
         <a href="perfil.html"> Mi Perfil</a>
         <a href="pedidos.html"> Mis Pedidos</a>
@@ -46,7 +50,6 @@
       </div>
     </div>
   </div>
-
 </header>
 
 <nav id="side-menu" class="side-nav">
@@ -123,5 +126,7 @@
     </div>
 </footer>
 <script src="js/script.js?v=20250313"></script>
+<script src="js/nosotros.js"></script>
+
 </body>
 </html>

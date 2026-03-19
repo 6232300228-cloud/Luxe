@@ -373,8 +373,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
-<<<<<<< HEAD
-=======
+
 
 // Función para newsletter (si existe)
 function suscribirse() {
@@ -386,4 +385,4 @@ function suscribirse() {
         mostrarToast('Por favor ingresa un email válido');
     }
 }
->>>>>>> f97f142ac1fa330a49500808ef118223dcb4dd4e
+

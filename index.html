@@ -52,9 +52,8 @@
     </a>
 
     <div id="user-menu" class="dropdown" style="display: none;">
-      <button class="dropbtn">
-        <span id="user-name"></span> <i class="arrow"></i>
-      </button>
+  <button class="dropbtn">
+  <span id="user-name"></span> <i class="arrow">▼</i></button>
       <div class="dropdown-content">
         <a href="perfil.html"> Mi Perfil</a>
         <a href="pedidos.html"> Mis Pedidos</a>
@@ -283,7 +282,7 @@ function getPrimerNombre(nombreCompleto) {
             
             const userNameElement = document.getElementById("user-name");
             if (userNameElement) {
-                userNameElement.textContent = "> " + getPrimerNombre(user.nombre);
+                userNameElement.textContent = getPrimerNombre(user.nombre);
             }
             
             if (typeof Swal !== 'undefined') {
@@ -308,7 +307,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const userNameElement = document.getElementById("user-name");
     
     if (user && userNameElement) {
-        userNameElement.textContent = "Hola, " + getPrimerNombre(user.nombre);
+        userNameElement.textContent = getPrimerNombre(user.nombre);
     }
 });
 </script>

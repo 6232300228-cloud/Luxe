@@ -49,7 +49,7 @@ function renderFavs() {
         <img src="${p.img}">
         <h4>${p.name}</h4>
         <p>$${p.price}</p>
-        <button onclick="removeFav(${index})">Quitar</button>
+        <button onclick="removeFav(${index})">Quitar maridos</button>
       </div>
     `;
   });

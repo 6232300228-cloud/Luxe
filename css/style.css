@@ -208,105 +208,135 @@ a, a:link, a:visited, a:hover, a:active {
   font-weight: bold;
   margin-left: 2px;
 }
-
-/* Menú desplegable usuario */
 /* ============================================
-   FIX PARA MÓVIL - TEXTO VISIBLE EN MENÚ
+   MENÚ DESPLEGABLE USUARIO
+   ============================================ */
+
+/* Contenedor del dropdown */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Botón con el nombre del usuario */
+.dropbtn {
+    background: linear-gradient(135deg, #ff4d6d, #ff8fa3);
+    color: white;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'Poppins', sans-serif;
+}
+
+#user-name {
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.arrow {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+.dropdown:hover .arrow {
+    transform: rotate(180deg);
+}
+
+/* Menú desplegable */
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: 45px;
+    background: white;
+    min-width: 200px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    z-index: 1000;
+    overflow: hidden;
+    border: 1px solid #ffe5e8;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Opciones del menú */
+.dropdown-content a {
+    color: #333;
+    padding: 12px 20px;
+    text-decoration: none;
+    display: block;
+    font-size: 14px;
+    border-bottom: 1px solid #fff0f3;
+    transition: all 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background: #fff5f7;
+    color: #ff4d6d;
+    padding-left: 25px;
+}
+
+/* Botón cerrar sesión */
+#logout-btn {
+    width: 100%;
+    text-align: left;
+    padding: 12px 20px;
+    background: white;
+    border: none;
+    font-size: 14px;
+    color: #ff4d6d;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+#logout-btn:hover {
+    background: #ff4d6d;
+    color: white;
+}
+
+/* ============================================
+   RESPONSIVE MÓVIL
    ============================================ */
 @media (max-width: 768px) {
-  /* Mostrar menú al hacer clic */
-  .dropdown.active .dropdown-content {
-    display: block !important;
-  }
-  
-  /* Estilo del menú desplegable */
-  .dropdown-content {
-    background: white !important;
-    border: 1px solid #ddd !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2) !important;
-    width: 200px !important;
-    right: 0 !important;
-    top: 100% !important;
-    border-radius: 8px !important;
-    padding: 5px 0 !important;
-  }
-  
-  /* Forzar que TODAS las opciones sean VISIBLES */
-  .dropdown-content a,
-  .dropdown-content button {
-    color: #333333 !important;
-    background: white !important;
-    display: block !important;
-    padding: 15px 20px !important;
-    font-size: 16px !important;
-    border-bottom: 1px solid #f0f0f0 !important;
-    text-align: left !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-  }
-  
-  /* Cerrar Sesión en rosa */
-  #logout-btn {
-    color: #ff4d6d !important;
-    font-weight: bold !important;
-  }
+    .dropdown-content {
+        position: fixed;
+        top: 60px;
+        right: 10px;
+        width: 200px;
+        background: white;
+        border: 2px solid #ff4d6d;
+    }
+    
+    .dropdown-content a,
+    #logout-btn {
+        color: #333;
+        background: white;
+        display: block;
+        font-size: 16px;
+        padding: 15px 20px;
+    }
+    
+    #logout-btn {
+        color: #ff4d6d;
+    }
+    
+    #logout-btn:hover {
+        background: #ff4d6d;
+        color: white;
+    }
 }
-/* Menú desplegable usuario */
-@media (max-width: 768px) {
-  /* Forzar que el dropdown se muestre al hacer clic */
-  .dropdown.active .dropdown-content {
-    display: block !important;
-  }
-  
-  /* ESPECIFICAR CORRECTAMENTE LOS SELECTORES */
-  div.dropdown-content a,
-  div.dropdown-content button,
-  #logout-btn {
-    color: #000000 !important; /* NEGRO FORZADO */
-    background-color: #ffffff !important; /* Fondo blanco */
-    display: block !important;
-    opacity: 1 !important;
-    visibility: visible !important;
-    font-size: 16px !important;
-    padding: 15px 20px !important;
-    border-bottom: 1px solid #f0f0f0 !important;
-    text-align: left !important;
-    font-weight: 500 !important; /* Asegurar que se vea bien */
-    line-height: 1.2 !important;
-  }
-  
-  /* El botón de logout específicamente */
-  #logout-btn {
-    color: #000000 !important;
-    background: #ffffff !important;
-    border: none !important;
-    width: 100% !important;
-    text-align: left !important;
-    margin: 0 !important;
-    border-radius: 0 !important;
-    cursor: pointer !important;
-  }
-  
-  /* Fondo del menú */
-  .dropdown-content {
-    background: #ffffff !important;
-    border: 1px solid #ddd !important;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1) !important;
-    border-radius: 8px !important; /* Opcional: darle bordes redondeados */
-  }
-  
-  /* ANULAR la regla que oculta el texto */
-  .icons a {
-    font-size: 0; /* Esto está bien para los iconos principales */
-    padding: 8px;
-  }
-  
-  /* Pero asegurar que el dropdown IGNORA esa regla */
-  .dropdown-content a,
-  .dropdown-content button {
-    font-size: 16px !important; /* Forzar tamaño de letra */
-  }
-}
+
 /* Menú hamburguesa */
 .menu-hamburger {
   display: flex;

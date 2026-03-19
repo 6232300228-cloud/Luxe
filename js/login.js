@@ -1,4 +1,4 @@
-// login.js - VERSIÓN FINAL DEFINITIVA
+// login.js - VERSIÓN FINAL 100% FUNCIONAL
 const loginSection = document.getElementById("login-section");
 const registerSection = document.getElementById("register-section");
 const toRegister = document.getElementById("to-register");
@@ -34,7 +34,7 @@ if (toLogin) {
 }
 
 // ============================================
-// LOGIN NORMAL - VERSIÓN MEJORADA CON TIPOS DE ERROR
+// LOGIN NORMAL
 // ============================================
 if (btnLogin) {
     btnLogin.addEventListener("click", async () => {
@@ -54,7 +54,6 @@ if (btnLogin) {
             return;
         }
 
-        // Mostrar loading
         Swal.fire({
             title: 'Iniciando sesión...',
             allowOutsideClick: false,
@@ -74,7 +73,6 @@ if (btnLogin) {
             Swal.close();
 
             if (response.ok) {
-                // ✅ LOGIN EXITOSO
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
 
@@ -83,7 +81,6 @@ if (btnLogin) {
                 await Swal.fire({
                     icon: 'success',
                     title: `¡Bienvenido ${primerNombre}!`,
-                    text: 'Redirigiendo...',
                     timer: 1500,
                     showConfirmButton: false,
                     position: 'top-end',
@@ -97,16 +94,11 @@ if (btnLogin) {
                 }
                 
             } else {
-                // 🟡 MANEJO DE ERRORES ESPECÍFICOS
                 if (data.tipo === 'google_account') {
-                    // Usuario de Google intentó login normal
                     const result = await Swal.fire({
                         icon: 'info',
                         title: 'Cuenta de Google',
-                        html: `
-                            <p>${data.error}</p>
-                            <p style="margin-top: 10px;">¿Quieres iniciar sesión con Google?</p>
-                        `,
+                        html: `<p>${data.error}</p><p>¿Quieres iniciar sesión con Google?</p>`,
                         showCancelButton: true,
                         confirmButtonText: 'Iniciar con Google',
                         cancelButtonText: 'Cancelar',
@@ -118,14 +110,10 @@ if (btnLogin) {
                     }
                     
                 } else if (data.tipo === 'not_verified') {
-                    // Usuario no ha verificado email
                     const result = await Swal.fire({
                         icon: 'warning',
                         title: 'Email no verificado',
-                        html: `
-                            <p>${data.error}</p>
-                            <p style="margin-top: 10px; font-size: 14px;">Revisa tu bandeja de entrada o spam.</p>
-                        `,
+                        html: `<p>${data.error}</p><p>Revisa tu bandeja de entrada.</p>`,
                         showCancelButton: true,
                         confirmButtonText: 'Reenviar correo',
                         cancelButtonText: 'Cerrar',
@@ -137,7 +125,6 @@ if (btnLogin) {
                     }
                     
                 } else {
-                    // Error genérico (credenciales inválidas)
                     Swal.fire({
                         icon: 'error',
                         title: 'Error',
@@ -166,12 +153,14 @@ if (btnLogin) {
 }
 
 // ============================================
-// FUNCIÓN PARA REENVIAR VERIFICACIÓN DE EMAIL
+// 🟢 FUNCIÓN REENVIAR VERIFICACIÓN - CORREGIDA 🟢
 // ============================================
 async function reenviarVerificacion(correo) {
     try {
-        Swal.fire({
+        // Mostrar loading
+        const loadingSwal = Swal.fire({
             title: 'Enviando correo...',
+            text: 'Por favor espera',
             allowOutsideClick: false,
             didOpen: () => {
                 Swal.showLoading();
@@ -185,6 +174,8 @@ async function reenviarVerificacion(correo) {
         });
 
         const data = await response.json();
+        
+        // 🟢 CERRAR LOADING ANTES DE MOSTRAR RESULTADO
         Swal.close();
 
         if (response.ok) {
@@ -210,10 +201,12 @@ async function reenviarVerificacion(correo) {
         }
     } catch (error) {
         console.error('Error:', error);
+        // 🟢 CERRAR LOADING EN CASO DE ERROR
         Swal.close();
         Swal.fire({
             icon: 'error',
             title: 'Error de conexión',
+            text: 'No se pudo conectar con el servidor',
             timer: 2000,
             showConfirmButton: false,
             position: 'top-end',
@@ -223,7 +216,7 @@ async function reenviarVerificacion(correo) {
 }
 
 // ============================================
-// REGISTRO NORMAL - VERSIÓN MEJORADA
+// REGISTRO NORMAL
 // ============================================
 if (btnRegister) {
     btnRegister.addEventListener("click", async () => {
@@ -236,7 +229,6 @@ if (btnRegister) {
 
         const nombreCompleto = `${nombre} ${apellido}`.trim();
 
-        // Validaciones
         if (!nombre || !apellido || !telefono || !direccion || !correo.includes("@") || !contraseña) {
             Swal.fire({
                 icon: 'error',
@@ -263,7 +255,6 @@ if (btnRegister) {
             return;
         }
 
-        // Mostrar loading
         Swal.fire({
             title: 'Creando cuenta...',
             allowOutsideClick: false,
@@ -289,7 +280,6 @@ if (btnRegister) {
             Swal.close();
 
             if (response.ok) {
-                // ✅ REGISTRO EXITOSO - Ahora requiere verificación
                 localStorage.setItem("pendingUser", JSON.stringify(data.user));
 
                 await Swal.fire({
@@ -298,13 +288,13 @@ if (btnRegister) {
                     html: `
                         <p>Te hemos enviado un correo de verificación a:</p>
                         <strong>${correo}</strong>
-                        <p style="margin-top: 15px; font-size: 14px;">Revisa tu bandeja de entrada y spam</p>
+                        <p style="margin-top: 15px;">Revisa tu bandeja de entrada</p>
                     `,
                     confirmButtonText: 'Entendido',
                     confirmButtonColor: '#ff4d6d'
                 });
 
-                // Limpiar formulario y mostrar login
+                // Limpiar formulario
                 document.getElementById("reg-nombre").value = '';
                 document.getElementById("reg-apellido").value = '';
                 document.getElementById("reg-telefono").value = '';
@@ -352,7 +342,7 @@ if (btnGoogle) {
 }
 
 // ============================================
-// FUNCIÓN PARA LOGIN CON TOKEN (Google Callback)
+// LOGIN CON TOKEN (Google Callback)
 // ============================================
 async function loginConToken(token) {
     try {
@@ -380,7 +370,6 @@ async function loginConToken(token) {
         const user = await response.json();
         Swal.close();
 
-        // ✅ Guardar datos
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
 
@@ -389,14 +378,12 @@ async function loginConToken(token) {
         await Swal.fire({
             icon: 'success',
             title: `¡Bienvenido ${primerNombre}!`,
-            text: 'Redirigiendo...',
             timer: 1500,
             showConfirmButton: false,
             position: 'top-end',
             toast: true
         });
 
-        // Redirigir según rol
         if (user.role === "admin" || user.role === "empleado") {
             window.location.href = "dashboard.html";
         } else {
@@ -404,7 +391,7 @@ async function loginConToken(token) {
         }
         
     } catch (error) {
-        console.error('❌ Error en login con token:', error);
+        console.error('❌ Error:', error);
         Swal.close();
         Swal.fire({
             icon: 'error',
@@ -419,7 +406,7 @@ async function loginConToken(token) {
 }
 
 // ============================================
-// PROCESAR TOKEN DE GOOGLE DESDE LA URL
+// PROCESAR TOKEN DE GOOGLE
 // ============================================
 (function() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -430,7 +417,7 @@ async function loginConToken(token) {
         Swal.fire({
             icon: 'error',
             title: 'Error con Google',
-            text: 'No se pudo iniciar sesión con Google. Intenta de nuevo.',
+            text: 'No se pudo iniciar sesión con Google',
             timer: 2000,
             showConfirmButton: false,
             position: 'top-end',
@@ -439,15 +426,14 @@ async function loginConToken(token) {
     }
 
     if (token) {
-        console.log('✅ Token detectado en URL');
-        // Limpiar URL (quitar token de la barra de direcciones)
+        console.log('✅ Token detectado');
         window.history.replaceState({}, document.title, window.location.pathname);
         loginConToken(token);
     }
 })();
 
 // ============================================
-// VERIFICAR SI HAY USUARIO PENDIENTE DE VERIFICACIÓN
+// VERIFICAR USUARIO PENDIENTE
 // ============================================
 (function() {
     const pendingUser = localStorage.getItem("pendingUser");
@@ -457,9 +443,9 @@ async function loginConToken(token) {
             icon: 'info',
             title: 'Verifica tu email',
             html: `
-                <p>Enviamos un correo de verificación a:</p>
+                <p>Enviamos un correo a:</p>
                 <strong>${user.correo}</strong>
-                <p style="margin-top: 15px;">Una vez verificado, podrás iniciar sesión.</p>
+                <p>Verifícalo para iniciar sesión</p>
             `,
             confirmButtonText: 'Entendido',
             confirmButtonColor: '#ff4d6d'
@@ -468,16 +454,13 @@ async function loginConToken(token) {
     }
 })();
 
-// ============================================
 // SUSCRIPCIÓN NEWSLETTER
-// ============================================
 function suscribirse() {
     const email = document.getElementById('newsletter-email').value.trim();
     if (email && email.includes('@')) {
         Swal.fire({
             icon: 'success',
             title: '¡Gracias por suscribirte!',
-            text: 'Pronto recibirás nuestras novedades',
             timer: 1500,
             showConfirmButton: false,
             position: 'top-end',
@@ -488,7 +471,6 @@ function suscribirse() {
         Swal.fire({
             icon: 'error',
             title: 'Email inválido',
-            text: 'Por favor ingresa un email válido',
             timer: 1500,
             showConfirmButton: false,
             position: 'top-end',

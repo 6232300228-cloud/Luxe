@@ -54,6 +54,13 @@ let products = [
   { id: 50, name: "Espejo de Bolsillo Luxe", price: 120, category: "accesorios", brand: "luxe", img: "img/espejo.png", desc: "Espejo con aumento para retoques rápidos." }
 ];
 
+// Productos para videos
+const videoProducts = [
+  { id: 1001, name: "Rubor Marmoleado", price: 225, category: "rubor", brand: "luxe", img: "img/rubor.png", desc: "Rubor en polvo marmoleado con acabado natural y larga duración. Ideal para dar un toque de color saludable a tus mejillas." },
+  { id: 1002, name: "Labial Cremoso Soft Matte", price: 250, category: "labial", brand: "luxe", img: "img/labial.png", desc: "Labial con textura cremosa que se desliza suavemente, dejando un acabado mate suave y confortable. Hidrata mientras aporta color intenso." },
+  { id: 1003, name: "Ultimate Shadow Palette", price: 400, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "Paleta de sombras con 16 tonos de alta pigmentación, desde mates hasta brillos intensos. Perfecta para looks de día y noche." }
+];
+
 let filtered = products;
 let selectedBrand = "all";
 let selectedCategory = "all";
@@ -65,76 +72,23 @@ const search = document.getElementById("search");
 const sortSelect = document.getElementById("sort");
 
 // ============================================
-// INICIALIZACIÓN
+// FUNCIONES AUXILIARES
 // ============================================
-document.addEventListener("DOMContentLoaded", function () {
-  renderProducts();
-  updateCartCounter();
-  updateFavCounter();
-  
-  // Eventos de búsqueda
-  if (search) {
-    search.addEventListener("input", () => {
-      let text = search.value.toLowerCase();
-      filtered = products.filter(p => p.name.toLowerCase().includes(text));
-      renderProducts();
-    });
-  }
-  
-  // Eventos de ordenamiento
-  if (sortSelect) {
-    sortSelect.addEventListener("change", () => {
-      const option = sortSelect.value;
-      if (option === "az") {
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-      } else if (option === "za") {
-        filtered.sort((a, b) => b.name.localeCompare(a.name));
-      } else if (option === "precioAsc") {
-        filtered.sort((a, b) => a.price - b.price);
-      } else if (option === "precioDesc") {
-        filtered.sort((a, b) => b.price - a.price);
-      }
-      renderProducts();
-    });
-  }
-  
-  // Eventos de newsletter
-  const newsletterBtn = document.querySelector('.newsletter-form button');
-  const newsletterInput = document.querySelector('.newsletter-form input');
-  if (newsletterBtn) {
-    newsletterBtn.onclick = () => {
-      const email = newsletterInput.value;
-      if (email.includes('@')) {
-        showToast("¡Bienvenida al Club Luxe! ");
-        newsletterInput.value = "";
-      } else {
-        showToast("Por favor, ingresa un email válido ");
-      }
-    };
-  }
-  
-  // Eventos de video
-  document.querySelectorAll('.video-card').forEach(card => {
-    const video = card.querySelector('video');
-    card.addEventListener('mouseenter', () => video.play());
-    card.addEventListener('mouseleave', () => {
-      video.pause();
-      video.currentTime = 0;
-    });
-  });
-});
-
-// ============================================
-// FUNCIONES PRINCIPALES
-// ============================================
-
-// Toggle menú hamburguesa
-function toggleMenu() {
-  const menu = document.getElementById('side-menu');
-  menu.classList.toggle('active');
+function getCategoryName(category) {
+  const categories = {
+    'labial': '💄 Labios',
+    'sombra': '🎨 Sombras',
+    'base': '✨ Bases',
+    'corrector': '👁️ Correctores',
+    'rubor': '🌸 Rubores',
+    'iluminador': '✨ Iluminador',
+    'ojos': '👀 Ojos',
+    'skincare': '🧴 Skincare',
+    'accesorios': '🛠️ Accesorios'
+  };
+  return categories[category] || category;
 }
 
-// Toast notifications
 function showToast(msg) {
   const toast = document.getElementById("toast");
   toast.textContent = msg;
@@ -142,119 +96,54 @@ function showToast(msg) {
   setTimeout(() => toast.classList.remove("show"), 2000);
 }
 
-// Renderizar productos
-function renderProducts() {
-  if (!productList) return;
+// ============================================
+// MODAL DE PRODUCTO
+// ============================================
+function openProductModal(productId) {
+  const modal = document.getElementById("productModal");
+  const modalContent = document.getElementById("modalProductDetail");
   
-  productList.innerHTML = "";
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-
-  if (filtered.length === 0) {
-    productList.innerHTML = "<h2 style='grid-column:1/-1; text-align:center;'>No se encontraron productos</h2>";
+  let product = products.find(p => p.id == productId);
+  if (!product) {
+    product = videoProducts.find(p => p.id == productId);
+  }
+  
+  if (!product) {
+    console.log("Producto no encontrado:", productId);
     return;
   }
-
-  filtered.forEach(p => {
-    const isFav = favs.some(f => f.id === p.id);
-    
-    const productCard = document.createElement('div');
-    productCard.className = 'product-card-luxe';
-    productCard.innerHTML = `
-      <button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">❤</button>
-      <a href="producto.html?id=${p.id}" class="product-link">
-        <div class="img-container">
-          <img src="${p.img}" alt="${p.name}" loading="lazy">
-        </div>
-        <div class="info-luxe">
-          <h4>${p.name.toUpperCase()}</h4>
-          <p class="subtitle-luxe">DISPONIBLE AHORA</p>
-          <p class="price-luxe">$${p.price}</p>
-        </div>
-      </a>
-      <button class="btn-buy-luxe" onclick="addToCart(${p.id})">AGREGAR AL CARRITO</button>
-    `;
-    productList.appendChild(productCard);
-  });
-}
-
-// Filtros combinados
-function aplicarFiltrosCombinados() {
-  filtered = products.filter(p => {
-    const coincideMarca = (selectedBrand === "all" || p.brand.toLowerCase() === selectedBrand.toLowerCase());
-    const coincideCat = (selectedCategory === "all" || p.category === selectedCategory);
-    return coincideMarca && coincideCat;
-  });
-  renderProducts();
-}
-
-// Filtrar por marca
-function filterBrand(brand, element) {
-  selectedBrand = brand;
-  document.querySelectorAll('.brand-item-mini').forEach(item => item.classList.remove('selected'));
-  if (element) element.classList.add('selected');
-  aplicarFiltrosCombinados();
-}
-
-// Filtrar por categoría
-function filterCategory(cat) {
-  selectedCategory = cat;
-  document.querySelectorAll(".category-menu button").forEach(btn => btn.classList.remove("active"));
-  if (event && event.target) event.target.classList.add("active");
-  aplicarFiltrosCombinados();
-}
-
-// Mostrar solo favoritos
-function showOnlyFavs() {
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  if (favs.length === 0) {
-    showToast("No tienes favoritos ");
-    return;
-  }
-  filtered = favs;
-  renderProducts();
-  showToast("Viendo tus favoritos ");
-}
-
-// ============================================
-// FAVORITOS
-// ============================================
-function toggleFav(event, id) {
-  event.preventDefault();
-  event.stopPropagation();
-
-  const btn = event.currentTarget;
-  btn.classList.toggle('active');
-
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  const index = favs.findIndex(f => f.id === id);
-
-  if (index === -1) {
-    const productToAdd = products.find(p => p.id === id);
-    if (productToAdd) {
-      favs.push(productToAdd);
-      showToast("Agregado a favoritos ");
-    }
-  } else {
-    favs.splice(index, 1);
-    showToast("Quitado de favoritos ");
-  }
-
-  localStorage.setItem("favs", JSON.stringify(favs));
-  updateFavCounter();
-}
-
-function updateFavCounter() {
-  if (!favCount) return;
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  const total = favs.length;
-  favCount.textContent = total;
-  favCount.setAttribute("data-count", total);
   
-  if (total > 0) {
-    favCount.classList.remove("pulse");
-    void favCount.offsetWidth;
-    favCount.classList.add("pulse");
-  }
+  modalContent.innerHTML = `
+    <div class="modal-product-img">
+      <img src="${product.img}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300'">
+    </div>
+    <div class="modal-product-info">
+      <span class="modal-brand">${product.brand.toUpperCase()}</span>
+      <h2>${product.name}</h2>
+      <div class="modal-category">${getCategoryName(product.category)}</div>
+      <p class="modal-description">${product.desc}</p>
+      <div class="modal-price">$${product.price}</div>
+      <div class="modal-buttons">
+        <button class="btn-modal-add" onclick="addToCartFromModal(${product.id})">🛒 Agregar al carrito</button>
+        <button class="btn-modal-close" onclick="closeProductModal()">Seguir comprando</button>
+      </div>
+    </div>
+  `;
+  
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+
+function closeProductModal() {
+  const modal = document.getElementById("productModal");
+  modal.style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+function addToCartFromModal(id) {
+  addToCart(id);
+  showToast("✨ Producto agregado al carrito ✨");
+  closeProductModal();
 }
 
 // ============================================
@@ -276,7 +165,11 @@ function updateCartCounter() {
 
 function addToCart(id) {
   let cart = JSON.parse(localStorage.getItem("carrito")) || [];
+  
   let product = products.find(p => p.id == id);
+  if (!product) {
+    product = videoProducts.find(p => p.id == id);
+  }
 
   if (!product) {
     console.log("Producto no encontrado:", id);
@@ -299,7 +192,141 @@ function addToCart(id) {
 
   localStorage.setItem("carrito", JSON.stringify(cart));
   updateCartCounter();
-  showToast("¡Añadido al carrito! ");
+  showToast("✨ ¡Añadido al carrito! ✨");
+}
+
+// ============================================
+// FAVORITOS
+// ============================================
+function updateFavCounter() {
+  if (!favCount) return;
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+  const total = favs.length;
+  favCount.textContent = total;
+  favCount.setAttribute("data-count", total);
+  
+  if (total > 0) {
+    favCount.classList.remove("pulse");
+    void favCount.offsetWidth;
+    favCount.classList.add("pulse");
+  }
+}
+
+function toggleFav(event, id) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const btn = event.currentTarget;
+  btn.classList.toggle('active');
+
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+  const index = favs.findIndex(f => f.id === id);
+
+  if (index === -1) {
+    const productToAdd = products.find(p => p.id === id);
+    if (productToAdd) {
+      favs.push(productToAdd);
+      showToast("❤️ Agregado a favoritos");
+    }
+  } else {
+    favs.splice(index, 1);
+    showToast("💔 Quitado de favoritos");
+  }
+
+  localStorage.setItem("favs", JSON.stringify(favs));
+  updateFavCounter();
+}
+
+// ============================================
+// RENDER PRODUCTOS
+// ============================================
+function renderProducts() {
+  if (!productList) return;
+  
+  productList.innerHTML = "";
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+  if (filtered.length === 0) {
+    productList.innerHTML = "<h2 style='grid-column:1/-1; text-align:center;'>No se encontraron productos</h2>";
+    return;
+  }
+
+  filtered.forEach(p => {
+    const isFav = favs.some(f => f.id === p.id);
+    
+    const productCard = document.createElement('div');
+    productCard.className = 'product-card-luxe';
+    productCard.innerHTML = `
+      <button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">❤</button>
+      <div class="product-clickable" onclick="openProductModal(${p.id})">
+        <div class="img-container">
+          <img src="${p.img}" alt="${p.name}" loading="lazy">
+        </div>
+        <div class="info-luxe">
+          <h4>${p.name.toUpperCase()}</h4>
+          <p class="subtitle-luxe">DISPONIBLE AHORA</p>
+          <p class="price-luxe">$${p.price}</p>
+        </div>
+      </div>
+      <button class="btn-buy-luxe" onclick="event.stopPropagation(); addToCart(${p.id})">AGREGAR AL CARRITO</button>
+    `;
+    productList.appendChild(productCard);
+  });
+}
+
+// ============================================
+// FILTROS
+// ============================================
+function aplicarFiltrosCombinados() {
+  filtered = products.filter(p => {
+    const coincideMarca = (selectedBrand === "all" || p.brand.toLowerCase() === selectedBrand.toLowerCase());
+    const coincideCat = (selectedCategory === "all" || p.category === selectedCategory);
+    return coincideMarca && coincideCat;
+  });
+  renderProducts();
+}
+
+function filterBrand(brand, element) {
+  selectedBrand = brand;
+  document.querySelectorAll('.brand-item-mini').forEach(item => item.classList.remove('selected'));
+  if (element) element.classList.add('selected');
+  aplicarFiltrosCombinados();
+  
+  setTimeout(() => {
+    const categorySection = document.querySelector('.category-menu');
+    if (categorySection) {
+      const yOffset = -120;
+      const y = categorySection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }, 100);
+}
+
+function filterCategory(cat) {
+  selectedCategory = cat;
+  document.querySelectorAll(".category-menu button").forEach(btn => btn.classList.remove("active"));
+  if (event && event.target) event.target.classList.add("active");
+  aplicarFiltrosCombinados();
+  
+  setTimeout(() => {
+    const categorySection = document.querySelector('.category-menu');
+    if (categorySection) {
+      const yOffset = -120;
+      const y = categorySection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  }, 100);
+}
+
+function showOnlyFavs() {
+  let favs = JSON.parse(localStorage.getItem("favs")) || [];
+  if (favs.length === 0) {
+    showToast("No tienes favoritos 💔");
+    return;
+  }
+  filtered = favs;
+  renderProducts();
+  showToast("❤️ Viendo tus favoritos");
 }
 
 // ============================================
@@ -368,122 +395,103 @@ function closeLook() {
 function completeExperience() {
   if (!window.currentExperience) return;
   window.currentExperience.forEach(p => addToCart(p.id));
-  showToast("¡Selección añadida al carrito! ");
+  showToast("🎁 ¡Selección añadida al carrito!");
   closeLook();
 }
 
-window.onclick = function(event) {
-  const modal = document.getElementById("lookModal");
-  if (event.target == modal) closeLook();
-}
-
 // ============================================
-// NAVEGACIÓN DESDE FOOTER
+// INICIALIZACIÓN
 // ============================================
-function navigateAndFilter(category) {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (category === 'all') {
-    filterCategory('all');
-  } else if (category === 'favs') {
-    showOnlyFavs();
-  } else {
-    filterCategory(category);
-  }
-}
-
-// ============================================
-// INTERCEPTOR DE ERRORES 401
-// ============================================
-(function() {
-  const originalFetch = window.fetch;
-  window.fetch = function(...args) {
-    return originalFetch.apply(this, args).then(response => {
-      if (response.status === 401) {
-        console.log('🔇 Error 401 ignorado');
-        return new Response(JSON.stringify({ data: [], message: 'No autenticado' }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
-        });
-      }
-      return response;
-    }).catch(error => {
-      console.log('🔇 Error de red ignorado');
-      return new Response(JSON.stringify({ data: [] }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
-      });
+document.addEventListener("DOMContentLoaded", function () {
+  renderProducts();
+  updateCartCounter();
+  updateFavCounter();
+  
+  if (search) {
+    search.addEventListener("input", () => {
+      let text = search.value.toLowerCase();
+      filtered = products.filter(p => p.name.toLowerCase().includes(text));
+      renderProducts();
     });
-  };
-})();
+  }
+  
+  if (sortSelect) {
+    sortSelect.addEventListener("change", () => {
+      const option = sortSelect.value;
+      if (option === "az") {
+        filtered.sort((a, b) => a.name.localeCompare(b.name));
+      } else if (option === "za") {
+        filtered.sort((a, b) => b.name.localeCompare(a.name));
+      } else if (option === "precioAsc") {
+        filtered.sort((a, b) => a.price - b.price);
+      } else if (option === "precioDesc") {
+        filtered.sort((a, b) => b.price - a.price);
+      }
+      renderProducts();
+    });
+  }
+  
+  const newsletterBtn = document.querySelector('.newsletter-form button');
+  const newsletterInput = document.querySelector('.newsletter-form input');
+  if (newsletterBtn) {
+    newsletterBtn.onclick = () => {
+      const email = newsletterInput.value;
+      if (email.includes('@')) {
+        showToast("🎉 ¡Bienvenida al Club Luxe!");
+        newsletterInput.value = "";
+      } else {
+        showToast("📧 Por favor, ingresa un email válido");
+      }
+    };
+  }
+  
+  document.querySelectorAll('.video-card').forEach(card => {
+    const video = card.querySelector('video');
+    card.addEventListener('mouseenter', () => video.play());
+    card.addEventListener('mouseleave', () => {
+      video.pause();
+      video.currentTime = 0;
+    });
+  });
+});
+
 // ============================================
-// FILTROS CON SCROLL A CATEGORÍAS
+// CERRAR MODAL AL HACER CLIC FUERA
 // ============================================
-
-// Filtrar por marca
-function filterBrand(brand, element) {
-  selectedBrand = brand;
+window.onclick = function(event) {
+  const productModal = document.getElementById("productModal");
+  const lookModal = document.getElementById("lookModal");
   
-  // Quitar selected de todos y poner al que clickeamos
-  document.querySelectorAll('.brand-item-mini').forEach(item => item.classList.remove('selected'));
-  if (element) element.classList.add('selected');
-  
-  // Aplicar filtros
-  aplicarFiltrosCombinados();
-  
-  // SCROLL SUAVE A LA SECCIÓN DE CATEGORÍAS
-  setTimeout(() => {
-    const categorySection = document.querySelector('.category-menu');
-    if (categorySection) {
-      const yOffset = -120; // Offset para que no quede pegado al header
-      const y = categorySection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  }, 100);
-}
-
-// Filtrar por categoría
-function filterCategory(cat) {
-  selectedCategory = cat;
-  
-  // Manejo visual de botones
-  document.querySelectorAll(".category-menu button").forEach(btn => btn.classList.remove("active"));
-  if (event && event.target) event.target.classList.add("active");
-  
-  // Aplicar filtros
-  aplicarFiltrosCombinados();
-  
-  // SCROLL SUAVE A LA SECCIÓN DE CATEGORÍAS
-  setTimeout(() => {
-    const categorySection = document.querySelector('.category-menu');
-    if (categorySection) {
-      const yOffset = -120;
-      const y = categorySection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  }, 100);
-}
-
-// También para el footer
-function navigateAndFilter(category) {
-  if (category === 'all') {
-    filterCategory('all');
-  } else if (category === 'favs') {
-    showOnlyFavs();
-  } else {
-    filterCategory(category);
+  if (event.target == productModal) {
+    closeProductModal();
+  }
+  if (event.target == lookModal) {
+    closeLook();
   }
 }
-//burguer menu
-// ============================================
-// MEJORAS PARA EL MENÚ HAMBURGUESA
-// ============================================
 
-// 1. CERRAR AL HACER CLIC FUERA
+// Cerrar con tecla ESC
+document.addEventListener('keydown', function(event) {
+  if (event.key === "Escape") {
+    const productModal = document.getElementById("productModal");
+    if (productModal.style.display === "flex") {
+      closeProductModal();
+    }
+  }
+});
+
+// ============================================
+// MENÚ HAMBURGUESA
+// ============================================
+function toggleMenu() {
+  const menu = document.getElementById('side-menu');
+  menu.classList.toggle('active');
+}
+
 document.addEventListener('click', function(event) {
   const menu = document.getElementById('side-menu');
   const hamburger = document.querySelector('.menu-hamburger');
   
-  // Si el menú está activo y el clic NO fue en el menú NI en el hamburguesa
   if (menu && menu.classList.contains('active') && 
       !menu.contains(event.target) && 
       !hamburger.contains(event.target)) {
@@ -491,30 +499,17 @@ document.addEventListener('click', function(event) {
   }
 });
 
-// 2. ABRIR AL PASAR EL CURSOR SOBRE EL HAMBURGUESA (SOLO DESKTOP)
 if (window.innerWidth > 768) {
   const hamburger = document.querySelector('.menu-hamburger');
   const menu = document.getElementById('side-menu');
   
   if (hamburger && menu) {
     let hoverTimer;
-    
-    // Al entrar al hamburguesa
     hamburger.addEventListener('mouseenter', function() {
-      hoverTimer = setTimeout(() => {
-        menu.classList.add('active');
-      }, 200); // Pequeño delay
+      hoverTimer = setTimeout(() => menu.classList.add('active'), 200);
     });
-    
-    // Al salir del hamburguesa, cancelar si no se abrió
     hamburger.addEventListener('mouseleave', function() {
       clearTimeout(hoverTimer);
-    });
-    
-    // Opcional: cerrar al salir del menú (si quieres)
-    menu.addEventListener('mouseleave', function() {
-      // Si quieres que se cierre al salir, descomenta:
-      // menu.classList.remove('active');
     });
   }
 }

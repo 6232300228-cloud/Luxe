@@ -1155,8 +1155,6 @@ header-icon:hover {
   right: 10px;
   background: white;
   border: none;
-  font-size: 22px;
-  color: #ccc;
   cursor: pointer;
   z-index: 10;
   width: 36px;
@@ -1167,22 +1165,52 @@ header-icon:hover {
   justify-content: center;
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   transition: all 0.3s ease;
+  padding: 0; /* Importante: elimina padding por defecto */
 }
 
+.heart-icon {
+  width: 20px;  /* Ajusta según el tamaño de tu icono */
+  height: 20px;
+  object-fit: contain;
+  transition: all 0.3s ease;
+}
+
+/* Estado hover del botón */
 .heart-fav:hover {
   transform: scale(1.15);
   background: #ff4d6d;
-  color: white;
 }
 
+.heart-fav:hover .heart-icon {
+  filter: brightness(0) invert(1); /* Hace el icono blanco en hover */
+}
+
+/* Estado activo (favorito) */
 .heart-fav.active {
-  color: #ff4d6d !important;
   background: white;
 }
 
+.heart-fav.active .heart-icon {
+  filter: none; /* Color normal del icono cuando está activo */
+}
+
+/* Hover en estado activo */
 .heart-fav.active:hover {
   background: #ff4d6d;
-  color: white !important;
+}
+
+.heart-fav.active:hover .heart-icon {
+  filter: brightness(0) invert(1); /* Icono blanco en hover cuando está activo */
+}
+.heart-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  pointer-events: none; /* Para que los clicks pasen al botón */
+}
+
+.heart-fav:hover .heart-icon {
+  filter: brightness(0) invert(1); /* Hace el icono blanco en hover */
 }
 
 .info-luxe {

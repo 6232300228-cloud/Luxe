@@ -22,13 +22,13 @@ let products = [
   { id: 18, name: "Infallible Fresh Wear 24H", price: 310, category: "base", brand: "loreal", img: "img/infallible.png", desc: "Cobertura completa que permite que la piel respire." },
   { id: 19, name: "Liquid Touch Concealer", price: 520, category: "corrector", brand: "rare", img: "img/rare-concealer.png", desc: "Corrector hidratante de cobertura media a total." },
   { id: 20, name: "Corrector de Larga Duración", price: 110, category: "corrector", brand: "bissu", img: "img/corrector-bissu.png", desc: "Corrector líquido cremoso de alta cobertura." },
-  { id: 21, name: "SuperStay Matte Ink", price: 260, category: "labial", brand: "maybelline", img: "img/matte-ink.png", desc: "Tinta de labios líquida con hasta 16 horas de duración." },
-  { id: 22, name: "Matte Lipstick Ruby Woo", price: 460, category: "labial", brand: "mac", img: "img/mac-red.png", desc: "El rojo más famoso del mundo con acabado ultra mate." },
+  { id: 21, name: "SuperStay Matte Ink", price: 260, category: "labial", brand: "maybelline", img: "img/Superstay.png", desc: "Tinta de labios líquida con hasta 16 horas de duración." },
+  { id: 22, name: "Matte Lipstick Ruby Woo", price: 460, category: "labial", brand: "mac", img: "img/Mate lipstick.png", desc: "El rojo más famoso del mundo con acabado ultra mate." },
   { id: 23, name: "Soft Pinch Liquid Blush", price: 540, category: "rubor", brand: "rare", img: "img/rare-blush.png", desc: "Rubor líquido de larga duración que se difumina hermoso." },
-  { id: 24, name: "Gloss Bomb Universal", price: 490, category: "labial", brand: "fenty", img: "img/fenty-gloss.png", desc: "Brillo de labios irresistible con aroma a melocotón y vainilla." },
-  { id: 25, name: "Lip Glow Oil", price: 890, category: "labial", brand: "dior", img: "img/dior-oil.png", desc: "Aceite labial brillante que protege y realza." },
-  { id: 26, name: "Fat Oil Lip Drip", price: 220, category: "labial", brand: "nyx", img: "img/fat-oil.png", desc: "Aceite hidratante con color de gran brillo." },
-  { id: 27, name: "Paleta de Sombras 'Mi Tierra'", price: 115, category: "sombra", brand: "bissu", img: "img/mitierra.png", desc: "Quintetos de sombras con colores intensos." },
+  { id: 24, name: "Gloss Bomb Universal", price: 490, category: "labial", brand: "fenty", img: "img/Gloss bomb.png", desc: "Brillo de labios irresistible con aroma a melocotón y vainilla." },
+  { id: 25, name: "Lip Glow Oil", price: 890, category: "labial", brand: "dior", img: "img/Glow oil.png", desc: "Aceite labial brillante que protege y realza." },
+  { id: 26, name: "Fat Oil Lip Drip", price: 220, category: "labial", brand: "nyx", img: "img/Fat oil.png", desc: "Aceite hidratante con color de gran brillo." },
+  { id: 27, name: "Paleta de Sombras 'Mi Tierra'", price: 115, category: "sombra", brand: "bissu", img: "img/Sombra tierra.png", desc: "Quintetos de sombras con colores intensos." },
   { id: 28, name: "Mascara Lash Paradise", price: 275, category: "ojos", brand: "loreal", img: "img/paradise.png", desc: "Volumen y longitud instantáneos con cepillo suave." },
   { id: 29, name: "Epic Ink Liner Black", price: 255, category: "ojos", brand: "nyx", img: "img/epic-ink.png", desc: "Delineador líquido con punta de pincel precisa." },
   { id: 30, name: "Perfect Strokes Eye Liner", price: 480, category: "ojos", brand: "rare", img: "img/rare-liner.png", desc: "Delineador líquido mate con flujo continuo." },
@@ -39,19 +39,19 @@ let products = [
   { id: 35, name: "Polvo Traslúcido Suelto", price: 95, category: "rubor", brand: "bissu", img: "img/polvo.png", desc: "Polvo fino para sellar el maquillaje y eliminar brillo." },
   { id: 36, name: "Rouge Blush", price: 1100, category: "rubor", brand: "dior", img: "img/dior-blush.png", desc: "Rubor de larga duración con pigmentos intensos." },
   { id: 37, name: "Stay Vulnerable Blush", price: 510, category: "rubor", brand: "rare", img: "img/rare-creamblush.png", desc: "Rubor en crema resistente al agua que se funde en la piel." },
-  { id: 38, name: "Agua Micelar Todo en 1", price: 145, category: "skincare", brand: "loreal", img: "img/micelar.png", desc: "Limpia, desmaquilla y tonifica el rostro." },
-  { id: 39, name: "Fat Water Toner Serum", price: 720, category: "skincare", brand: "fenty", img: "img/fat-water.png", desc: "Tratamiento que reduce poros y manchas." },
-  { id: 40, name: "Dior Addict Lip Maximizer", price: 910, category: "labial", brand: "dior", img: "img/maximizer.png", desc: "Brillo de labios con efecto volumen instantáneo." },
-  { id: 41, name: "Esponja Beauty Blender", price: 180, category: "accesorios", brand: "luxe", img: "img/esponja.png", desc: "Esponja para difuminar base y corrector." },
-  { id: 42, name: "Brush Cleanser", price: 390, category: "accesorios", brand: "mac", img: "img/cleaner.png", desc: "Limpiador de brochas de secado rápido." },
-  { id: 43, name: "Prep + Prime Fix+", price: 680, category: "accesorios", brand: "mac", img: "img/fix.png", desc: "Bruma de agua que fija el maquillaje y refresca." },
-  { id: 44, name: "Matte Setting Spray", price: 235, category: "accesorios", brand: "nyx", img: "img/set-spray.png", desc: "Fijador de maquillaje para evitar el brillo." },
-  { id: 45, name: "Sacapuntas de Cosméticos", price: 1, category: "accesorios", brand: "bissu", img: "img/sacapuntas.png", desc: "Mantén tus lápices con punta perfecta." },
-  { id: 46, name: "Pegamento Lash It Loud", price: 190, category: "accesorios", brand: "nyx", img: "img/glue.png", desc: "Adhesivo para pestañas de alta fijación." },
+  { id: 38, name: "Agua Micelar Todo en 1", price: 145, category: "skincare", brand: "loreal", img: "img/Agua micelar.png", desc: "Limpia, desmaquilla y tonifica el rostro." },
+  { id: 39, name: "Fat Water Toner Serum", price: 720, category: "skincare", brand: "fenty", img: "img/Fat water.png", desc: "Tratamiento que reduce poros y manchas." },
+  { id: 40, name: "Dior Addict Lip Maximizer", price: 910, category: "labial", brand: "dior", img: "Dior addict.png", desc: "Brillo de labios con efecto volumen instantáneo." },
+  { id: 41, name: "Esponja Beauty Blender", price: 180, category: "accesorios", brand: "luxe", img: "img/Esponja beauty blender.png", desc: "Esponja para difuminar base y corrector." },
+  { id: 42, name: "Brush Cleanser", price: 390, category: "accesorios", brand: "mac", img: "img/Brush cleanser.png", desc: "Limpiador de brochas de secado rápido." },
+  { id: 43, name: "Prep + Prime Fix+", price: 680, category: "accesorios", brand: "mac", img: "img/prep+prime fix.png", desc: "Bruma de agua que fija el maquillaje y refresca." },
+  { id: 44, name: "Matte Setting Spray", price: 235, category: "accesorios", brand: "nyx", img: "img/Matte setting.png", desc: "Fijador de maquillaje para evitar el brillo." },
+  { id: 45, name: "Sacapuntas de Cosméticos", price: 1, category: "accesorios", brand: "bissu", img: "img/Sacapuntas.png", desc: "Mantén tus lápices con punta perfecta." },
+  { id: 46, name: "Pegamento Lash It Loud", price: 190, category: "accesorios", brand: "nyx", img: "img/Pegamento.png", desc: "Adhesivo para pestañas de alta fijación." },
   { id: 47, name: "Pestañas Postizas 3D", price: 85, category: "ojos", brand: "bissu", img: "img/pestañas.png", desc: "Añade volumen y drama a tus ojos." },
   { id: 48, name: "Paleta Pro Contour", price: 320, category: "rubor", brand: "nyx", img: "img/contour.png", desc: "Kit para definir y resaltar facciones." },
-  { id: 49, name: "Delineador de Labios Retráctil", price: 55, category: "labial", brand: "bissu", img: "img/lip-liner.png", desc: "Textura cremosa para delinear labios." },
-  { id: 50, name: "Espejo de Bolsillo Luxe", price: 120, category: "accesorios", brand: "luxe", img: "img/espejo.png", desc: "Espejo con aumento para retoques rápidos." }
+  { id: 49, name: "Delineador de Labios Retráctil", price: 55, category: "labial", brand: "bissu", img: "Delineador labios.png", desc: "Textura cremosa para delinear labios." },
+  { id: 50, name: "Espejo de Bolsillo Luxe", price: 120, category: "accesorios", brand: "luxe", img: "img/Espejo bolsillo.png", desc: "Espejo con aumento para retoques rápidos." }
 ];
 
 // Productos para videos
@@ -76,15 +76,15 @@ const sortSelect = document.getElementById("sort");
 // ============================================
 function getCategoryName(category) {
   const categories = {
-    'labial': '💄 Labios',
-    'sombra': '🎨 Sombras',
-    'base': '✨ Bases',
-    'corrector': '👁️ Correctores',
-    'rubor': '🌸 Rubores',
-    'iluminador': '✨ Iluminador',
-    'ojos': '👀 Ojos',
-    'skincare': '🧴 Skincare',
-    'accesorios': '🛠️ Accesorios'
+    'labial': ' Labios',
+    'sombra': 'Sombras',
+    'base': 'Bases',
+    'corrector': 'Correctores',
+    'rubor': 'Rubores',
+    'iluminador': 'Iluminador',
+    'ojos': 'Ojos',
+    'skincare': 'Skincare',
+    'accesorios': 'Accesorios'
   };
   return categories[category] || category;
 }
@@ -124,7 +124,7 @@ function openProductModal(productId) {
       <p class="modal-description">${product.desc}</p>
       <div class="modal-price">$${product.price}</div>
       <div class="modal-buttons">
-        <button class="btn-modal-add" onclick="addToCartFromModal(${product.id})">🛒 Agregar al carrito</button>
+        <button class="btn-modal-add" onclick="addToCartFromModal(${product.id})"> Agregar al carrito</button>
         <button class="btn-modal-close" onclick="closeProductModal()">Seguir comprando</button>
       </div>
     </div>
@@ -142,7 +142,7 @@ function closeProductModal() {
 
 function addToCartFromModal(id) {
   addToCart(id);
-  showToast("✨ Producto agregado al carrito ✨");
+  showToast("Producto agregado al carrito ");
   closeProductModal();
 }
 
@@ -226,11 +226,11 @@ function toggleFav(event, id) {
     const productToAdd = products.find(p => p.id === id);
     if (productToAdd) {
       favs.push(productToAdd);
-      showToast("❤️ Agregado a favoritos");
+      showToast("Agregado a favoritos");
     }
   } else {
     favs.splice(index, 1);
-    showToast("💔 Quitado de favoritos");
+    showToast("Quitado de favoritos");
   }
 
   localStorage.setItem("favs", JSON.stringify(favs));
@@ -257,8 +257,10 @@ function renderProducts() {
     const productCard = document.createElement('div');
     productCard.className = 'product-card-luxe';
     productCard.innerHTML = `
-      <button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">❤</button>
-      <div class="product-clickable" onclick="openProductModal(${p.id})">
+<button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">
+  <img src="corazon.png" alt="Favorito" class="heart-icon">
+</button>
+     <div class="product-clickable" onclick="openProductModal(${p.id})">
         <div class="img-container">
           <img src="${p.img}" alt="${p.name}" loading="lazy">
         </div>
@@ -437,10 +439,10 @@ document.addEventListener("DOMContentLoaded", function () {
     newsletterBtn.onclick = () => {
       const email = newsletterInput.value;
       if (email.includes('@')) {
-        showToast("🎉 ¡Bienvenida al Club Luxe!");
+        showToast("¡Bienvenida al Club Luxe!");
         newsletterInput.value = "";
       } else {
-        showToast("📧 Por favor, ingresa un email válido");
+        showToast(" Por favor, ingresa un email válido");
       }
     };
   }

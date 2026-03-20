@@ -1,7 +1,7 @@
 // ============================================
 // VARIABLES GLOBALES
 // ============================================
- let products = [
+let products = [
   { id: 1, name: "Labial Humectante", price: 65, category: "labial", brand: "bissu", img: "img/labial.png", desc: "Labial clásico de Bissú con aceite de coco." },
   { id: 2, name: "Ultimate Shadow Palette", price: 420, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "Paleta profesional con 16 tonos de alta pigmentación." },
   { id: 3, name: "Can't Stop Won't Stop Foundation", price: 380, category: "base", brand: "nyx", img: "img/base.png", desc: "Base de maquillaje líquida de cobertura total y mate." },

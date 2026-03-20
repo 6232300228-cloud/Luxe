@@ -107,23 +107,49 @@ if (btnLogin) {
     });
 }
 
-// REGISTRO NORMAL - CORREGIDO
+// En la sección de REGISTRO NORMAL, actualiza la parte donde obtienes los valores:
+
 if (btnRegister) {
     btnRegister.addEventListener("click", async () => {
         const nombre = document.getElementById("reg-nombre").value;
         const apellido = document.getElementById("reg-apellido").value;
         const telefono = document.getElementById("reg-telefono").value;
-        const direccion = document.getElementById("reg-direccion").value;
+        
+        // Nuevos campos de dirección
+        const calle = document.getElementById("reg-calle").value;
+        const numero = document.getElementById("reg-numero").value;
+        const colonia = document.getElementById("reg-colonia").value;
+        const estado = document.getElementById("reg-estado").value;
+        const cp = document.getElementById("reg-cp").value;
+        const referencia = document.getElementById("reg-referencia").value;
+        
         const correo = document.getElementById("reg-correo").value;
         const contraseña = document.getElementById("reg-pass").value;
 
+        // Combinar dirección en un solo string
+        const direccionCompleta = `${calle} #${numero}, ${colonia}, ${estado}, C.P. ${cp}`;
+        
+        // Guardar también los campos por separado para mostrarlos bonito en perfil
+        const direccionDetallada = {
+            calle,
+            numero,
+            colonia,
+            estado,
+            cp,
+            referencia
+        };
+
         const nombreCompleto = `${nombre} ${apellido}`.trim();
 
-        if (nombre === "" || apellido === "" || telefono === "" || direccion === "" || !correo.includes("@") || contraseña === "") {
+        // Validaciones
+        if (nombre === "" || apellido === "" || telefono === "" || telefono.length !== 10 || 
+            calle === "" || numero === "" || colonia === "" || estado === "" || cp === "" || 
+            cp.length !== 5 || !correo.includes("@") || contraseña === "") {
+            
             Swal.fire({
                 icon: 'error',
                 title: 'Campos incompletos',
-                text: 'Por favor, llena todos los campos',
+                text: 'Por favor, llena todos los campos obligatorios correctamente',
                 timer: 2000,
                 showConfirmButton: false,
                 position: 'top-end',
@@ -139,8 +165,9 @@ if (btnRegister) {
                 body: JSON.stringify({ 
                     nombre: nombreCompleto, 
                     correo, 
-                    telefono, 
-                    direccion, 
+                    telefono: `+52${telefono}`, // Guardamos con +52
+                    direccion: direccionCompleta,
+                    direccion_detallada: direccionDetallada, // Guardamos también los detalles
                     contraseña 
                 })
             });
@@ -148,10 +175,15 @@ if (btnRegister) {
             const data = await response.json();
 
             if (response.ok) {
+                // Guardar dirección detallada también en localStorage
+                const userData = {
+                    ...data.user,
+                    direccion_detallada: direccionDetallada
+                };
+                
                 localStorage.setItem("token", data.token);
-                localStorage.setItem("user", JSON.stringify(data.user));
+                localStorage.setItem("user", JSON.stringify(userData));
 
-                // ✅ CORREGIDO: user → data.user
                 const primerNombre = getPrimerNombre(data.user.nombre);
 
                 Swal.fire({

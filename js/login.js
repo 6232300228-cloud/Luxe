@@ -1,4 +1,4 @@
-// login.js - VERSIÓN CORREGIDA CON MEJOR MANEJO DE ERRORES
+// login.js - VERSIÓN COMPLETA Y CORREGIDA
 const loginSection = document.getElementById("login-section");
 const registerSection = document.getElementById("register-section");
 const toRegister = document.getElementById("to-register");
@@ -16,7 +16,7 @@ function getPrimerNombre(nombreCompleto) {
     return nombreCompleto.split(' ')[0];
 }
 
-// FUNCIÓN PARA MOSTRAR TOAST CON SWEETALERT
+// FUNCIÓN PARA MOSTRAR MENSAJES
 function mostrarToast(mensaje, tipo = 'error') {
     if (typeof Swal !== 'undefined') {
         Swal.fire({
@@ -47,7 +47,9 @@ if (toLogin) {
     });
 }
 
-// LOGIN NORMAL
+// ============================================
+// LOGIN
+// ============================================
 if (btnLogin) {
     btnLogin.addEventListener("click", async () => {
         let correo = document.getElementById("login-correo").value;
@@ -89,36 +91,7 @@ if (btnLogin) {
                     }
                 });
             } else {
-                // Manejar caso de cuenta no verificada
-                if (data.tipo === 'not_verified') {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Cuenta no verificada',
-                        text: 'Por favor verifica tu correo electrónico antes de iniciar sesión',
-                        confirmButtonText: 'Reenviar correo',
-                        showCancelButton: true,
-                        cancelButtonText: 'Cancelar'
-                    }).then(async (result) => {
-                        if (result.isConfirmed) {
-                            try {
-                                const resendRes = await fetch(`${API_URL}/auth/resend-verification`, {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ correo })
-                                });
-                                if (resendRes.ok) {
-                                    mostrarToast('Correo de verificación reenviado', 'success');
-                                } else {
-                                    mostrarToast('Error al reenviar el correo');
-                                }
-                            } catch (error) {
-                                mostrarToast('Error de conexión');
-                            }
-                        }
-                    });
-                } else {
-                    mostrarToast(data.error || "Error al iniciar sesión", 'error');
-                }
+                mostrarToast(data.error || "Error al iniciar sesión", 'error');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -127,30 +100,28 @@ if (btnLogin) {
     });
 }
 
-// REGISTRO - VERSIÓN CORREGIDA
+// ============================================
+// REGISTRO - VERSIÓN COMPLETA CORREGIDA
+// ============================================
 if (btnRegister) {
     btnRegister.addEventListener("click", async () => {
-        // Obtener valores
+        // Obtener valores de los inputs
         const nombre = document.getElementById("reg-nombre").value.trim();
         const apellido = document.getElementById("reg-apellido").value.trim();
         const telefono = document.getElementById("reg-telefono").value.trim();
-        
-        // Campos de dirección
         const calle = document.getElementById("reg-calle").value.trim();
         const numero = document.getElementById("reg-numero").value.trim();
         const colonia = document.getElementById("reg-colonia").value.trim();
         const estado = document.getElementById("reg-estado").value.trim();
         const cp = document.getElementById("reg-cp").value.trim();
         const referencia = document.getElementById("reg-referencia").value.trim();
-        
         const correo = document.getElementById("reg-correo").value.trim();
         const contraseña = document.getElementById("reg-pass").value;
 
         // ============================================
-        // VALIDACIONES DETALLADAS CON MENSAJES CLAROS
+        // VALIDACIONES
         // ============================================
         
-        // Validar nombre y apellido
         if (nombre === "") {
             mostrarToast('Por favor ingresa tu nombre', 'error');
             document.getElementById("reg-nombre").focus();
@@ -163,7 +134,6 @@ if (btnRegister) {
             return;
         }
         
-        // Validar teléfono (10 dígitos, solo números)
         if (telefono === "") {
             mostrarToast('Por favor ingresa tu teléfono', 'error');
             document.getElementById("reg-telefono").focus();
@@ -176,7 +146,6 @@ if (btnRegister) {
             return;
         }
         
-        // Validar dirección
         if (calle === "") {
             mostrarToast('Por favor ingresa tu calle', 'error');
             document.getElementById("reg-calle").focus();
@@ -213,7 +182,6 @@ if (btnRegister) {
             return;
         }
         
-        // Validar correo
         if (correo === "") {
             mostrarToast('Por favor ingresa tu correo electrónico', 'error');
             document.getElementById("reg-correo").focus();
@@ -226,7 +194,6 @@ if (btnRegister) {
             return;
         }
         
-        // Validar contraseña
         if (contraseña === "") {
             mostrarToast('Por favor ingresa una contraseña', 'error');
             document.getElementById("reg-pass").focus();
@@ -239,24 +206,37 @@ if (btnRegister) {
             return;
         }
 
-        // Mostrar loading
+        // Deshabilitar botón mientras se procesa
         btnRegister.disabled = true;
         btnRegister.textContent = 'Registrando...';
 
-        // Construir dirección completa
+        // ============================================
+        // CONSTRUIR DATOS PARA ENVIAR
+        // ============================================
+        
+        // Nombre completo (corregido)
+        const nombreCompleto = `${nombre} ${apellido}`.trim();
+        
+        // Dirección completa (corregido)
         const direccionCompleta = `${calle} #${numero}, ${colonia}, ${estado}, C.P. ${cp}`;
         
-        // Dirección detallada para guardar en el perfil
+        // Dirección detallada para guardar
         const direccionDetallada = {
-            calle,
-            numero,
-            colonia,
-            estado,
-            cp,
+            calle: calle,
+            numero: numero,
+            colonia: colonia,
+            estado: estado,
+            cp: cp,
             referencia: referencia || ''
         };
 
-        const nombreCompleto = `${nombre} ${apellido}`.trim();
+        console.log('📝 Datos a enviar:', {
+            nombre: nombreCompleto,
+            correo: correo,
+            telefono: `+52${telefono}`,
+            direccion: direccionCompleta,
+            direccion_detallada: direccionDetallada
+        });
 
         try {
             const response = await fetch(`${API_URL}/auth/register`, {
@@ -264,27 +244,30 @@ if (btnRegister) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ 
                     nombre: nombreCompleto, 
-                    correo, 
+                    correo: correo, 
                     telefono: `+52${telefono}`,
                     direccion: direccionCompleta,
                     direccion_detallada: direccionDetallada,
-                    contraseña 
+                    contraseña: contraseña 
                 })
             });
 
             const data = await response.json();
 
             if (response.ok) {
-                // Guardar dirección detallada también en localStorage
+                // Guardar usuario en localStorage
                 const userData = {
                     ...data.user,
-                    direccion_detallada: direccionDetallada
+                    direccion_detallada: direccionDetallada,
+                    direccion: direccionCompleta
                 };
                 
-                localStorage.setItem("token", data.token);
+                if (data.token) {
+                    localStorage.setItem("token", data.token);
+                }
                 localStorage.setItem("user", JSON.stringify(userData));
 
-                const primerNombre = getPrimerNombre(data.user.nombre);
+                const primerNombre = getPrimerNombre(nombreCompleto);
 
                 Swal.fire({
                     icon: 'success',
@@ -301,26 +284,28 @@ if (btnRegister) {
                 btnRegister.textContent = 'Registrarme';
             }
         } catch (error) {
-            console.error('Error:', error);
-            mostrarToast('No se pudo conectar con el servidor. Verifica tu conexión a internet.', 'error');
+            console.error('Error en registro:', error);
+            mostrarToast('No se pudo conectar con el servidor. Verifica tu conexión.', 'error');
             btnRegister.disabled = false;
             btnRegister.textContent = 'Registrarme';
         }
     });
 }
 
+// ============================================
 // LOGIN CON GOOGLE
+// ============================================
 if (btnGoogle) {
     btnGoogle.addEventListener("click", () => {
         window.location.href = `${API_URL}/auth/google`;
     });
 }
 
-// FUNCIÓN PARA LOGIN CON TOKEN
+// ============================================
+// LOGIN CON TOKEN DE GOOGLE
+// ============================================
 async function loginConToken(token) {
     try {
-        console.log('Intentando login con token');
-
         const response = await fetch(`${API_URL}/auth/me`, {
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -351,25 +336,24 @@ async function loginConToken(token) {
             window.location.href = "index.html";
         }
     } catch (error) {
-        console.error('Error en login con token:', error);
-        mostrarToast('Error al iniciar sesión automáticamente', 'error');
+        console.error('Error:', error);
+        mostrarToast('Error al iniciar sesión', 'error');
     }
 }
 
-// PROCESAR TOKEN DE GOOGLE
+// Procesar token de Google si viene en la URL
 (function() {
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
 
     if (token) {
-        console.log('Token detectado en URL, procesando...');
+        console.log('Token detectado en URL');
         loginConToken(token);
-        // Limpiar URL
         window.history.replaceState({}, document.title, window.location.pathname);
     }
 })();
 
-// Suscripción newsletter
+// Función para newsletter
 function suscribirse() {
     const email = document.getElementById('newsletter-email').value;
     if (email && email.includes('@')) {

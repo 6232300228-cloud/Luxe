@@ -86,28 +86,29 @@
 </section>
 
 <!-- Probado en cámara -->
+<!-- Probado en cámara -->
 <section class="video-showcase">
-  <h2 class="video-title"> Probado en cámara</h2>
+  <h2 class="video-title">Probado en cámara </h2>
   <div class="video-grid">
-    <div class="video-card">
-      <video src="videos/rubor.mp4" muted loop></video>
-      <div class="overlay">
-        <h3>Aplicando Marmoleado</h3>
-        <p>$225</p>
+    <div class="video-card" onclick="openProductModal(1001)">
+      <video src="videos/rubor.mp4" muted loop playsinline></video>
+      <div class="video-overlay">
+        <h3>Rubor Marmoleado</h3>
+        <button class="btn-ver-producto" onclick="event.stopPropagation(); openProductModal(1001)">Ver producto</button>
       </div>
     </div>
-    <div class="video-card">
-      <video src="videos/gloss.mp4" muted loop></video>
-      <div class="overlay">
+    <div class="video-card" onclick="openProductModal(1002)">
+      <video src="videos/gloss.mp4" muted loop playsinline></video>
+      <div class="video-overlay">
         <h3>Labial Cremoso Soft Matte</h3>
-        <p>$250</p>
+        <button class="btn-ver-producto" onclick="event.stopPropagation(); openProductModal(1002)">Ver producto</button>
       </div>
     </div>
-    <div class="video-card">
-      <video src="videos/swatch.mp4" muted loop></video>
-      <div class="overlay">
+    <div class="video-card" onclick="openProductModal(1003)">
+      <video src="videos/swatch.mp4" muted loop playsinline></video>
+      <div class="video-overlay">
         <h3>Ultimate Shadow Palette</h3>
-        <p>$400</p>
+        <button class="btn-ver-producto" onclick="event.stopPropagation(); openProductModal(1003)">Ver producto</button>
       </div>
     </div>
   </div>
@@ -210,7 +211,15 @@
     <div id="look-products" class="products"></div>
   </div>
 </div>
-
+<!--modal videos<!-- Modal de Producto -->
+<div id="productModal" class="product-modal">
+  <div class="modal-content">
+    <span class="modal-close" onclick="closeProductModal()">&times;</span>
+    <div id="modalProductDetail" class="modal-product-detail">
+      <!-- Contenido dinámico -->
+    </div>
+  </div>
+</div>
 <!-- Footer -->
 <footer class="footer-luxe">
   <div class="footer-container">

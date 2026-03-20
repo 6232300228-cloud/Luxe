@@ -205,13 +205,6 @@ header-icon:hover {
   filter: brightness(0);          
 }
 
-
-
-
-
-
-
-
 /* Contadores */
 #fav-count, #cart-count {
   background: #ff4d6d;
@@ -223,7 +216,7 @@ header-icon:hover {
   margin-left: 2px;
 }
 /* ============================================
-   MENÚ DESPLEGABLE USUARIO
+   MENÚ DESPLEGABLE USUARIO - CON 3 SEGUNDOS DE DELAY
    ============================================ */
 
 /* Contenedor del dropdown */
@@ -246,6 +239,13 @@ header-icon:hover {
     align-items: center;
     gap: 5px;
     font-family: 'Poppins', sans-serif;
+    transition: all 0.3s ease;
+}
+
+.dropbtn:hover {
+    background: linear-gradient(135deg, #ff2d55, #ff6b8b);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
 }
 
 #user-name {
@@ -257,19 +257,29 @@ header-icon:hover {
 
 .arrow {
     font-size: 12px;
-    transition: transform 0.10s ease;
+    transition: transform 0.3s ease;
 }
 
 .dropdown:hover .arrow {
     transform: rotate(180deg);
 }
 
-/* Menú desplegable */
+/* Zona de seguridad GRANDE - puente invisible */
+.dropdown::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    height: 30px; /* Espacio de seguridad grande */
+    background: transparent;
+}
+
+/* Menú desplegable - CON 3 SEGUNDOS DE DELAY */
 .dropdown-content {
-    display: none;
     position: absolute;
     right: 0;
-    top: 45px;
+    top: 50px; /* Un poco más abajo por la zona de seguridad */
     background: white;
     min-width: 200px;
     border-radius: 15px;
@@ -277,10 +287,24 @@ header-icon:hover {
     z-index: 1000;
     overflow: hidden;
     border: 1px solid #ffe5e8;
+    
+    /* Oculto por defecto */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    
+    /* Transición suave con 3 SEGUNDOS de delay al ocultar */
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    transition-delay: 0s, 3s, 0s; /* 👈 3 SEGUNDOS DE GRACIA */
 }
 
-.dropdown:hover .dropdown-content {
-    display: block;
+/* Mostrar menú - SIN DELAY */
+.dropdown:hover .dropdown-content,
+.dropdown-content:hover {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s, 0s, 0s; /* Sin delay al mostrar */
 }
 
 /* Opciones del menú */
@@ -291,7 +315,12 @@ header-icon:hover {
     display: block;
     font-size: 14px;
     border-bottom: 1px solid #fff0f3;
-    transition: all 0.10s ease;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.dropdown-content a:last-child {
+    border-bottom: none;
 }
 
 .dropdown-content a:hover {
@@ -311,7 +340,8 @@ header-icon:hover {
     color: #ff4d6d;
     cursor: pointer;
     font-weight: 600;
-    transition: all 0.10s ease;
+    transition: all 0.2s ease;
+    border-top: 1px solid #ffe5e8;
 }
 
 #logout-btn:hover {
@@ -320,16 +350,20 @@ header-icon:hover {
 }
 
 /* ============================================
-   RESPONSIVE MÓVIL
+   VERSIÓN MÓVIL (sin delay)
    ============================================ */
 @media (max-width: 768px) {
     .dropdown-content {
         position: fixed;
-        top: 60px;
-        right: 10px;
-        width: 200px;
+        top: 70px;
+        right: 15px;
+        width: 220px;
         background: white;
         border: 2px solid #ff4d6d;
+        box-shadow: 0 10px 30px rgba(255, 77, 109, 0.2);
+        
+        /* En móvil quitamos el delay */
+        transition-delay: 0s, 0s, 0s;
     }
     
     .dropdown-content a,
@@ -343,11 +377,19 @@ header-icon:hover {
     
     #logout-btn {
         color: #ff4d6d;
+        font-weight: 700;
     }
     
     #logout-btn:hover {
         background: #ff4d6d;
         color: white;
+    }
+    
+    /* Para móvil: activar con click */
+    .dropdown.active .dropdown-content {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
     }
 }
 
@@ -497,6 +539,8 @@ header-icon:hover {
   text-align: center;
   font-size: 28px;
   margin-bottom: 40px;
+  font-family: 'Playfair Display', serif;
+  color: #333;
 }
 
 .video-grid {
@@ -513,34 +557,267 @@ header-icon:hover {
   border-radius: 20px;
   overflow: hidden;
   cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
 }
 
 .video-card video {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s ease;
 }
 
-.overlay {
+.video-overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.2));
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   align-items: center;
-  color: white;
+  padding: 20px;
   opacity: 0;
-  transition: opacity 0.4s ease;
+  transition: opacity 0.3s ease;
 }
 
-.video-card:hover .overlay {
+.video-card:hover .video-overlay {
   opacity: 1;
 }
 
-.video-card:hover video {
+.video-overlay h3 {
+  color: white;
+  font-size: 18px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.btn-ver-producto {
+  background: #ff4d6d;
+  color: white;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 25px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.btn-ver-producto:hover {
+  background: #e63946;
   transform: scale(1.05);
+}
+
+/* ============================================
+   MODAL DE PRODUCTO
+   ============================================ */
+.product-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(5px);
+  animation: fadeIn 0.3s ease;
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content {
+  background: white;
+  border-radius: 25px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp 0.3s ease;
+  cursor: default;
+  pointer-events: auto;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.modal-close {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 35px;
+  cursor: pointer;
+  color: #333;
+  z-index: 10;
+  transition: color 0.3s ease;
+}
+
+.modal-close:hover {
+  color: #ff4d6d;
+}
+
+.modal-product-detail {
+  display: flex;
+  flex-direction: row;
+  padding: 30px;
+  gap: 30px;
+}
+
+.modal-product-img {
+  flex: 1;
+  text-align: center;
+}
+
+.modal-product-img img {
+  width: 100%;
+  max-width: 300px;
+  border-radius: 15px;
+  object-fit: cover;
+}
+
+.modal-product-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.modal-product-info h2 {
+  font-size: 28px;
+  color: #333;
+  font-family: 'Playfair Display', serif;
+  margin: 0;
+}
+
+.modal-product-info .modal-price {
+  font-size: 32px;
+  font-weight: bold;
+  color: #ff4d6d;
+  margin: 10px 0;
+}
+
+.modal-product-info .modal-brand {
+  color: #666;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.modal-product-info .modal-category {
+  background: #f0f0f0;
+  display: inline-block;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: #666;
+  width: fit-content;
+}
+
+.modal-product-info .modal-description {
+  color: #555;
+  line-height: 1.6;
+  margin: 15px 0;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.btn-modal-add {
+  flex: 1;
+  background: #ff4d6d;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-modal-add:hover {
+  background: #e63946;
+  transform: scale(1.02);
+}
+
+.btn-modal-close {
+  flex: 1;
+  background: #f0f0f0;
+  color: #333;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-modal-close:hover {
+  background: #e0e0e0;
+}
+
+.product-clickable {
+  cursor: pointer;
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.product-clickable:hover .img-container img {
+  transform: scale(1.05);
+}
+
+.img-container {
+  overflow: hidden;
+  border-radius: 15px;
+}
+
+.img-container img {
+  transition: transform 0.3s ease;
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .modal-product-detail {
+    flex-direction: column;
+    padding: 20px;
+  }
+  
+  .modal-product-img img {
+    max-width: 200px;
+  }
+  
+  .modal-product-info h2 {
+    font-size: 22px;
+  }
+  
+  .modal-product-info .modal-price {
+    font-size: 28px;
+  }
 }
 
 /* ============================================
@@ -2183,14 +2460,10 @@ header-icon:hover {
     font-size: 1.8rem;
   }
 }
-/*login.html*/
-
-
 /* ============================================
    BOTÓN VOLVER - VISIBLE EN MÓVIL
    ============================================ */
 
-/* Asegurar que el botón Volver sea visible en todas las pantallas */
 .icons a[href="index.html"] {
   display: inline-flex !important;
   align-items: center;
@@ -2208,7 +2481,6 @@ header-icon:hover {
   color: white;
 }
 
-/* En móvil, mantener el botón visible */
 @media (max-width: 768px) {
   .icons a[href="index.html"] {
     display: inline-flex !important;
@@ -2221,26 +2493,29 @@ header-icon:hover {
     background: #ff4d6d !important;
   }
   
-  /* Anular cualquier regla que oculte el texto */
   .icons a[href="index.html"] {
     font-size: 13px !important;
     text-indent: 0 !important;
   }
   
   .icons a[href="index.html"]::before {
-    display: none !important; /* Eliminar cualquier pseudo-elemento */
+    display: none !important;
   }
 }
 
-/* Para pantallas muy pequeñas */
 @media (max-width: 480px) {
   .icons a[href="index.html"] {
     font-size: 12px !important;
     padding: 5px 10px !important;
   }
 }
+
+/* ============================================
+   CONTENEDOR PRINCIPAL
+   ============================================ */
+
 .auth-container {
-  max-width: 450px;
+  max-width: 550px;
   width: 100%;
   margin: 0 auto;
   background: white;
@@ -2290,11 +2565,29 @@ header-icon:hover {
   height: 2px;
 }
 
-/* Inputs */
+/* ============================================
+   INPUTS EN PARES (NOMBRE/APELLIDO, CORREO/CONTRASEÑA)
+   ============================================ */
+
+.input-pair {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.input-pair input {
+  flex: 1;
+  margin: 0 !important;
+}
+
+/* ============================================
+   INPUTS - ESTILOS BASE
+   ============================================ */
+
 .auth-box input {
   width: 100%;
   padding: 14px 18px;
-  margin: 8px 0;
   border: 2px solid #f0f0f0;
   border-radius: 15px;
   font-size: 15px;
@@ -2316,7 +2609,75 @@ header-icon:hover {
   font-size: 14px;
 }
 
-/* Botones */
+/* ============================================
+   TELÉFONO CON PREFIJO +52
+   ============================================ */
+
+.phone-input-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin: 8px 0;
+  border: 2px solid #f0f0f0;
+  border-radius: 15px;
+  background: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.phone-input-container:focus-within {
+  border-color: #ff4d6d;
+  box-shadow: 0 0 8px rgba(255, 77, 109, 0.3);
+  background: white;
+}
+
+.phone-prefix {
+  padding: 14px 0 14px 18px;
+  background: #f0f0f0;
+  border-radius: 13px 0 0 13px;
+  font-weight: 600;
+  color: #333;
+  font-size: 15px;
+  border-right: 2px solid #ddd;
+}
+
+.phone-input-container input {
+  flex: 1;
+  margin: 0 !important;
+  border: none !important;
+  border-radius: 0 13px 13px 0 !important;
+  background: transparent !important;
+}
+
+.phone-input-container input:focus {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* ============================================
+   DIRECCIÓN - INPUTS EN LÍNEA
+   ============================================ */
+
+.row-inputs {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin: 8px 0;
+}
+
+.row-inputs input {
+  flex: 1;
+  margin: 0 !important;
+}
+
+/* Código postal más pequeño */
+#reg-cp {
+  max-width: 100px;
+}
+
+/* ============================================
+   BOTONES
+   ============================================ */
+
 #btnLogin, #btnRegister {
   width: 100%;
   background: black;
@@ -2397,7 +2758,7 @@ header-icon:hover {
   z-index: 1;
 }
 
-/* Texto toggle (cambiar entre login/registro) */
+/* Texto toggle */
 .toggle-text {
   text-align: center;
   margin-top: 20px;
@@ -2418,7 +2779,26 @@ header-icon:hover {
 }
 
 /* ============================================
-   RESPONSIVE PARA LOGIN
+   ANIMACIÓN
+   ============================================ */
+
+.auth-box {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================
+   RESPONSIVE
    ============================================ */
 
 @media (max-width: 768px) {
@@ -2428,6 +2808,7 @@ header-icon:hover {
   }
   
   .auth-container {
+    max-width: 500px;
     padding: 30px 25px;
   }
   
@@ -2439,7 +2820,8 @@ header-icon:hover {
     font-size: 20px;
   }
   
-  .auth-box input {
+  .auth-box input,
+  .phone-prefix {
     padding: 13px 16px;
     font-size: 14px;
   }
@@ -2453,6 +2835,10 @@ header-icon:hover {
     padding: 12px 16px;
     font-size: 14px;
   }
+  
+  .input-pair, .row-inputs {
+    gap: 8px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -2462,6 +2848,7 @@ header-icon:hover {
   }
   
   .auth-container {
+    max-width: 100%;
     padding: 25px 20px;
     border-radius: 25px;
   }
@@ -2480,11 +2867,15 @@ header-icon:hover {
     font-size: 18px;
   }
   
-  .auth-box input {
+  .auth-box input,
+  .phone-prefix {
     padding: 12px 15px;
     font-size: 14px;
-    margin: 6px 0;
     border-radius: 12px;
+  }
+  
+  .phone-prefix {
+    padding: 12px 0 12px 15px;
   }
   
   #btnLogin, #btnRegister {
@@ -2514,6 +2905,21 @@ header-icon:hover {
     font-size: 13px;
     margin-top: 15px;
   }
+  
+  /* En móvil, los pares se apilan */
+  .input-pair, .row-inputs {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .input-pair input,
+  .row-inputs input {
+    margin: 6px 0 !important;
+  }
+  
+  #reg-cp {
+    max-width: 100%;
+  }
 }
 
 @media (max-width: 360px) {
@@ -2525,7 +2931,8 @@ header-icon:hover {
     font-size: 20px;
   }
   
-  .auth-box input {
+  .auth-box input,
+  .phone-prefix {
     padding: 10px 12px;
     font-size: 13px;
   }
@@ -2547,6 +2954,213 @@ header-icon:hover {
   
   .toggle-text {
     font-size: 12px;
+  }
+}
+/*perfil*/
+/* ============================================
+   ESTILOS PARA PERFIL.HTML
+   ============================================ */
+
+.perfil-container {
+  max-width: 650px;
+  width: 90%;
+  margin: 30px auto;
+  background: white;
+  border-radius: 30px;
+  box-shadow: 0 20px 40px rgba(255, 77, 109, 0.15);
+  padding: 40px;
+  transition: all 0.3s ease;
+}
+
+.perfil-container h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  color: #333;
+  text-align: center;
+  margin: 0 0 30px 0;
+  position: relative;
+}
+
+.perfil-container h2::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 3px;
+  background: #ff4d6d;
+  border-radius: 3px;
+}
+
+/* Avatar */
+.perfil-avatar {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.avatar-circle {
+  width: 100px;
+  height: 100px;
+  background: #ff4d6d;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+  font-weight: bold;
+  color: white;
+  border: 4px solid white;
+  box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+}
+
+/* Secciones */
+.perfil-section {
+  background: #fafafa;
+  border-radius: 20px;
+  padding: 25px;
+  margin-bottom: 25px;
+  border: 2px solid #f0f0f0;
+  transition: all 0.3s ease;
+}
+
+.perfil-section:hover {
+  border-color: #ff4d6d;
+  box-shadow: 0 5px 15px rgba(255, 77, 109, 0.1);
+}
+
+.perfil-section h3 {
+  font-size: 20px;
+  color: #ff4d6d;
+  margin: 0 0 20px 0;
+}
+
+/* Campos */
+.perfil-campo {
+  margin-bottom: 15px;
+}
+
+.perfil-campo label {
+  display: block;
+  font-weight: 600;
+  color: #555;
+  font-size: 14px;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.perfil-campo input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 15px;
+  outline: none;
+  transition: all 0.3s ease;
+  background: white;
+  box-sizing: border-box;
+}
+
+.perfil-campo input:focus {
+  border-color: #ff4d6d;
+  box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.1);
+}
+
+/* Grid para dirección */
+.direccion-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+}
+
+.direccion-grid .perfil-campo {
+  margin-bottom: 0;
+}
+
+.direccion-grid .full-width {
+  grid-column: span 2;
+}
+
+/* Botón guardar */
+#btnGuardar {
+  width: 100%;
+  background: black;
+  color: white;
+  padding: 16px 30px;
+  border: none;
+  border-radius: 25px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 20px;
+  letter-spacing: 1px;
+}
+
+#btnGuardar:hover {
+  background: #ff4d6d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 77, 109, 0.3);
+}
+
+/* Teléfono en perfil */
+.perfil-campo .phone-input-container {
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .perfil-container {
+    padding: 30px 20px;
+    width: 95%;
+  }
+  
+  .perfil-container h2 {
+    font-size: 28px;
+  }
+  
+  .perfil-section {
+    padding: 20px;
+  }
+  
+  .direccion-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .direccion-grid .full-width {
+    grid-column: span 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .perfil-container {
+    padding: 20px 15px;
+  }
+  
+  .perfil-container h2 {
+    font-size: 24px;
+  }
+  
+  .perfil-section h3 {
+    font-size: 18px;
+  }
+  
+  .perfil-campo input {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+  
+  #btnGuardar {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+  
+  .avatar-circle {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
   }
 }
 /*check.html*/

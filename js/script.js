@@ -76,15 +76,15 @@ const sortSelect = document.getElementById("sort");
 // ============================================
 function getCategoryName(category) {
   const categories = {
-    'labial': '💄 Labios',
-    'sombra': '🎨 Sombras',
-    'base': '✨ Bases',
-    'corrector': '👁️ Correctores',
-    'rubor': '🌸 Rubores',
-    'iluminador': '✨ Iluminador',
-    'ojos': '👀 Ojos',
-    'skincare': '🧴 Skincare',
-    'accesorios': '🛠️ Accesorios'
+    'labial': ' Labios',
+    'sombra': 'Sombras',
+    'base': 'Bases',
+    'corrector': 'Correctores',
+    'rubor': 'Rubores',
+    'iluminador': 'Iluminador',
+    'ojos': 'Ojos',
+    'skincare': 'Skincare',
+    'accesorios': 'Accesorios'
   };
   return categories[category] || category;
 }
@@ -124,7 +124,7 @@ function openProductModal(productId) {
       <p class="modal-description">${product.desc}</p>
       <div class="modal-price">$${product.price}</div>
       <div class="modal-buttons">
-        <button class="btn-modal-add" onclick="addToCartFromModal(${product.id})">🛒 Agregar al carrito</button>
+        <button class="btn-modal-add" onclick="addToCartFromModal(${product.id})"> Agregar al carrito</button>
         <button class="btn-modal-close" onclick="closeProductModal()">Seguir comprando</button>
       </div>
     </div>
@@ -142,7 +142,7 @@ function closeProductModal() {
 
 function addToCartFromModal(id) {
   addToCart(id);
-  showToast("✨ Producto agregado al carrito ✨");
+  showToast("Producto agregado al carrito ");
   closeProductModal();
 }
 
@@ -226,11 +226,11 @@ function toggleFav(event, id) {
     const productToAdd = products.find(p => p.id === id);
     if (productToAdd) {
       favs.push(productToAdd);
-      showToast("❤️ Agregado a favoritos");
+      showToast("Agregado a favoritos");
     }
   } else {
     favs.splice(index, 1);
-    showToast("💔 Quitado de favoritos");
+    showToast("Quitado de favoritos");
   }
 
   localStorage.setItem("favs", JSON.stringify(favs));
@@ -257,8 +257,10 @@ function renderProducts() {
     const productCard = document.createElement('div');
     productCard.className = 'product-card-luxe';
     productCard.innerHTML = `
-      <button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">❤</button>
-      <div class="product-clickable" onclick="openProductModal(${p.id})">
+<button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">
+  <img src="corazon.png" alt="Favorito" class="heart-icon">
+</button>
+     <div class="product-clickable" onclick="openProductModal(${p.id})">
         <div class="img-container">
           <img src="${p.img}" alt="${p.name}" loading="lazy">
         </div>
@@ -437,10 +439,10 @@ document.addEventListener("DOMContentLoaded", function () {
     newsletterBtn.onclick = () => {
       const email = newsletterInput.value;
       if (email.includes('@')) {
-        showToast("🎉 ¡Bienvenida al Club Luxe!");
+        showToast("¡Bienvenida al Club Luxe!");
         newsletterInput.value = "";
       } else {
-        showToast("📧 Por favor, ingresa un email válido");
+        showToast(" Por favor, ingresa un email válido");
       }
     };
   }

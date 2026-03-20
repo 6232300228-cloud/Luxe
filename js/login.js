@@ -1,4 +1,4 @@
-// login.js - VERSIÓN 100% CORREGIDA
+// login.js - VERSIÓN CORREGIDA CON MEJOR MANEJO DE ERRORES
 const loginSection = document.getElementById("login-section");
 const registerSection = document.getElementById("register-section");
 const toRegister = document.getElementById("to-register");
@@ -16,6 +16,22 @@ function getPrimerNombre(nombreCompleto) {
     return nombreCompleto.split(' ')[0];
 }
 
+// FUNCIÓN PARA MOSTRAR TOAST CON SWEETALERT
+function mostrarToast(mensaje, tipo = 'error') {
+    if (typeof Swal !== 'undefined') {
+        Swal.fire({
+            icon: tipo,
+            title: mensaje,
+            timer: 2000,
+            showConfirmButton: false,
+            position: 'top-end',
+            toast: true
+        });
+    } else {
+        alert(mensaje);
+    }
+}
+
 // CAMBIO ENTRE FORMULARIOS
 if (toRegister) {
     toRegister.addEventListener("click", () => {
@@ -31,22 +47,14 @@ if (toLogin) {
     });
 }
 
-// LOGIN NORMAL - CORREGIDO
+// LOGIN NORMAL
 if (btnLogin) {
     btnLogin.addEventListener("click", async () => {
         let correo = document.getElementById("login-correo").value;
         let contraseña = document.getElementById("login-pass").value;
 
         if (correo === "" || !correo.includes("@") || contraseña === "") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Por favor, ingresa tu correo y contraseña correctamente',
-                timer: 2000,
-                showConfirmButton: false,
-                position: 'top-end',
-                toast: true
-            });
+            mostrarToast('Por favor, ingresa tu correo y contraseña correctamente', 'error');
             return;
         }
 
@@ -63,7 +71,6 @@ if (btnLogin) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
 
-                // ✅ CORREGIDO: user → data.user
                 const primerNombre = getPrimerNombre(data.user.nombre);
 
                 Swal.fire({
@@ -82,55 +89,174 @@ if (btnLogin) {
                     }
                 });
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: data.error || "Error al iniciar sesión",
-                    timer: 2000,
-                    showConfirmButton: false,
-                    position: 'top-end',
-                    toast: true
-                });
+                // Manejar caso de cuenta no verificada
+                if (data.tipo === 'not_verified') {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Cuenta no verificada',
+                        text: 'Por favor verifica tu correo electrónico antes de iniciar sesión',
+                        confirmButtonText: 'Reenviar correo',
+                        showCancelButton: true,
+                        cancelButtonText: 'Cancelar'
+                    }).then(async (result) => {
+                        if (result.isConfirmed) {
+                            try {
+                                const resendRes = await fetch(`${API_URL}/auth/resend-verification`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ correo })
+                                });
+                                if (resendRes.ok) {
+                                    mostrarToast('Correo de verificación reenviado', 'success');
+                                } else {
+                                    mostrarToast('Error al reenviar el correo');
+                                }
+                            } catch (error) {
+                                mostrarToast('Error de conexión');
+                            }
+                        }
+                    });
+                } else {
+                    mostrarToast(data.error || "Error al iniciar sesión", 'error');
+                }
             }
         } catch (error) {
             console.error('Error:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error de conexión',
-                text: 'No se pudo conectar con el servidor',
-                timer: 2000,
-                showConfirmButton: false,
-                position: 'top-end',
-                toast: true
-            });
+            mostrarToast('No se pudo conectar con el servidor', 'error');
         }
     });
 }
 
-// REGISTRO NORMAL - CORREGIDO
+// REGISTRO - VERSIÓN CORREGIDA
 if (btnRegister) {
     btnRegister.addEventListener("click", async () => {
-        const nombre = document.getElementById("reg-nombre").value;
-        const apellido = document.getElementById("reg-apellido").value;
-        const telefono = document.getElementById("reg-telefono").value;
-        const direccion = document.getElementById("reg-direccion").value;
-        const correo = document.getElementById("reg-correo").value;
+        // Obtener valores
+        const nombre = document.getElementById("reg-nombre").value.trim();
+        const apellido = document.getElementById("reg-apellido").value.trim();
+        const telefono = document.getElementById("reg-telefono").value.trim();
+        
+        // Campos de dirección
+        const calle = document.getElementById("reg-calle").value.trim();
+        const numero = document.getElementById("reg-numero").value.trim();
+        const colonia = document.getElementById("reg-colonia").value.trim();
+        const estado = document.getElementById("reg-estado").value.trim();
+        const cp = document.getElementById("reg-cp").value.trim();
+        const referencia = document.getElementById("reg-referencia").value.trim();
+        
+        const correo = document.getElementById("reg-correo").value.trim();
         const contraseña = document.getElementById("reg-pass").value;
 
-        const nombreCompleto = `${nombre} ${apellido}`.trim();
-
-        if (nombre === "" || apellido === "" || telefono === "" || direccion === "" || !correo.includes("@") || contraseña === "") {
-            Swal.fire({
-                icon: 'error',
-                title: 'Campos incompletos',
-                text: 'Por favor, llena todos los campos',
-                timer: 2000,
-                showConfirmButton: false,
-                position: 'top-end',
-                toast: true
-            });
+        // ============================================
+        // VALIDACIONES DETALLADAS CON MENSAJES CLAROS
+        // ============================================
+        
+        // Validar nombre y apellido
+        if (nombre === "") {
+            mostrarToast('Por favor ingresa tu nombre', 'error');
+            document.getElementById("reg-nombre").focus();
             return;
         }
+        
+        if (apellido === "") {
+            mostrarToast('Por favor ingresa tu apellido', 'error');
+            document.getElementById("reg-apellido").focus();
+            return;
+        }
+        
+        // Validar teléfono (10 dígitos, solo números)
+        if (telefono === "") {
+            mostrarToast('Por favor ingresa tu teléfono', 'error');
+            document.getElementById("reg-telefono").focus();
+            return;
+        }
+        
+        if (!/^\d{10}$/.test(telefono)) {
+            mostrarToast('El teléfono debe tener exactamente 10 dígitos (solo números)', 'error');
+            document.getElementById("reg-telefono").focus();
+            return;
+        }
+        
+        // Validar dirección
+        if (calle === "") {
+            mostrarToast('Por favor ingresa tu calle', 'error');
+            document.getElementById("reg-calle").focus();
+            return;
+        }
+        
+        if (numero === "") {
+            mostrarToast('Por favor ingresa el número exterior', 'error');
+            document.getElementById("reg-numero").focus();
+            return;
+        }
+        
+        if (colonia === "") {
+            mostrarToast('Por favor ingresa tu colonia', 'error');
+            document.getElementById("reg-colonia").focus();
+            return;
+        }
+        
+        if (estado === "") {
+            mostrarToast('Por favor ingresa tu estado', 'error');
+            document.getElementById("reg-estado").focus();
+            return;
+        }
+        
+        if (cp === "") {
+            mostrarToast('Por favor ingresa tu código postal', 'error');
+            document.getElementById("reg-cp").focus();
+            return;
+        }
+        
+        if (!/^\d{5}$/.test(cp)) {
+            mostrarToast('El código postal debe tener exactamente 5 dígitos', 'error');
+            document.getElementById("reg-cp").focus();
+            return;
+        }
+        
+        // Validar correo
+        if (correo === "") {
+            mostrarToast('Por favor ingresa tu correo electrónico', 'error');
+            document.getElementById("reg-correo").focus();
+            return;
+        }
+        
+        if (!correo.includes("@") || !correo.includes(".")) {
+            mostrarToast('Por favor ingresa un correo electrónico válido', 'error');
+            document.getElementById("reg-correo").focus();
+            return;
+        }
+        
+        // Validar contraseña
+        if (contraseña === "") {
+            mostrarToast('Por favor ingresa una contraseña', 'error');
+            document.getElementById("reg-pass").focus();
+            return;
+        }
+        
+        if (contraseña.length < 6) {
+            mostrarToast('La contraseña debe tener al menos 6 caracteres', 'error');
+            document.getElementById("reg-pass").focus();
+            return;
+        }
+
+        // Mostrar loading
+        btnRegister.disabled = true;
+        btnRegister.textContent = 'Registrando...';
+
+        // Construir dirección completa
+        const direccionCompleta = `${calle} #${numero}, ${colonia}, ${estado}, C.P. ${cp}`;
+        
+        // Dirección detallada para guardar en el perfil
+        const direccionDetallada = {
+            calle,
+            numero,
+            colonia,
+            estado,
+            cp,
+            referencia: referencia || ''
+        };
+
+        const nombreCompleto = `${nombre} ${apellido}`.trim();
 
         try {
             const response = await fetch(`${API_URL}/auth/register`, {
@@ -139,8 +265,9 @@ if (btnRegister) {
                 body: JSON.stringify({ 
                     nombre: nombreCompleto, 
                     correo, 
-                    telefono, 
-                    direccion, 
+                    telefono: `+52${telefono}`,
+                    direccion: direccionCompleta,
+                    direccion_detallada: direccionDetallada,
                     contraseña 
                 })
             });
@@ -148,45 +275,36 @@ if (btnRegister) {
             const data = await response.json();
 
             if (response.ok) {
+                // Guardar dirección detallada también en localStorage
+                const userData = {
+                    ...data.user,
+                    direccion_detallada: direccionDetallada
+                };
+                
                 localStorage.setItem("token", data.token);
-                localStorage.setItem("user", JSON.stringify(data.user));
+                localStorage.setItem("user", JSON.stringify(userData));
 
-                // ✅ CORREGIDO: user → data.user
                 const primerNombre = getPrimerNombre(data.user.nombre);
 
                 Swal.fire({
                     icon: 'success',
-                    title: `¡Cuenta creada! Bienvenido ${primerNombre}!`,
-                    timer: 1500,
-                    showConfirmButton: false,
-                    position: 'top-end',
-                    toast: true,
-                    didClose: () => {
-                        window.location.href = "index.html";
-                    }
+                    title: `¡Cuenta creada!`,
+                    html: `Hola <strong>${primerNombre}</strong>,<br>Te hemos enviado un correo de verificación a <strong>${correo}</strong><br>Por favor revisa tu bandeja de entrada.`,
+                    confirmButtonText: 'Entendido',
+                    confirmButtonColor: '#ff4d6d'
+                }).then(() => {
+                    window.location.href = "login.html";
                 });
             } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: data.error || "Error al registrarse",
-                    timer: 2000,
-                    showConfirmButton: false,
-                    position: 'top-end',
-                    toast: true
-                });
+                mostrarToast(data.error || "Error al registrarse", 'error');
+                btnRegister.disabled = false;
+                btnRegister.textContent = 'Registrarme';
             }
         } catch (error) {
             console.error('Error:', error);
-            Swal.fire({
-                icon: 'error',
-                title: 'Error de conexión',
-                text: 'No se pudo conectar con el servidor',
-                timer: 2000,
-                showConfirmButton: false,
-                position: 'top-end',
-                toast: true
-            });
+            mostrarToast('No se pudo conectar con el servidor. Verifica tu conexión a internet.', 'error');
+            btnRegister.disabled = false;
+            btnRegister.textContent = 'Registrarme';
         }
     });
 }
@@ -198,7 +316,7 @@ if (btnGoogle) {
     });
 }
 
-// FUNCIÓN PARA LOGIN CON TOKEN - CORREGIDA
+// FUNCIÓN PARA LOGIN CON TOKEN
 async function loginConToken(token) {
     try {
         console.log('Intentando login con token');
@@ -216,10 +334,7 @@ async function loginConToken(token) {
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
 
-        // ✅ user SÍ existe aquí (es el resultado del fetch)
         const primerNombre = getPrimerNombre(user.nombre);
-
-        console.log('Usuario autenticado:', user.nombre);
 
         Swal.fire({
             icon: 'success',
@@ -237,15 +352,7 @@ async function loginConToken(token) {
         }
     } catch (error) {
         console.error('Error en login con token:', error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Error',
-            text: 'Error al iniciar sesión automáticamente',
-            timer: 2000,
-            showConfirmButton: false,
-            position: 'top-end',
-            toast: true
-        });
+        mostrarToast('Error al iniciar sesión automáticamente', 'error');
     }
 }
 
@@ -257,6 +364,8 @@ async function loginConToken(token) {
     if (token) {
         console.log('Token detectado en URL, procesando...');
         loginConToken(token);
+        // Limpiar URL
+        window.history.replaceState({}, document.title, window.location.pathname);
     }
 })();
 
@@ -264,24 +373,9 @@ async function loginConToken(token) {
 function suscribirse() {
     const email = document.getElementById('newsletter-email').value;
     if (email && email.includes('@')) {
-        Swal.fire({
-            icon: 'success',
-            title: '¡Gracias por suscribirte!',
-            timer: 1500,
-            showConfirmButton: false,
-            position: 'top-end',
-            toast: true
-        });
+        mostrarToast('¡Gracias por suscribirte!', 'success');
         document.getElementById('newsletter-email').value = '';
     } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Email inválido',
-            text: 'Por favor ingresa un email válido',
-            timer: 1500,
-            showConfirmButton: false,
-            position: 'top-end',
-            toast: true
-        });
+        mostrarToast('Por favor ingresa un email válido', 'error');
     }
 }

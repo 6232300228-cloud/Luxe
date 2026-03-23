@@ -1,388 +1,463 @@
-// checkout.js - Versión mejorada y responsive
+// ============================================
+// CHECKOUT.JS - CON MERCADO PAGO
+// ============================================
 
-document.addEventListener("DOMContentLoaded", () => {
-    // Elementos del DOM (actualizados para el nuevo HTML)
-    const metodoPagoRadios = document.querySelectorAll('input[name="metodoPago"]');
-    const tarjetaBox = document.getElementById("tarjetaBox");
-    const paypalBox = document.getElementById("paypalBox");
-    const btnContinuar = document.getElementById("btnContinuar");
-    const btnPagar = document.getElementById("btnPagar");
+// Variables globales
+let carrito = [];
+let total = 0;
+let pasoActual = 1; // 1: Envío, 2: Pago, 3: Confirmar
+
+// ============================================
+// INICIALIZACIÓN
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    // Cargar carrito del localStorage
+    cargarCarrito();
     
-    // Elementos de los pasos
-    const shippingSection = document.getElementById("shipping-section");
-    const paymentSection = document.getElementById("payment-section");
-
-    // Mostrar Totales del localStorage
-    const pagoInfo = JSON.parse(localStorage.getItem("totalAPagar"));
-    if (pagoInfo) {
-        document.getElementById("resumen-subtotal").innerText = `$${pagoInfo.subtotal.toFixed(2)}`;
-        document.getElementById("resumen-envio").innerText = pagoInfo.envio === 0 ? "GRATIS" : `$${pagoInfo.envio.toFixed(2)}`;
-        document.getElementById("resumen-total").innerText = `$${pagoInfo.total.toFixed(2)}`;
-    } else {
-        // Si no hay pagoInfo, calcular del carrito
-        const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-        const subtotal = carrito.reduce((sum, item) => sum + (item.precio * (item.cantidad || 1)), 0);
-        const envio = subtotal >= 500 ? 0 : 99;
-        const total = subtotal + envio;
-        
-        document.getElementById("resumen-subtotal").innerText = `$${subtotal.toFixed(2)}`;
-        document.getElementById("resumen-envio").innerText = envio === 0 ? "GRATIS" : `$${envio.toFixed(2)}`;
-        document.getElementById("resumen-total").innerText = `$${total.toFixed(2)}`;
-    }
-
-    // Visibilidad de métodos de pago (para los radios)
-    metodoPagoRadios.forEach(radio => {
-        radio.addEventListener("change", () => {
-            if (radio.value === "tarjeta" && radio.checked) {
-                tarjetaBox.classList.remove("hidden");
-                paypalBox.classList.add("hidden");
-            } else if (radio.value === "paypal" && radio.checked) {
-                tarjetaBox.classList.add("hidden");
-                paypalBox.classList.remove("hidden");
-            }
-        });
+    // Actualizar resumen
+    actualizarResumen();
+    
+    // Configurar eventos
+    document.getElementById('btnContinuar').addEventListener('click', avanzarPaso);
+    document.getElementById('btnPagar').addEventListener('click', procesarPago);
+    
+    // Eventos para métodos de pago
+    const radioTarjeta = document.querySelector('input[value="tarjeta"]');
+    const radioPaypal = document.querySelector('input[value="paypal"]');
+    
+    radioTarjeta.addEventListener('change', function() {
+        document.getElementById('tarjetaBox').classList.remove('hidden');
+        document.getElementById('paypalBox').classList.add('hidden');
     });
-
-    // Cargar datos del usuario
-    let user = JSON.parse(localStorage.getItem("user"));
-    let token = localStorage.getItem("token");
-
-    if (user) {
-        if(document.getElementById("correo")) document.getElementById("correo").value = user.correo || "";
-        if(document.getElementById("nombre")) document.getElementById("nombre").value = user.nombre || "";
-        if(document.getElementById("direccion")) document.getElementById("direccion").value = user.direccion || "";
-        if(document.getElementById("correoPaypal")) document.getElementById("correoPaypal").value = user.correo || "";
-    }
-
-    // ============================================
-    // BOTÓN CONTINUAR (Paso 1 -> Paso 2)
-    // ============================================
-    if (btnContinuar) {
-        btnContinuar.addEventListener("click", () => {
-            // Validar información de envío
-            const nombre = document.getElementById("nombre").value;
-            const direccion = document.getElementById("direccion").value;
-            const correo = document.getElementById("correo").value;
-            
-            if (!nombre || !direccion || !correo) {
-                mostrarToast("⚠️ Completa todos los datos de envío");
-                return;
-            }
-            
-            if (!correo.includes("@")) {
-                mostrarToast("⚠️ Ingresa un correo válido");
-                return;
-            }
-            
-            // Ocultar sección de envío y mostrar pago
-            if (shippingSection) shippingSection.style.display = "none";
-            if (paymentSection) paymentSection.style.display = "block";
-            
-            // Cambiar botones
-            btnContinuar.style.display = "none";
-            btnPagar.style.display = "block";
-            
-            // Actualizar barra de progreso
-            actualizarProgreso(2);
-            
-            // Hacer scroll hacia arriba suavemente
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
-
-    // ============================================
-    // PROCESAR PAGO (Paso 2)
-    // ============================================
-    if (btnPagar) {
-        btnPagar.addEventListener("click", async () => {
-            // Verificar usuario
-            if (!user || !token) { 
-                mostrarToast("⚠️ Inicia sesión primero");
-                setTimeout(() => { window.location.href = "login.html"; }, 1500);
-                return; 
-            }
-
-            // Validar datos del formulario
-            const nombre = document.getElementById("nombre").value;
-            const direccion = document.getElementById("direccion").value;
-            const correo = document.getElementById("correo").value;
-            
-            // Obtener método de pago seleccionado
-            const metodoSeleccionado = document.querySelector('input[name="metodoPago"]:checked');
-            if (!metodoSeleccionado) {
-                mostrarToast("⚠️ Selecciona un método de pago");
-                return;
-            }
-            const metodo = metodoSeleccionado.value;
-
-            if (!nombre || !direccion || !correo) { 
-                mostrarToast("⚠️ Completa todos los datos"); 
-                return; 
-            }
-
-            // Validar según método de pago
-            if (metodo === "tarjeta") {
-                const numeroTarjeta = document.getElementById("numeroTarjeta").value;
-                const expira = document.getElementById("expira").value;
-                const cvv = document.getElementById("cvvTarjeta").value;
-                
-                if (!numeroTarjeta || !expira || !cvv) {
-                    mostrarToast("⚠️ Completa los datos de la tarjeta");
-                    return;
-                }
-                
-                // Validación básica de tarjeta
-                if (numeroTarjeta.replace(/\s/g, '').length < 16) {
-                    mostrarToast("⚠️ Número de tarjeta inválido");
-                    return;
-                }
-            } else if (metodo === "paypal") {
-                const paypalCorreo = document.getElementById("correoPaypal").value;
-                if (!paypalCorreo || !paypalCorreo.includes("@")) {
-                    mostrarToast("⚠️ Ingresa un correo válido de PayPal");
-                    return;
-                }
-            }
-
-            // Obtener carrito de localStorage
-            const carrito = JSON.parse(localStorage.getItem("carrito")) || [];
-            
-            if (carrito.length === 0) { 
-                mostrarToast("❌ Error: El carrito está vacío"); 
-                return; 
-            }
-
-            // Calcular total
-            const total = pagoInfo ? pagoInfo.total : carrito.reduce((sum, item) => sum + (item.precio * (item.cantidad || 1)), 0);
-
-            console.log("🛒 Carrito a pagar:", carrito);
-            console.log("💰 Total:", total);
-
-            // Deshabilitar botón
-            btnPagar.innerText = "Procesando...";
-            btnPagar.disabled = true;
-
-            try {
-                // Preparar datos del pedido para el backend
-                const pedidoData = {
-                    usuario: {
-                        nombre: user.nombre,
-                        correo: user.correo,
-                        direccion: direccion
-                    },
-                    productos: carrito.map(item => ({
-                        nombre: item.nombre || item.name,
-                        precio: item.precio || item.price,
-                        cantidad: item.cantidad || 1,
-                        imagen: item.imagen || item.image
-                    })),
-                    total: total,
-                    metodoPago: metodo,
-                    fecha: new Date().toISOString(),
-                    estado: "pagado"
-                };
-
-                console.log("📦 Enviando pedido:", pedidoData);
-
-                // Enviar al backend para guardar el pedido
-                const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify(pedidoData)
-                });
-
-                if (!response.ok) {
-                    const error = await response.json();
-                    throw new Error(error.error || 'Error al procesar el pedido');
-                }
-
-                const data = await response.json();
-                console.log("✅ Pedido guardado:", data);
-
-                // ============================================
-                // 🔥 REDUCIR STOCK DE CADA PRODUCTO VENDIDO
-                // ============================================
-                console.log("🔄 Reduciendo stock de productos...");
-
-                for (const item of carrito) {
-                    try {
-                        const productoId = item.id || item._id;
-                        
-                        if (!productoId) {
-                            console.warn(`⚠️ Producto sin ID: ${item.nombre || item.name}`);
-                            continue;
-                        }
-
-                        console.log(`➖ Reduciendo stock para ${item.nombre || item.name} (ID: ${productoId})`);
-
-                        const stockResponse = await fetch(`https://luxe-api-frr5.onrender.com/api/products/reducir-stock/${productoId}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${token}`
-                            },
-                            body: JSON.stringify({ 
-                                cantidad: item.cantidad || 1 
-                            })
-                        });
-
-                        if (stockResponse.ok) {
-                            const stockData = await stockResponse.json();
-                            console.log(`✅ Stock actualizado: ${item.nombre || item.name} ahora tiene ${stockData.nuevoStock} unidades`);
-                        } else {
-                            const error = await stockResponse.json();
-                            console.error(`❌ Error con ${item.nombre || item.name}:`, error);
-                        }
-                    } catch (error) {
-                        console.error(`❌ Error de red para ${item.nombre || item.name}:`, error);
-                    }
-                }
-
-                console.log("✅ Reducción de stock completada");
-                // ============================================
-                // FIN REDUCCIÓN DE STOCK
-                // ============================================
-
-                // Guardar ticket
-                localStorage.setItem("ticket", JSON.stringify({
-                    id: data.pedido?.id || Date.now(),
-                    fecha: new Date().toISOString(),
-                    cliente: user.nombre,
-                    correo: user.correo,
-                    direccion: direccion,
-                    metodoPago: metodo,
-                    total: total,
-                    productos: carrito.map(item => ({
-                        nombre: item.nombre || item.name,
-                        precio: item.precio || item.price,
-                        cantidad: item.cantidad || 1
-                    }))
-                }));
-
-                // Limpiar carrito
-                localStorage.removeItem("carrito");
-                localStorage.removeItem("totalAPagar");
-
-                // Mostrar éxito con SweetAlert si está disponible
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'success',
-                        title: '¡Compra confirmada!',
-                        text: 'Tu pago fue procesado exitosamente',
-                        confirmButtonColor: '#ff4d6d',
-                        timer: 2000,
-                        showConfirmButton: false
-                    }).then(() => {
-                        window.location.href = "ticket.html";
-                    });
-                } else {
-                    alert("✅ ¡Compra confirmada!");
-                    window.location.href = "ticket.html";
-                }
-
-            } catch (error) {
-                console.error("❌ Error completo:", error);
-                
-                if (typeof Swal !== 'undefined') {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Error',
-                        text: error.message || 'Error al procesar el pago',
-                        confirmButtonColor: '#ff4d6d'
-                    });
-                } else {
-                    alert(`❌ Error: ${error.message}`);
-                }
-                
-                btnPagar.innerText = "Confirmar Pago";
-                btnPagar.disabled = false;
-            }
-        });
-    }
-
-    // Función para actualizar la barra de progreso
-    function actualizarProgreso(paso) {
-        const steps = document.querySelectorAll('.progress-step');
-        steps.forEach((step, index) => {
-            if (index < paso) {
-                step.classList.add('active');
-            } else {
-                step.classList.remove('active');
-            }
-        });
-    }
-
-    // Función para mostrar toast (notificaciones temporales)
-    function mostrarToast(mensaje) {
-        // Verificar si SweetAlert está disponible
-        if (typeof Swal !== 'undefined') {
-            Swal.fire({
-                icon: 'info',
-                title: mensaje,
-                timer: 2000,
-                showConfirmButton: false,
-                position: 'top-end',
-                toast: true
-            });
-        } else {
-            // Fallback a alert tradicional
-            alert(mensaje);
-        }
-    }
-
+    
+    radioPaypal.addEventListener('change', function() {
+        document.getElementById('tarjetaBox').classList.add('hidden');
+        document.getElementById('paypalBox').classList.remove('hidden');
+    });
+    
     // Formatear número de tarjeta mientras se escribe
-    const numeroTarjeta = document.getElementById("numeroTarjeta");
+    const numeroTarjeta = document.getElementById('numeroTarjeta');
     if (numeroTarjeta) {
-        numeroTarjeta.addEventListener("input", function(e) {
+        numeroTarjeta.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
             if (value.length > 16) value = value.slice(0, 16);
-            
-            // Agregar espacios cada 4 dígitos
-            let formatted = '';
-            for (let i = 0; i < value.length; i++) {
-                if (i > 0 && i % 4 === 0) formatted += ' ';
-                formatted += value[i];
-            }
-            e.target.value = formatted;
+            value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+            e.target.value = value;
         });
     }
-
+    
     // Formatear fecha de expiración
-    const expira = document.getElementById("expira");
+    const expira = document.getElementById('expira');
     if (expira) {
-        expira.addEventListener("input", function(e) {
+        expira.addEventListener('input', function(e) {
             let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 4) value = value.slice(0, 4);
-            
-            if (value.length >= 3) {
-                e.target.value = value.slice(0, 2) + '/' + value.slice(2);
-            } else {
-                e.target.value = value;
+            if (value.length >= 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4);
             }
+            e.target.value = value;
         });
     }
-
-    // Limitar CVV a 3-4 dígitos
-    const cvv = document.getElementById("cvvTarjeta");
-    if (cvv) {
-        cvv.addEventListener("input", function(e) {
-            e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
-        });
-    }
+    
+    // Cargar datos del usuario si está logueado
+    cargarDatosUsuario();
+    
+    // Actualizar contador del carrito
+    actualizarContadorCarrito();
 });
 
-
-// Función para newsletter (si existe)
-function suscribirse() {
-    const email = document.getElementById('newsletter-email').value;
-    if (email && email.includes('@')) {
-        mostrarToast('¡Gracias por suscribirte!');
-        document.getElementById('newsletter-email').value = '';
-    } else {
-        mostrarToast('Por favor ingresa un email válido');
+// ============================================
+// CARGAR CARRITO DEL LOCALSTORAGE
+// ============================================
+function cargarCarrito() {
+    const carritoGuardado = localStorage.getItem('carrito');
+    if (carritoGuardado) {
+        carrito = JSON.parse(carritoGuardado);
+        calcularTotal();
     }
 }
 
+// ============================================
+// CALCULAR TOTAL DEL CARRITO
+// ============================================
+function calcularTotal() {
+    total = 0;
+    carrito.forEach(item => {
+        total += (item.precio * (item.cantidad || 1));
+    });
+}
+
+// ============================================
+// ACTUALIZAR RESUMEN DE COMPRA
+// ============================================
+function actualizarResumen() {
+    const subtotal = total;
+    const envio = subtotal >= 1000 ? 0 : 99;
+    const totalPagar = subtotal + envio;
+    
+    document.getElementById('resumen-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+    document.getElementById('resumen-envio').textContent = envio === 0 ? 'GRATIS' : `$${envio.toFixed(2)}`;
+    document.getElementById('resumen-total').textContent = `$${totalPagar.toFixed(2)}`;
+}
+
+// ============================================
+// AVANZAR ENTRE PASOS
+// ============================================
+function avanzarPaso() {
+    if (pasoActual === 1) {
+        // Validar datos de envío
+        const nombre = document.getElementById('nombre').value.trim();
+        const direccion = document.getElementById('direccion').value.trim();
+        const correo = document.getElementById('correo').value.trim();
+        
+        if (!nombre || !direccion || !correo) {
+            mostrarToast('Por favor, completa todos los campos de envío', 'error');
+            return;
+        }
+        
+        if (!correo.includes('@')) {
+            mostrarToast('Por favor, ingresa un correo válido', 'error');
+            return;
+        }
+        
+        // Guardar datos de envío
+        guardarDatosEnvio(nombre, direccion, correo);
+        
+        // Avanzar al paso 2
+        pasoActual = 2;
+        actualizarBarraProgreso();
+        
+        // Ocultar sección de envío, mostrar sección de pago
+        document.getElementById('shipping-section').style.display = 'none';
+        document.getElementById('payment-section').style.display = 'block';
+        document.getElementById('btnContinuar').style.display = 'none';
+        document.getElementById('btnPagar').style.display = 'block';
+        
+        // Scroll suave al inicio
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+    } else if (pasoActual === 2) {
+        // Validar método de pago seleccionado
+        const metodoPago = document.querySelector('input[name="metodoPago"]:checked').value;
+        
+        if (metodoPago === 'tarjeta') {
+            const numeroTarjeta = document.getElementById('numeroTarjeta').value.replace(/\s/g, '');
+            const expira = document.getElementById('expira').value;
+            const cvv = document.getElementById('cvvTarjeta').value;
+            
+            if (!numeroTarjeta || numeroTarjeta.length < 16) {
+                mostrarToast('Por favor, ingresa un número de tarjeta válido', 'error');
+                return;
+            }
+            if (!expira || expira.length < 5) {
+                mostrarToast('Por favor, ingresa la fecha de expiración (MM/AA)', 'error');
+                return;
+            }
+            if (!cvv || cvv.length < 3) {
+                mostrarToast('Por favor, ingresa el CVV', 'error');
+                return;
+            }
+        } else if (metodoPago === 'paypal') {
+            const correoPaypal = document.getElementById('correoPaypal').value.trim();
+            if (!correoPaypal || !correoPaypal.includes('@')) {
+                mostrarToast('Por favor, ingresa un correo de PayPal válido', 'error');
+                return;
+            }
+        }
+        
+        // Avanzar al paso 3 (confirmación)
+        pasoActual = 3;
+        actualizarBarraProgreso();
+        
+        // Mostrar confirmación
+        mostrarConfirmacion();
+    }
+}
+
+// ============================================
+// ACTUALIZAR BARRA DE PROGRESO
+// ============================================
+function actualizarBarraProgreso() {
+    const steps = document.querySelectorAll('.progress-step');
+    const lines = document.querySelectorAll('.progress-line');
+    
+    steps.forEach((step, index) => {
+        if (index + 1 <= pasoActual) {
+            step.classList.add('active');
+        } else {
+            step.classList.remove('active');
+        }
+    });
+    
+    lines.forEach((line, index) => {
+        if (index + 1 < pasoActual) {
+            line.style.background = '#ff4d6d';
+        } else {
+            line.style.background = '#f0f0f0';
+        }
+    });
+}
+
+// ============================================
+// GUARDAR DATOS DE ENVÍO
+// ============================================
+function guardarDatosEnvio(nombre, direccion, correo) {
+    localStorage.setItem('envio_nombre', nombre);
+    localStorage.setItem('envio_direccion', direccion);
+    localStorage.setItem('envio_correo', correo);
+}
+
+// ============================================
+// PROCESAR PAGO CON MERCADO PAGO
+// ============================================
+async function procesarPago() {
+    const metodoPago = document.querySelector('input[name="metodoPago"]:checked').value;
+    
+    // Mostrar loading
+    const btnPagar = document.getElementById('btnPagar');
+    const textoOriginal = btnPagar.textContent;
+    btnPagar.textContent = 'Procesando...';
+    btnPagar.disabled = true;
+    
+    try {
+        // Preparar los items del carrito para Mercado Pago
+        const items = carrito.map(item => ({
+            nombre: item.nombre,
+            precio: item.precio,
+            cantidad: item.cantidad || 1
+        }));
+        
+        // Obtener datos de envío
+        const nombre = localStorage.getItem('envio_nombre') || '';
+        const direccion = localStorage.getItem('envio_direccion') || '';
+        const correo = localStorage.getItem('envio_correo') || '';
+        
+        // Llamar al endpoint de Mercado Pago
+        const response = await fetch('https://luxe-api-frr5.onrender.com/api/crear-preferencia', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                items: items,
+                payer: {
+                    name: nombre,
+                    email: correo,
+                    address: direccion
+                }
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.init_point) {
+            // Guardar información del pedido antes de redirigir
+            guardarPedido();
+            
+            // Redirigir a Mercado Pago
+            window.location.href = data.init_point;
+        } else {
+            mostrarToast('Error al procesar el pago. Intenta de nuevo.', 'error');
+            btnPagar.textContent = textoOriginal;
+            btnPagar.disabled = false;
+        }
+        
+    } catch (error) {
+        console.error('Error en el pago:', error);
+        mostrarToast('Error de conexión. Verifica tu internet.', 'error');
+        btnPagar.textContent = textoOriginal;
+        btnPagar.disabled = false;
+    }
+}
+
+// ============================================
+// GUARDAR PEDIDO EN LOCALSTORAGE
+// ============================================
+function guardarPedido() {
+    const nombre = localStorage.getItem('envio_nombre') || '';
+    const direccion = localStorage.getItem('envio_direccion') || '';
+    const correo = localStorage.getItem('envio_correo') || '';
+    const metodoPago = document.querySelector('input[name="metodoPago"]:checked').value;
+    
+    const pedido = {
+        id: Date.now(),
+        fecha: new Date().toISOString(),
+        items: carrito,
+        subtotal: total,
+        envio: total >= 1000 ? 0 : 99,
+        total: total + (total >= 1000 ? 0 : 99),
+        envioData: {
+            nombre: nombre,
+            direccion: direccion,
+            correo: correo
+        },
+        metodoPago: metodoPago,
+        estado: 'pendiente'
+    };
+    
+    // Guardar en localStorage
+    let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+    pedidos.push(pedido);
+    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+    
+    // Limpiar carrito después de guardar el pedido
+    localStorage.removeItem('carrito');
+}
+
+// ============================================
+// MOSTRAR CONFIRMACIÓN (PASO 3)
+// ============================================
+function mostrarConfirmacion() {
+    const checkoutCard = document.querySelector('.checkout-card');
+    const nombre = localStorage.getItem('envio_nombre') || '';
+    const direccion = localStorage.getItem('envio_direccion') || '';
+    const metodoPago = document.querySelector('input[name="metodoPago"]:checked').value;
+    const metodoTexto = metodoPago === 'tarjeta' ? 'Tarjeta de Crédito/Débito' : 'PayPal';
+    
+    checkoutCard.innerHTML = `
+        <h2 class="checkout-title">Confirmar Pedido</h2>
+        
+        <div class="checkout-progress">
+            <div class="progress-step active">
+                <span class="step-number">1</span>
+                <span class="step-label">Envío</span>
+            </div>
+            <div class="progress-line" style="background: #ff4d6d;"></div>
+            <div class="progress-step active">
+                <span class="step-number">2</span>
+                <span class="step-label">Pago</span>
+            </div>
+            <div class="progress-line"></div>
+            <div class="progress-step active">
+                <span class="step-number">3</span>
+                <span class="step-label">Confirmar</span>
+            </div>
+        </div>
+        
+        <div style="text-align: left; margin: 20px 0;">
+            <h3 style="color: #ff4d6d;">Datos de Envío</h3>
+            <p><strong>Nombre:</strong> ${nombre}</p>
+            <p><strong>Dirección:</strong> ${direccion}</p>
+            
+            <h3 style="color: #ff4d6d; margin-top: 20px;">Método de Pago</h3>
+            <p>${metodoTexto}</p>
+        </div>
+        
+        <div class="checkout-summary">
+            <h3>Resumen de compra</h3>
+            <div class="summary-row">
+                <span>Subtotal:</span>
+                <span id="resumen-subtotal">$${total.toFixed(2)}</span>
+            </div>
+            <div class="summary-row">
+                <span>Envío:</span>
+                <span id="resumen-envio">${total >= 1000 ? 'GRATIS' : `$${(total >= 1000 ? 0 : 99).toFixed(2)}`}</span>
+            </div>
+            <div class="summary-divider"></div>
+            <div class="summary-row total-row">
+                <span>Total a Pagar:</span>
+                <span id="resumen-total">$${(total + (total >= 1000 ? 0 : 99)).toFixed(2)}</span>
+            </div>
+        </div>
+        
+        <div class="checkout-actions">
+            <button id="btnConfirmar" class="btn-luxe-pay">Confirmar y Pagar</button>
+        </div>
+        
+        <p class="secure-text">🔒 Al confirmar, serás redirigido a la pasarela de pago segura</p>
+    `;
+    
+    document.getElementById('btnConfirmar').addEventListener('click', procesarPago);
+}
+
+// ============================================
+// CARGAR DATOS DEL USUARIO LOGUEADO
+// ============================================
+function cargarDatosUsuario() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+        const nombreInput = document.getElementById('nombre');
+        const correoInput = document.getElementById('correo');
+        
+        if (nombreInput && user.nombre) {
+            nombreInput.value = user.nombre;
+        }
+        if (correoInput && user.correo) {
+            correoInput.value = user.correo;
+        }
+    }
+}
+
+// ============================================
+// ACTUALIZAR CONTADOR DEL CARRITO
+// ============================================
+function actualizarContadorCarrito() {
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) {
+        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        const total = carrito.reduce((sum, item) => sum + (item.cantidad || 1), 0);
+        cartCount.textContent = total;
+    }
+}
+
+// ============================================
+// MOSTRAR TOAST (MENSAJE FLOTANTE)
+// ============================================
+function mostrarToast(mensaje, tipo = 'success') {
+    // Crear elemento toast si no existe
+    let toast = document.getElementById('custom-toast');
+    if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'custom-toast';
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: ${tipo === 'error' ? '#ff4d6d' : '#4caf50'};
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            z-index: 9999;
+            animation: slideIn 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        `;
+        document.body.appendChild(toast);
+        
+        // Agregar animación CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from {
+                    transform: translateX(100%);
+                    opacity: 0;
+                }
+                to {
+                    transform: translateX(0);
+                    opacity: 1;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    toast.textContent = mensaje;
+    toast.style.background = tipo === 'error' ? '#ff4d6d' : '#4caf50';
+    toast.style.display = 'block';
+    
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 3000);
+}
+
+// ============================================
+// FUNCIÓN PARA SUSCRIBIRSE AL NEWSLETTER
+// ============================================
+function suscribirse() {
+    const email = document.getElementById('newsletter-email')?.value;
+    if (email && email.includes('@')) {
+        mostrarToast('¡Bienvenida al Club Luxe!', 'success');
+        document.getElementById('newsletter-email').value = '';
+    } else {
+        mostrarToast('Por favor, ingresa un email válido', 'error');
+    }
+}

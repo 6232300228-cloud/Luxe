@@ -67,7 +67,6 @@
 <nav id="side-menu" class="side-nav">
   <span class="close-btn" onclick="toggleMenu()">&times;</span>
   <div class="menu-section">
-    <h3 style="color: #ff4d6d; padding-left: 20px;">Menú Principal</h3>
     <a href="nosotros.html"> Sobre Nosotros</a>
     <a href="#">Lo más nuevo</a>
     <a href="#"> Ofertas</a>
@@ -85,26 +84,33 @@
   <button class="next" onclick="nextSlide()">▶</button>
 </section>
 
-<!-- Probado en cámara -->
+
 <!-- Probado en cámara -->
 <section class="video-showcase">
-  <h2 class="video-title">Probado en cámara </h2>
   <div class="video-grid">
+    <!-- Video 1 - Rubor Marmoleado -->
     <div class="video-card" onclick="openProductModal(1001)">
+      <div class="video-badge">TOP</div>
       <video src="videos/rubor.mp4" muted loop playsinline></video>
       <div class="video-overlay">
         <h3>Rubor Marmoleado</h3>
         <button class="btn-ver-producto" onclick="event.stopPropagation(); openProductModal(1001)">Ver producto</button>
       </div>
     </div>
+
+    <!-- Video 2 - Labial Cremoso Soft Matte -->
     <div class="video-card" onclick="openProductModal(1002)">
+      <div class="video-badge">TOP</div>
       <video src="videos/gloss.mp4" muted loop playsinline></video>
       <div class="video-overlay">
         <h3>Labial Cremoso Soft Matte</h3>
         <button class="btn-ver-producto" onclick="event.stopPropagation(); openProductModal(1002)">Ver producto</button>
       </div>
     </div>
+
+    <!-- Video 3 - Ultimate Shadow Palette -->
     <div class="video-card" onclick="openProductModal(1003)">
+      <div class="video-badge">TOP</div>
       <video src="videos/swatch.mp4" muted loop playsinline></video>
       <div class="video-overlay">
         <h3>Ultimate Shadow Palette</h3>
@@ -204,7 +210,7 @@
 <!-- Toast -->
 <div id="toast" class="toast"></div>
 
-<!-- Modal del look -->
+<!-- Modal de kit pro -->
 <div id="lookModal" class="look-modal">
   <div class="look-modal-content">
     <span class="close-look" onclick="closeLook()">×</span>
@@ -319,6 +325,137 @@ document.addEventListener('DOMContentLoaded', function() {
         userNameElement.textContent = getPrimerNombre(user.nombre);
     }
 });
+</script>
+<script>
+// CONTROL DE VIDEOS MÓVIL - REPRODUCCIÓN EN PRIMER CLIC
+(function() {
+  // Solo en móvil
+  if (window.innerWidth > 768) return;
+  
+  console.log('📱 Modo móvil activado');
+  
+  const videoCards = document.querySelectorAll('.video-card');
+  let activeVideo = null;
+  let userInteracted = false;
+  
+  if (videoCards.length === 0) return;
+  
+  // Función para activar todos los videos después de la primera interacción
+  function enableAllVideos() {
+    if (userInteracted) return;
+    userInteracted = true;
+    console.log('✅ Primera interacción - videos activados');
+    
+    // Precargar y preparar todos los videos
+    videoCards.forEach(card => {
+      const video = card.querySelector('video');
+      if (video) {
+        video.load();
+        video.muted = true;
+        video.playsInline = true;
+      }
+    });
+  }
+  
+  // Configurar cada video
+  videoCards.forEach(card => {
+    const video = card.querySelector('video');
+    const btn = card.querySelector('.btn-ver-producto');
+    const productId = card.getAttribute('data-product-id');
+    
+    if (!video) return;
+    
+    video.preload = 'auto';
+    video.muted = true;
+    video.playsInline = true;
+    card.removeAttribute('onclick');
+    
+    // Botón para abrir modal
+    if (btn && productId) {
+      btn.removeAttribute('onclick');
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        enableAllVideos(); // Activar videos al tocar botón también
+        if (typeof openProductModal === 'function') {
+          openProductModal(parseInt(productId));
+        }
+      });
+    }
+    
+    // PRIMER CLIC - reproduce inmediatamente
+    card.addEventListener('click', function(e) {
+      if (e.target === btn || btn?.contains(e.target)) return;
+      
+      e.stopPropagation();
+      e.preventDefault();
+      
+      // Activar videos en el primer toque
+      enableAllVideos();
+      
+      // Pausar todos los demás
+      videoCards.forEach(otherCard => {
+        const otherVideo = otherCard.querySelector('video');
+        if (otherVideo && otherVideo !== video && !otherVideo.paused) {
+          otherVideo.pause();
+        }
+      });
+      
+      // Reproducir ESTE video (en el primer clic)
+      video.play().then(() => {
+        activeVideo = video;
+        console.log('▶️ Video reproduciéndose en primer clic');
+      }).catch(err => {
+        console.log('Error, reintentando:', err);
+        // Si falla, intentar de nuevo
+        setTimeout(() => {
+          video.play().catch(e => console.log('Error final:', e));
+        }, 100);
+      });
+    });
+  });
+  
+  // Autoplay al hacer scroll (solo después de interacción)
+  let scrollTimeout;
+  function playVisibleVideo() {
+    if (!userInteracted) return; // Solo después de que el usuario tocó algo
+    
+    let bestCard = null;
+    let bestVisibility = 0;
+    
+    videoCards.forEach(card => {
+      const video = card.querySelector('video');
+      if (!video) return;
+      
+      const rect = card.getBoundingClientRect();
+      const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
+      const visibility = visibleHeight / rect.height;
+      
+      if (visibility > bestVisibility && visibility > 0.4) {
+        bestVisibility = visibility;
+        bestCard = card;
+      }
+    });
+    
+    if (bestCard) {
+      const bestVideo = bestCard.querySelector('video');
+      if (activeVideo !== bestVideo) {
+        if (activeVideo && !activeVideo.paused) activeVideo.pause();
+        bestVideo.play().catch(e => console.log('Error scroll:', e));
+        activeVideo = bestVideo;
+      }
+    } else if (activeVideo && !activeVideo.paused) {
+      activeVideo.pause();
+      activeVideo = null;
+    }
+  }
+  
+  window.addEventListener('scroll', function() {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(playVisibleVideo, 150);
+  });
+  
+  console.log('✅ Videos listos - primer toque reproduce');
+})();
 </script>
 </body>
 </html>

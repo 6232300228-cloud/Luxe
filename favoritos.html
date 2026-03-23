@@ -3,12 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Favoritos - Luxe</title>
+  <title>Mis Favoritos - Luxe Beauty</title>
   <link rel="icon" href="img/logo.png" type="image/x-icon">
-<link rel="stylesheet" href="css/style.css?v=20250313">
+  <link rel="stylesheet" href="css/style.css?v=20250313">
 </head>
-
-<body>
+<body class="favorites-page">
 
 <header class="header">
   <div class="header-left">
@@ -27,19 +26,23 @@
   </div>
 
   <div class="header-right icons">
-    <a href="carrito.html">
-      <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
+   
+    <a href="carrito.html" class="cart-link">
+      <img src="img/carrito.png" alt="Carrito" class="header-icon">
+      <span id="cart-count" data-count="0"></span>
     </a>
     <a href="login.html" id="login-btn">
-      <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
+      <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon">
+      <span>Iniciar sesión</span>
     </a>
 
     <div id="user-menu" class="dropdown" style="display: none;">
-  <button class="dropbtn">
-  <span id="user-name"></span> <i class="arrow">▼</i></button>
+      <button class="dropbtn">
+        <span id="user-name"></span> <i class="arrow">▼</i>
+      </button>
       <div class="dropdown-content">
-        <a href="perfil.html"> Mi Perfil</a>
-        <a href="pedidos.html"> Mis Pedidos</a>
+        <a href="perfil.html">Mi Perfil</a>
+        <a href="pedidos.html">Mis Pedidos</a>
         <hr>
         <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
       </div>
@@ -47,30 +50,17 @@
   </div>
 </header>
 
-<nav id="side-menu" class="side-nav">
-  <span class="close-btn" onclick="toggleMenu()">&times;</span>
-  <div class="menu-section">
-    <h3 style="color: #ff4d6d; padding-left: 20px;">Menú Principal</h3>
-    <a href="nosotros.html">Sobre Nosotros</a>
-    <a href="#">Lo más nuevo</a>
-    <a href="#">Ofertas</a>
-  </div>
-</nav>
+
 
 <main class="container">
-  <!-- Header de favoritos para móvil -->
-  <div class="favorites-header-mobile">
-    <h2 class="favorites-title">Mis Favoritos</h2>
-    <button class="btn-vaciar-fav-mobile" id="vaciar-favoritos-mobile" style="display: none;">Vaciar</button>
+  <!-- Header de favoritos -->
+  <div class="favorites-header">
+    <button class="btn-vaciar-fav" id="vaciar-favoritos-btn">Vaciar</button>
   </div>
   
   <!-- Contenedor de productos favoritos -->
-  <section class="products" id="fav-items">
-    <!-- Mensaje de favoritos vacío (se mostrará cuando no haya productos) -->
-    <div class="empty-favorites-message" id="empty-favorites-message" style="display: none;">
-      <p>No tienes productos favoritos</p>
-      <a href="index.html" class="btn-continuar-fav">Descubrir productos</a>
-    </div>
+  <section class="products-grid" id="fav-items">
+    <!-- Los productos se cargarán dinámicamente con JavaScript -->
   </section>
 </main>
 
@@ -104,5 +94,19 @@
 
 <script src="js/favoritos.js?v=20250313"></script>
 <script src="js/user.js?v=20250313"></script>
+
+<!-- Script adicional para manejar suscripción si no existe en otros archivos -->
+<script>
+function suscribirse() {
+  const email = document.getElementById('newsletter-email')?.value;
+  if (!email) {
+    alert('Por favor ingresa un email válido');
+    return;
+  }
+  alert(`¡Gracias por suscribirte ${email}! Recibirás nuestras novedades pronto.`);
+  document.getElementById('newsletter-email').value = '';
+}
+</script>
+
 </body>
 </html>

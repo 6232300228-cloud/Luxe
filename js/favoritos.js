@@ -27,7 +27,57 @@ function toggleMenu() {
   const menu = document.getElementById('side-menu');
   if (menu) menu.classList.toggle('active');
 }
+// Agrega esta función a tu archivo favoritos.js
+function vaciarFavoritos() {
+    if (confirm("¿Quieres vaciar todos tus favoritos?")) {
+        localStorage.setItem("favs", JSON.stringify([]));
+        renderFavs();
+        actualizarContadorCarrito();
+        
+        // Mostrar notificación opcional
+        mostrarToast("Todos los favoritos han sido eliminados");
+    }
+}
 
+// Función para mostrar notificación (opcional)
+function mostrarToast(mensaje) {
+    let toast = document.getElementById("toast");
+    if (!toast) {
+        toast = document.createElement("div");
+        toast.id = "toast";
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 14px;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        `;
+        document.body.appendChild(toast);
+    }
+    
+    toast.textContent = mensaje;
+    toast.style.opacity = "1";
+    
+    setTimeout(() => {
+        toast.style.opacity = "0";
+    }, 3000);
+}
+
+// Agregar el event listener al botón de vaciar
+document.addEventListener('DOMContentLoaded', function() {
+    const vaciarBtn = document.getElementById("vaciar-favoritos-btn");
+    if (vaciarBtn) {
+        vaciarBtn.addEventListener("click", vaciarFavoritos);
+    }
+});
 function renderFavs() {
   let favs = JSON.parse(localStorage.getItem("favs")) || [];
   favItems.innerHTML = "";

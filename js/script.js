@@ -192,7 +192,7 @@ function addToCart(id) {
 
   localStorage.setItem("carrito", JSON.stringify(cart));
   updateCartCounter();
-  showToast("✨ ¡Añadido al carrito! ✨");
+  showToast("¡Añadido al carrito!");
 }
 
 // ============================================
@@ -323,12 +323,12 @@ function filterCategory(cat) {
 function showOnlyFavs() {
   let favs = JSON.parse(localStorage.getItem("favs")) || [];
   if (favs.length === 0) {
-    showToast("No tienes favoritos 💔");
+    showToast("No tienes favoritos ");
     return;
   }
   filtered = favs;
   renderProducts();
-  showToast("❤️ Viendo tus favoritos");
+  showToast(" Viendo tus favoritos");
 }
 
 // ============================================
@@ -397,7 +397,7 @@ function closeLook() {
 function completeExperience() {
   if (!window.currentExperience) return;
   window.currentExperience.forEach(p => addToCart(p.id));
-  showToast("🎁 ¡Selección añadida al carrito!");
+  showToast(" ¡Selección añadida al carrito!");
   closeLook();
 }
 
@@ -410,13 +410,23 @@ document.addEventListener("DOMContentLoaded", function () {
   updateFavCounter();
   
   if (search) {
-    search.addEventListener("input", () => {
-      let text = search.value.toLowerCase();
-      filtered = products.filter(p => p.name.toLowerCase().includes(text));
-      renderProducts();
-    });
-  }
-  
+  search.addEventListener("input", () => {
+    let text = search.value.toLowerCase();
+    filtered = products.filter(p => p.name.toLowerCase().includes(text));
+    renderProducts();
+    
+    // Desplazar automáticamente a los productos después de buscar
+    const productSection = document.getElementById("product-list");
+    if (productSection && text.length > 0) {
+      // Pequeño delay para que el render termine
+      setTimeout(() => {
+        const yOffset = -100; // Ajuste para que no quede pegado al header
+        const y = productSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }, 100);
+    }
+  });
+}
   if (sortSelect) {
     sortSelect.addEventListener("change", () => {
       const option = sortSelect.value;

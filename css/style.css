@@ -1219,68 +1219,69 @@ header-icon:hover {
   transform: scale(1.1);
 }
 
+/* ============================================
+   ESTILOS CORAZÓN FAVORITOS - CORREGIDO
+   ============================================ */
+
 .heart-fav {
   position: absolute;
   top: 10px;
   right: 10px;
-  background: white;
+  background: transparent;  /* ← SIN FONDO BLANCO */
   border: none;
   cursor: pointer;
   z-index: 10;
   width: 36px;
   height: 36px;
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   transition: all 0.3s ease;
-  padding: 0; /* Importante: elimina padding por defecto */
+  padding: 0;
+  box-shadow: none;  /* ← SIN SOMBRA */
 }
 
 .heart-icon {
-  width: 20px;  /* Ajusta según el tamaño de tu icono */
-  height: 20px;
+  width: 24px;  /* Un poco más grande para mejor visibilidad */
+  height: 24px;
   object-fit: contain;
+  pointer-events: none;
   transition: all 0.3s ease;
 }
 
-/* Estado hover del botón */
+/* Estado NORMAL (NO favorito) - Corazón GRIS */
+.heart-fav:not(.active) .heart-icon {
+  filter: brightness(0) saturate(100%) invert(40%) sepia(0%) saturate(0%) brightness(90%) contrast(90%);
+  /* Corazón gris oscuro cuando NO está en favoritos */
+  opacity: 0.8;
+}
+
+/* Estado ACTIVO (en favoritos) - CORAZÓN ROJO */
+.heart-fav.active .heart-icon {
+  filter: brightness(0) saturate(100%) invert(27%) sepia(98%) saturate(3000%) hue-rotate(330deg) brightness(100%) contrast(100%);
+  /* Corazón rojo brillante cuando ESTÁ en favoritos */
+  opacity: 1;
+}
+
+/* Efecto hover - SIN FONDO BLANCO */
 .heart-fav:hover {
-  transform: scale(1.15);
-  background: #ff4d6d;
+  transform: scale(1.2);
+  background: transparent;  /* SIN FONDO */
 }
 
 .heart-fav:hover .heart-icon {
-  filter: brightness(0) invert(1); /* Hace el icono blanco en hover */
+  filter: brightness(0) saturate(100%) invert(60%) sepia(80%) saturate(2000%) hue-rotate(330deg) brightness(100%) contrast(100%);
+  /* Rojo más claro en hover */
 }
 
-/* Estado activo (favorito) */
-.heart-fav.active {
-  background: white;
-}
-
-.heart-fav.active .heart-icon {
-  filter: none; /* Color normal del icono cuando está activo */
-}
-
-/* Hover en estado activo */
+/* Hover cuando ya está activo (favorito) */
 .heart-fav.active:hover {
-  background: #ff4d6d;
+  background: transparent;
 }
 
 .heart-fav.active:hover .heart-icon {
-  filter: brightness(0) invert(1); /* Icono blanco en hover cuando está activo */
-}
-.heart-icon {
-  width: 20px;
-  height: 20px;
-  object-fit: contain;
-  pointer-events: none; /* Para que los clicks pasen al botón */
-}
-
-.heart-fav:hover .heart-icon {
-  filter: brightness(0) invert(1); /* Hace el icono blanco en hover */
+  filter: brightness(0) saturate(100%) invert(20%) sepia(100%) saturate(3000%) hue-rotate(330deg) brightness(95%) contrast(100%);
+  /* Rojo más intenso en hover */
 }
 
 .info-luxe {

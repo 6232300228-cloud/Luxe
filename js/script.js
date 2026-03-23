@@ -257,10 +257,10 @@ function renderProducts() {
     const productCard = document.createElement('div');
     productCard.className = 'product-card-luxe';
     productCard.innerHTML = `
-<button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">
-  <img src="corazon.png" alt="Favorito" class="heart-icon">
-</button>
-     <div class="product-clickable" onclick="openProductModal(${p.id})">
+      <button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">
+        <img src="img/corazon.png" alt="Favorito" class="heart-icon">
+      </button>
+      <div class="product-clickable" onclick="openProductModal(${p.id})">
         <div class="img-container">
           <img src="${p.img}" alt="${p.name}" loading="lazy">
         </div>

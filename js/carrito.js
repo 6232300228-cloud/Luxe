@@ -99,7 +99,7 @@ function renderCarrito() {
 
     // LÓGICA DE ENVÍO
     const envioGratisMin = 500;
-    const COSTO_ENVIO = 50; 
+    const COSTO_ENVIO = 1; 
     const shippingBox = document.getElementById("shipping-message");
     
     let envio = (subtotal >= envioGratisMin) ? 0 : COSTO_ENVIO;

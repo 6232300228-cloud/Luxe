@@ -9,7 +9,7 @@ let pasoActual = 1;
 
 // Constantes de envío
 const ENVIO_GRATIS_MINIMO = 500; // $500 para envío gratis
-const COSTO_ENVIO = 50; // $50 si no alcanza
+const COSTO_ENVIO = 1; // $50 si no alcanza
 
 // ============================================
 // INICIALIZACIÓN

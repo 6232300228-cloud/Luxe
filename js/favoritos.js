@@ -104,7 +104,36 @@ function renderFavs() {
     `;
   });
 }
+function toggleMenu() {
+  const menu = document.getElementById('side-menu');
+  menu.classList.toggle('active');
+}
 
+document.addEventListener('click', function(event) {
+  const menu = document.getElementById('side-menu');
+  const hamburger = document.querySelector('.menu-hamburger');
+  
+  if (menu && menu.classList.contains('active') && 
+      !menu.contains(event.target) && 
+      !hamburger.contains(event.target)) {
+    menu.classList.remove('active');
+  }
+});
+
+if (window.innerWidth > 768) {
+  const hamburger = document.querySelector('.menu-hamburger');
+  const menu = document.getElementById('side-menu');
+  
+  if (hamburger && menu) {
+    let hoverTimer;
+    hamburger.addEventListener('mouseenter', function() {
+      hoverTimer = setTimeout(() => menu.classList.add('active'), 200);
+    });
+    hamburger.addEventListener('mouseleave', function() {
+      clearTimeout(hoverTimer);
+    });
+  }
+}
 function removeFav(index) {
   let favs = JSON.parse(localStorage.getItem("favs")) || [];
   favs.splice(index, 1);

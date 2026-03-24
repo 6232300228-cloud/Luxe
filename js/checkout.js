@@ -1,174 +1,249 @@
 // ============================================
-// CHECKOUT.JS - CON MERCADO PAGO
+// CHECKOUT.JS - CON ENVÍO GRATIS > $500
 // ============================================
 
 // Variables globales
 let carrito = [];
 let total = 0;
-let pasoActual = 1; // 1: Envío, 2: Pago, 3: Confirmar
+let pasoActual = 1;
+
+// Constantes de envío
+const ENVIO_GRATIS_MINIMO = 500; // $500 para envío gratis
+const COSTO_ENVIO = 50; // $50 si no alcanza
 
 // ============================================
 // INICIALIZACIÓN
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    // Cargar carrito del localStorage
-    cargarCarrito();
+    console.log('Checkout inicializado');
     
-    // Actualizar resumen
+    // Cargar carrito
+    cargarCarrito();
     actualizarResumen();
     
-    // Configurar eventos
-    document.getElementById('btnContinuar').addEventListener('click', avanzarPaso);
-    document.getElementById('btnPagar').addEventListener('click', procesarPago);
+    // Configurar eventos de los botones
+    const btnContinuar = document.getElementById('btnContinuar');
+    const btnPagar = document.getElementById('btnPagar');
     
-    // Eventos para métodos de pago
-    const radioTarjeta = document.querySelector('input[value="tarjeta"]');
-    const radioPaypal = document.querySelector('input[value="paypal"]');
+    if (btnContinuar) btnContinuar.addEventListener('click', avanzarPaso);
+    if (btnPagar) btnPagar.addEventListener('click', procesarPago);
     
-    radioTarjeta.addEventListener('change', function() {
-        document.getElementById('tarjetaBox').classList.remove('hidden');
-        document.getElementById('paypalBox').classList.add('hidden');
-    });
-    
-    radioPaypal.addEventListener('change', function() {
-        document.getElementById('tarjetaBox').classList.add('hidden');
-        document.getElementById('paypalBox').classList.remove('hidden');
-    });
-    
-    // Formatear número de tarjeta mientras se escribe
-    const numeroTarjeta = document.getElementById('numeroTarjeta');
-    if (numeroTarjeta) {
-        numeroTarjeta.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length > 16) value = value.slice(0, 16);
-            value = value.replace(/(\d{4})(?=\d)/g, '$1 ');
-            e.target.value = value;
-        });
-    }
-    
-    // Formatear fecha de expiración
-    const expira = document.getElementById('expira');
-    if (expira) {
-        expira.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, '');
-            if (value.length >= 2) {
-                value = value.slice(0, 2) + '/' + value.slice(2, 4);
+    // Eventos para los métodos de pago
+    const radios = document.querySelectorAll('input[name="metodoPago"]');
+    radios.forEach(radio => {
+        radio.addEventListener('change', function() {
+            document.getElementById('tarjetaBox')?.classList.add('hidden');
+            document.getElementById('paypalBox')?.classList.add('hidden');
+            document.getElementById('mercadopagoBox')?.classList.add('hidden');
+            
+            if (this.value === 'tarjeta') {
+                document.getElementById('tarjetaBox')?.classList.remove('hidden');
+            } else if (this.value === 'paypal') {
+                document.getElementById('paypalBox')?.classList.remove('hidden');
+            } else if (this.value === 'mercadopago') {
+                document.getElementById('mercadopagoBox')?.classList.remove('hidden');
             }
-            e.target.value = value;
         });
-    }
+    });
     
-    // Cargar datos del usuario si está logueado
-    cargarDatosUsuario();
+    // Cargar datos del usuario
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (user) {
+        const nombreInput = document.getElementById('nombre');
+        const correoInput = document.getElementById('correo');
+        if (nombreInput && user.nombre) nombreInput.value = user.nombre;
+        if (correoInput && user.correo) correoInput.value = user.correo;
+    }
     
     // Actualizar contador del carrito
-    actualizarContadorCarrito();
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) {
+        const carritoGuardado = JSON.parse(localStorage.getItem('carrito')) || [];
+        const totalItems = carritoGuardado.reduce((sum, item) => sum + (item.cantidad || 1), 0);
+        cartCount.textContent = totalItems;
+    }
 });
 
 // ============================================
-// CARGAR CARRITO DEL LOCALSTORAGE
+// CALCULAR COSTO DE ENVÍO
 // ============================================
-function cargarCarrito() {
-    const carritoGuardado = localStorage.getItem('carrito');
-    if (carritoGuardado) {
-        carrito = JSON.parse(carritoGuardado);
-        calcularTotal();
+function calcularEnvio() {
+    // Envío gratis si el total es mayor o igual a $500
+    if (total >= ENVIO_GRATIS_MINIMO) {
+        return 0;
+    }
+    return COSTO_ENVIO;
+}
+
+// ============================================
+// ACTUALIZAR RESUMEN
+// ============================================
+function actualizarResumen() {
+    const subtotal = total;
+    const envio = calcularEnvio();
+    const totalPagar = subtotal + envio;
+    
+    const subtotalEl = document.getElementById('resumen-subtotal');
+    const envioEl = document.getElementById('resumen-envio');
+    const totalEl = document.getElementById('resumen-total');
+    
+    if (subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+    
+    // Mostrar mensaje de envío gratis si aplica
+    if (envioEl) {
+        if (envio === 0) {
+            envioEl.textContent = 'GRATIS ';
+            envioEl.style.color = '#4caf50';
+        } else {
+            envioEl.textContent = `$${envio.toFixed(2)}`;
+            envioEl.style.color = '#666';
+        }
+    }
+    
+    if (totalEl) totalEl.textContent = `$${totalPagar.toFixed(2)}`;
+    
+    // Mostrar/ocultar mensaje de envío gratis
+    mostrarMensajeEnvio();
+}
+
+// ============================================
+// MOSTRAR MENSAJE DE ENVÍO GRATIS
+// ============================================
+function mostrarMensajeEnvio() {
+    // Buscar o crear el mensaje de envío gratis
+    let mensajeEnvio = document.getElementById('mensaje-envio-gratis');
+    
+    if (total < ENVIO_GRATIS_MINIMO) {
+        const faltante = ENVIO_GRATIS_MINIMO - total;
+        if (!mensajeEnvio) {
+            // Crear el mensaje si no existe
+            const summary = document.querySelector('.checkout-summary');
+            if (summary) {
+                mensajeEnvio = document.createElement('div');
+                mensajeEnvio.id = 'mensaje-envio-gratis';
+                mensajeEnvio.style.cssText = `
+                    background: #fff0f3;
+                    padding: 10px;
+                    border-radius: 10px;
+                    margin-bottom: 15px;
+                    font-size: 13px;
+                    text-align: center;
+                    color: #ff4d6d;
+                `;
+                summary.insertBefore(mensajeEnvio, summary.firstChild);
+            }
+        }
+        if (mensajeEnvio) {
+            mensajeEnvio.innerHTML = ` Agrega $${faltante.toFixed(2)} más para obtener <strong>ENVÍO GRATIS</strong> `;
+            mensajeEnvio.style.display = 'block';
+        }
+    } else {
+        if (mensajeEnvio) {
+            mensajeEnvio.innerHTML = ` ¡ENVÍO GRATIS! Tu pedido califica para envío sin costo `;
+            mensajeEnvio.style.background = '#e8f5e9';
+            mensajeEnvio.style.color = '#2e7d32';
+        }
     }
 }
 
 // ============================================
-// CALCULAR TOTAL DEL CARRITO
+// CARGAR CARRITO
 // ============================================
-function calcularTotal() {
-    total = 0;
-    carrito.forEach(item => {
-        total += (item.precio * (item.cantidad || 1));
-    });
-}
-
-// ============================================
-// ACTUALIZAR RESUMEN DE COMPRA
-// ============================================
-function actualizarResumen() {
-    const subtotal = total;
-    const envio = subtotal >= 1000 ? 0 : 99;
-    const totalPagar = subtotal + envio;
+function cargarCarrito() {
+    const carritoGuardado = localStorage.getItem('carrito');
+    console.log('Carrito guardado:', carritoGuardado);
     
-    document.getElementById('resumen-subtotal').textContent = `$${subtotal.toFixed(2)}`;
-    document.getElementById('resumen-envio').textContent = envio === 0 ? 'GRATIS' : `$${envio.toFixed(2)}`;
-    document.getElementById('resumen-total').textContent = `$${totalPagar.toFixed(2)}`;
+    if (carritoGuardado) {
+        carrito = JSON.parse(carritoGuardado);
+        total = carrito.reduce((sum, item) => sum + (item.precio * (item.cantidad || 1)), 0);
+        console.log('Total calculado:', total);
+    } else {
+        carrito = [];
+        total = 0;
+        console.log('No hay carrito guardado');
+    }
 }
 
 // ============================================
-// AVANZAR ENTRE PASOS
+// AVANZAR AL SIGUIENTE PASO
 // ============================================
 function avanzarPaso() {
     if (pasoActual === 1) {
         // Validar datos de envío
-        const nombre = document.getElementById('nombre').value.trim();
-        const direccion = document.getElementById('direccion').value.trim();
-        const correo = document.getElementById('correo').value.trim();
+        const nombre = document.getElementById('nombre')?.value.trim();
+        const direccion = document.getElementById('direccion')?.value.trim();
+        const correo = document.getElementById('correo')?.value.trim();
         
         if (!nombre || !direccion || !correo) {
-            mostrarToast('Por favor, completa todos los campos de envío', 'error');
+            mostrarToast('Completa todos los campos de envío', 'error');
             return;
         }
-        
         if (!correo.includes('@')) {
-            mostrarToast('Por favor, ingresa un correo válido', 'error');
+            mostrarToast('Ingresa un correo válido', 'error');
             return;
         }
         
-        // Guardar datos de envío
-        guardarDatosEnvio(nombre, direccion, correo);
+        // Guardar datos
+        localStorage.setItem('envio_nombre', nombre);
+        localStorage.setItem('envio_direccion', direccion);
+        localStorage.setItem('envio_correo', correo);
         
-        // Avanzar al paso 2
+        // Cambiar al paso 2
         pasoActual = 2;
-        actualizarBarraProgreso();
         
         // Ocultar sección de envío, mostrar sección de pago
-        document.getElementById('shipping-section').style.display = 'none';
-        document.getElementById('payment-section').style.display = 'block';
-        document.getElementById('btnContinuar').style.display = 'none';
-        document.getElementById('btnPagar').style.display = 'block';
+        const shippingSection = document.getElementById('shipping-section');
+        const paymentSection = document.getElementById('payment-section');
+        const btnContinuar = document.getElementById('btnContinuar');
+        const btnPagar = document.getElementById('btnPagar');
         
-        // Scroll suave al inicio
+        if (shippingSection) shippingSection.style.display = 'none';
+        if (paymentSection) paymentSection.style.display = 'block';
+        if (btnContinuar) btnContinuar.style.display = 'none';
+        if (btnPagar) btnPagar.style.display = 'block';
+        
+        // Actualizar barra de progreso
+        actualizarBarraProgreso();
         window.scrollTo({ top: 0, behavior: 'smooth' });
-        
     } else if (pasoActual === 2) {
-        // Validar método de pago seleccionado
-        const metodoPago = document.querySelector('input[name="metodoPago"]:checked').value;
+        // Validar método de pago
+        const metodoSeleccionado = document.querySelector('input[name="metodoPago"]:checked');
+        
+        if (!metodoSeleccionado) {
+            mostrarToast('Selecciona un método de pago', 'error');
+            return;
+        }
+        
+        const metodoPago = metodoSeleccionado.value;
         
         if (metodoPago === 'tarjeta') {
-            const numeroTarjeta = document.getElementById('numeroTarjeta').value.replace(/\s/g, '');
-            const expira = document.getElementById('expira').value;
-            const cvv = document.getElementById('cvvTarjeta').value;
+            const numeroTarjeta = document.getElementById('numeroTarjeta')?.value.replace(/\s/g, '');
+            const expira = document.getElementById('expira')?.value;
+            const cvv = document.getElementById('cvvTarjeta')?.value;
             
             if (!numeroTarjeta || numeroTarjeta.length < 16) {
-                mostrarToast('Por favor, ingresa un número de tarjeta válido', 'error');
+                mostrarToast('Número de tarjeta inválido', 'error');
                 return;
             }
             if (!expira || expira.length < 5) {
-                mostrarToast('Por favor, ingresa la fecha de expiración (MM/AA)', 'error');
+                mostrarToast('Fecha de expiración inválida', 'error');
                 return;
             }
             if (!cvv || cvv.length < 3) {
-                mostrarToast('Por favor, ingresa el CVV', 'error');
+                mostrarToast('CVV inválido', 'error');
                 return;
             }
         } else if (metodoPago === 'paypal') {
-            const correoPaypal = document.getElementById('correoPaypal').value.trim();
+            const correoPaypal = document.getElementById('correoPaypal')?.value.trim();
             if (!correoPaypal || !correoPaypal.includes('@')) {
-                mostrarToast('Por favor, ingresa un correo de PayPal válido', 'error');
+                mostrarToast('Correo de PayPal inválido', 'error');
                 return;
             }
         }
         
-        // Avanzar al paso 3 (confirmación)
+        // Avanzar al paso 3
         pasoActual = 3;
         actualizarBarraProgreso();
-        
-        // Mostrar confirmación
         mostrarConfirmacion();
     }
 }
@@ -198,246 +273,215 @@ function actualizarBarraProgreso() {
 }
 
 // ============================================
-// GUARDAR DATOS DE ENVÍO
-// ============================================
-function guardarDatosEnvio(nombre, direccion, correo) {
-    localStorage.setItem('envio_nombre', nombre);
-    localStorage.setItem('envio_direccion', direccion);
-    localStorage.setItem('envio_correo', correo);
-}
-
-// ============================================
-// PROCESAR PAGO CON MERCADO PAGO
+// PROCESAR PAGO
 // ============================================
 async function procesarPago() {
-    const metodoPago = document.querySelector('input[name="metodoPago"]:checked').value;
+    const metodoSeleccionado = document.querySelector('input[name="metodoPago"]:checked');
+    
+    if (!metodoSeleccionado) {
+        mostrarToast('Selecciona un método de pago', 'error');
+        return;
+    }
+    
+    const metodoPago = metodoSeleccionado.value;
     
     // Mostrar loading
-    const btnPagar = document.getElementById('btnPagar');
+    const btnPagar = document.getElementById('btnConfirmar') || document.getElementById('btnPagar');
+    if (!btnPagar) return;
+    
     const textoOriginal = btnPagar.textContent;
-    btnPagar.textContent = 'Procesando...';
+    btnPagar.textContent = ' Procesando...';
     btnPagar.disabled = true;
     
     try {
-        // Preparar los items del carrito para Mercado Pago
-        const items = carrito.map(item => ({
-            nombre: item.nombre,
-            precio: item.precio,
-            cantidad: item.cantidad || 1
-        }));
-        
-        // Obtener datos de envío
-        const nombre = localStorage.getItem('envio_nombre') || '';
-        const direccion = localStorage.getItem('envio_direccion') || '';
-        const correo = localStorage.getItem('envio_correo') || '';
-        
-        // Llamar al endpoint de Mercado Pago
-        const response = await fetch('https://luxe-api-frr5.onrender.com/api/crear-preferencia', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                items: items,
-                payer: {
-                    name: nombre,
-                    email: correo,
-                    address: direccion
-                }
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (data.init_point) {
-            // Guardar información del pedido antes de redirigir
-            guardarPedido();
-            
-            // Redirigir a Mercado Pago
-            window.location.href = data.init_point;
-        } else {
-            mostrarToast('Error al procesar el pago. Intenta de nuevo.', 'error');
-            btnPagar.textContent = textoOriginal;
-            btnPagar.disabled = false;
+        if (metodoPago === 'mercadopago') {
+            await procesarMercadoPago(btnPagar, textoOriginal);
+        } else if (metodoPago === 'tarjeta') {
+            guardarPedido('tarjeta');
+            mostrarToast('Pago procesado exitosamente', 'success');
+            setTimeout(() => window.location.href = 'success.html', 1500);
+        } else if (metodoPago === 'paypal') {
+            guardarPedido('paypal');
+            mostrarToast('Redirigiendo a PayPal...', 'success');
+            setTimeout(() => window.location.href = 'https://www.paypal.com/mx/home', 1500);
         }
-        
     } catch (error) {
-        console.error('Error en el pago:', error);
-        mostrarToast('Error de conexión. Verifica tu internet.', 'error');
+        console.error('Error:', error);
+        mostrarToast('Error de conexión. Intenta de nuevo.', 'error');
         btnPagar.textContent = textoOriginal;
         btnPagar.disabled = false;
     }
 }
 
 // ============================================
-// GUARDAR PEDIDO EN LOCALSTORAGE
+// PROCESAR CON MERCADO PAGO
 // ============================================
-function guardarPedido() {
+async function procesarMercadoPago(btnPagar, textoOriginal) {
+    if (!carrito || carrito.length === 0) {
+        mostrarToast('El carrito está vacío', 'error');
+        btnPagar.textContent = textoOriginal;
+        btnPagar.disabled = false;
+        return;
+    }
+    
+    const items = carrito.map(item => ({
+        nombre: item.nombre,
+        precio: item.precio,
+        cantidad: item.cantidad || 1
+    }));
+    
     const nombre = localStorage.getItem('envio_nombre') || '';
     const direccion = localStorage.getItem('envio_direccion') || '';
     const correo = localStorage.getItem('envio_correo') || '';
-    const metodoPago = document.querySelector('input[name="metodoPago"]:checked').value;
+    
+    try {
+        const response = await fetch('https://luxe-api-frr5.onrender.com/api/crear-preferencia', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ items, payer: { name: nombre, email: correo, address: direccion } })
+        });
+        
+        const data = await response.json();
+        
+        if (data.init_point) {
+            guardarPedido('mercadopago');
+            window.location.href = data.init_point;
+        } else {
+            mostrarToast(data.error || 'Error al crear el pago', 'error');
+            btnPagar.textContent = textoOriginal;
+            btnPagar.disabled = false;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        mostrarToast('Error de conexión', 'error');
+        btnPagar.textContent = textoOriginal;
+        btnPagar.disabled = false;
+    }
+}
+
+// ============================================
+// GUARDAR PEDIDO
+// ============================================
+function guardarPedido(metodoPago) {
+    const nombre = localStorage.getItem('envio_nombre') || '';
+    const direccion = localStorage.getItem('envio_direccion') || '';
+    const correo = localStorage.getItem('envio_correo') || '';
+    const envioCosto = calcularEnvio();
     
     const pedido = {
         id: Date.now(),
         fecha: new Date().toISOString(),
         items: carrito,
         subtotal: total,
-        envio: total >= 1000 ? 0 : 99,
-        total: total + (total >= 1000 ? 0 : 99),
-        envioData: {
-            nombre: nombre,
-            direccion: direccion,
-            correo: correo
-        },
+        envio: envioCosto,
+        total: total + envioCosto,
+        envioData: { nombre, direccion, correo },
         metodoPago: metodoPago,
         estado: 'pendiente'
     };
     
-    // Guardar en localStorage
     let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
     pedidos.push(pedido);
     localStorage.setItem('pedidos', JSON.stringify(pedidos));
-    
-    // Limpiar carrito después de guardar el pedido
+    localStorage.setItem('ultimoPedido', JSON.stringify(pedido));
     localStorage.removeItem('carrito');
+    
+    console.log('Pedido guardado:', pedido);
 }
 
 // ============================================
-// MOSTRAR CONFIRMACIÓN (PASO 3)
+// MOSTRAR CONFIRMACIÓN
 // ============================================
 function mostrarConfirmacion() {
     const checkoutCard = document.querySelector('.checkout-card');
     const nombre = localStorage.getItem('envio_nombre') || '';
     const direccion = localStorage.getItem('envio_direccion') || '';
-    const metodoPago = document.querySelector('input[name="metodoPago"]:checked').value;
-    const metodoTexto = metodoPago === 'tarjeta' ? 'Tarjeta de Crédito/Débito' : 'PayPal';
+    const metodoPagoRadio = document.querySelector('input[name="metodoPago"]:checked');
+    const metodoPago = metodoPagoRadio ? metodoPagoRadio.value : 'tarjeta';
+    
+    let metodoTexto = '';
+    if (metodoPago === 'tarjeta') metodoTexto = ' Tarjeta de Crédito/Débito';
+    else if (metodoPago === 'paypal') metodoTexto = 'PayPal';
+    else if (metodoPago === 'mercadopago') metodoTexto = ' Mercado Pago';
+    
+    const envioCosto = calcularEnvio();
+    const totalPagar = total + envioCosto;
     
     checkoutCard.innerHTML = `
         <h2 class="checkout-title">Confirmar Pedido</h2>
         
         <div class="checkout-progress">
-            <div class="progress-step active">
-                <span class="step-number">1</span>
-                <span class="step-label">Envío</span>
-            </div>
+            <div class="progress-step active"><span class="step-number">1</span><span class="step-label">Envío</span></div>
             <div class="progress-line" style="background: #ff4d6d;"></div>
-            <div class="progress-step active">
-                <span class="step-number">2</span>
-                <span class="step-label">Pago</span>
-            </div>
-            <div class="progress-line"></div>
-            <div class="progress-step active">
-                <span class="step-number">3</span>
-                <span class="step-label">Confirmar</span>
-            </div>
+            <div class="progress-step active"><span class="step-number">2</span><span class="step-label">Pago</span></div>
+            <div class="progress-line" style="background: #ff4d6d;"></div>
+            <div class="progress-step active"><span class="step-number">3</span><span class="step-label">Confirmar</span></div>
         </div>
         
         <div style="text-align: left; margin: 20px 0;">
-            <h3 style="color: #ff4d6d;">Datos de Envío</h3>
-            <p><strong>Nombre:</strong> ${nombre}</p>
-            <p><strong>Dirección:</strong> ${direccion}</p>
+            <h3 style="color: #ff4d6d;"> Datos de Envío</h3>
+            <p><strong>Nombre:</strong> ${escapeHTML(nombre)}</p>
+            <p><strong>Dirección:</strong> ${escapeHTML(direccion)}</p>
             
-            <h3 style="color: #ff4d6d; margin-top: 20px;">Método de Pago</h3>
+            <h3 style="color: #ff4d6d; margin-top: 20px;"> Método de Pago</h3>
             <p>${metodoTexto}</p>
         </div>
         
         <div class="checkout-summary">
             <h3>Resumen de compra</h3>
-            <div class="summary-row">
-                <span>Subtotal:</span>
-                <span id="resumen-subtotal">$${total.toFixed(2)}</span>
-            </div>
-            <div class="summary-row">
-                <span>Envío:</span>
-                <span id="resumen-envio">${total >= 1000 ? 'GRATIS' : `$${(total >= 1000 ? 0 : 99).toFixed(2)}`}</span>
-            </div>
+            <div class="summary-row"><span>Subtotal (${carrito.length} productos):</span><span>$${total.toFixed(2)}</span></div>
+            <div class="summary-row"><span>Envío:</span><span>${envioCosto === 0 ? 'GRATIS ' : `$${envioCosto.toFixed(2)}`}</span></div>
             <div class="summary-divider"></div>
-            <div class="summary-row total-row">
-                <span>Total a Pagar:</span>
-                <span id="resumen-total">$${(total + (total >= 1000 ? 0 : 99)).toFixed(2)}</span>
-            </div>
+            <div class="summary-row total-row"><span>Total a Pagar:</span><span>$${totalPagar.toFixed(2)}</span></div>
         </div>
         
         <div class="checkout-actions">
             <button id="btnConfirmar" class="btn-luxe-pay">Confirmar y Pagar</button>
         </div>
         
-        <p class="secure-text">🔒 Al confirmar, serás redirigido a la pasarela de pago segura</p>
+        <p class="secure-text">🔒 Tus datos están seguros. El pago se procesa de forma encriptada.</p>
     `;
     
-    document.getElementById('btnConfirmar').addEventListener('click', procesarPago);
+    const btnConfirmar = document.getElementById('btnConfirmar');
+    if (btnConfirmar) btnConfirmar.addEventListener('click', procesarPago);
 }
 
 // ============================================
-// CARGAR DATOS DEL USUARIO LOGUEADO
+// ESCAPE HTML
 // ============================================
-function cargarDatosUsuario() {
-    const user = JSON.parse(localStorage.getItem('user'));
-    if (user) {
-        const nombreInput = document.getElementById('nombre');
-        const correoInput = document.getElementById('correo');
-        
-        if (nombreInput && user.nombre) {
-            nombreInput.value = user.nombre;
-        }
-        if (correoInput && user.correo) {
-            correoInput.value = user.correo;
-        }
-    }
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
 }
 
 // ============================================
-// ACTUALIZAR CONTADOR DEL CARRITO
-// ============================================
-function actualizarContadorCarrito() {
-    const cartCount = document.getElementById('cart-count');
-    if (cartCount) {
-        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-        const total = carrito.reduce((sum, item) => sum + (item.cantidad || 1), 0);
-        cartCount.textContent = total;
-    }
-}
-
-// ============================================
-// MOSTRAR TOAST (MENSAJE FLOTANTE)
+// MOSTRAR TOAST
 // ============================================
 function mostrarToast(mensaje, tipo = 'success') {
-    // Crear elemento toast si no existe
     let toast = document.getElementById('custom-toast');
     if (!toast) {
         toast = document.createElement('div');
         toast.id = 'custom-toast';
         toast.style.cssText = `
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
             background: ${tipo === 'error' ? '#ff4d6d' : '#4caf50'};
             color: white;
             padding: 12px 24px;
             border-radius: 25px;
             font-size: 14px;
             z-index: 9999;
-            animation: slideIn 0.3s ease;
             box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            white-space: nowrap;
         `;
         document.body.appendChild(toast);
-        
-        // Agregar animación CSS
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-        `;
-        document.head.appendChild(style);
     }
     
     toast.textContent = mensaje;
@@ -450,7 +494,7 @@ function mostrarToast(mensaje, tipo = 'success') {
 }
 
 // ============================================
-// FUNCIÓN PARA SUSCRIBIRSE AL NEWSLETTER
+// NEWSLETTER
 // ============================================
 function suscribirse() {
     const email = document.getElementById('newsletter-email')?.value;
@@ -458,6 +502,6 @@ function suscribirse() {
         mostrarToast('¡Bienvenida al Club Luxe!', 'success');
         document.getElementById('newsletter-email').value = '';
     } else {
-        mostrarToast('Por favor, ingresa un email válido', 'error');
+        mostrarToast('Email inválido', 'error');
     }
 }

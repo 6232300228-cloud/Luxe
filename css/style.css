@@ -754,6 +754,8 @@ header-icon:hover {
 .modal-product-img {
   flex: 1;
   text-align: center;
+    cursor: default !important;
+  user-select: none;
 }
 
 .modal-product-img img {
@@ -903,6 +905,7 @@ header-icon:hover {
   height: 60px;
   display: flex;
   align-items: center;
+  justify-content: center; /* Centra todo el contenido */
   overflow-x: auto;
   white-space: nowrap;
 }
@@ -911,8 +914,8 @@ header-icon:hover {
   display: flex;
   align-items: center;
   gap: 30px;
-  width: 55%;
-  padding: 0 30px;
+  width: auto; /* Cambiado de 55% a auto */
+  padding: 0 20px; /* Padding consistente */
 }
 
 .brand-item-mini {
@@ -924,7 +927,7 @@ header-icon:hover {
   font-size: 12px;
   font-weight: 500;
   color: #333;
-  border-right: 1px solid #c0568b;
+  border-right: 1px solid #e63f92;
   padding-right: 20px;
 }
 
@@ -933,7 +936,10 @@ header-icon:hover {
   font-size: 13px;
   color: #555;
   text-transform: uppercase;
-  width: 22%;
+  width: auto; /* Cambiado de 22% a auto */
+  margin-right: 20px; /* Espacio después del texto */
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .brand-item-mini img {
@@ -950,14 +956,15 @@ header-icon:hover {
   opacity: 1;
   transform: scale(1.15);
 }
-
 /* ============================================
-   BANNERS TRIPLES
+   BANNERS TRIPLES - RESPONSIVE CORREGIDO
    ============================================ */
+
 .triple-banner-section {
   padding: 60px 0;
   background: linear-gradient(to bottom, #e8d8cc00 0%, #f3ebe5 40%, #ffffff 100%);
 }
+
 .triple-container-full {
   display: flex;
   gap: 20px;
@@ -1016,6 +1023,136 @@ header-icon:hover {
   mask-image: linear-gradient(to top, black 80%, transparent 100%);
 }
 
+/* ============================================
+   RESPONSIVE PARA TABLET (entre 481px y 768px)
+   ============================================ */
+@media (min-width: 481px) and (max-width: 768px) {
+  .triple-banner-section {
+    padding: 40px 0;
+  }
+  
+  .triple-container-full {
+    flex-direction: column;
+    gap: 20px;
+    width: 90%;
+  }
+  
+  .banner-box-luxe {
+    height: 280px;
+    flex-direction: row;
+    border-radius: 25px;
+  }
+  
+  .banner-info-luxe {
+    width: 50%;
+    height: 100%;
+    padding: 20px;
+    text-align: left;
+    align-items: flex-start;
+  }
+  
+  .banner-info-luxe h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+  
+  .banner-info-luxe p {
+    font-size: 12px;
+    margin-bottom: 15px;
+    max-width: 100%;
+  }
+  
+  .banner-img-luxe {
+    width: 50%;
+    height: 100%;
+  }
+  
+  .btn-luxe {
+    padding: 10px 20px;
+    font-size: 12px;
+  }
+}
+
+/* ============================================
+   MÓVIL (max 480px) - TARJETAS MÁS PEQUEÑAS
+   ============================================ */
+@media (max-width: 480px) {
+  .triple-banner-section {
+    padding: 30px 0;
+  }
+  
+  .triple-container-full {
+    flex-direction: column;
+    gap: 15px;
+    width: 92%;
+  }
+  
+  .banner-box-luxe {
+    height: 160px; /* Más pequeñas */
+    flex-direction: row;
+    border-radius: 20px;
+  }
+  
+  .banner-info-luxe {
+    width: 55%;
+    height: 100%;
+    padding: 15px;
+    text-align: left;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  
+  .banner-info-luxe h3 {
+    font-size: 14px; /* Título más pequeño */
+    margin-bottom: 4px;
+  }
+  
+  .banner-info-luxe p {
+    font-size: 10px; /* Texto más pequeño */
+    margin-bottom: 10px;
+    max-width: 100%;
+    line-height: 1.3;
+  }
+  
+  .banner-img-luxe {
+    width: 45%;
+    height: 100%;
+  }
+  
+  .btn-luxe {
+    padding: 6px 12px;
+    font-size: 9px;
+    border-radius: 20px;
+  }
+}
+
+/* ============================================
+   MÓVIL MUY PEQUEÑO (max 380px)
+   ============================================ */
+@media (max-width: 380px) {
+  .banner-box-luxe {
+    height: 140px;
+  }
+  
+  .banner-info-luxe {
+    padding: 10px;
+  }
+  
+  .banner-info-luxe h3 {
+    font-size: 12px;
+  }
+  
+  .banner-info-luxe p {
+    font-size: 9px;
+    margin-bottom: 8px;
+  }
+  
+  .btn-luxe {
+    padding: 5px 10px;
+    font-size: 8px;
+  }
+}
+
 .pro-box { background: #f8f1f1; }
 .gift-box { background: #fef9e7; }
 .skin-box { background: #e8f5e9; }
@@ -1029,6 +1166,7 @@ header-icon:hover {
   font-weight: 600;
   font-size: 13px;
   cursor: pointer;
+  transition: all 0.3s ease;
 }
 
 .btn-luxe:hover {
@@ -1417,6 +1555,8 @@ header-icon:hover {
 }
 
 .look-modal-content {
+   scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
   background: white;
   padding: 40px;
   border-radius: 30px;
@@ -1440,6 +1580,114 @@ header-icon:hover {
   flex-wrap: wrap;
   justify-content: center;
   gap: 25px;
+}
+/* ============================================
+   LOOK MODAL - RESPONSIVE MÓVIL
+   ============================================ */
+
+/* Tablet y móvil */
+@media (max-width: 768px) {
+  .look-modal {
+    padding: 10px;
+  }
+  
+  .look-modal-content {
+    padding: 25px 20px;
+    max-width: 95%;
+    border-radius: 20px;
+  }
+  
+  .close-look {
+    top: 12px;
+    right: 15px;
+    font-size: 28px;
+  }
+  
+  #look-products {
+    gap: 15px;
+  }
+  
+  #look-products > div {
+    width: calc(50% - 10px);
+    min-width: 140px;
+    padding: 12px;
+  }
+  
+  #look-products img {
+    height: 100px;
+  }
+  
+  #look-products h4 {
+    font-size: 12px;
+  }
+  
+  #look-products p {
+    font-size: 13px;
+  }
+  
+  #look-products button {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+  
+  .btn-add-all-luxe {
+    padding: 12px 20px;
+    font-size: 12px;
+  }
+  
+  #look-products h2 {
+    font-size: 22px !important;
+    margin-bottom: 15px !important;
+  }
+}
+
+/* Móvil pequeño */
+@media (max-width: 480px) {
+  .look-modal-content {
+    padding: 20px 15px;
+  }
+  
+  .close-look {
+    top: 10px;
+    right: 12px;
+    font-size: 24px;
+  }
+  
+  #look-products {
+    gap: 12px;
+  }
+  
+  #look-products > div {
+    width: calc(50% - 6px);
+    min-width: 130px;
+    padding: 10px;
+  }
+  
+  #look-products img {
+    height: 85px;
+  }
+  
+  #look-products h4 {
+    font-size: 11px;
+  }
+  
+  #look-products p {
+    font-size: 12px;
+  }
+  
+  #look-products button {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+  
+  .btn-add-all-luxe {
+    padding: 10px 16px;
+    font-size: 11px;
+  }
+  
+  #look-products h2 {
+    font-size: 18px !important;
+  }
 }
 
 /* ============================================
@@ -1607,7 +1855,18 @@ header-icon:hover {
   .icons a span:not(#fav-count):not(#cart-count) {
     display: none;
   }
+   /* EXCEPCIÓN: NO ocultar el botón "Volver al carrito" */
+  .icons a.back-to-cart {
+    font-size: 12px !important;  /* Mostrar texto */
+    padding: 6px 12px !important;
+    background: #f0f0f0;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
   
+  .icons a span:not(#fav-count):not(#cart-count) {
+    display: none;
+  }
   /* TUS PNG se mantienen visibles */
   .header-icon {
     width: 18px;
@@ -1748,18 +2007,183 @@ header-icon:hover {
   }
 }
 /* ============================================
-   VIDEOS - RESPONSIVE CORREGIDO
+   VIDEOS - RESPONSIVE PARA TODAS LAS PANTALLAS
    ============================================ */
-@media (max-width: 768px) {
+
+/* Estilos base para escritorio (grid normal) */
+.video-showcase {
+  padding: 60px 8%;
+  background: linear-gradient(to bottom, #fff0f6fa, #fff0f6cb), url('../img/pettern.jpeg');
+  background-repeat: repeat;
+  background-size: auto, 200px;
+}
+
+.video-title {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 40px;
+  font-family: 'Playfair Display', serif;
+  color: #333;
+}
+
+.video-grid {
+  display: flex;
+  justify-content: center;
+  gap: 25px;
+  flex-wrap: wrap;
+}
+
+.video-card {
+  position: relative;
+  width: 300px;
+  height: 540px;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+/* ============================================
+   TABLET Y LAPTOPS PEQUEÑAS (entre 769px y 1024px)
+   ============================================ */
+@media (min-width: 769px) and (max-width: 1024px) {
   .video-showcase {
-    padding: 30px 0; /* Cambiamos padding lateral a 0 */
-    overflow: hidden; /* Previene desbordes */
+    padding: 40px 20px;
   }
   
   .video-title {
-    font-size: 22px;
+    font-size: 26px;
+    margin-bottom: 30px;
+  }
+  
+  .video-grid {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    overflow-y: visible;
+    flex-wrap: nowrap;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 10px 20px 20px 20px;
+    margin: 0;
+    justify-content: flex-start;
+  }
+  
+  /* Espacio al inicio y final para mejor experiencia */
+  .video-grid::before {
+    content: '';
+    display: block;
+    flex: 0 0 10px;
+    min-width: 10px;
+  }
+  
+  .video-grid::after {
+    content: '';
+    display: block;
+    flex: 0 0 10px;
+    min-width: 10px;
+  }
+  
+  .video-card {
+    flex: 0 0 280px;
+    scroll-snap-align: start;
+    height: 500px;
+    width: auto;
+  }
+  
+  /* Ocultar scrollbar pero mantener funcionalidad */
+  .video-grid::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  .video-grid::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  .video-grid::-webkit-scrollbar-thumb {
+    background: #ff4d6d;
+    border-radius: 10px;
+  }
+}
+
+/* ============================================
+   TABLET VERTICAL (entre 481px y 768px)
+   ============================================ */
+@media (min-width: 481px) and (max-width: 768px) {
+  .video-showcase {
+    padding: 30px 15px;
+  }
+  
+  .video-title {
+    font-size: 24px;
     margin-bottom: 25px;
-    padding: 0 15px; /* Título sí necesita padding */
+    padding: 0 15px;
+  }
+  
+  .video-grid {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    overflow-y: visible;
+    flex-wrap: nowrap;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 5px 15px 20px 15px;
+    margin: 0;
+    justify-content: flex-start;
+  }
+  
+  .video-grid::before {
+    content: '';
+    display: block;
+    flex: 0 0 8px;
+    min-width: 8px;
+  }
+  
+  .video-grid::after {
+    content: '';
+    display: block;
+    flex: 0 0 8px;
+    min-width: 8px;
+  }
+  
+  .video-card {
+    flex: 0 0 260px;
+    scroll-snap-align: start;
+    height: 460px;
+    width: auto;
+  }
+  
+  .video-grid::-webkit-scrollbar {
+    height: 4px;
+  }
+  
+  .video-grid::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  .video-grid::-webkit-scrollbar-thumb {
+    background: #ff4d6d;
+    border-radius: 10px;
+  }
+}
+
+/* ============================================
+   MÓVIL (max 480px)
+   ============================================ */
+@media (max-width: 480px) {
+  .video-showcase {
+    padding: 20px 0;
+  }
+  
+  .video-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding: 0 15px;
   }
   
   .video-grid {
@@ -1770,45 +2194,46 @@ header-icon:hover {
     flex-wrap: nowrap;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    /* IMPORTANTE: padding izquierdo y derecho */
-    padding: 5px 0 15px 15px !important;
+    padding: 5px 0 15px 12px;
     margin: 0;
-    justify-content: flex-start; /* Cambiamos de center a flex-start */
+    justify-content: flex-start;
   }
   
-  /* Espacio al final para que el último video no quede pegado */
   .video-grid::after {
     content: '';
     display: block;
-    flex: 0 0 15px;
-    min-width: 15px;
-  }
-  
-  .video-card {
-    flex: 0 0 240px;
-    scroll-snap-align: start;
-    height: 420px;
-    width: auto;
-  }
-  
-  
-}
-
-/* Pantallas muy pequeñas */
-@media (max-width: 480px) {
- 
-  .video-grid {
-    padding: 5px 0 15px 12px !important;
-  }
-  
-  .video-grid::after {
     flex: 0 0 12px;
     min-width: 12px;
   }
   
-  .video-title {
-    font-size: 20px;
-    margin-bottom: 20px;
+  .video-card {
+    flex: 0 0 200px;
+    scroll-snap-align: start;
+    height: 360px;
+    width: auto;
+  }
+  
+  .video-grid::-webkit-scrollbar {
+    height: 3px;
+  }
+}
+
+/* ============================================
+   PANTALLAS GRANDES (normal, sin cambios)
+   ============================================ */
+@media (min-width: 1025px) {
+  .video-grid {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+    overflow-x: visible;
+  }
+  
+  .video-card {
+    flex: 0 0 auto;
+    width: 300px;
+    height: 540px;
   }
 }
 /* ============================================
@@ -1846,6 +2271,7 @@ header-icon:hover {
     height: 16px;
   }
 }
+
 
 /*carrito.html*/
 .cart-page-wrapper {
@@ -3346,12 +3772,38 @@ header-icon:hover {
     font-size: 32px;
   }
 }
-/*check.html*/
 /* ==========================================
-   CHECKOUT RESPONSIVE MEJORADO
+   CHECKOUT - ESTILOS CORREGIDOS Y OPTIMIZADOS
    ========================================== */
 
-/* Barra de progreso del checkout */
+/* Contenedor principal */
+.checkout-container {
+  background: #fdf2f5;
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.checkout-card {
+  background: #ffffff;
+  padding: 40px;
+  border-radius: 30px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  max-width: 550px;
+  width: 100%;
+}
+
+.checkout-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  margin-bottom: 30px;
+  color: #333;
+  text-align: center;
+}
+
+/* Barra de progreso */
 .checkout-progress {
   display: flex;
   align-items: center;
@@ -3377,7 +3829,7 @@ header-icon:hover {
   justify-content: center;
   font-weight: bold;
   color: #999;
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   transition: all 0.3s ease;
 }
 
@@ -3388,7 +3840,7 @@ header-icon:hover {
 }
 
 .step-label {
-  font-size: 12px;
+  font-size: 11px;
   color: #999;
   font-weight: 600;
   text-transform: uppercase;
@@ -3407,14 +3859,21 @@ header-icon:hover {
   margin-bottom: 25px;
 }
 
-/* Mejoras para el checkout-card */
-.checkout-card {
-  max-width: 600px;
+/* Secciones */
+.checkout-section {
+  margin-bottom: 25px;
   width: 100%;
-  padding: 40px;
 }
 
-/* Step badges */
+.checkout-section h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
 .step-badge {
   background: #ff4d6d;
   color: white;
@@ -3429,6 +3888,30 @@ header-icon:hover {
   margin-right: 10px;
 }
 
+/* Inputs */
+.input-group {
+  width: 100%;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  background: #f9f9f9;
+  box-sizing: border-box;
+}
+
+.input-group input:focus {
+  border-color: #ff4d6d;
+  outline: none;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.1);
+}
+
 /* Métodos de pago */
 .payment-methods {
   display: flex;
@@ -3439,6 +3922,7 @@ header-icon:hover {
 
 .payment-option {
   flex: 1;
+  min-width: 110px;
   cursor: pointer;
 }
 
@@ -3449,15 +3933,17 @@ header-icon:hover {
 .payment-label {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
-  padding: 15px;
+  padding: 12px;
   background: #f9f9f9;
   border: 2px solid #eee;
-  border-radius: 15px;
-  font-size: 14px;
+  border-radius: 12px;
+  font-size: 13px;
   font-weight: 600;
   transition: all 0.3s ease;
   cursor: pointer;
+  text-align: center;
 }
 
 .payment-option input[type="radio"]:checked + .payment-label {
@@ -3467,7 +3953,7 @@ header-icon:hover {
 }
 
 .payment-icon {
-  font-size: 20px;
+  font-size: 18px;
 }
 
 /* Cajas de detalles de pago */
@@ -3476,7 +3962,7 @@ header-icon:hover {
   padding: 20px;
   border-radius: 15px;
   margin-top: 15px;
-  animation: slideDown 0.4s ease;
+  border: 1px solid #ffd6e0;
 }
 
 .payment-details-box.hidden {
@@ -3484,21 +3970,81 @@ header-icon:hover {
 }
 
 .payment-details-box h4 {
-  margin: 0 0 15px 0;
-  color: #333;
-  font-size: 16px;
+  margin: 0 0 12px 0;
+  color: #ff4d6d;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .payment-info {
   font-size: 13px;
   color: #666;
   margin: 0 0 15px 0;
-  padding: 10px;
+  padding: 12px;
   background: white;
   border-radius: 10px;
+  border-left: 3px solid #ff4d6d;
+  line-height: 1.4;
 }
 
-/* Resumen de compra mejorado */
+/* Inputs dentro de las cajas de pago */
+.payment-details-box input {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #ffd6e0;
+  border-radius: 10px;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  background: white;
+  box-sizing: border-box;
+  margin-bottom: 10px;
+}
+
+.payment-details-box input:focus {
+  border-color: #ff4d6d;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.1);
+}
+
+.input-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 5px;
+}
+
+.input-row input {
+  margin-bottom: 0;
+}
+
+/* Número de tarjeta específico */
+#numeroTarjeta {
+  letter-spacing: 1px;
+  font-size: 15px;
+}
+
+/* Botones de PayPal y Mercado Pago con logos */
+.payment-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+.payment-logo {
+  height: 32px;
+  object-fit: contain;
+}
+/* Para la tarjeta específicamente si sigue siendo más grande */
+.payment-option:first-child .payment-icon-img {
+  object-fit: cover;
+  object-position: center;
+  height: 50px;
+}
+/* Resumen de compra */
 .checkout-summary {
   background: #fff5f7;
   border-radius: 20px;
@@ -3507,16 +4053,17 @@ header-icon:hover {
 }
 
 .checkout-summary h3 {
-  font-size: 18px;
+  font-size: 16px;
   margin: 0 0 15px 0;
   color: #333;
+  font-weight: 600;
 }
 
 .summary-row {
   display: flex;
   justify-content: space-between;
   padding: 8px 0;
-  font-size: 15px;
+  font-size: 14px;
   color: #666;
 }
 
@@ -3532,7 +4079,7 @@ header-icon:hover {
 }
 
 .summary-row.total-row {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   color: #ff4d6d;
   padding-top: 5px;
@@ -3547,66 +4094,36 @@ header-icon:hover {
 
 .btn-luxe-pay {
   flex: 1;
-  padding: 16px 25px;
-  font-size: 16px;
-  border-radius: 15px;
+  background: #000;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
   transition: all 0.3s ease;
+  text-align: center;
+}
+
+.btn-luxe-pay:hover {
+  background: #ff4d6d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 77, 109, 0.3);
+}
+
+.secure-text {
+  font-size: 11px;
+  color: #aaa;
+  text-align: center;
+  margin-top: 15px;
 }
 
 /* ==========================================
-   RESPONSIVE PARA CHECKOUT
+   RESPONSIVE - MÓVIL
    ========================================== */
 
-/* Tablets */
 @media (max-width: 768px) {
-  .checkout-card {
-    padding: 30px 25px;
-  }
-  
-  .checkout-title {
-    font-size: 26px;
-    margin-bottom: 25px;
-  }
-  
-  .step-number {
-    width: 35px;
-    height: 35px;
-    font-size: 14px;
-  }
-  
-  .step-label {
-    font-size: 11px;
-  }
-  
-  .payment-label {
-    padding: 12px;
-    font-size: 13px;
-  }
-  
-  .payment-icon {
-    font-size: 18px;
-  }
-  
-  .checkout-summary {
-    padding: 15px;
-  }
-  
-  .summary-row {
-    font-size: 14px;
-  }
-  
-  .summary-row.total-row {
-    font-size: 18px;
-  }
-  
-  .btn-luxe-pay {
-    padding: 14px 20px;
-    font-size: 15px;
-  }
-}
-
-/* Móviles */
-@media (max-width: 480px) {
   .checkout-container {
     padding: 20px 15px;
   }
@@ -3621,14 +4138,9 @@ header-icon:hover {
     margin-bottom: 20px;
   }
   
-  /* Barra de progreso más compacta */
-  .checkout-progress {
-    margin-bottom: 20px;
-  }
-  
   .step-number {
-    width: 32px;
-    height: 32px;
+    width: 35px;
+    height: 35px;
     font-size: 13px;
   }
   
@@ -3636,38 +4148,32 @@ header-icon:hover {
     font-size: 10px;
   }
   
-  .progress-line {
-    margin-bottom: 20px;
-  }
-  
-  /* Secciones */
   .checkout-section h3 {
     font-size: 16px;
-    margin-bottom: 12px;
   }
   
   .step-badge {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     font-size: 12px;
   }
   
-  /* Inputs */
   .input-group input {
-    padding: 14px;
+    padding: 12px 14px;
     font-size: 14px;
-    margin-bottom: 12px;
   }
   
-  /* Métodos de pago */
   .payment-methods {
-    flex-direction: column;
     gap: 10px;
   }
   
   .payment-label {
-    padding: 14px;
-    font-size: 14px;
+    padding: 10px;
+    font-size: 12px;
+  }
+  
+  .payment-icon {
+    font-size: 16px;
   }
   
   .payment-details-box {
@@ -3675,37 +4181,131 @@ header-icon:hover {
   }
   
   .payment-details-box h4 {
-    font-size: 15px;
-    margin-bottom: 12px;
+    font-size: 14px;
   }
   
-  .input-row {
-    flex-direction: row;
-    gap: 8px;
+  .payment-info {
+    font-size: 12px;
+    padding: 10px;
   }
   
-  .input-row input {
-    flex: 1;
+  .payment-details-box input {
+    padding: 11px 12px;
+    font-size: 13px;
   }
   
-  /* Resumen */
   .checkout-summary {
     padding: 15px;
     margin: 20px 0;
   }
   
-  .checkout-summary h3 {
-    font-size: 16px;
-    margin-bottom: 12px;
-  }
-  
   .summary-row {
-    font-size: 14px;
+    font-size: 13px;
     padding: 6px 0;
   }
   
   .summary-row.total-row {
-    font-size: 18px;
+    font-size: 17px;
+  }
+  
+  .btn-luxe-pay {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-container {
+    padding: 15px 12px;
+  }
+  
+  .checkout-card {
+    padding: 20px 15px;
+    border-radius: 20px;
+  }
+  
+  .checkout-title {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+  
+  /* Barra de progreso más compacta */
+  .checkout-progress {
+    margin-bottom: 20px;
+  }
+  
+  .step-number {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+  
+  .step-label {
+    font-size: 9px;
+  }
+  
+  .progress-line {
+    margin-bottom: 20px;
+  }
+  
+  /* Métodos de pago en columna */
+  .payment-methods {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .payment-option {
+    width: 100%;
+  }
+  
+  .payment-label {
+    justify-content: center;
+    padding: 12px;
+  }
+  
+  /* Inputs en móvil */
+  .input-group input {
+    padding: 12px;
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+  
+  .input-row {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .input-row input {
+    width: 100%;
+  }
+  
+  .payment-details-box {
+    padding: 15px;
+  }
+  
+  .payment-details-box input {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  /* Resumen */
+  .checkout-summary {
+    padding: 12px;
+    margin: 15px 0;
+  }
+  
+  .checkout-summary h3 {
+    font-size: 15px;
+    margin-bottom: 10px;
+  }
+  
+  .summary-row {
+    font-size: 13px;
+    padding: 5px 0;
+  }
+  
+  .summary-row.total-row {
+    font-size: 16px;
   }
   
   /* Botones */
@@ -3716,84 +4316,18 @@ header-icon:hover {
   
   .btn-luxe-pay {
     width: 100%;
-    padding: 15px;
+    padding: 14px;
     font-size: 15px;
-    border-radius: 12px;
+    border-radius: 30px;
   }
   
   .secure-text {
-    font-size: 11px;
+    font-size: 10px;
     margin-top: 12px;
   }
-  
-  /* Ajustes del header */
-  .back-to-cart {
-    font-size: 0 !important;
-    padding: 8px !important;
-  }
-  
-  .back-to-cart::before {
-    content: "←";
-    font-size: 18px;
-  }
-  
-  .back-to-cart span {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    font-size: 11px !important;
-  }
 }
 
-/* Móviles pequeños */
-@media (max-width: 360px) {
-  .checkout-card {
-    padding: 20px 15px;
-  }
-  
-  .checkout-title {
-    font-size: 22px;
-  }
-  
-  .step-number {
-    width: 28px;
-    height: 28px;
-    font-size: 12px;
-  }
-  
-  .step-label {
-    font-size: 9px;
-  }
-  
-  .input-group input {
-    padding: 12px;
-    font-size: 13px;
-  }
-  
-  .payment-label {
-    padding: 12px;
-    font-size: 13px;
-  }
-  
-  .payment-icon {
-    font-size: 16px;
-  }
-  
-  .summary-row {
-    font-size: 13px;
-  }
-  
-  .summary-row.total-row {
-    font-size: 17px;
-  }
-  
-  .btn-luxe-pay {
-    padding: 14px;
-    font-size: 14px;
-  }
-}
-
-/* Animaciones */
+/* Animación */
 @keyframes slideDown {
   from {
     opacity: 0;
@@ -3804,197 +4338,3 @@ header-icon:hover {
     transform: translateY(0);
   }
 }
-  /*notas checkout*/
-  .checkout-container {
-  background: #fdf2f5;
-  min-height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 20px;
-}
-.checkout-card {
-  background: #ffffff;
-  padding: 40px;
-  border-radius: 30px;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
-  max-width: 500px;
-  width: 100%;
-  text-align: center;
-}
-.checkout-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 28px;
-  margin-bottom: 30px;
-  color: #333;
-}
-.checkout-section {
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.checkout-section h3 {
-  font-size: 16px;
-  margin-bottom: 15px;
-  color: #555;
-  display: flex;
-  align-items: center;
-  width: 100%;
-  max-width: 400px;
-}
-.step {
-  background: #ff4d6d;
-  color: white;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 12px;
-  margin-right: 10px;
-}
-
-.input-group, .luxe-select, .payment-box {
-  width: 100%;
-  max-width: 400px;
-}
-
-.input-group input, .luxe-select, .payment-box input {
-  width: 100%;
-  padding: 15px;
-  margin-bottom: 15px;
-  border: 1px solid #eee;
-  border-radius: 12px;
-  background: #f9f9f9;
-  transition: 0.3s;
-  font-size: 14px;
-}
-
-.btn-luxe-pay {
-  background: #000;
-  color: white;
-  width: 100%;
-  padding: 20px;
-  border: none;
-  border-radius: 50px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-  margin-top: 20px;
-}
-
-.btn-luxe-pay:hover {
-  background: #ff4d6d;
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(255, 77, 109, 0.3);
-}
-
-.secure-text {
-  font-size: 12px;
-  color: #aaa;
-  margin-top: 15px;
-}
-/* ============================================
-   CAJAS DE DETALLES DE PAGO (CON ESTILO)
-   ============================================ */
-.payment-details-box {
-  background: #fff0f3;
-  padding: 20px;
-  border-radius: 15px;
-  margin-top: 15px;
-  animation: slideDown 0.3s ease;
-  border: 1px solid #ffd6e0; /* Borde sutil */
-  box-shadow: 0 4px 10px rgba(255, 77, 109, 0.1); /* Sombra suave */
-}
-
-.payment-details-box.hidden {
-  display: none;
-}
-
-.payment-details-box h4 {
-  margin: 0 0 15px 0;
-  color: #ff4d6d; /* Título en rosa */
-  font-size: 16px;
-  font-weight: 700;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.payment-details-box h4::before {
-  content: "💳";
-  font-size: 18px;
-}
-
-#paypalBox h4::before {
-  content: "🅿️";
-}
-
-.payment-info {
-  font-size: 13px;
-  color: #666;
-  margin: 0 0 15px 0;
-  padding: 12px;
-  background: white;
-  border-radius: 10px;
-  border-left: 4px solid #ff4d6d; /* Detalle decorativo */
-  line-height: 1.5;
-}
-
-.input-row {
-  display: flex;
-  gap: 12px;
-  margin-top: 10px;
-}
-
-.input-row input {
-  flex: 1;
-  padding: 14px;
-  border: 2px solid #ffd6e0;
-  border-radius: 12px;
-  font-size: 14px;
-  outline: none;
-  transition: all 0.3s ease;
-  background: white;
-}
-
-.input-row input:focus {
-  border-color: #ff4d6d;
-  box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.1);
-}
-
-/* Input específico para número de tarjeta */
-#numeroTarjeta {
-  width: 100%;
-  padding: 14px;
-  border: 2px solid #ffd6e0;
-  border-radius: 12px;
-  font-size: 16px;
-  letter-spacing: 1px;
-  margin-bottom: 10px;
-  background: white;
-}
-
-#numeroTarjeta:focus {
-  border-color: #ff4d6d;
-}
-
-/* Input para correo de PayPal */
-#correoPaypal {
-  width: 100%;
-  padding: 14px;
-  border: 2px solid #ffd6e0;
-  border-radius: 12px;
-  font-size: 14px;
-  background: white;
-}
-
-#correoPaypal:focus {
-  border-color: #ff4d6d;
-}
-

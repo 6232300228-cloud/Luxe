@@ -2,38 +2,54 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-  <title>Finalizar Compra - Luxe</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LuxeCollection</title>
   <link rel="icon" href="img/logo.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css?v=20250313">
 </head>
 
 <body>
-
 <header class="header">
-  <div style="display: flex; align-items: center; gap: 15px;">
-    <a href="index.html">
+  <div class="header-left">
+    <div class="menu-hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <a href="index.html" class="logo-link">
       <img src="img/logo.png" alt="Logo Luxe" class="logo">
+      <div class="logo-text-group">
+        <span class="slogan-minimal">Tu destino de belleza</span>
+      </div>
     </a>
   </div>
 
   <div class="icons">
-    <a href="carrito.html" class="back-to-cart">← Volver al carrito <span id="cart-count"></span></a>
+    <a href="carrito.html" class="back-to-cart">Volver al carrito <span id="cart-count"></span></a>
 
     <div id="user-menu" class="dropdown" style="display: none;">
       <button class="dropbtn">
         <span id="user-name"></span> <i class="arrow">▼</i>
       </button>
       <div class="dropdown-content">
-        <a href="perfil.html">👤 Mi Perfil</a>
-        <a href="pedidos.html">📦 Mis Pedidos</a>
+        <a href="perfil.html"> Mi Perfil</a>
+        <a href="pedidos.html"> Mis Pedidos</a>
         <hr>
         <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
       </div>
     </div>
   </div>
 </header>
+<nav id="side-menu" class="side-nav">
+  <span class="close-btn" onclick="toggleMenu()">&times;</span>
+  <div class="menu-section">
+    <a href="nosotros.html"> Sobre Nosotros</a>
+    <a href="#">Lo más nuevo</a>
+    <a href="#"> Ofertas</a>
+  </div>
+</nav>
 
 <main class="checkout-container">
   <div class="checkout-card">
@@ -71,24 +87,40 @@
     <section class="checkout-section" id="payment-section">
       <h3><span class="step-badge">2</span> Método de Pago</h3>
       
-      <div class="payment-methods">
-        <label class="payment-option">
-          <input type="radio" name="metodoPago" value="tarjeta" checked>
-          <span class="payment-label">
-            <span class="payment-icon">💳</span>
-            Tarjeta de Crédito / Débito
-          </span>
-        </label>
-        
-        <label class="payment-option">
-          <input type="radio" name="metodoPago" value="paypal">
-          <span class="payment-label">
-            <span class="payment-icon">🅿️</span>
-            PayPal
-          </span>
-        </label>
-      </div>
-
+ <div class="payment-methods">
+  <label class="payment-option">
+    <input type="radio" name="metodoPago" value="tarjeta" checked>
+    <span class="payment-label">
+      <img src="img/tarjeta.png" alt="Tarjeta" class="payment-icon-img">
+    </span>
+  </label>
+  
+  <label class="payment-option">
+    <input type="radio" name="metodoPago" value="paypal">
+    <span class="payment-label">
+      <img src="img/paypal.png" alt="PayPal" class="payment-icon-img">
+    </span>
+  </label>
+  
+  <label class="payment-option">
+    <input type="radio" name="metodoPago" value="mercadopago">
+    <span class="payment-label">
+      <img src="img/mercadopago.png" alt="Mercado Pago" class="payment-icon-img">
+    </span>
+  </label>
+</div>
+<div id="mercadopagoBox" class="payment-details-box hidden">
+  <h4> Pagar con Mercado Pago</h4>
+  <p class="payment-info">
+    Serás redirigido a Mercado Pago para completar tu pago de forma segura. 
+    Podrás pagar con tarjeta de crédito, débito, efectivo o saldo disponible.
+  </p>
+  <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+    <img src="/img/mercadopago.png" alt="Mercado Pago" style="height: 40px;">
+    <img src="/img/visa.png" alt="Visa" style="height: 40px;">
+    <img src="/img/mastercard.png" alt="Mastercard" style="height: 40px;">
+  </div>
+</div>
       <div id="tarjetaBox" class="payment-details-box">
         <h4>Datos de la Tarjeta</h4>
         <input type="text" id="numeroTarjeta" placeholder="0000 0000 0000 0000" maxlength="19">

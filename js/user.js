@@ -7,7 +7,26 @@ function getPrimerNombre(nombreCompleto) {
     if (!nombreCompleto) return "Usuario";
     return nombreCompleto.split(' ')[0];
 }
+// Función para verificar si el usuario es admin y mostrar el botón dashboard
+function verificarAdmin() {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = localStorage.getItem('token');
+    const dashboardBtn = document.getElementById('dashboard-btn');
+    
+    if (dashboardBtn) {
+        if (token && user && (user.role === 'admin' || user.role === 'empleado')) {
+            dashboardBtn.style.display = 'flex';
+        } else {
+            dashboardBtn.style.display = 'none';
+        }
+    }
+}
 
+// Llamar esta función cuando se carga la página
+document.addEventListener('DOMContentLoaded', function() {
+    // ... tu código existente ...
+    verificarAdmin();
+});
 // Función para actualizar la UI del usuario
 function actualizarUIUsuario() {
     const token = localStorage.getItem("token");

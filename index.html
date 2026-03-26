@@ -39,27 +39,32 @@
   </div>
 
   <div class="header-right icons">
+    <!-- Dashboard - solo visible para admin -->
+    <a href="dashboard.html" id="dashboard-btn" style="display: none;">
+        <img src="img/dashboard-icon.png" alt="Dashboard" class="header-icon"> Dashboard
+    </a>
+    
     <a href="favoritos.html">
-      <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
+        <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
     </a>
     <a href="carrito.html">
-      <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
+        <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
     </a>
     <a href="login.html" id="login-btn">
-      <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
+        <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
     </a>
-
     <div id="user-menu" class="dropdown" style="display: none;">
-  <button class="dropbtn">
-  <span id="user-name"></span> <i class="arrow">▼</i></button>
-      <div class="dropdown-content">
-        <a href="perfil.html"> Mi Perfil</a>
-        <a href="pedidos.html"> Mis Pedidos</a>
-        <hr>
-        <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
-      </div>
+        <button class="dropbtn">
+            <span id="user-name"></span> <i class="arrow">▼</i>
+        </button>
+        <div class="dropdown-content">
+            <a href="perfil.html"> Mi Perfil</a>
+            <a href="pedidos.html"> Mis Pedidos</a>
+            <hr>
+            <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
+        </div>
     </div>
-  </div>
+</div>
 </header>
 
 <nav id="side-menu" class="side-nav">

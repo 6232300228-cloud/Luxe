@@ -392,6 +392,18 @@ header-icon:hover {
    VERSIÓN MÓVIL (sin delay)
    ============================================ */
 @media (max-width: 768px) {
+  /* Dashboard button en móvil */
+@media (max-width: 768px) {
+    #dashboard-btn {
+        font-size: 0 !important;
+        padding: 8px !important;
+    }
+    
+    #dashboard-btn .header-icon {
+        width: 20px;
+        height: 20px;
+    }
+}
     .dropdown-content {
         position: fixed;
         top: 70px;

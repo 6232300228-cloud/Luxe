@@ -1780,6 +1780,8 @@ header-icon:hover {
   color: #ff4d6d;
   font-weight: bold;
   font-size: 12px; /* Texto más pequeño */
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
 }
 
 .footer-column ul {
@@ -2029,7 +2031,47 @@ header-icon:hover {
   .social-links {
     justify-content: center;
   }
+
+
+
+
+/* Imágenes dentro de los enlaces */
+.social-links a img {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* EFECTO HOVER EN ESCRITORIO */
+@media (hover: hover) {
+  .social-links a:hover {
+    background: #ff4d6d;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+    
+  }
   
+  /* EFECTO DE GIRO EN PC */
+.social-links a:hover img {
+  transform: rotate(360deg) scale(1.1);
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+}
+
+/* EFECTO TAP EN MÓVIL */
+@media (hover: none) {
+  .social-links a:active {
+    background: #ff4d6d;
+    transform: scale(0.95);
+  }
+  
+  .social-links a:active img {
+    transform: rotate(360deg) scale(1.1);
+  }
+}
+
+/* Para mantener consistencia en todos los dispositivos */
+.social-links a:focus {
+  outline: none;
+}
   .newsletter-form {
     flex-direction: column;
     max-width: 280px;

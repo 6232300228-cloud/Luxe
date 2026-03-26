@@ -265,12 +265,11 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
         return;
     }
     
-    // CORRECCIÓN IMPORTANTE: Usar 'title' en lugar de 'nombre' para el backend
+    // Formato correcto para Mercado Pago
     const items = carrito.map(item => ({
-        title: item.nombre,  // 👈 CAMBIADO: 'title' en lugar de 'nombre'
-        quantity: item.cantidad || 1,
-        unit_price: item.precio,
-        currency_id: "MXN"
+        nombre: item.nombre,
+        precio: item.precio,
+        cantidad: item.cantidad || 1
     }));
     
     const nombre = localStorage.getItem('envio_nombre') || '';
@@ -335,37 +334,55 @@ async function guardarPedidoEnBackend(metodoPago) {
     const envioCosto = calcularEnvio();
     const totalPagar = total + envioCosto;
     
+    // Obtener datos del usuario para el backend
+    const usuario = JSON.parse(localStorage.getItem('user')) || {};
+    
     const pedidoData = {
-        items: carrito.map(item => ({
-            productoId: item.id,
+        usuario: {
+            nombre: nombre,
+            correo: correo,
+            direccion: direccion
+        },
+        productos: carrito.map(item => ({
             nombre: item.nombre,
             precio: item.precio,
             cantidad: item.cantidad || 1,
-            imagen: item.img
+            imagen: item.img || ''
         })),
-        subtotal: total,
-        envio: envioCosto,
         total: totalPagar,
-        direccion: direccion,
-        correo: correo,
-        nombre: nombre,
         metodoPago: metodoPago
     };
     
+    console.log('📝 Guardando pedido en backend:', pedidoData);
+    
     try {
-        const headers = { 'Content-Type': 'application/json' };
-        if (userToken) headers['Authorization'] = `Bearer ${userToken}`;
+        const headers = {
+            'Content-Type': 'application/json'
+        };
         
-        const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders', {
+        if (userToken) {
+            headers['Authorization'] = `Bearer ${userToken}`;
+        }
+        
+        // 👈 Usando la ruta /crear que existe en orders.js
+        const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
             method: 'POST',
             headers: headers,
             body: JSON.stringify(pedidoData)
         });
         
-        if (!response.ok) throw new Error('Error al guardar pedido');
+        console.log('📥 Status:', response.status);
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('❌ Error del backend:', errorData);
+            throw new Error(errorData.error || 'Error al guardar pedido');
+        }
         
         const result = await response.json();
+        console.log('✅ Pedido guardado en backend:', result);
         
+        // Guardar en localStorage para respaldo
         const pedidoLocal = {
             id: result.pedido?.id || Date.now(),
             fecha: new Date().toISOString(),
@@ -384,10 +401,11 @@ async function guardarPedidoEnBackend(metodoPago) {
         localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
         localStorage.removeItem('carrito');
         
-        return pedidoLocal;
+        return result.pedido || pedidoLocal;
         
     } catch (error) {
-        console.error('Error guardando pedido:', error);
+        console.error('❌ Error guardando pedido:', error);
+        mostrarToast('Error al guardar el pedido: ' + error.message, 'error');
         throw error;
     }
 }

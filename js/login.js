@@ -1,4 +1,4 @@
-// login.js - VERSIÓN COMPLETA Y CORREGIDA
+// login.js - VERSIÓN COMPLETA SIN VERIFICACIÓN DE CORREO
 const loginSection = document.getElementById("login-section");
 const registerSection = document.getElementById("register-section");
 const toRegister = document.getElementById("to-register");
@@ -101,7 +101,7 @@ if (btnLogin) {
 }
 
 // ============================================
-// REGISTRO - VERSIÓN COMPLETA CORREGIDA
+// REGISTRO - SIN VERIFICACIÓN DE CORREO
 // ============================================
 if (btnRegister) {
     btnRegister.addEventListener("click", async () => {
@@ -214,10 +214,10 @@ if (btnRegister) {
         // CONSTRUIR DATOS PARA ENVIAR
         // ============================================
         
-        // Nombre completo (corregido)
+        // Nombre completo
         const nombreCompleto = `${nombre} ${apellido}`.trim();
         
-        // Dirección completa (corregido)
+        // Dirección completa
         const direccionCompleta = `${calle} #${numero}, ${colonia}, ${estado}, C.P. ${cp}`;
         
         // Dirección detallada para guardar
@@ -269,14 +269,23 @@ if (btnRegister) {
 
                 const primerNombre = getPrimerNombre(nombreCompleto);
 
+                // ✅ MODIFICADO: Ya no dice nada de correo de verificación
                 Swal.fire({
                     icon: 'success',
-                    title: `¡Cuenta creada!`,
-                    html: `Hola <strong>${primerNombre}</strong>,<br>Te hemos enviado un correo de verificación a <strong>${correo}</strong><br>Por favor revisa tu bandeja de entrada.`,
-                    confirmButtonText: 'Entendido',
-                    confirmButtonColor: '#ff4d6d'
-                }).then(() => {
-                    window.location.href = "login.html";
+                    title: `¡Bienvenido ${primerNombre}!`,
+                    text: 'Cuenta creada exitosamente',
+                    timer: 1500,
+                    showConfirmButton: false,
+                    position: 'top-end',
+                    toast: true,
+                    didClose: () => {
+                        // Redirigir según el rol
+                        if (data.user.role === "admin" || data.user.role === "empleado") {
+                            window.location.href = "dashboard.html";
+                        } else {
+                            window.location.href = "index.html";
+                        }
+                    }
                 });
             } else {
                 mostrarToast(data.error || "Error al registrarse", 'error');

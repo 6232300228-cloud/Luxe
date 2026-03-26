@@ -83,8 +83,7 @@ async function cargarProductos() {
             }
 
             tr.innerHTML = `
-                <td><img src="${p.img}" width="40" style="border-radius: 5px;" onerror="this.src='img/logo.png'"></td>
-                <td><b>${p.name}</b><br><small style="color: #888;">ID: ${p.id}</small></td>
+                <td><img src="${p.img}" width="50" height="50" style="border-radius: 8px; object-fit: cover;" onerror="this.src='img/logo.png'"></td>                <td><b>${p.name}</b><br><small style="color: #888;">ID: ${p.id}</small></td>
                 <td>${p.category || 'Sin categoría'}</td>
                 <td style="font-weight: bold; color: #ff4d6d;">$${p.price}</td>
                 <td style="color: ${stockColor}; font-weight: bold;">${p.stock || 0} unidades</td>

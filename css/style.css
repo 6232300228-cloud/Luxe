@@ -4162,3 +4162,28 @@ header-icon:hover {
     color: #333;
   }
 }
+
+
+
+/* ============================================
+   ESTILOS ESPECÍFICOS PARA DASHBOARD - IMÁGENES
+   ============================================ */
+
+/* Afecta a todas las imágenes dentro de la tabla del dashboard */
+#lista-inventario img,
+.tabla-productos img,
+tbody img,
+table img {
+  width: 50px !important;
+  height: 50px !important;
+  object-fit: cover !important;
+  border-radius: 8px;
+}
+
+/* Centrar vertical y horizontalmente la columna de imagen */
+#lista-inventario td:first-child,
+.tabla-productos td:first-child {
+  text-align: center;
+  vertical-align: middle;
+  width: 70px;
+}

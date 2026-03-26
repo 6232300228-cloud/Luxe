@@ -1971,63 +1971,40 @@ header-icon:hover {
     font-size: 10px;
   }
   
-   .category-menu {
-    justify-content: flex-start;  /* Alinear a la izquierda */
+    .category-menu {
+    justify-content: flex-start;
     gap: 20px;
     padding: 12px 15px;
     overflow-x: auto;
     overflow-y: hidden;
-    flex-wrap: nowrap;  /* Evitar que se envuelvan */
+    flex-wrap: nowrap;
     -webkit-overflow-scrolling: touch;
-     scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none;    margin: 10px 0;
+    margin: 10px 0;
     border-radius: 0;
+    /* Ocultar scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .category-menu::-webkit-scrollbar {
+    display: none;
   }
   
   .category-menu button {
     font-size: 13px;
     padding: 8px 0;
-    flex-shrink: 0;  /* Evitar que se encojan */
+    flex-shrink: 0;
   }
   
-   /* Primera categoría (Todo) debe empezar desde el borde */
   .category-menu button:first-child {
     margin-left: 0;
   }
   
-  /* Última categoría para que no quede cortada */
   .category-menu button:last-child {
     margin-right: 15px;
   }
-  
-  /* Ocultar scrollbar en móvil pero mantener funcionalidad */
-  .category-menu::-webkit-scrollbar {
-    height: 3px;
-  }
-  
-  .category-menu::-webkit-scrollbar-track {
-    background: #f0f0f0;
-    border-radius: 10px;
-  }
-  
-  .category-menu::-webkit-scrollbar-thumb {
-    background: #ff4d6d;
-    border-radius: 10px;
-  }
-}
 
-/* Móviles muy pequeños */
-@media (max-width: 480px) {
-  .category-menu {
-    gap: 15px;
-    padding: 10px 12px;
-  }
   
-  .category-menu button {
-    font-size: 12px;
-    padding: 6px 0;
-  }
-}
   .products {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
@@ -2067,7 +2044,7 @@ header-icon:hover {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
   }
-
+}
 /* ============================================
    VIDEOS - RESPONSIVE PARA TODAS LAS PANTALLAS
    ============================================ */

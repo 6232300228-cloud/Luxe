@@ -3,27 +3,64 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
   <title>Mi Perfil - Luxe</title>
   <link rel="icon" href="img/logo.png" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css?v=20250313">
-  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
   <header class="header">
-    <a href="index.html">
-      <img src="img/logo.png" alt="Logo de la empresa" class="logo">
-    </a>
-    <div class="icons">
-      <a href="index.html">Inicio</a>
-      <a href="pedidos.html">Mis pedidos</a>
-      <a href="login.html" id="login-btn">👤 Iniciar sesión</a>
-      <span id="user-name" style="display:none;"></span>
-      <button id="logout-btn" style="display:none;">Salir</button>
+    <div class="header-left">
+      <div class="menu-hamburger" onclick="toggleMenu()">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <a href="index.html" class="logo-link">
+        <img src="img/logo.png" alt="Logo Luxe" class="logo">
+        <div class="logo-text-group">
+          <span class="slogan-minimal">Tu destino de belleza</span>
+        </div>
+      </a>
+    </div>
+    <div class="header-right icons">
+      <a href="favoritos.html">
+        <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
+      </a>
+      <a href="carrito.html">
+        <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
+      </a>
+      <a href="dashboard.html" id="dashboard-btn" style="display: none;">
+        <img src="img/dashboard-icon.png" alt="Dashboard" class="header-icon"> Dashboard
+      </a>
+      <a href="login.html" id="login-btn">
+        <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
+      </a>
+      <div id="user-menu" class="dropdown" style="display: none;">
+        <button class="dropbtn">
+          <span id="user-name"></span> <i class="arrow">▼</i>
+        </button>
+        <div class="dropdown-content">
+          <a href="perfil.html"> Mi Perfil</a>
+          <a href="pedidos.html"> Mis Pedidos</a>
+          <hr>
+          <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
+        </div>
+      </div>
     </div>
   </header>
+
+  <nav id="side-menu" class="side-nav">
+    <span class="close-btn" onclick="toggleMenu()">&times;</span>
+    <div class="menu-section">
+      <a href="nosotros.html"> Sobre Nosotros</a>
+      <a href="#">Lo más nuevo</a>
+      <a href="#"> Ofertas</a>
+    </div>
+  </nav>
 
   <div class="perfil-container">
     <div class="perfil-avatar">
@@ -113,8 +150,7 @@
         <h3>Encuéntranos en</h3>
         <div class="social-links">
           <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Instagram" class="logo"></a>
-          <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
-
+          <a href="https://www.tiktok.com/@luxecollection_1"><img src="img/tiktok.png" alt="TikTok" class="logo"></a>
         </div>
       </div>
       
@@ -134,16 +170,94 @@
   </footer>
   
   <script src="js/perfil.js?v=20250313"></script>
-  <script src="js/user.js?v=20250313"></script>
   <script>
-    // Mostrar inicial del nombre en el avatar
-    document.addEventListener('DOMContentLoaded', function() {
-      const user = JSON.parse(localStorage.getItem("user"));
-      if (user && user.nombre) {
-        const inicial = user.nombre.charAt(0).toUpperCase();
-        document.getElementById('avatarInicial').textContent = inicial;
+    // Funciones del header
+    function toggleMenu() {
+      const menu = document.getElementById('side-menu');
+      menu.classList.toggle('active');
+    }
+
+    document.addEventListener('click', function(event) {
+      const menu = document.getElementById('side-menu');
+      const hamburger = document.querySelector('.menu-hamburger');
+      if (menu && menu.classList.contains('active') && !menu.contains(event.target) && !hamburger.contains(event.target)) {
+        menu.classList.remove('active');
       }
     });
+
+    // Actualizar contadores
+    function actualizarContadores() {
+      const favCount = document.getElementById('fav-count');
+      const cartCount = document.getElementById('cart-count');
+      if (favCount) {
+        const favs = JSON.parse(localStorage.getItem('favs')) || [];
+        favCount.textContent = favs.length;
+      }
+      if (cartCount) {
+        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        const totalItems = carrito.reduce((sum, item) => sum + (item.cantidad || 1), 0);
+        cartCount.textContent = totalItems;
+      }
+    }
+
+    // Cargar usuario y mostrar nombre
+    function cargarUsuario() {
+      const token = localStorage.getItem('token');
+      const user = JSON.parse(localStorage.getItem('user'));
+      const loginBtn = document.getElementById('login-btn');
+      const userMenu = document.getElementById('user-menu');
+      const userNameSpan = document.getElementById('user-name');
+      const dashboardBtn = document.getElementById('dashboard-btn');
+      
+      if (token && user) {
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (userMenu) userMenu.style.display = 'block';
+        if (userNameSpan) {
+          const nombre = user.nombre || user.email || 'Usuario';
+          userNameSpan.textContent = nombre.split(' ')[0];
+        }
+        // Mostrar dashboard solo para admin/empleado
+        if (dashboardBtn && (user.role === 'admin' || user.role === 'empleado')) {
+          dashboardBtn.style.display = 'flex';
+        }
+        // Mostrar inicial en avatar
+        const avatarInicial = document.getElementById('avatarInicial');
+        if (avatarInicial && user.nombre) {
+          avatarInicial.textContent = user.nombre.charAt(0).toUpperCase();
+        }
+      } else {
+        if (loginBtn) loginBtn.style.display = 'flex';
+        if (userMenu) userMenu.style.display = 'none';
+        if (dashboardBtn) dashboardBtn.style.display = 'none';
+      }
+    }
+
+    function cerrarSesion() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      window.location.href = 'index.html';
+    }
+
+    function suscribirse() {
+      const email = document.getElementById('newsletter-email')?.value;
+      if (email && email.includes('@')) {
+        Swal.fire('¡Bienvenida al Club Luxe!', 'Recibirás ofertas exclusivas', 'success');
+        document.getElementById('newsletter-email').value = '';
+      } else {
+        Swal.fire('Email inválido', 'Por favor ingresa un correo válido', 'error');
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      actualizarContadores();
+      cargarUsuario();
+      
+      const logoutBtn = document.getElementById('logout-btn');
+      if (logoutBtn) logoutBtn.addEventListener('click', cerrarSesion);
+    });
+
+    window.toggleMenu = toggleMenu;
+    window.suscribirse = suscribirse;
   </script>
 </body>
 </html>

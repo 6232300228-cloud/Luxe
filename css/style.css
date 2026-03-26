@@ -2005,8 +2005,6 @@ header-icon:hover {
   .category-menu button:last-child {
     margin-right: 15px;
   }
-
-  
   .products {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
@@ -2027,35 +2025,25 @@ header-icon:hover {
     left: 50%;
     transform: translateX(-50%);
   }
-  
-  .social-links {
-    justify-content: center;
-  }
-
-
-
-
-/* Imágenes dentro de los enlaces */
-.social-links a img {
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* EFECTO HOVER EN ESCRITORIO */
-@media (hover: hover) {
-  .social-links a:hover {
-    background: #ff4d6d;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
-    
-  }
-  
-  /* EFECTO DE GIRO EN PC */
-.social-links a:hover img {
+  /* EFECTO DE GIRO EN PC - FUERA DEL MEDIA QUERY */
+.social-links a:hover .logo {
   transform: rotate(360deg) scale(1.1);
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
-}
 
+/* Asegurar que la transición esté en el estado normal también */
+.social-links a .logo {
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+  .social-links {
+    justify-content: center;
+  }
+  /* Efecto de giro en PC */
+  .social-links a:hover .logo {
+    transform: rotate(360deg) scale(1.1);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  }
 /* EFECTO TAP EN MÓVIL */
 @media (hover: none) {
   .social-links a:active {
@@ -2063,9 +2051,6 @@ header-icon:hover {
     transform: scale(0.95);
   }
   
-  .social-links a:active img {
-    transform: rotate(360deg) scale(1.1);
-  }
 }
 
 /* Para mantener consistencia en todos los dispositivos */

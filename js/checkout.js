@@ -1,5 +1,5 @@
 // ============================================
-// CHECKOUT.JS - CORREGIDO
+// CHECKOUT.JS - VERSIÓN COMPLETA (Tarjeta + Mercado Pago)
 // ============================================
 
 // Variables globales
@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('✅ Checkout inicializado');
     
     userToken = localStorage.getItem('token');
-    console.log('Token de usuario:', userToken ? 'Sí hay token' : 'No hay token');
     
     cargarCarrito();
     actualizarResumen();
@@ -73,19 +72,19 @@ function actualizarResumen() {
     const envioEl = document.getElementById('resumen-envio');
     const totalEl = document.getElementById('resumen-total');
     
-    if (subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+    if (subtotalEl) subtotalEl.textContent = `$${Math.round(subtotal)}`;
     
     if (envioEl) {
         if (envio === 0) {
             envioEl.textContent = 'GRATIS';
             envioEl.style.color = '#4caf50';
         } else {
-            envioEl.textContent = `$${envio.toFixed(2)}`;
+            envioEl.textContent = `$${envio}`;
             envioEl.style.color = '#666';
         }
     }
     
-    if (totalEl) totalEl.textContent = `$${totalPagar.toFixed(2)}`;
+    if (totalEl) totalEl.textContent = `$${Math.round(totalPagar)}`;
     mostrarMensajeEnvio();
 }
 
@@ -112,7 +111,7 @@ function mostrarMensajeEnvio() {
             }
         }
         if (mensajeEnvio) {
-            mensajeEnvio.innerHTML = `💰 Agrega $${faltante.toFixed(2)} más para obtener ENVIO GRATIS`;
+            mensajeEnvio.innerHTML = `💰 Agrega $${Math.round(faltante)} más para obtener ENVIO GRATIS`;
             mensajeEnvio.style.display = 'block';
         }
     } else {
@@ -129,7 +128,6 @@ function cargarCarrito() {
     if (carritoGuardado) {
         carrito = JSON.parse(carritoGuardado);
         total = carrito.reduce((sum, item) => sum + (item.precio * (item.cantidad || 1)), 0);
-        console.log('💰 Total calculado:', total);
     } else {
         carrito = [];
         total = 0;
@@ -219,6 +217,9 @@ function actualizarBarraProgreso() {
     });
 }
 
+// ============================================
+// PROCESAR PAGO - TARJETA Y MERCADO PAGO
+// ============================================
 async function procesarPago() {
     const metodoSeleccionado = document.querySelector('input[name="metodoPago"]:checked');
     if (!metodoSeleccionado) {
@@ -238,16 +239,11 @@ async function procesarPago() {
         if (metodoPago === 'mercadopago') {
             await procesarMercadoPago(btnPagar, textoOriginal);
         } else if (metodoPago === 'tarjeta') {
-            const pedidoGuardado = await guardarPedidoEnBackend('tarjeta');
-            if (pedidoGuardado) {
-                mostrarToast('Pago procesado exitosamente', 'success');
-                setTimeout(() => {
-                    window.location.href = 'success.html';
-                }, 1500);
-            } else {
-                btnPagar.textContent = textoOriginal;
-                btnPagar.disabled = false;
-            }
+            guardarPedidoLocal('tarjeta');
+            mostrarToast('Pago procesado exitosamente', 'success');
+            setTimeout(() => {
+                window.location.href = 'success.html';
+            }, 1500);
         }
     } catch (error) {
         console.error('Error:', error);
@@ -257,6 +253,9 @@ async function procesarPago() {
     }
 }
 
+// ============================================
+// MERCADO PAGO
+// ============================================
 async function procesarMercadoPago(btnPagar, textoOriginal) {
     if (!carrito || carrito.length === 0) {
         mostrarToast('El carrito está vacío', 'error');
@@ -277,7 +276,7 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
     const envioCosto = calcularEnvio();
     
     try {
-        // 🔥 GUARDAR SOLO EN LOCALSTORAGE, NO EN BACKEND
+        // Guardar pedido en localStorage
         guardarPedidoLocal('mercadopago');
         
         const response = await fetch('https://luxe-api-frr5.onrender.com/api/crear-preferencia', {
@@ -307,6 +306,9 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
     }
 }
 
+// ============================================
+// GUARDAR PEDIDO EN LOCALSTORAGE
+// ============================================
 function guardarPedidoLocal(metodoPago) {
     const nombre = localStorage.getItem('envio_nombre') || '';
     const direccion = localStorage.getItem('envio_direccion') || '';
@@ -317,10 +319,13 @@ function guardarPedidoLocal(metodoPago) {
     const pedidoLocal = {
         id: Date.now(),
         fecha: new Date().toISOString(),
-        items: carrito,
-        subtotal: total,
+        items: carrito.map(item => ({
+            ...item,
+            precio: Math.round(item.precio)
+        })),
+        subtotal: Math.round(total),
         envio: envioCosto,
-        total: totalPagar,
+        total: Math.round(totalPagar),
         envioData: { nombre, direccion, correo },
         metodoPago: metodoPago,
         estado: 'pendiente'
@@ -332,9 +337,12 @@ function guardarPedidoLocal(metodoPago) {
     localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
     localStorage.removeItem('carrito');
     
-    console.log('✅ Pedido guardado localmente');
+    console.log('✅ Pedido guardado:', pedidoLocal);
 }
 
+// ============================================
+// MOSTRAR CONFIRMACIÓN
+// ============================================
 function mostrarConfirmacion() {
     const checkoutCard = document.querySelector('.checkout-card');
     const nombre = localStorage.getItem('envio_nombre') || '';
@@ -364,10 +372,10 @@ function mostrarConfirmacion() {
         </div>
         <div class="checkout-summary">
             <h3>Resumen de compra</h3>
-            <div class="summary-row"><span>Subtotal (${carrito.length} productos):</span><span>$${total.toFixed(2)}</span></div>
-            <div class="summary-row"><span>Envío:</span><span>${envioCosto === 0 ? 'GRATIS' : `$${envioCosto.toFixed(2)}`}</span></div>
+            <div class="summary-row"><span>Subtotal (${carrito.length} productos):</span><span>$${Math.round(total)}</span></div>
+            <div class="summary-row"><span>Envío:</span><span>${envioCosto === 0 ? 'GRATIS' : `$${envioCosto}`}</span></div>
             <div class="summary-divider"></div>
-            <div class="summary-row total-row"><span>Total a Pagar:</span><span>$${totalPagar.toFixed(2)}</span></div>
+            <div class="summary-row total-row"><span>Total a Pagar:</span><span>$${Math.round(totalPagar)}</span></div>
         </div>
         <div class="checkout-actions">
             <button id="btnConfirmar" class="btn-luxe-pay">Confirmar y Pagar</button>

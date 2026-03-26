@@ -65,7 +65,7 @@ async function cargarProductos() {
         productos.forEach(p => {
             const tr = document.createElement("tr");
             
-            // Color según stock
+            // Color seg stock
             let stockColor = '#4CAF50';
             if (p.stock <= 0) stockColor = '#f44336';
             else if (p.stock <= 20) stockColor = '#ff9800';

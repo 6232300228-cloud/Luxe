@@ -3787,7 +3787,33 @@ header-icon:hover {
 /* ==========================================
    CHECKOUT - ESTILOS CORREGIDOS Y OPTIMIZADOS
    ========================================== */
+/* Estilos para pedidos */
+.card-pedido {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
 
+.card-pedido:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(255,77,109,0.15);
+}
+
+.estado-badge {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.estado-pendiente { background: #ff4d6d20; color: #ff4d6d; }
+.estado-pagado { background: #1976d220; color: #1976d2; }
+.estado-enviado { background: #f57c0020; color: #f57c00; }
+.estado-entregado { background: #388e3c20; color: #388e3c; }
+.estado-cancelado { background: #99920; color: #666; }
 /* Contenedor principal */
 .checkout-container {
   background: #fdf2f5;

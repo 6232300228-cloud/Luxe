@@ -4025,14 +4025,7 @@ header-icon:hover {
   font-size: 15px;
 }
 
-/* Botones de PayPal y Mercado Pago con logos */
-.payment-buttons {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 15px;
-  flex-wrap: wrap;
-}
+
 
 .payment-logo {
   height: 32px;
@@ -4119,222 +4112,41 @@ header-icon:hover {
   margin-top: 15px;
 }
 
-/* ==========================================
-   RESPONSIVE - MÓVIL
-   ========================================== */
-
-@media (max-width: 768px) {
-  .checkout-container {
-    padding: 20px 15px;
-  }
-  
-  .checkout-card {
-    padding: 25px 20px;
-    border-radius: 25px;
-  }
-  
-  .checkout-title {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .step-number {
-    width: 35px;
-    height: 35px;
-    font-size: 13px;
-  }
-  
-  .step-label {
-    font-size: 10px;
-  }
-  
-  .checkout-section h3 {
-    font-size: 16px;
-  }
-  
-  .step-badge {
-    width: 26px;
-    height: 26px;
-    font-size: 12px;
-  }
-  
-  .input-group input {
-    padding: 12px 14px;
-    font-size: 14px;
-  }
-  
+@media (max-width: 550px) {
+  /* Métodos de pago en fila, pero más pequeños */
   .payment-methods {
-    gap: 10px;
-  }
-  
-  .payment-label {
-    padding: 10px;
-    font-size: 12px;
-  }
-  
-  .payment-icon {
-    font-size: 16px;
-  }
-  
-  .payment-details-box {
-    padding: 15px;
-  }
-  
-  .payment-details-box h4 {
-    font-size: 14px;
-  }
-  
-  .payment-info {
-    font-size: 12px;
-    padding: 10px;
-  }
-  
-  .payment-details-box input {
-    padding: 11px 12px;
-    font-size: 13px;
-  }
-  
-  .checkout-summary {
-    padding: 15px;
-    margin: 20px 0;
-  }
-  
-  .summary-row {
-    font-size: 13px;
-    padding: 6px 0;
-  }
-  
-  .summary-row.total-row {
-    font-size: 17px;
-  }
-  
-  .btn-luxe-pay {
-    padding: 12px 16px;
-    font-size: 14px;
-  }
-}
-
-@media (max-width: 480px) {
-  .checkout-container {
-    padding: 15px 12px;
-  }
-  
-  .checkout-card {
-    padding: 20px 15px;
-    border-radius: 20px;
-  }
-  
-  .checkout-title {
-    font-size: 22px;
-    margin-bottom: 15px;
-  }
-  
-  /* Barra de progreso más compacta */
-  .checkout-progress {
-    margin-bottom: 20px;
-  }
-  
-  .step-number {
-    width: 30px;
-    height: 30px;
-    font-size: 12px;
-  }
-  
-  .step-label {
-    font-size: 9px;
-  }
-  
-  .progress-line {
-    margin-bottom: 20px;
-  }
-  
-  /* Métodos de pago en columna */
-  .payment-methods {
-    flex-direction: column;
+    display: flex;
+    flex-direction: row !important;
     gap: 8px;
+    justify-content: space-between;
   }
   
   .payment-option {
-    width: 100%;
+    flex: 1;
+    min-width: 0;
   }
   
   .payment-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    padding: 12px;
+    gap: 6px;
+    padding: 10px 4px;
+    background: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 12px;
   }
   
-  /* Inputs en móvil */
-  .input-group input {
-    padding: 12px;
-    font-size: 14px;
-    margin-bottom: 10px;
+  .payment-icon-img {
+    width: 32px;
+    height: 32px;
+    object-fit: contain;
   }
   
-  .input-row {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .input-row input {
-    width: 100%;
-  }
-  
-  .payment-details-box {
-    padding: 15px;
-  }
-  
-  .payment-details-box input {
-    padding: 12px;
-    font-size: 14px;
-  }
-  
-  /* Resumen */
-  .checkout-summary {
-    padding: 12px;
-    margin: 15px 0;
-  }
-  
-  .checkout-summary h3 {
-    font-size: 15px;
-    margin-bottom: 10px;
-  }
-  
-  .summary-row {
-    font-size: 13px;
-    padding: 5px 0;
-  }
-  
-  .summary-row.total-row {
-    font-size: 16px;
-  }
-  
-  /* Botones */
-  .checkout-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .btn-luxe-pay {
-    width: 100%;
-    padding: 14px;
-    font-size: 15px;
-    border-radius: 30px;
-  }
-  
-  .secure-text {
+  .payment-label span {
     font-size: 10px;
-    margin-top: 12px;
-  }
-}
-
-/* Animación */
-@keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+    font-weight: 600;
+    color: #333;
   }
 }

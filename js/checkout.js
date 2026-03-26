@@ -1,21 +1,26 @@
 // ============================================
-// CHECKOUT.JS - CON ENVÍO GRATIS > $500
+// CHECKOUT.JS - CON ENVÍO GRATIS > $500 Y BACKEND
 // ============================================
 
 // Variables globales
 let carrito = [];
 let total = 0;
 let pasoActual = 1;
+let userToken = null;
 
 // Constantes de envío
 const ENVIO_GRATIS_MINIMO = 500; // $500 para envío gratis
-const COSTO_ENVIO = 1; // $50 si no alcanza
+const COSTO_ENVIO = 50; // $50 si no alcanza
 
 // ============================================
 // INICIALIZACIÓN
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Checkout inicializado');
+    console.log('✅ Checkout inicializado');
+    
+    // Obtener token del usuario si está logueado
+    userToken = localStorage.getItem('token');
+    console.log('Token de usuario:', userToken ? 'Sí hay token' : 'No hay token');
     
     // Cargar carrito
     cargarCarrito();
@@ -33,13 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
     radios.forEach(radio => {
         radio.addEventListener('change', function() {
             document.getElementById('tarjetaBox')?.classList.add('hidden');
-            document.getElementById('paypalBox')?.classList.add('hidden');
             document.getElementById('mercadopagoBox')?.classList.add('hidden');
             
             if (this.value === 'tarjeta') {
                 document.getElementById('tarjetaBox')?.classList.remove('hidden');
-            } else if (this.value === 'paypal') {
-                document.getElementById('paypalBox')?.classList.remove('hidden');
             } else if (this.value === 'mercadopago') {
                 document.getElementById('mercadopagoBox')?.classList.remove('hidden');
             }
@@ -68,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // CALCULAR COSTO DE ENVÍO
 // ============================================
 function calcularEnvio() {
-    // Envío gratis si el total es mayor o igual a $500
     if (total >= ENVIO_GRATIS_MINIMO) {
         return 0;
     }
@@ -89,10 +90,9 @@ function actualizarResumen() {
     
     if (subtotalEl) subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
     
-    // Mostrar mensaje de envío gratis si aplica
     if (envioEl) {
         if (envio === 0) {
-            envioEl.textContent = 'GRATIS ';
+            envioEl.textContent = 'GRATIS 🎉';
             envioEl.style.color = '#4caf50';
         } else {
             envioEl.textContent = `$${envio.toFixed(2)}`;
@@ -102,7 +102,6 @@ function actualizarResumen() {
     
     if (totalEl) totalEl.textContent = `$${totalPagar.toFixed(2)}`;
     
-    // Mostrar/ocultar mensaje de envío gratis
     mostrarMensajeEnvio();
 }
 
@@ -110,13 +109,11 @@ function actualizarResumen() {
 // MOSTRAR MENSAJE DE ENVÍO GRATIS
 // ============================================
 function mostrarMensajeEnvio() {
-    // Buscar o crear el mensaje de envío gratis
     let mensajeEnvio = document.getElementById('mensaje-envio-gratis');
     
     if (total < ENVIO_GRATIS_MINIMO) {
         const faltante = ENVIO_GRATIS_MINIMO - total;
         if (!mensajeEnvio) {
-            // Crear el mensaje si no existe
             const summary = document.querySelector('.checkout-summary');
             if (summary) {
                 mensajeEnvio = document.createElement('div');
@@ -134,12 +131,12 @@ function mostrarMensajeEnvio() {
             }
         }
         if (mensajeEnvio) {
-            mensajeEnvio.innerHTML = ` Agrega $${faltante.toFixed(2)} más para obtener <strong>ENVÍO GRATIS</strong> `;
+            mensajeEnvio.innerHTML = `💰 Agrega $${faltante.toFixed(2)} más para obtener <strong>ENVÍO GRATIS</strong> 🚚`;
             mensajeEnvio.style.display = 'block';
         }
     } else {
         if (mensajeEnvio) {
-            mensajeEnvio.innerHTML = ` ¡ENVÍO GRATIS! Tu pedido califica para envío sin costo `;
+            mensajeEnvio.innerHTML = `🎉 ¡ENVÍO GRATIS! Tu pedido califica para envío sin costo 🚚✨`;
             mensajeEnvio.style.background = '#e8f5e9';
             mensajeEnvio.style.color = '#2e7d32';
         }
@@ -151,16 +148,16 @@ function mostrarMensajeEnvio() {
 // ============================================
 function cargarCarrito() {
     const carritoGuardado = localStorage.getItem('carrito');
-    console.log('Carrito guardado:', carritoGuardado);
+    console.log('📦 Carrito guardado:', carritoGuardado);
     
     if (carritoGuardado) {
         carrito = JSON.parse(carritoGuardado);
         total = carrito.reduce((sum, item) => sum + (item.precio * (item.cantidad || 1)), 0);
-        console.log('Total calculado:', total);
+        console.log('💰 Total calculado:', total);
     } else {
         carrito = [];
         total = 0;
-        console.log('No hay carrito guardado');
+        console.log('⚠️ No hay carrito guardado');
     }
 }
 
@@ -169,7 +166,6 @@ function cargarCarrito() {
 // ============================================
 function avanzarPaso() {
     if (pasoActual === 1) {
-        // Validar datos de envío
         const nombre = document.getElementById('nombre')?.value.trim();
         const direccion = document.getElementById('direccion')?.value.trim();
         const correo = document.getElementById('correo')?.value.trim();
@@ -183,15 +179,12 @@ function avanzarPaso() {
             return;
         }
         
-        // Guardar datos
         localStorage.setItem('envio_nombre', nombre);
         localStorage.setItem('envio_direccion', direccion);
         localStorage.setItem('envio_correo', correo);
         
-        // Cambiar al paso 2
         pasoActual = 2;
         
-        // Ocultar sección de envío, mostrar sección de pago
         const shippingSection = document.getElementById('shipping-section');
         const paymentSection = document.getElementById('payment-section');
         const btnContinuar = document.getElementById('btnContinuar');
@@ -202,11 +195,9 @@ function avanzarPaso() {
         if (btnContinuar) btnContinuar.style.display = 'none';
         if (btnPagar) btnPagar.style.display = 'block';
         
-        // Actualizar barra de progreso
         actualizarBarraProgreso();
         window.scrollTo({ top: 0, behavior: 'smooth' });
     } else if (pasoActual === 2) {
-        // Validar método de pago
         const metodoSeleccionado = document.querySelector('input[name="metodoPago"]:checked');
         
         if (!metodoSeleccionado) {
@@ -233,15 +224,8 @@ function avanzarPaso() {
                 mostrarToast('CVV inválido', 'error');
                 return;
             }
-        } else if (metodoPago === 'paypal') {
-            const correoPaypal = document.getElementById('correoPaypal')?.value.trim();
-            if (!correoPaypal || !correoPaypal.includes('@')) {
-                mostrarToast('Correo de PayPal inválido', 'error');
-                return;
-            }
         }
         
-        // Avanzar al paso 3
         pasoActual = 3;
         actualizarBarraProgreso();
         mostrarConfirmacion();
@@ -284,27 +268,26 @@ async function procesarPago() {
     }
     
     const metodoPago = metodoSeleccionado.value;
-    
-    // Mostrar loading
     const btnPagar = document.getElementById('btnConfirmar') || document.getElementById('btnPagar');
     if (!btnPagar) return;
     
     const textoOriginal = btnPagar.textContent;
-    btnPagar.textContent = ' Procesando...';
+    btnPagar.textContent = '⏳ Procesando...';
     btnPagar.disabled = true;
     
     try {
         if (metodoPago === 'mercadopago') {
             await procesarMercadoPago(btnPagar, textoOriginal);
-        } else if (metodoPago === 'tarjeta') {
-            guardarPedido('tarjeta');
-            mostrarToast('Pago procesado exitosamente', 'success');
-            setTimeout(() => window.location.href = 'success.html', 1500);
-        } else if (metodoPago === 'paypal') {
-            guardarPedido('paypal');
-            mostrarToast('Redirigiendo a PayPal...', 'success');
-            setTimeout(() => window.location.href = 'https://www.paypal.com/mx/home', 1500);
-        }
+       } else if (metodoPago === 'tarjeta') {
+    // Guardar pedido y redirigir a success.html
+    const pedidoGuardado = await guardarPedidoEnBackend('tarjeta');
+    if (pedidoGuardado) {
+        mostrarToast('Pago procesado exitosamente', 'success');
+        setTimeout(() => {
+            window.location.href = 'success.html';
+        }, 1500);
+    }
+}
     } catch (error) {
         console.error('Error:', error);
         mostrarToast('Error de conexión. Intenta de nuevo.', 'error');
@@ -314,7 +297,7 @@ async function procesarPago() {
 }
 
 // ============================================
-// PROCESAR CON MERCADO PAGO
+// PROCESAR CON MERCADO PAGO (con envío incluido)
 // ============================================
 async function procesarMercadoPago(btnPagar, textoOriginal) {
     if (!carrito || carrito.length === 0) {
@@ -333,18 +316,46 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
     const nombre = localStorage.getItem('envio_nombre') || '';
     const direccion = localStorage.getItem('envio_direccion') || '';
     const correo = localStorage.getItem('envio_correo') || '';
+    const envioCosto = calcularEnvio();
+    
+    console.log('📦 Enviando a Mercado Pago:', { items, envio: envioCosto, total: total + envioCosto });
     
     try {
+        // 1. Primero guardar el pedido en el backend
+        const pedidoGuardado = await guardarPedidoEnBackend('mercadopago');
+        
+        if (!pedidoGuardado) {
+            mostrarToast('Error al guardar el pedido', 'error');
+            btnPagar.textContent = textoOriginal;
+            btnPagar.disabled = false;
+            return;
+        }
+        
+        // 2. Crear preferencia en Mercado Pago con el envío incluido
         const response = await fetch('https://luxe-api-frr5.onrender.com/api/crear-preferencia', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ items, payer: { name: nombre, email: correo, address: direccion } })
+            body: JSON.stringify({ 
+                items: items,
+                envio: envioCosto,  // 👈 Enviar el costo de envío
+                payer: { 
+                    name: nombre, 
+                    email: correo, 
+                    address: direccion 
+                }
+            })
         });
         
         const data = await response.json();
         
         if (data.init_point) {
-            guardarPedido('mercadopago');
+            // Guardar referencia del pedido para después del pago
+            localStorage.setItem('pedidoPendiente', JSON.stringify({
+                id: pedidoGuardado.id,
+                total: total + envioCosto
+            }));
+            
+            // Redirigir a Mercado Pago
             window.location.href = data.init_point;
         } else {
             mostrarToast(data.error || 'Error al crear el pago', 'error');
@@ -360,33 +371,84 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
 }
 
 // ============================================
-// GUARDAR PEDIDO
+// GUARDAR PEDIDO EN EL BACKEND
 // ============================================
-function guardarPedido(metodoPago) {
+async function guardarPedidoEnBackend(metodoPago) {
     const nombre = localStorage.getItem('envio_nombre') || '';
     const direccion = localStorage.getItem('envio_direccion') || '';
     const correo = localStorage.getItem('envio_correo') || '';
     const envioCosto = calcularEnvio();
+    const totalPagar = total + envioCosto;
     
-    const pedido = {
-        id: Date.now(),
-        fecha: new Date().toISOString(),
-        items: carrito,
+    const pedidoData = {
+        items: carrito.map(item => ({
+            productoId: item.id,
+            nombre: item.nombre,
+            precio: item.precio,
+            cantidad: item.cantidad || 1,
+            imagen: item.img
+        })),
         subtotal: total,
         envio: envioCosto,
-        total: total + envioCosto,
-        envioData: { nombre, direccion, correo },
-        metodoPago: metodoPago,
-        estado: 'pendiente'
+        total: totalPagar,
+        direccion: direccion,
+        correo: correo,
+        nombre: nombre,
+        metodoPago: metodoPago
     };
     
-    let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
-    pedidos.push(pedido);
-    localStorage.setItem('pedidos', JSON.stringify(pedidos));
-    localStorage.setItem('ultimoPedido', JSON.stringify(pedido));
-    localStorage.removeItem('carrito');
+    console.log('📝 Guardando pedido en backend:', pedidoData);
     
-    console.log('Pedido guardado:', pedido);
+    try {
+        const headers = {
+            'Content-Type': 'application/json'
+        };
+        
+        // Si hay token, agregarlo para identificar al usuario
+        if (userToken) {
+            headers['Authorization'] = `Bearer ${userToken}`;
+        }
+        
+        const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(pedidoData)
+        });
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Error al guardar pedido');
+        }
+        
+        const result = await response.json();
+        console.log('✅ Pedido guardado en backend:', result);
+        
+        // También guardar en localStorage para respaldo
+        const pedidoLocal = {
+            id: result.pedido?.id || Date.now(),
+            fecha: new Date().toISOString(),
+            items: carrito,
+            subtotal: total,
+            envio: envioCosto,
+            total: totalPagar,
+            envioData: { nombre, direccion, correo },
+            metodoPago: metodoPago,
+            estado: 'pendiente'
+        };
+        
+        let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+        pedidos.push(pedidoLocal);
+        localStorage.setItem('pedidos', JSON.stringify(pedidos));
+        localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
+        localStorage.removeItem('carrito');
+        
+        return result.pedido || pedidoLocal;
+        
+    } catch (error) {
+        console.error('❌ Error guardando pedido:', error);
+        mostrarToast('Error al guardar el pedido', 'error');
+        throw error;
+    }
 }
 
 // ============================================
@@ -400,9 +462,8 @@ function mostrarConfirmacion() {
     const metodoPago = metodoPagoRadio ? metodoPagoRadio.value : 'tarjeta';
     
     let metodoTexto = '';
-    if (metodoPago === 'tarjeta') metodoTexto = ' Tarjeta de Crédito/Débito';
-    else if (metodoPago === 'paypal') metodoTexto = 'PayPal';
-    else if (metodoPago === 'mercadopago') metodoTexto = ' Mercado Pago';
+    if (metodoPago === 'tarjeta') metodoTexto = '💳 Tarjeta de Crédito/Débito';
+    else if (metodoPago === 'mercadopago') metodoTexto = '💰 Mercado Pago';
     
     const envioCosto = calcularEnvio();
     const totalPagar = total + envioCosto;
@@ -419,24 +480,24 @@ function mostrarConfirmacion() {
         </div>
         
         <div style="text-align: left; margin: 20px 0;">
-            <h3 style="color: #ff4d6d;"> Datos de Envío</h3>
+            <h3 style="color: #ff4d6d;">📦 Datos de Envío</h3>
             <p><strong>Nombre:</strong> ${escapeHTML(nombre)}</p>
             <p><strong>Dirección:</strong> ${escapeHTML(direccion)}</p>
             
-            <h3 style="color: #ff4d6d; margin-top: 20px;"> Método de Pago</h3>
+            <h3 style="color: #ff4d6d; margin-top: 20px;">💳 Método de Pago</h3>
             <p>${metodoTexto}</p>
         </div>
         
         <div class="checkout-summary">
-            <h3>Resumen de compra</h3>
+            <h3>🛍️ Resumen de compra</h3>
             <div class="summary-row"><span>Subtotal (${carrito.length} productos):</span><span>$${total.toFixed(2)}</span></div>
-            <div class="summary-row"><span>Envío:</span><span>${envioCosto === 0 ? 'GRATIS ' : `$${envioCosto.toFixed(2)}`}</span></div>
+            <div class="summary-row"><span>Envío:</span><span>${envioCosto === 0 ? 'GRATIS 🎉' : `$${envioCosto.toFixed(2)}`}</span></div>
             <div class="summary-divider"></div>
             <div class="summary-row total-row"><span>Total a Pagar:</span><span>$${totalPagar.toFixed(2)}</span></div>
         </div>
         
         <div class="checkout-actions">
-            <button id="btnConfirmar" class="btn-luxe-pay">Confirmar y Pagar</button>
+            <button id="btnConfirmar" class="btn-luxe-pay">✅ Confirmar y Pagar</button>
         </div>
         
         <p class="secure-text">🔒 Tus datos están seguros. El pago se procesa de forma encriptada.</p>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago Fallido - Luxe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .error-container {
+            max-width: 500px;
+            margin: 80px auto;
+            padding: 40px;
+            text-align: center;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .error-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+        .btn-retry {
+            background: #ff4d6d;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+            font-weight: 600;
+        }
+        .btn-retry:hover {
+            background: #e63946;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html"><img src="img/logo.png" alt="Logo Luxe" style="height: 50px;"></a>
+    </header>
+    <main>
+        <div class="error-container">
+            <div class="error-icon">❌</div>
+            <h1 style="color: #ff4d6d;">Pago no completado</h1>
+            <p>Hubo un problema con tu pago. Por favor, intenta nuevamente.</p>
+            <a href="carrito.html" class="btn-retry">Volver al carrito</a>
+        </div>
+    </main>
+</body>
+</html>

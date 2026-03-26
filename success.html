@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Pago Exitoso - Luxe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .tracking-container {
+            max-width: 700px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        .success-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+        }
+        
+        .success-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .tracking-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+            overflow-x: auto;
+            padding-bottom: 15px;
+        }
+        
+        .tracking-steps::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .tracking-steps::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+        
+        .tracking-steps::-webkit-scrollbar-thumb {
+            background: #ff4d6d;
+            border-radius: 10px;
+        }
+        
+        .tracking-steps::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 1;
+        }
+        
+        .step {
+            text-align: center;
+            flex: 1;
+            min-width: 80px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .step-icon {
+            width: 60px;
+            height: 60px;
+            background: white;
+            border: 3px solid #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+        
+        .step-icon img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+        
+        .step.active .step-icon {
+            border-color: #ff4d6d;
+            background: #ff4d6d;
+        }
+        
+        .step.active .step-icon img {
+            filter: brightness(0) invert(1);
+        }
+        
+        .step.completed .step-icon {
+            border-color: #4caf50;
+            background: #4caf50;
+        }
+        
+        .step.completed .step-icon img {
+            filter: brightness(0) invert(1);
+        }
+        
+        .step-label {
+            font-size: 11px;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .step.active .step-label,
+        .step.completed .step-label {
+            color: #ff4d6d;
+        }
+        
+        .step.completed .step-label {
+            color: #4caf50;
+        }
+        
+        .order-details {
+            background: #f9f9f9;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 30px 0;
+        }
+        
+        .order-details h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .order-row:last-child {
+            border-bottom: none;
+        }
+        
+        .product-item {
+            display: flex;
+            gap: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .product-img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            background: white;
+            border-radius: 8px;
+        }
+        
+        .product-info {
+            flex: 1;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+        
+        .product-price {
+            color: #ff4d6d;
+            font-size: 13px;
+        }
+        
+        .tracking-timeline {
+            margin: 30px 0;
+            padding: 20px;
+            background: white;
+            border-radius: 15px;
+            border: 1px solid #f0f0f0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-left: 2px solid #e0e0e0;
+            margin-left: 20px;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -9px;
+            top: 20px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #e0e0e0;
+        }
+        
+        .timeline-item.completed::before {
+            background: #4caf50;
+        }
+        
+        .timeline-item.current::before {
+            background: #ff4d6d;
+            box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.3);
+        }
+        
+        .timeline-date {
+            font-size: 11px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+        
+        .timeline-title {
+            font-weight: 600;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .timeline-desc {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+        
+        .btn-primary {
+            background: #ff4d6d;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-primary:hover {
+            background: #e63946;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #333;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .btn-secondary:hover {
+            background: #555;
+        }
+        
+        .order-id {
+            font-family: monospace;
+            background: #f0f0f0;
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+        }
+        
+        @media (max-width: 650px) {
+            .tracking-container {
+                padding: 15px;
+                margin: 20px auto;
+            }
+            
+            .tracking-steps {
+                gap: 10px;
+                justify-content: flex-start;
+            }
+            
+            .step {
+                min-width: 70px;
+            }
+            
+            .step-icon {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .step-icon img {
+                width: 26px;
+                height: 26px;
+            }
+            
+            .step-label {
+                font-size: 9px;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                text-align: center;
+                padding: 12px 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .step-icon {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .step-icon img {
+                width: 24px;
+                height: 24px;
+            }
+            
+            .step-label {
+                font-size: 8px;
+            }
+            
+            .step {
+                min-width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <div class="menu-hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <a href="index.html" class="logo-link">
+                <img src="img/logo.png" alt="Logo Luxe" class="logo">
+                <div class="logo-text-group">
+                    <span class="slogan-minimal">Tu destino de belleza</span>
+                </div>
+            </a>
+        </div>
+        <div class="header-right icons">
+            <a href="favoritos.html">
+                <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
+            </a>
+            <a href="carrito.html">
+                <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
+            </a>
+            <a href="login.html" id="login-btn">
+                <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
+            </a>
+            <div id="user-menu" class="dropdown" style="display: none;">
+                <button class="dropbtn">
+                    <span id="user-name"></span> <i class="arrow">▼</i>
+                </button>
+                <div class="dropdown-content">
+                    <a href="perfil.html"> Mi Perfil</a>
+                    <a href="pedidos.html"> Mis Pedidos</a>
+                    <hr>
+                    <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav id="side-menu" class="side-nav">
+        <span class="close-btn" onclick="toggleMenu()">&times;</span>
+        <div class="menu-section">
+            <a href="nosotros.html"> Sobre Nosotros</a>
+            <a href="#">Lo más nuevo</a>
+            <a href="#"> Ofertas</a>
+        </div>
+    </nav>
+
+    <main class="checkout-container">
+        <div class="tracking-container">
+            <div class="success-header">
+                <div class="success-icon">
+                    <img src="img/success-icon.png" alt="Exito" onerror="this.src='https://via.placeholder.com/80?text=✓'">
+                </div>
+                <h1 style="color: #ff4d6d;">Pago exitoso</h1>
+                <p>Tu compra se ha procesado correctamente</p>
+            </div>
+
+            <div class="tracking-steps" id="trackingSteps">
+                <div class="step completed" id="step-pago">
+                    <div class="step-icon">
+                        <img src="img/pago-icon.png" alt="Pago" onerror="this.src='https://via.placeholder.com/32?text=💳'">
+                    </div>
+                    <div class="step-label">Pago aprobado</div>
+                </div>
+                <div class="step" id="step-preparando">
+                    <div class="step-icon">
+                        <img src="img/preparando-icon.png" alt="Preparando" onerror="this.src='https://via.placeholder.com/32?text=📦'">
+                    </div>
+                    <div class="step-label">Preparando pedido</div>
+                </div>
+                <div class="step" id="step-envio">
+                    <div class="step-icon">
+                        <img src="img/envio-icon.png" alt="Envio" onerror="this.src='https://via.placeholder.com/32?text=🚚'">
+                    </div>
+                    <div class="step-label">En camino</div>
+                </div>
+                <div class="step" id="step-entregado">
+                    <div class="step-icon">
+                        <img src="img/entregado-icon.png" alt="Entregado" onerror="this.src='https://via.placeholder.com/32?text=🏠'">
+                    </div>
+                    <div class="step-label">Entregado</div>
+                </div>
+            </div>
+
+            <div class="tracking-timeline" id="trackingTimeline">
+                <div class="timeline-item completed" id="timeline-pago">
+                    <div>
+                        <div class="timeline-date" id="fecha-pago">Hace unos momentos</div>
+                        <div class="timeline-title">Pago confirmado</div>
+                        <div class="timeline-desc">Tu pago ha sido aprobado correctamente</div>
+                    </div>
+                </div>
+                <div class="timeline-item" id="timeline-preparando">
+                    <div>
+                        <div class="timeline-date" id="fecha-preparando">Proximamente</div>
+                        <div class="timeline-title">Preparando tu pedido</div>
+                        <div class="timeline-desc">Estamos alistando tus productos</div>
+                    </div>
+                </div>
+                <div class="timeline-item" id="timeline-envio">
+                    <div>
+                        <div class="timeline-date">-</div>
+                        <div class="timeline-title">En camino</div>
+                        <div class="timeline-desc">Tu pedido esta en ruta hacia tu domicilio</div>
+                    </div>
+                </div>
+                <div class="timeline-item" id="timeline-entregado">
+                    <div>
+                        <div class="timeline-date">-</div>
+                        <div class="timeline-title">Entregado</div>
+                        <div class="timeline-desc">Tu pedido ha sido entregado</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="order-details" id="orderDetails">
+                <h3>Detalles del pedido</h3>
+                <div class="order-row">
+                    <span>Numero de pedido:</span>
+                    <span class="order-id" id="order-id">Cargando...</span>
+                </div>
+                <div class="order-row">
+                    <span>Fecha:</span>
+                    <span id="order-date">Cargando...</span>
+                </div>
+                <div class="order-row">
+                    <span>Metodo de pago:</span>
+                    <span id="order-method">Mercado Pago</span>
+                </div>
+                <div class="order-row">
+                    <span>Direccion de envio:</span>
+                    <span id="order-address">Cargando...</span>
+                </div>
+            </div>
+
+            <div class="order-details">
+                <h3>Productos</h3>
+                <div id="order-products"></div>
+                <div class="order-row" style="margin-top: 15px; font-weight: bold;">
+                    <span>Total pagado:</span>
+                    <span id="order-total" style="color: #ff4d6d; font-size: 20px;">$0.00</span>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <a href="pedidos.html" class="btn-primary">Ver mis pedidos</a>
+                <a href="index.html" class="btn-secondary">Seguir comprando</a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer-luxe">
+        <div class="footer-container">
+            <div class="footer-column">
+                <img src="img/logo.png" alt="Luxe Logo" class="footer-logo">
+                <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
+            </div>
+            <div class="footer-column newsletter">
+                <h3>Unete al Club Luxe</h3>
+                <p>Recibe ofertas exclusivas.</p>
+                <div class="newsletter-form">
+                    <input type="email" id="newsletter-email" placeholder="Tu email...">
+                    <button onclick="suscribirse()">Unirse</button>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        // ============================================
+        // FUNCIONES DEL HEADER
+        // ============================================
+        
+        // Menú hamburguesa
+       function toggleMenu() {
+  const menu = document.getElementById('side-menu');
+  menu.classList.toggle('active');
+}
+
+document.addEventListener('click', function(event) {
+  const menu = document.getElementById('side-menu');
+  const hamburger = document.querySelector('.menu-hamburger');
+  
+  if (menu && menu.classList.contains('active') && 
+      !menu.contains(event.target) && 
+      !hamburger.contains(event.target)) {
+    menu.classList.remove('active');
+  }
+});
+
+if (window.innerWidth > 768) {
+  const hamburger = document.querySelector('.menu-hamburger');
+  const menu = document.getElementById('side-menu');
+  
+  if (hamburger && menu) {
+    let hoverTimer;
+    hamburger.addEventListener('mouseenter', function() {
+      hoverTimer = setTimeout(() => menu.classList.add('active'), 200);
+    });
+    hamburger.addEventListener('mouseleave', function() {
+      clearTimeout(hoverTimer);
+    });
+  }
+}
+        
+        // Actualizar contadores
+        function actualizarContadores() {
+            const favCount = document.getElementById('fav-count');
+            const cartCount = document.getElementById('cart-count');
+            
+            if (favCount) {
+                const favs = JSON.parse(localStorage.getItem('favs')) || [];
+                favCount.textContent = favs.length;
+            }
+            
+            if (cartCount) {
+                const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+                const totalItems = carrito.reduce((sum, item) => sum + (item.cantidad || 1), 0);
+                cartCount.textContent = totalItems;
+            }
+        }
+        
+        // Cargar datos del usuario
+        function cargarUsuario() {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user'));
+            const loginBtn = document.getElementById('login-btn');
+            const userMenu = document.getElementById('user-menu');
+            const userNameSpan = document.getElementById('user-name');
+            
+            if (token && user) {
+                if (loginBtn) loginBtn.style.display = 'none';
+                if (userMenu) userMenu.style.display = 'block';
+                if (userNameSpan) {
+                    const nombre = user.nombre || user.email || 'Usuario';
+                    userNameSpan.textContent = nombre.split(' ')[0];
+                }
+            } else {
+                if (loginBtn) loginBtn.style.display = 'flex';
+                if (userMenu) userMenu.style.display = 'none';
+            }
+        }
+        
+        // Cerrar sesión
+        function cerrarSesion() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'index.html';
+        }
+        
+        // ============================================
+        // FUNCIONES DEL SUCCESS
+        // ============================================
+        
+        // Obtener el ultimo pedido guardado
+        let ultimoPedido = JSON.parse(localStorage.getItem('ultimoPedido'));
+        
+        if (!ultimoPedido) {
+            const pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+            if (pedidos.length > 0) {
+                ultimoPedido = pedidos[pedidos.length - 1];
+                console.log('Pedido recuperado de pedidos:', ultimoPedido);
+            }
+        }
+        
+        console.log('Ultimo pedido:', ultimoPedido);
+        
+        function mostrarDetallesPedido() {
+            if (ultimoPedido) {
+                const orderIdElem = document.getElementById('order-id');
+                if (orderIdElem) orderIdElem.textContent = `#${ultimoPedido.id}`;
+                
+                const orderDateElem = document.getElementById('order-date');
+                if (orderDateElem && ultimoPedido.fecha) {
+                    const fecha = new Date(ultimoPedido.fecha);
+                    orderDateElem.textContent = fecha.toLocaleString('es-MX', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                    });
+                }
+                
+                const orderAddressElem = document.getElementById('order-address');
+                if (orderAddressElem) {
+                    if (ultimoPedido.envioData && ultimoPedido.envioData.direccion) {
+                        orderAddressElem.textContent = ultimoPedido.envioData.direccion;
+                    } else if (ultimoPedido.direccion) {
+                        orderAddressElem.textContent = ultimoPedido.direccion;
+                    } else {
+                        orderAddressElem.textContent = 'No especificada';
+                    }
+                }
+                
+                const orderMethodElem = document.getElementById('order-method');
+                if (orderMethodElem && ultimoPedido.metodoPago) {
+                    if (ultimoPedido.metodoPago === 'mercadopago') {
+                        orderMethodElem.textContent = 'Mercado Pago';
+                    } else if (ultimoPedido.metodoPago === 'tarjeta') {
+                        orderMethodElem.textContent = 'Tarjeta de Credito / Debito';
+                    }
+                }
+                
+                const orderTotalElem = document.getElementById('order-total');
+                if (orderTotalElem && ultimoPedido.total) {
+                    orderTotalElem.textContent = `$${ultimoPedido.total.toFixed(2)}`;
+                }
+                
+                const productsContainer = document.getElementById('order-products');
+                if (productsContainer) {
+                    if (ultimoPedido.items && ultimoPedido.items.length > 0) {
+                        productsContainer.innerHTML = ultimoPedido.items.map(item => `
+                            <div class="product-item">
+                                <img src="${item.img || 'img/placeholder.png'}" alt="${item.nombre}" class="product-img" onerror="this.src='https://via.placeholder.com/60'">
+                                <div class="product-info">
+                                    <div class="product-name">${item.nombre}</div>
+                                    <div class="product-price">$${(item.precio || 0).toFixed(2)} x ${item.cantidad || 1}</div>
+                                </div>
+                                <div style="font-weight: bold; color: #ff4d6d;">
+                                    $${((item.precio || 0) * (item.cantidad || 1)).toFixed(2)}
+                                </div>
+                            </div>
+                        `).join('');
+                    } else {
+                        productsContainer.innerHTML = '<p style="text-align: center; color: #666;">No hay productos para mostrar</p>';
+                    }
+                }
+            } else {
+                const productsContainer = document.getElementById('order-products');
+                if (productsContainer) {
+                    productsContainer.innerHTML = '<p style="text-align: center; color: #666;">No se pudo cargar la informacion del pedido</p>';
+                }
+            }
+        }
+        
+        function simularProgresoPedido() {
+            const ahora = new Date();
+            const fechaPago = ahora.toLocaleString('es-MX', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            const fechaPagoElem = document.getElementById('fecha-pago');
+            if (fechaPagoElem) fechaPagoElem.textContent = fechaPago;
+            
+            setTimeout(() => {
+                const stepPreparando = document.getElementById('step-preparando');
+                const timelinePreparando = document.getElementById('timeline-preparando');
+                const fechaPreparando = document.getElementById('fecha-preparando');
+                
+                if (stepPreparando) stepPreparando.classList.add('active');
+                if (timelinePreparando) timelinePreparando.classList.add('current');
+                if (fechaPreparando) {
+                    const fechaPrep = new Date();
+                    fechaPrep.setMinutes(fechaPrep.getMinutes() + 2);
+                    fechaPreparando.textContent = fechaPrep.toLocaleString('es-MX', { hour: '2-digit', minute: '2-digit' });
+                }
+                
+                setTimeout(() => {
+                    const stepEnvio = document.getElementById('step-envio');
+                    const timelineEnvio = document.getElementById('timeline-envio');
+                    
+                    if (stepPreparando) {
+                        stepPreparando.classList.add('completed');
+                        stepPreparando.classList.remove('active');
+                    }
+                    if (stepEnvio) stepEnvio.classList.add('active');
+                    if (timelinePreparando) {
+                        timelinePreparando.classList.remove('current');
+                        timelinePreparando.classList.add('completed');
+                    }
+                    if (timelineEnvio) {
+                        timelineEnvio.classList.add('current');
+                        const fechaEnvio = new Date();
+                        fechaEnvio.setMinutes(fechaEnvio.getMinutes() + 5);
+                        const fechaEnvioElem = timelineEnvio.querySelector('.timeline-date');
+                        if (fechaEnvioElem) {
+                            fechaEnvioElem.textContent = fechaEnvio.toLocaleString('es-MX', { hour: '2-digit', minute: '2-digit' });
+                        }
+                    }
+                    
+                    setTimeout(() => {
+                        const stepEntregado = document.getElementById('step-entregado');
+                        const timelineEntregado = document.getElementById('timeline-entregado');
+                        
+                        if (stepEnvio) {
+                            stepEnvio.classList.add('completed');
+                            stepEnvio.classList.remove('active');
+                        }
+                        if (stepEntregado) stepEntregado.classList.add('active');
+                        if (timelineEnvio) {
+                            timelineEnvio.classList.remove('current');
+                            timelineEnvio.classList.add('completed');
+                        }
+                        if (timelineEntregado) {
+                            timelineEntregado.classList.add('current');
+                            const fechaEntrega = new Date();
+                            fechaEntrega.setMinutes(fechaEntrega.getMinutes() + 8);
+                            const fechaEntregaElem = timelineEntregado.querySelector('.timeline-date');
+                            if (fechaEntregaElem) {
+                                fechaEntregaElem.textContent = fechaEntrega.toLocaleString('es-MX', { hour: '2-digit', minute: '2-digit' });
+                            }
+                        }
+                        
+                        setTimeout(() => {
+                            if (stepEntregado) {
+                                stepEntregado.classList.add('completed');
+                                stepEntregado.classList.remove('active');
+                            }
+                            if (timelineEntregado) {
+                                timelineEntregado.classList.remove('current');
+                                timelineEntregado.classList.add('completed');
+                            }
+                        }, 2000);
+                    }, 3000);
+                }, 3000);
+            }, 2000);
+        }
+        
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
+        document.addEventListener('DOMContentLoaded', function() {
+            actualizarContadores();
+            cargarUsuario();
+            mostrarDetallesPedido();
+            simularProgresoPedido();
+            
+            // Limpiar carrito
+            localStorage.removeItem('carrito');
+            
+            // Evento para cerrar sesión
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', cerrarSesion);
+            }
+        });
+        
+        function suscribirse() {
+            const email = document.getElementById('newsletter-email')?.value;
+            if (email && email.includes('@')) {
+                alert('Bienvenida al Club Luxe');
+                document.getElementById('newsletter-email').value = '';
+            } else {
+                alert('Por favor, ingresa un email valido');
+            }
+        }
+        
+        window.suscribirse = suscribirse;
+        window.toggleMenu = toggleMenu;
+    </script>
+</body>
+</html>

@@ -80,8 +80,8 @@ async function cargarProductos() {
             let btns = '';
             if (user.role === "admin") {
                 btns = `
-                    <button class="btn-accion btn-editar" onclick="editarProducto(${p.id})">✏️ Editar</button>
-                    <button class="btn-accion btn-borrar" onclick="eliminarProducto(${p.id})">🗑️ Eliminar</button>
+                    <button class="btn-accion btn-editar" onclick="editarProducto(${p.id})"> Editar</button>
+                    <button class="btn-accion btn-borrar" onclick="eliminarProducto(${p.id})"> Eliminar</button>
                 `;
             } else {
                 btns = `<span style="color: #888;"> Solo lectura</span>`;

@@ -390,8 +390,7 @@ header-icon:hover {
 
 /* ============================================
    VERSIÓN MÓVIL (sin delay)
-   ============================================ */
-@media (max-width: 768px) {
+
   /* Dashboard button en móvil */
 @media (max-width: 768px) {
     #dashboard-btn {
@@ -404,44 +403,57 @@ header-icon:hover {
         height: 20px;
     }
 }
-    .dropdown-content {
-        position: fixed;
-        top: 70px;
-        right: 15px;
-        width: 220px;
-        background: white;
-        border: 2px solid #ff4d6d;
-        box-shadow: 0 10px 30px rgba(255, 77, 109, 0.2);
-        
-        /* En móvil quitamos el delay */
-        transition-delay: 0s, 0s, 0s;
-    }
-    
-    .dropdown-content a,
-    #logout-btn {
-        color: #333;
-        background: white;
-        display: block;
-        font-size: 16px;
-        padding: 15px 20px;
-    }
-    
-    #logout-btn {
-        color: #ff4d6d;
-        font-weight: 700;
-    }
-    
-    #logout-btn:hover {
-        background: #ff4d6d;
-        color: white;
-    }
-    
-    /* Para móvil: activar con click */
-    .dropdown.active .dropdown-content {
-        opacity: 1;
-        visibility: visible;
-        transform: translateY(0);
-    }
+/* ============================================
+   FIX PARA EL MENÚ DE USUARIO EN MÓVIL
+   ============================================ */
+
+@media (max-width: 768px) {
+  /* Anular la regla que oculta texto en los enlaces SOLO para el dropdown */
+  .dropdown .dropdown-content a,
+  .dropdown .dropdown-content button {
+    font-size: 14px !important;
+    display: block !important;
+    padding: 12px 20px !important;
+    color: #333 !important;
+    background: white !important;
+    text-align: left !important;
+  }
+  
+  .dropdown .dropdown-content a:hover,
+  .dropdown .dropdown-content button:hover {
+    background: #fff0f3 !important;
+    color: #ff4d6d !important;
+  }
+  
+  /* Asegurar que el botón de cerrar sesión también se vea */
+  .dropdown .dropdown-content .logout-link,
+  #logout-btn {
+    font-size: 14px !important;
+    display: block !important;
+    width: 100% !important;
+    text-align: left !important;
+    border: none !important;
+    background: white !important;
+    cursor: pointer !important;
+  }
+  
+  /* El botón del usuario (nombre) debe mantener su estilo */
+  .dropbtn {
+    font-size: 12px !important;
+    padding: 6px 12px !important;
+    background: #ff4d6d !important;
+    color: white !important;
+  }
+  
+  /* El menú dropdown debe ser visible */
+  .dropdown-content {
+    min-width: 180px !important;
+    right: 0 !important;
+    left: auto !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+  }
 }
 
 /* Menú hamburguesa */
@@ -1959,24 +1971,39 @@ header-icon:hover {
     font-size: 10px;
   }
   
-  .category-menu {
-    flex-wrap: nowrap;
+    .category-menu {
+    justify-content: flex-start;
+    gap: 20px;
+    padding: 12px 15px;
     overflow-x: auto;
-    gap: 8px;
-    padding: 15px;
+    overflow-y: hidden;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+    margin: 10px 0;
+    border-radius: 0;
+    /* Ocultar scrollbar */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .category-menu::-webkit-scrollbar {
+    display: none;
   }
   
   .category-menu button {
+    font-size: 13px;
+    padding: 8px 0;
     flex-shrink: 0;
-    font-size: 12px;
-    padding: 6px 12px;
-    background: #fff0f3;
-    border-radius: 20px;
   }
   
-  .category-menu button::after {
-    display: none;
+  .category-menu button:first-child {
+    margin-left: 0;
   }
+  
+  .category-menu button:last-child {
+    margin-right: 15px;
+  }
+
   
   .products {
     grid-template-columns: repeat(2, 1fr);
@@ -3136,14 +3163,13 @@ header-icon:hover {
    ============================================ */
 
 .auth-container {
-  max-width: 550px;
-  width: 100%;
-  margin: 0 auto;
+  max-width: 500px;
+  width: 90%;
+  margin: 40px auto;
   background: white;
-  border-radius: 30px;
-  box-shadow: 0 20px 40px rgba(255, 77, 109, 0.15);
-  padding: 40px;
-  transition: all 0.3s ease;
+  border-radius: 25px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  padding: 35px 30px;
 }
 
 .auth-box {
@@ -3208,13 +3234,13 @@ header-icon:hover {
 
 .auth-box input {
   width: 100%;
-  padding: 14px 18px;
-  border: 2px solid #f0f0f0;
-  border-radius: 15px;
+  padding: 14px 16px;
+  margin-bottom: 5px !important;  /* Espacio entre inputs */
+  border: 1px solid #ddd;
+  border-radius: 12px;
   font-size: 15px;
-  outline: none;
+  background: #f9f9f9;
   transition: all 0.3s ease;
-  background: #fafafa;
   box-sizing: border-box;
 }
 

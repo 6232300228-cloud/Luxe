@@ -1,5 +1,5 @@
 // ============================================
-// CHECKOUT.JS - VERSIÓN COMPLETA (Tarjeta + Mercado Pago)
+// CHECKOUT.JS - GUARDAR EN LOCALSTORAGE Y BACKEND
 // ============================================
 
 // Variables globales
@@ -218,36 +218,109 @@ function actualizarBarraProgreso() {
 }
 
 // ============================================
-// PROCESAR PAGO - TARJETA Y MERCADO PAGO
+// GUARDAR PEDIDO EN LOCALSTORAGE Y BACKEND
 // ============================================
-async function procesarPago() {
-    const metodoSeleccionado = document.querySelector('input[name="metodoPago"]:checked');
-    if (!metodoSeleccionado) {
-        mostrarToast('Selecciona un método de pago', 'error');
-        return;
+async function guardarPedidoCompleto(metodoPago) {
+    const nombre = localStorage.getItem('envio_nombre') || '';
+    const direccion = localStorage.getItem('envio_direccion') || '';
+    const correo = localStorage.getItem('envio_correo') || '';
+    const envioCosto = calcularEnvio();
+    const totalPagar = total + envioCosto;
+    
+    // Datos para el pedido local
+    const pedidoLocal = {
+        id: Date.now(),
+        fecha: new Date().toISOString(),
+        items: carrito.map(item => ({
+            ...item,
+            precio: Math.round(item.precio)
+        })),
+        subtotal: Math.round(total),
+        envio: envioCosto,
+        total: Math.round(totalPagar),
+        envioData: { nombre, direccion, correo },
+        metodoPago: metodoPago,
+        estado: 'pendiente'
+    };
+    
+    // 1. Guardar en localStorage
+    let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+    pedidos.push(pedidoLocal);
+    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+    localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
+    localStorage.removeItem('carrito');
+    
+    // 2. Guardar en backend (si hay token)
+    const token = localStorage.getItem('token');
+    if (token) {
+        try {
+            const pedidoData = {
+                usuario: {
+                    nombre: nombre,
+                    correo: correo,
+                    direccion: direccion,
+                    telefono: ''
+                },
+                productos: carrito.map(item => ({
+                    nombre: item.nombre,
+                    precio: Math.round(item.precio),
+                    cantidad: item.cantidad || 1,
+                    imagen: item.img || ''
+                })),
+                total: Math.round(totalPagar),
+                metodoPago: metodoPago === 'mercadopago' ? 'tarjeta' : metodoPago
+            };
+            
+            const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(pedidoData)
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('✅ Pedido guardado en backend:', result);
+                // Actualizar el ID del pedido local con el ID de MongoDB
+                if (result.pedido?.id) {
+                    pedidoLocal.id = result.pedido.id;
+                    pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+                    const index = pedidos.findIndex(p => p.id === pedidoLocal.id || p.fecha === pedidoLocal.fecha);
+                    if (index !== -1) {
+                        pedidos[index] = pedidoLocal;
+                        localStorage.setItem('pedidos', JSON.stringify(pedidos));
+                        localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
+                    }
+                }
+            } else {
+                console.log('⚠️ No se pudo guardar en backend, pedido solo en localStorage');
+            }
+        } catch (error) {
+            console.error('❌ Error guardando en backend:', error);
+            console.log('⚠️ Pedido guardado solo en localStorage');
+        }
+    } else {
+        console.log('⚠️ Usuario no logueado, pedido solo en localStorage');
     }
     
-    const metodoPago = metodoSeleccionado.value;
-    const btnPagar = document.getElementById('btnConfirmar') || document.getElementById('btnPagar');
-    if (!btnPagar) return;
-    
-    const textoOriginal = btnPagar.textContent;
-    btnPagar.textContent = 'Procesando...';
-    btnPagar.disabled = true;
-    
+    return pedidoLocal;
+}
+
+// ============================================
+// PROCESAR PAGO - TARJETA
+// ============================================
+async function procesarTarjeta(btnPagar, textoOriginal) {
     try {
-        if (metodoPago === 'mercadopago') {
-            await procesarMercadoPago(btnPagar, textoOriginal);
-        } else if (metodoPago === 'tarjeta') {
-            guardarPedidoLocal('tarjeta');
-            mostrarToast('Pago procesado exitosamente', 'success');
-            setTimeout(() => {
-                window.location.href = 'success.html';
-            }, 1500);
-        }
+        await guardarPedidoCompleto('tarjeta');
+        mostrarToast('Pago procesado exitosamente', 'success');
+        setTimeout(() => {
+            window.location.href = 'success.html';
+        }, 1500);
     } catch (error) {
         console.error('Error:', error);
-        mostrarToast('Error de conexión. Intenta de nuevo.', 'error');
+        mostrarToast('Error al procesar el pago', 'error');
         btnPagar.textContent = textoOriginal;
         btnPagar.disabled = false;
     }
@@ -276,8 +349,8 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
     const envioCosto = calcularEnvio();
     
     try {
-        // Guardar pedido en localStorage
-        guardarPedidoLocal('mercadopago');
+        // Guardar pedido (localStorage + backend)
+        await guardarPedidoCompleto('mercadopago');
         
         const response = await fetch('https://luxe-api-frr5.onrender.com/api/crear-preferencia', {
             method: 'POST',
@@ -307,37 +380,35 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
 }
 
 // ============================================
-// GUARDAR PEDIDO EN LOCALSTORAGE
+// PROCESAR PAGO PRINCIPAL
 // ============================================
-function guardarPedidoLocal(metodoPago) {
-    const nombre = localStorage.getItem('envio_nombre') || '';
-    const direccion = localStorage.getItem('envio_direccion') || '';
-    const correo = localStorage.getItem('envio_correo') || '';
-    const envioCosto = calcularEnvio();
-    const totalPagar = total + envioCosto;
+async function procesarPago() {
+    const metodoSeleccionado = document.querySelector('input[name="metodoPago"]:checked');
+    if (!metodoSeleccionado) {
+        mostrarToast('Selecciona un método de pago', 'error');
+        return;
+    }
     
-    const pedidoLocal = {
-        id: Date.now(),
-        fecha: new Date().toISOString(),
-        items: carrito.map(item => ({
-            ...item,
-            precio: Math.round(item.precio)
-        })),
-        subtotal: Math.round(total),
-        envio: envioCosto,
-        total: Math.round(totalPagar),
-        envioData: { nombre, direccion, correo },
-        metodoPago: metodoPago,
-        estado: 'pendiente'
-    };
+    const metodoPago = metodoSeleccionado.value;
+    const btnPagar = document.getElementById('btnConfirmar') || document.getElementById('btnPagar');
+    if (!btnPagar) return;
     
-    let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
-    pedidos.push(pedidoLocal);
-    localStorage.setItem('pedidos', JSON.stringify(pedidos));
-    localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
-    localStorage.removeItem('carrito');
+    const textoOriginal = btnPagar.textContent;
+    btnPagar.textContent = 'Procesando...';
+    btnPagar.disabled = true;
     
-    console.log('✅ Pedido guardado:', pedidoLocal);
+    try {
+        if (metodoPago === 'mercadopago') {
+            await procesarMercadoPago(btnPagar, textoOriginal);
+        } else if (metodoPago === 'tarjeta') {
+            await procesarTarjeta(btnPagar, textoOriginal);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        mostrarToast('Error de conexión. Intenta de nuevo.', 'error');
+        btnPagar.textContent = textoOriginal;
+        btnPagar.disabled = false;
+    }
 }
 
 // ============================================

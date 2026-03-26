@@ -6,8 +6,15 @@ const token = localStorage.getItem("token");
 
 // Si no hay sesión o el usuario es cliente, redirigir
 if (!user || !token || (user.role !== "admin" && user.role !== "empleado")) {
-    alert("⚠️ Acceso restringido solo para personal autorizado");
-    window.location.href = "login.html";
+    Swal.fire({
+        icon: 'warning',
+        title: 'Acceso restringido',
+        text: 'Solo personal autorizado puede acceder al dashboard',
+        timer: 2000,
+        showConfirmButton: false
+    }).then(() => {
+        window.location.href = "login.html";
+    });
 }
 
 // ============================================
@@ -22,10 +29,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Mostrar botón de agregar solo para admin
     if (user.role === "admin") {
-        document.getElementById("btn-agregar").classList.remove("hidden");
-        // Configurar botón de agregar producto
         const btnAgregar = document.getElementById("btn-agregar");
         if (btnAgregar) {
+            btnAgregar.classList.remove("hidden");
             btnAgregar.onclick = () => {
                 mostrarModalAgregarProducto();
             };
@@ -43,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 // ============================================
 async function cargarProductos() {
     const tabla = document.getElementById("lista-inventario");
-    tabla.innerHTML = '展览<td colspan="6" style="text-align: center;">Cargando productos...</td>展览';
+    tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">Cargando productos...</td></tr>';
     
     try {
         const response = await fetch('https://luxe-api-frr5.onrender.com/api/products');
@@ -65,7 +71,7 @@ async function cargarProductos() {
         productos.forEach(p => {
             const tr = document.createElement("tr");
             
-            // Color seg stock
+            // Color según stock
             let stockColor = '#4CAF50';
             if (p.stock <= 0) stockColor = '#f44336';
             else if (p.stock <= 20) stockColor = '#ff9800';
@@ -74,8 +80,8 @@ async function cargarProductos() {
             let btns = '';
             if (user.role === "admin") {
                 btns = `
-                    <button class="btn-accion btn-editar" onclick="editarProducto(${p.id})"> Editar</button>
-                    <button class="btn-accion btn-borrar" onclick="eliminarProducto(${p.id})"> Eliminar</button>
+                    <button class="btn-accion btn-editar" onclick="editarProducto(${p.id})">✏️ Editar</button>
+                    <button class="btn-accion btn-borrar" onclick="eliminarProducto(${p.id})">🗑️ Eliminar</button>
                 `;
             } else {
                 btns = `<span style="color: #888;"> Solo lectura</span>`;
@@ -209,7 +215,6 @@ document.getElementById("btn-cerrar-sesion").onclick = () => {
 // 7. EDITAR PRODUCTO
 // ============================================
 async function editarProducto(id) {
-    // Verificar permisos
     if (user.role !== 'admin') {
         Swal.fire({
             icon: 'error',
@@ -223,9 +228,8 @@ async function editarProducto(id) {
         return;
     }
     
-    // Obtener el producto actual
     try {
-        const response = await fetch(`https://luxe-api-frr5.onrender.com/api/products`);
+        const response = await fetch('https://luxe-api-frr5.onrender.com/api/products');
         const productos = await response.json();
         const producto = productos.find(p => p.id == id);
         
@@ -258,7 +262,6 @@ async function editarProducto(id) {
 // 8. MOSTRAR MODAL EDITAR PRODUCTO
 // ============================================
 function mostrarModalEditarProducto(producto) {
-    // Crear modal si no existe
     if (!document.getElementById('modalEditarProducto')) {
         const modalHTML = `
             <div id="modalEditarProducto" class="modal-producto" style="display: none;">
@@ -335,7 +338,6 @@ function mostrarModalEditarProducto(producto) {
         `;
         document.body.insertAdjacentHTML('beforeend', modalHTML);
         
-        // Agregar estilos del modal si no existen
         if (!document.getElementById('modalStyles')) {
             const styles = `
                 <style id="modalStyles">
@@ -385,7 +387,6 @@ function mostrarModalEditarProducto(producto) {
         }
     }
     
-    // Llenar el formulario con los datos del producto
     document.getElementById('editProductoId').value = producto.id;
     document.getElementById('editProductoNombre').value = producto.name;
     document.getElementById('editProductoPrecio').value = producto.price;
@@ -395,9 +396,7 @@ function mostrarModalEditarProducto(producto) {
     document.getElementById('editProductoDesc').value = producto.desc || '';
     document.getElementById('editProductoStock').value = producto.stock || 100;
     
-    // Mostrar modal
-    const modal = document.getElementById('modalEditarProducto');
-    modal.style.display = 'flex';
+    document.getElementById('modalEditarProducto').style.display = 'flex';
 }
 
 function cerrarModalEditar() {
@@ -481,7 +480,6 @@ async function guardarEdicionProducto() {
 // 9. ELIMINAR PRODUCTO
 // ============================================
 async function eliminarProducto(id) {
-    // Verificar permisos
     if (user.role !== 'admin') {
         Swal.fire({
             icon: 'error',
@@ -495,7 +493,6 @@ async function eliminarProducto(id) {
         return;
     }
     
-    // Confirmar eliminación
     const confirmar = await Swal.fire({
         title: '¿Eliminar producto?',
         text: 'Esta acción no se puede deshacer',
@@ -512,9 +509,7 @@ async function eliminarProducto(id) {
     try {
         const response = await fetch(`https://luxe-api-frr5.onrender.com/api/products/eliminar/${id}`, {
             method: 'DELETE',
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
+            headers: { 'Authorization': `Bearer ${token}` }
         });
         
         const data = await response.json();
@@ -636,8 +631,7 @@ function mostrarModalAgregarProducto() {
         document.body.insertAdjacentHTML('beforeend', modalHTML);
     }
     
-    const modal = document.getElementById('modalProducto');
-    modal.style.display = 'flex';
+    document.getElementById('modalProducto').style.display = 'flex';
 }
 
 function cerrarModalAgregar() {
@@ -734,3 +728,6 @@ window.cerrarModalEditar = cerrarModalEditar;
 window.guardarEdicionProducto = guardarEdicionProducto;
 window.cerrarModalAgregar = cerrarModalAgregar;
 window.guardarNuevoProducto = guardarNuevoProducto;
+window.cargarProductos = cargarProductos;
+
+console.log('✅ Dashboard.js cargado correctamente');

@@ -41,7 +41,7 @@ let products = [
   { id: 37, name: "Stay Vulnerable Blush", price: 510, category: "rubor", brand: "rare", img: "img/rare-creamblush.png", desc: "Rubor en crema resistente al agua que se funde en la piel." },
   { id: 38, name: "Agua Micelar Todo en 1", price: 145, category: "skincare", brand: "loreal", img: "img/Agua micelar.png", desc: "Limpia, desmaquilla y tonifica el rostro." },
   { id: 39, name: "Fat Water Toner Serum", price: 720, category: "skincare", brand: "fenty", img: "img/Fat water.png", desc: "Tratamiento que reduce poros y manchas." },
-  { id: 40, name: "Dior Addict Lip Maximizer", price: 910, category: "labial", brand: "dior", img: "Dior addict.png", desc: "Brillo de labios con efecto volumen instantáneo." },
+  { id: 40, name: "Dior Addict Lip Maximizer", price: 910, category: "labial", brand: "dior", img: "img/Dior addict.png", desc: "Brillo de labios con efecto volumen instantáneo." },
   { id: 41, name: "Esponja Beauty Blender", price: 180, category: "accesorios", brand: "luxe", img: "img/Esponja beauty blender.png", desc: "Esponja para difuminar base y corrector." },
   { id: 42, name: "Brush Cleanser", price: 390, category: "accesorios", brand: "mac", img: "img/Brush cleanser.png", desc: "Limpiador de brochas de secado rápido." },
   { id: 43, name: "Prep + Prime Fix+", price: 680, category: "accesorios", brand: "mac", img: "img/prep+prime fix.png", desc: "Bruma de agua que fija el maquillaje y refresca." },
@@ -50,7 +50,7 @@ let products = [
   { id: 46, name: "Pegamento Lash It Loud", price: 190, category: "accesorios", brand: "nyx", img: "img/Pegamento.png", desc: "Adhesivo para pestañas de alta fijación." },
   { id: 47, name: "Pestañas Postizas 3D", price: 85, category: "ojos", brand: "bissu", img: "img/pestañas.png", desc: "Añade volumen y drama a tus ojos." },
   { id: 48, name: "Paleta Pro Contour", price: 320, category: "rubor", brand: "nyx", img: "img/contour.png", desc: "Kit para definir y resaltar facciones." },
-  { id: 49, name: "Delineador de Labios Retráctil", price: 55, category: "labial", brand: "bissu", img: "Delineador labios.png", desc: "Textura cremosa para delinear labios." },
+  { id: 49, name: "Delineador de Labios Retráctil", price: 55, category: "labial", brand: "bissu", img: "img/Delineador labios.png", desc: "Textura cremosa para delinear labios." },
   { id: 50, name: "Espejo de Bolsillo Luxe", price: 120, category: "accesorios", brand: "luxe", img: "img/Espejo bolsillo.png", desc: "Espejo con aumento para retoques rápidos." }
 ];
 

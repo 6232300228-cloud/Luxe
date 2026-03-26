@@ -11,7 +11,6 @@ async function cargarPedidos() {
     if (!token || !user) {
         contenedor.innerHTML = `
             <div class="card" style="padding: 40px; text-align: center;">
-                <h2 style="color: #ff4d6d;"> Inicia sesión para ver tus pedidos</h2>
                 <p>Necesitas iniciar sesión para ver el historial de tus compras.</p>
                 <a href="login.html" style="display: inline-block; background: #ff4d6d; color: white; padding: 12px 30px; text-decoration: none; border-radius: 25px; margin-top: 20px;">
                     Ir a iniciar sesión

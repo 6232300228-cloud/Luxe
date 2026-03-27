@@ -1,69 +1,17 @@
 // ============================================
 // VARIABLES GLOBALES
 // ============================================
-let products = [
-  { id: 1, name: "Labial Humectante", price: 65, category: "labial", brand: "bissu", img: "img/labial.png", desc: "Labial clásico de Bissú con aceite de coco." },
-  { id: 2, name: "Ultimate Shadow Palette", price: 420, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "Paleta profesional con 16 tonos de alta pigmentación." },
-  { id: 3, name: "Can't Stop Won't Stop Foundation", price: 380, category: "base", brand: "nyx", img: "img/base.png", desc: "Base de maquillaje líquida de cobertura total y mate." },
-  { id: 4, name: "HD Photogenic Concealer", price: 160, category: "corrector", brand: "nyx", img: "img/corrector.png", desc: "Corrector que ayuda a cubrir imperfecciones y ojeras." },
-  { id: 5, name: "Plumin Delineador Mate", price: 95, category: "ojos", brand: "bissu", img: "img/delineador.png", desc: "Delineador de ojos tipo plumín resistente al agua." },
-  { id: 6, name: "Lash Sensational Sky High", price: 285, category: "ojos", brand: "maybelline", img: "img/rimel.png", desc: "Máscara que ofrece longitud sin límites y volumen." },
-  { id: 7, name: "Gloss Labial", price: 85, category: "labial", brand: "bissu", img: "img/labial2.png", desc: "Brillo con destellos brillantes y textura no pegajosa." },
-  { id: 8, name: "Set de Brochas Esenciales", price: 450, category: "accesorios", brand: "luxe", img: "img/brochas.png", desc: "Set profesional de cerdas sintéticas premium." },
-  { id: 9, name: "Iluminador en Polvo", price: 98, category: "iluminador", brand: "bissu", img: "img/iluminador.png", desc: "Polvo compacto para dar luz al rostro." },
-  { id: 10, name: "Rubor Compacto", price: 72, category: "rubor", brand: "bissu", img: "img/rubor.png", desc: "Textura sedosa para un acabado natural." },
-  { id: 11, name: "Revitalift Limpiador", price: 195, category: "skincare", brand: "loreal", img: "img/limpiador.png", desc: "Gel de limpieza facial con ácido hialurónico." },
-  { id: 12, name: "Sérum Pure Vitamin C10", price: 850, category: "skincare", brand: "loreal", img: "img/serum.png", desc: "Sérum renovador antioxidante para dar luminosidad." },
-  { id: 13, name: "Hydra Touch Primer", price: 340, category: "skincare", brand: "nyx", img: "img/crema.png", desc: "Base de maquillaje hidratante con extractos de plantas." },
-  { id: 14, name: "Pro Filt'r Soft Matte", price: 790, category: "base", brand: "fenty", img: "img/fenty-base.png", desc: "Base de larga duración en 50 tonos." },
-  { id: 15, name: "Studio Fix Fluid SPF 15", price: 760, category: "base", brand: "mac", img: "img/mac-base.png", desc: "Base con control de aceite y acabado mate natural." },
-  { id: 16, name: "Dior Backstage Face & Body", price: 980, category: "base", brand: "dior", img: "img/dior-base.png", desc: "La base secreta de los maquilladores de Dior." },
-  { id: 17, name: "Fit Me Matte + Poreless", price: 215, category: "base", brand: "maybelline", img: "img/fit-me.png", desc: "Matifica la piel y desvanece los poros." },
-  { id: 18, name: "Infallible Fresh Wear 24H", price: 310, category: "base", brand: "loreal", img: "img/infallible.png", desc: "Cobertura completa que permite que la piel respire." },
-  { id: 19, name: "Liquid Touch Concealer", price: 520, category: "corrector", brand: "rare", img: "img/rare-concealer.png", desc: "Corrector hidratante de cobertura media a total." },
-  { id: 20, name: "Corrector de Larga Duración", price: 110, category: "corrector", brand: "bissu", img: "img/corrector-bissu.png", desc: "Corrector líquido cremoso de alta cobertura." },
-  { id: 21, name: "SuperStay Matte Ink", price: 260, category: "labial", brand: "maybelline", img: "img/Superstay.png", desc: "Tinta de labios líquida con hasta 16 horas de duración." },
-  { id: 22, name: "Matte Lipstick Ruby Woo", price: 460, category: "labial", brand: "mac", img: "img/Mate lipstick.png", desc: "El rojo más famoso del mundo con acabado ultra mate." },
-  { id: 23, name: "Soft Pinch Liquid Blush", price: 540, category: "rubor", brand: "rare", img: "img/rare-blush.png", desc: "Rubor líquido de larga duración que se difumina hermoso." },
-  { id: 24, name: "Gloss Bomb Universal", price: 490, category: "labial", brand: "fenty", img: "img/Gloss bomb.png", desc: "Brillo de labios irresistible con aroma a melocotón y vainilla." },
-  { id: 25, name: "Lip Glow Oil", price: 890, category: "labial", brand: "dior", img: "img/Glow oil.png", desc: "Aceite labial brillante que protege y realza." },
-  { id: 26, name: "Fat Oil Lip Drip", price: 220, category: "labial", brand: "nyx", img: "img/Fat oil.png", desc: "Aceite hidratante con color de gran brillo." },
-  { id: 27, name: "Paleta de Sombras 'Mi Tierra'", price: 115, category: "sombra", brand: "bissu", img: "img/Sombra tierra.png", desc: "Quintetos de sombras con colores intensos." },
-  { id: 28, name: "Mascara Lash Paradise", price: 275, category: "ojos", brand: "loreal", img: "img/paradise.png", desc: "Volumen y longitud instantáneos con cepillo suave." },
-  { id: 29, name: "Epic Ink Liner Black", price: 255, category: "ojos", brand: "nyx", img: "img/epic-ink.png", desc: "Delineador líquido con punta de pincel precisa." },
-  { id: 30, name: "Perfect Strokes Eye Liner", price: 480, category: "ojos", brand: "rare", img: "img/rare-liner.png", desc: "Delineador líquido mate con flujo continuo." },
-  { id: 31, name: "Delineador en Gel para Cejas", price: 85, category: "ojos", brand: "bissu", img: "img/cejas-bissu.png", desc: "Define y rellena tus cejas con acabado natural." },
-  { id: 32, name: "Brow Fast Sculpt", price: 195, category: "ojos", brand: "maybelline", img: "img/brow-mascara.png", desc: "Máscara de cejas con color para peinar y fijar." },
-  { id: 33, name: "Mineralize Skinfinish", price: 810, category: "iluminador", brand: "mac", img: "img/mac-high.png", desc: "Polvo facial de lujo cocido a fuego lento." },
-  { id: 34, name: "Killawatt Highlighter Duo", price: 820, category: "iluminador", brand: "fenty", img: "img/fenty-high.png", desc: "Dos tonos de iluminador para un brillo personalizado." },
-  { id: 35, name: "Polvo Traslúcido Suelto", price: 95, category: "rubor", brand: "bissu", img: "img/polvo.png", desc: "Polvo fino para sellar el maquillaje y eliminar brillo." },
-  { id: 36, name: "Rouge Blush", price: 1100, category: "rubor", brand: "dior", img: "img/dior-blush.png", desc: "Rubor de larga duración con pigmentos intensos." },
-  { id: 37, name: "Stay Vulnerable Blush", price: 510, category: "rubor", brand: "rare", img: "img/rare-creamblush.png", desc: "Rubor en crema resistente al agua que se funde en la piel." },
-  { id: 38, name: "Agua Micelar Todo en 1", price: 145, category: "skincare", brand: "loreal", img: "img/Agua micelar.png", desc: "Limpia, desmaquilla y tonifica el rostro." },
-  { id: 39, name: "Fat Water Toner Serum", price: 720, category: "skincare", brand: "fenty", img: "img/Fat water.png", desc: "Tratamiento que reduce poros y manchas." },
-  { id: 40, name: "Dior Addict Lip Maximizer", price: 910, category: "labial", brand: "dior", img: "img/Dior addict.png", desc: "Brillo de labios con efecto volumen instantáneo." },
-  { id: 41, name: "Esponja Beauty Blender", price: 180, category: "accesorios", brand: "luxe", img: "img/Esponja beauty blender.png", desc: "Esponja para difuminar base y corrector." },
-  { id: 42, name: "Brush Cleanser", price: 390, category: "accesorios", brand: "mac", img: "img/Brush cleanser.png", desc: "Limpiador de brochas de secado rápido." },
-  { id: 43, name: "Prep + Prime Fix+", price: 680, category: "accesorios", brand: "mac", img: "img/prep+prime fix.png", desc: "Bruma de agua que fija el maquillaje y refresca." },
-  { id: 44, name: "Matte Setting Spray", price: 235, category: "accesorios", brand: "nyx", img: "img/Matte setting.png", desc: "Fijador de maquillaje para evitar el brillo." },
-  { id: 45, name: "Sacapuntas de Cosméticos", price: 10, category: "accesorios", brand: "bissu", img: "img/Sacapuntas.png", desc: "Mantén tus lápices con punta perfecta." },
-  { id: 46, name: "Pegamento Lash It Loud", price: 190, category: "accesorios", brand: "nyx", img: "img/Pegamento.png", desc: "Adhesivo para pestañas de alta fijación." },
-  { id: 47, name: "Pestañas Postizas 3D", price: 85, category: "ojos", brand: "bissu", img: "img/pestañas.png", desc: "Añade volumen y drama a tus ojos." },
-  { id: 48, name: "Paleta Pro Contour", price: 320, category: "rubor", brand: "nyx", img: "img/contour.png", desc: "Kit para definir y resaltar facciones." },
-  { id: 49, name: "Delineador de Labios Retráctil", price: 55, category: "labial", brand: "bissu", img: "img/Delineador labios.png", desc: "Textura cremosa para delinear labios." },
-  { id: 50, name: "Espejo de Bolsillo Luxe", price: 120, category: "accesorios", brand: "luxe", img: "img/Espejo bolsillo.png", desc: "Espejo con aumento para retoques rápidos." }
-];
-
-// Productos para videos
-const videoProducts = [
-  { id: 1001, name: "Rubor Marmoleado", price: 225, category: "rubor", brand: "luxe", img: "img/rubor.png", desc: "Rubor en polvo marmoleado con acabado natural y larga duración. Ideal para dar un toque de color saludable a tus mejillas." },
-  { id: 1002, name: "Labial Cremoso Soft Matte", price: 250, category: "labial", brand: "luxe", img: "img/labial.png", desc: "Labial con textura cremosa que se desliza suavemente, dejando un acabado mate suave y confortable. Hidrata mientras aporta color intenso." },
-  { id: 1003, name: "Ultimate Shadow Palette", price: 400, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "Paleta de sombras con 16 tonos de alta pigmentación, desde mates hasta brillos intensos. Perfecta para looks de día y noche." }
-];
-
-let filtered = products;
+let products = []; // Se cargarán desde la API
+let filtered = [];
 let selectedBrand = "all";
 let selectedCategory = "all";
+
+// Productos para videos (se mantienen)
+const videoProducts = [
+    { id: 1001, name: "Rubor Marmoleado", price: 225, category: "rubor", brand: "luxe", img: "img/rubor.png", desc: "Rubor en polvo marmoleado con acabado natural y larga duración. Ideal para dar un toque de color saludable a tus mejillas." },
+    { id: 1002, name: "Labial Cremoso Soft Matte", price: 250, category: "labial", brand: "luxe", img: "img/labial.png", desc: "Labial con textura cremosa que se desliza suavemente, dejando un acabado mate suave y confortable. Hidrata mientras aporta color intenso." },
+    { id: 1003, name: "Ultimate Shadow Palette", price: 400, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "Paleta de sombras con 16 tonos de alta pigmentación, desde mates hasta brillos intensos. Perfecta para looks de día y noche." }
+];
 
 const productList = document.getElementById("product-list");
 const cartCount = document.getElementById("cart-count");
@@ -75,453 +23,518 @@ const sortSelect = document.getElementById("sort");
 // FUNCIONES AUXILIARES
 // ============================================
 function getCategoryName(category) {
-  const categories = {
-    'labial': ' Labios',
-    'sombra': 'Sombras',
-    'base': 'Bases',
-    'corrector': 'Correctores',
-    'rubor': 'Rubores',
-    'iluminador': 'Iluminador',
-    'ojos': 'Ojos',
-    'skincare': 'Skincare',
-    'accesorios': 'Accesorios'
-  };
-  return categories[category] || category;
+    const categories = {
+        'labial': '💄 Labios',
+        'sombra': '👁️ Sombras',
+        'base': '🎨 Bases',
+        'corrector': '✨ Correctores',
+        'rubor': '🌸 Rubores',
+        'iluminador': '✨ Iluminador',
+        'ojos': '👀 Ojos',
+        'skincare': '🧴 Skincare',
+        'accesorios': '🛠️ Accesorios',
+        'rostro': '🌟 Rostro'
+    };
+    return categories[category] || category;
 }
 
 function showToast(msg) {
-  const toast = document.getElementById("toast");
-  toast.textContent = msg;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 2000);
+    const toast = document.getElementById("toast");
+    toast.textContent = msg;
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+}
+
+// ============================================
+// CARGAR PRODUCTOS DESDE LA API
+// ============================================
+async function cargarProductosDesdeAPI() {
+    try {
+        const response = await fetch('https://luxe-api-frr5.onrender.com/api/products');
+        if (!response.ok) throw new Error('Error al cargar productos');
+        
+        products = await response.json();
+        filtered = [...products];
+        renderProducts();
+        updateCartCounter();
+        updateFavCounter();
+        
+        console.log(`✅ ${products.length} productos cargados desde el servidor`);
+    } catch (error) {
+        console.error('❌ Error cargando productos:', error);
+        const productList = document.getElementById("product-list");
+        if (productList) {
+            productList.innerHTML = `<div style="text-align:center; padding:50px;">❌ Error al cargar productos. Intenta de nuevo más tarde.</div>`;
+        }
+    }
 }
 
 // ============================================
 // MODAL DE PRODUCTO
 // ============================================
 function openProductModal(productId) {
-  const modal = document.getElementById("productModal");
-  const modalContent = document.getElementById("modalProductDetail");
-  
-  let product = products.find(p => p.id == productId);
-  if (!product) {
-    product = videoProducts.find(p => p.id == productId);
-  }
-  
-  if (!product) {
-    console.log("Producto no encontrado:", productId);
-    return;
-  }
-  
-  modalContent.innerHTML = `
-    <div class="modal-product-img">
-      <img src="${product.img}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300'">
-    </div>
-    <div class="modal-product-info">
-      <span class="modal-brand">${product.brand.toUpperCase()}</span>
-      <h2>${product.name}</h2>
-      <div class="modal-category">${getCategoryName(product.category)}</div>
-      <p class="modal-description">${product.desc}</p>
-      <div class="modal-price">$${product.price}</div>
-      <div class="modal-buttons">
-        <button class="btn-modal-add" onclick="addToCartFromModal(${product.id})"> Agregar al carrito</button>
-        <button class="btn-modal-close" onclick="closeProductModal()">Seguir comprando</button>
-      </div>
-    </div>
-  `;
-  
-  modal.style.display = "flex";
-  document.body.style.overflow = "hidden";
+    const modal = document.getElementById("productModal");
+    const modalContent = document.getElementById("modalProductDetail");
+    
+    let product = products.find(p => p.id == productId);
+    if (!product) {
+        product = videoProducts.find(p => p.id == productId);
+    }
+    
+    if (!product) {
+        console.log("Producto no encontrado:", productId);
+        return;
+    }
+    
+    modalContent.innerHTML = `
+        <div class="modal-product-img">
+            <img src="${product.img}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300'">
+        </div>
+        <div class="modal-product-info">
+            <span class="modal-brand">${product.brand ? product.brand.toUpperCase() : 'LUXE'}</span>
+            <h2>${product.name}</h2>
+            <div class="modal-category">${getCategoryName(product.category)}</div>
+            <p class="modal-description">${product.desc || 'Producto de alta calidad para realzar tu belleza natural.'}</p>
+            <div class="modal-price">$${product.price}</div>
+            <div class="modal-buttons">
+                <button class="btn-modal-add" onclick="addToCartFromModal(${product.id})">🛒 Agregar al carrito</button>
+                <button class="btn-modal-close" onclick="closeProductModal()">Seguir comprando</button>
+            </div>
+        </div>
+    `;
+    
+    modal.style.display = "flex";
+    document.body.style.overflow = "hidden";
 }
 
 function closeProductModal() {
-  const modal = document.getElementById("productModal");
-  modal.style.display = "none";
-  document.body.style.overflow = "auto";
+    const modal = document.getElementById("productModal");
+    modal.style.display = "none";
+    document.body.style.overflow = "auto";
 }
 
 function addToCartFromModal(id) {
-  addToCart(id);
-  showToast("Producto agregado al carrito ");
-  closeProductModal();
+    addToCart(id);
+    showToast("✅ Producto agregado al carrito");
+    closeProductModal();
 }
 
 // ============================================
 // CARRITO
 // ============================================
 function updateCartCounter() {
-  if (!cartCount) return;
-  let cart = JSON.parse(localStorage.getItem("carrito")) || [];
-  const total = cart.reduce((sum, item) => sum + (item.cantidad || 1), 0);
-  cartCount.textContent = total;
-  cartCount.setAttribute("data-count", total);
-  
-  if (total > 0) {
-    cartCount.classList.remove("pulse");
-    void cartCount.offsetWidth;
-    cartCount.classList.add("pulse");
-  }
+    if (!cartCount) return;
+    let cart = JSON.parse(localStorage.getItem("carrito")) || [];
+    const total = cart.reduce((sum, item) => sum + (item.cantidad || 1), 0);
+    cartCount.textContent = total;
+    cartCount.setAttribute("data-count", total);
+    
+    if (total > 0) {
+        cartCount.classList.remove("pulse");
+        void cartCount.offsetWidth;
+        cartCount.classList.add("pulse");
+    }
 }
 
 function addToCart(id) {
-  let cart = JSON.parse(localStorage.getItem("carrito")) || [];
-  
-  let product = products.find(p => p.id == id);
-  if (!product) {
-    product = videoProducts.find(p => p.id == id);
-  }
+    // Verificar si el usuario está logueado
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
+    
+    if (!token || !user) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Inicia sesión primero',
+            text: 'Necesitas iniciar sesión para agregar productos al carrito',
+            confirmButtonText: 'Iniciar sesión',
+            confirmButtonColor: '#ff4d6d',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "login.html";
+            }
+        });
+        return;
+    }
+    
+    let cart = JSON.parse(localStorage.getItem("carrito")) || [];
+    
+    let product = products.find(p => p.id == id);
+    if (!product) {
+        product = videoProducts.find(p => p.id == id);
+    }
 
-  if (!product) {
-    console.log("Producto no encontrado:", id);
-    return;
-  }
+    if (!product) {
+        console.log("Producto no encontrado:", id);
+        return;
+    }
 
-  let existing = cart.find(x => x.id == id);
+    let existing = cart.find(x => x.id == id);
 
-  if (existing) {
-    existing.cantidad += 1;
-  } else {
-    cart.push({
-      id: product.id,
-      nombre: product.name,
-      precio: product.price,
-      img: product.img,
-      cantidad: 1
-    });
-  }
+    if (existing) {
+        existing.cantidad += 1;
+    } else {
+        cart.push({
+            id: product.id,
+            nombre: product.name,
+            precio: product.price,
+            img: product.img,
+            cantidad: 1
+        });
+    }
 
-  localStorage.setItem("carrito", JSON.stringify(cart));
-  updateCartCounter();
-  showToast("¡Añadido al carrito!");
+    localStorage.setItem("carrito", JSON.stringify(cart));
+    updateCartCounter();
+    showToast("🛒 ¡Añadido al carrito!");
 }
 
 // ============================================
 // FAVORITOS
 // ============================================
 function updateFavCounter() {
-  if (!favCount) return;
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  const total = favs.length;
-  favCount.textContent = total;
-  favCount.setAttribute("data-count", total);
-  
-  if (total > 0) {
-    favCount.classList.remove("pulse");
-    void favCount.offsetWidth;
-    favCount.classList.add("pulse");
-  }
+    if (!favCount) return;
+    let favs = JSON.parse(localStorage.getItem("favs")) || [];
+    const total = favs.length;
+    favCount.textContent = total;
+    favCount.setAttribute("data-count", total);
+    
+    if (total > 0) {
+        favCount.classList.remove("pulse");
+        void favCount.offsetWidth;
+        favCount.classList.add("pulse");
+    }
 }
 
 function toggleFav(event, id) {
-  event.preventDefault();
-  event.stopPropagation();
+    event.preventDefault();
+    event.stopPropagation();
 
-  const btn = event.currentTarget;
-  btn.classList.toggle('active');
+    const btn = event.currentTarget;
+    btn.classList.toggle('active');
 
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  const index = favs.findIndex(f => f.id === id);
+    let favs = JSON.parse(localStorage.getItem("favs")) || [];
+    const index = favs.findIndex(f => f.id === id);
 
-  if (index === -1) {
-    const productToAdd = products.find(p => p.id === id);
-    if (productToAdd) {
-      favs.push(productToAdd);
-      showToast("Agregado a favoritos");
+    if (index === -1) {
+        const productToAdd = products.find(p => p.id === id);
+        if (productToAdd) {
+            favs.push(productToAdd);
+            showToast("❤️ Agregado a favoritos");
+        }
+    } else {
+        favs.splice(index, 1);
+        showToast("💔 Quitado de favoritos");
     }
-  } else {
-    favs.splice(index, 1);
-    showToast("Quitado de favoritos");
-  }
 
-  localStorage.setItem("favs", JSON.stringify(favs));
-  updateFavCounter();
+    localStorage.setItem("favs", JSON.stringify(favs));
+    updateFavCounter();
 }
 
 // ============================================
 // RENDER PRODUCTOS
 // ============================================
 function renderProducts() {
-  if (!productList) return;
-  
-  productList.innerHTML = "";
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-
-  if (filtered.length === 0) {
-    productList.innerHTML = "<h2 style='grid-column:1/-1; text-align:center;'>No se encontraron productos</h2>";
-    return;
-  }
-
-  filtered.forEach(p => {
-    const isFav = favs.some(f => f.id === p.id);
+    if (!productList) return;
     
-    const productCard = document.createElement('div');
-    productCard.className = 'product-card-luxe';
-    productCard.innerHTML = `
-      <button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">
-        <img src="img/corazon.png" alt="Favorito" class="heart-icon">
-      </button>
-      <div class="product-clickable" onclick="openProductModal(${p.id})">
-        <div class="img-container">
-          <img src="${p.img}" alt="${p.name}" loading="lazy">
-        </div>
-        <div class="info-luxe">
-          <h4>${p.name.toUpperCase()}</h4>
-          <p class="subtitle-luxe">DISPONIBLE AHORA</p>
-          <p class="price-luxe">$${p.price}</p>
-        </div>
-      </div>
-      <button class="btn-buy-luxe" onclick="event.stopPropagation(); addToCart(${p.id})">AGREGAR AL CARRITO</button>
-    `;
-    productList.appendChild(productCard);
-  });
+    productList.innerHTML = "";
+    let favs = JSON.parse(localStorage.getItem("favs")) || [];
+
+    if (filtered.length === 0) {
+        productList.innerHTML = "<h2 style='grid-column:1/-1; text-align:center;'>No se encontraron productos</h2>";
+        return;
+    }
+
+    filtered.forEach(p => {
+        const isFav = favs.some(f => f.id === p.id);
+        
+        const productCard = document.createElement('div');
+        productCard.className = 'product-card-luxe';
+        productCard.innerHTML = `
+            <button class="heart-fav ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${p.id})">
+                <img src="img/corazon.png" alt="Favorito" class="heart-icon">
+            </button>
+            <div class="product-clickable" onclick="openProductModal(${p.id})">
+                <div class="img-container">
+                    <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='img/logo.png'">
+                </div>
+                <div class="info-luxe">
+                    <h4>${p.name.toUpperCase()}</h4>
+                    <p class="subtitle-luxe">DISPONIBLE AHORA</p>
+                    <p class="price-luxe">$${p.price}</p>
+                </div>
+            </div>
+            <button class="btn-buy-luxe" onclick="event.stopPropagation(); addToCart(${p.id})">AGREGAR AL CARRITO</button>
+        `;
+        productList.appendChild(productCard);
+    });
 }
 
 // ============================================
 // FILTROS
 // ============================================
 function aplicarFiltrosCombinados() {
-  filtered = products.filter(p => {
-    const coincideMarca = (selectedBrand === "all" || p.brand.toLowerCase() === selectedBrand.toLowerCase());
-    const coincideCat = (selectedCategory === "all" || p.category === selectedCategory);
-    return coincideMarca && coincideCat;
-  });
-  renderProducts();
+    filtered = products.filter(p => {
+        const coincideMarca = (selectedBrand === "all" || p.brand?.toLowerCase() === selectedBrand.toLowerCase());
+        const coincideCat = (selectedCategory === "all" || p.category === selectedCategory);
+        return coincideMarca && coincideCat;
+    });
+    renderProducts();
 }
 
 function filterBrand(brand, element) {
-  selectedBrand = brand;
-  document.querySelectorAll('.brand-item-mini').forEach(item => item.classList.remove('selected'));
-  if (element) element.classList.add('selected');
-  aplicarFiltrosCombinados();
-  
-  setTimeout(() => {
-    const categorySection = document.querySelector('.category-menu');
-    if (categorySection) {
-      const yOffset = -120;
-      const y = categorySection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  }, 100);
+    selectedBrand = brand;
+    document.querySelectorAll('.brand-item-mini').forEach(item => item.classList.remove('selected'));
+    if (element) element.classList.add('selected');
+    aplicarFiltrosCombinados();
+    
+    setTimeout(() => {
+        const categorySection = document.querySelector('.category-menu');
+        if (categorySection) {
+            const yOffset = -120;
+            const y = categorySection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+    }, 100);
 }
 
 function filterCategory(cat) {
-  selectedCategory = cat;
-  document.querySelectorAll(".category-menu button").forEach(btn => btn.classList.remove("active"));
-  if (event && event.target) event.target.classList.add("active");
-  aplicarFiltrosCombinados();
-  
-  setTimeout(() => {
-    const categorySection = document.querySelector('.category-menu');
-    if (categorySection) {
-      const yOffset = -120;
-      const y = categorySection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-      window.scrollTo({ top: y, behavior: 'smooth' });
-    }
-  }, 100);
+    selectedCategory = cat;
+    document.querySelectorAll(".category-menu button").forEach(btn => btn.classList.remove("active"));
+    if (event && event.target) event.target.classList.add("active");
+    aplicarFiltrosCombinados();
+    
+    setTimeout(() => {
+        const categorySection = document.querySelector('.category-menu');
+        if (categorySection) {
+            const yOffset = -120;
+            const y = categorySection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+    }, 100);
 }
 
 function showOnlyFavs() {
-  let favs = JSON.parse(localStorage.getItem("favs")) || [];
-  if (favs.length === 0) {
-    showToast("No tienes favoritos ");
-    return;
-  }
-  filtered = favs;
-  renderProducts();
-  showToast(" Viendo tus favoritos");
+    let favs = JSON.parse(localStorage.getItem("favs")) || [];
+    if (favs.length === 0) {
+        showToast("💔 No tienes favoritos");
+        return;
+    }
+    filtered = favs;
+    renderProducts();
+    showToast("❤️ Viendo tus favoritos");
 }
 
 // ============================================
 // EXPERIENCIAS (LOOK MODAL)
 // ============================================
 function openExperience(tipo) {
-  const modal = document.getElementById("lookModal");
-  const container = document.getElementById("look-products");
-  const modalContent = modal.querySelector(".look-modal-content");
+    const modal = document.getElementById("lookModal");
+    const container = document.getElementById("look-products");
+    const modalContent = modal.querySelector(".look-modal-content");
 
-  const selecciones = {
-    'pro': [2, 3, 4, 8, 10],
-    'kit': [1, 7, 5, 6],
-    'skincare': [11, 12, 13]
-  };
+    const selecciones = {
+        'pro': [2, 3, 4, 8, 10],
+        'kit': [1, 7, 5, 6],
+        'skincare': [11, 12, 13]
+    };
 
-  const config = {
-    'pro': { titulo: "FAVORITOS PRO", bgColor: "#fdf2f5", textColor: "#333", btn: "#ff4d6d" },
-    'kit': { titulo: "KITS DE REGALO", bgColor: "#fff9fb", textColor: "#333", btn: "#ff4d6d" },
-    'skincare': { titulo: "RITUAL SKINCARE", bgColor: "#f0f9f1", textColor: "#2d5a27", btn: "#4caf50" }
-  };
+    const config = {
+        'pro': { titulo: "⭐ FAVORITOS PRO", bgColor: "#fdf2f5", textColor: "#333", btn: "#ff4d6d" },
+        'kit': { titulo: "🎁 KITS DE REGALO", bgColor: "#fff9fb", textColor: "#333", btn: "#ff4d6d" },
+        'skincare': { titulo: "🧴 RITUAL SKINCARE", bgColor: "#f0f9f1", textColor: "#2d5a27", btn: "#4caf50" }
+    };
 
-  const IDsSeleccionados = selecciones[tipo];
-  const experienceProducts = products.filter(p => IDsSeleccionados.includes(p.id));
-  const setup = config[tipo];
+    const IDsSeleccionados = selecciones[tipo];
+    const experienceProducts = products.filter(p => IDsSeleccionados.includes(p.id));
+    const setup = config[tipo];
 
-  modalContent.style.backgroundColor = setup.bgColor;
-  modalContent.style.color = setup.textColor;
-  container.innerHTML = `<h2 style="text-align:center; margin-bottom:20px; width:100%; font-family:'Playfair Display';">${setup.titulo}</h2>`;
+    modalContent.style.backgroundColor = setup.bgColor;
+    modalContent.style.color = setup.textColor;
+    container.innerHTML = `<h2 style="text-align:center; margin-bottom:20px; width:100%; font-family:'Playfair Display';">${setup.titulo}</h2>`;
 
-  let total = 0;
-  experienceProducts.forEach((p, index) => {
-    total += p.price;
-    let pasoTag = (tipo === 'skincare') ? `<span style="display:inline-block; background:#2d5a27; color:white; width:24px; height:24px; border-radius:50%; line-height:24px; margin-right:8px;">${index + 1}</span>` : "";
-    
-    const productDiv = document.createElement('div');
-    productDiv.style.cssText = "background:rgba(255,255,255,0.8); border-radius:15px; padding:15px; text-align:center;";
-    productDiv.innerHTML = `
-      ${pasoTag}
-      <img src="${p.img}" alt="${p.name}" style="width:100%; height:120px; object-fit:contain;">
-      <h4 style="margin:10px 0; font-size:14px;">${p.name}</h4>
-      <p style="font-weight:bold; color:#ff4d6d;">$${p.price}</p>
-      <button onclick="addToCart(${p.id})" style="cursor:pointer; padding:8px 15px; border-radius:5px; border:none; background:${setup.btn}; color:white;">Añadir</button>
+    let total = 0;
+    experienceProducts.forEach((p, index) => {
+        total += p.price;
+        let pasoTag = (tipo === 'skincare') ? `<span style="display:inline-block; background:#2d5a27; color:white; width:24px; height:24px; border-radius:50%; line-height:24px; margin-right:8px;">${index + 1}</span>` : "";
+        
+        const productDiv = document.createElement('div');
+        productDiv.style.cssText = "background:rgba(255,255,255,0.8); border-radius:15px; padding:15px; text-align:center;";
+        productDiv.innerHTML = `
+            ${pasoTag}
+            <img src="${p.img}" alt="${p.name}" style="width:100%; height:120px; object-fit:contain;">
+            <h4 style="margin:10px 0; font-size:14px;">${p.name}</h4>
+            <p style="font-weight:bold; color:#ff4d6d;">$${p.price}</p>
+            <button onclick="addToCart(${p.id})" style="cursor:pointer; padding:8px 15px; border-radius:5px; border:none; background:${setup.btn}; color:white;">Añadir</button>
+        `;
+        container.appendChild(productDiv);
+    });
+
+    const totalDiv = document.createElement('div');
+    totalDiv.style.cssText = "width:100%; text-align:center; margin-top:20px; padding-top:20px; border-top:1px solid rgba(0,0,0,0.1);";
+    totalDiv.innerHTML = `
+        <h3>Total: $${total}</h3>
+        <button class="btn-add-all-luxe" style="background:${setup.btn}; color:white; padding:15px 35px; border:none; border-radius:50px; cursor:pointer; font-weight:bold; width:100%;" onclick="completeExperience()">
+            🛒 AÑADIR TODO AL CARRITO
+        </button>
     `;
-    container.appendChild(productDiv);
-  });
+    container.appendChild(totalDiv);
 
-  const totalDiv = document.createElement('div');
-  totalDiv.style.cssText = "width:100%; text-align:center; margin-top:20px; padding-top:20px; border-top:1px solid rgba(0,0,0,0.1);";
-  totalDiv.innerHTML = `
-    <h3>Total: $${total}</h3>
-    <button class="btn-add-all-luxe" style="background:${setup.btn}; color:white; padding:15px 35px; border:none; border-radius:50px; cursor:pointer; font-weight:bold; width:100%;" onclick="completeExperience()">
-      AÑADIR TODO AL CARRITO
-    </button>
-  `;
-  container.appendChild(totalDiv);
-
-  window.currentExperience = experienceProducts;
-  modal.style.display = "flex";
+    window.currentExperience = experienceProducts;
+    modal.style.display = "flex";
 }
 
 function closeLook() {
-  document.getElementById("lookModal").style.display = "none";
+    document.getElementById("lookModal").style.display = "none";
 }
 
 function completeExperience() {
-  if (!window.currentExperience) return;
-  window.currentExperience.forEach(p => addToCart(p.id));
-  showToast(" ¡Selección añadida al carrito!");
-  closeLook();
+    if (!window.currentExperience) return;
+    window.currentExperience.forEach(p => addToCart(p.id));
+    showToast("🎉 ¡Selección añadida al carrito!");
+    closeLook();
+}
+
+// ============================================
+// NAVEGACIÓN DESDE FOOTER
+// ============================================
+function navigateAndFilter(category) {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (category === 'all') {
+        filterCategory('all');
+    } else if (category === 'favs') {
+        showOnlyFavs();
+    } else {
+        filterCategory(category);
+    }
 }
 
 // ============================================
 // INICIALIZACIÓN
 // ============================================
-document.addEventListener("DOMContentLoaded", function () {
-  renderProducts();
-  updateCartCounter();
-  updateFavCounter();
-  
-  if (search) {
-  search.addEventListener("input", () => {
-    let text = search.value.toLowerCase();
-    filtered = products.filter(p => p.name.toLowerCase().includes(text));
-    renderProducts();
+document.addEventListener("DOMContentLoaded", async function () {
+    // Cargar productos desde la API
+    await cargarProductosDesdeAPI();
     
-    // Desplazar automáticamente a los productos después de buscar
-    const productSection = document.getElementById("product-list");
-    if (productSection && text.length > 0) {
-      // Pequeño delay para que el render termine
-      setTimeout(() => {
-        const yOffset = -100; // Ajuste para que no quede pegado al header
-        const y = productSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-      }, 100);
+    // Actualizar contadores
+    updateCartCounter();
+    updateFavCounter();
+    
+    // Evento de búsqueda
+    if (search) {
+        search.addEventListener("input", () => {
+            let text = search.value.toLowerCase();
+            filtered = products.filter(p => p.name.toLowerCase().includes(text));
+            renderProducts();
+            
+            const productSection = document.getElementById("product-list");
+            if (productSection && text.length > 0) {
+                setTimeout(() => {
+                    const yOffset = -100;
+                    const y = productSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }, 100);
+            }
+        });
     }
-  });
-}
-  if (sortSelect) {
-    sortSelect.addEventListener("change", () => {
-      const option = sortSelect.value;
-      if (option === "az") {
-        filtered.sort((a, b) => a.name.localeCompare(b.name));
-      } else if (option === "za") {
-        filtered.sort((a, b) => b.name.localeCompare(a.name));
-      } else if (option === "precioAsc") {
-        filtered.sort((a, b) => a.price - b.price);
-      } else if (option === "precioDesc") {
-        filtered.sort((a, b) => b.price - a.price);
-      }
-      renderProducts();
+    
+    // Evento de ordenamiento
+    if (sortSelect) {
+        sortSelect.addEventListener("change", () => {
+            const option = sortSelect.value;
+            if (option === "az") {
+                filtered.sort((a, b) => a.name.localeCompare(b.name));
+            } else if (option === "za") {
+                filtered.sort((a, b) => b.name.localeCompare(a.name));
+            } else if (option === "precioAsc") {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (option === "precioDesc") {
+                filtered.sort((a, b) => b.price - a.price);
+            }
+            renderProducts();
+        });
+    }
+    
+    // Newsletter
+    const newsletterBtn = document.querySelector('.newsletter-form button');
+    const newsletterInput = document.querySelector('.newsletter-form input');
+    if (newsletterBtn) {
+        newsletterBtn.onclick = () => {
+            const email = newsletterInput.value;
+            if (email.includes('@')) {
+                showToast("🎉 ¡Bienvenida al Club Luxe!");
+                newsletterInput.value = "";
+            } else {
+                showToast("📧 Por favor, ingresa un email válido");
+            }
+        };
+    }
+    
+    // Videos
+    document.querySelectorAll('.video-card').forEach(card => {
+        const video = card.querySelector('video');
+        card.addEventListener('mouseenter', () => video.play());
+        card.addEventListener('mouseleave', () => {
+            video.pause();
+            video.currentTime = 0;
+        });
     });
-  }
-  
-  const newsletterBtn = document.querySelector('.newsletter-form button');
-  const newsletterInput = document.querySelector('.newsletter-form input');
-  if (newsletterBtn) {
-    newsletterBtn.onclick = () => {
-      const email = newsletterInput.value;
-      if (email.includes('@')) {
-        showToast("¡Bienvenida al Club Luxe!");
-        newsletterInput.value = "";
-      } else {
-        showToast(" Por favor, ingresa un email válido");
-      }
-    };
-  }
-  
-  document.querySelectorAll('.video-card').forEach(card => {
-    const video = card.querySelector('video');
-    card.addEventListener('mouseenter', () => video.play());
-    card.addEventListener('mouseleave', () => {
-      video.pause();
-      video.currentTime = 0;
-    });
-  });
 });
 
 // ============================================
-// CERRAR MODAL AL HACER CLIC FUERA
+// MODAL CLICK FUERA Y ESC
 // ============================================
 window.onclick = function(event) {
-  const productModal = document.getElementById("productModal");
-  const lookModal = document.getElementById("lookModal");
-  
-  if (event.target == productModal) {
-    closeProductModal();
-  }
-  if (event.target == lookModal) {
-    closeLook();
-  }
+    const productModal = document.getElementById("productModal");
+    const lookModal = document.getElementById("lookModal");
+    
+    if (event.target == productModal) {
+        closeProductModal();
+    }
+    if (event.target == lookModal) {
+        closeLook();
+    }
 }
 
-// Cerrar con tecla ESC
 document.addEventListener('keydown', function(event) {
-  if (event.key === "Escape") {
-    const productModal = document.getElementById("productModal");
-    if (productModal.style.display === "flex") {
-      closeProductModal();
+    if (event.key === "Escape") {
+        const productModal = document.getElementById("productModal");
+        if (productModal && productModal.style.display === "flex") {
+            closeProductModal();
+        }
     }
-  }
 });
 
 // ============================================
 // MENÚ HAMBURGUESA
 // ============================================
 function toggleMenu() {
-  const menu = document.getElementById('side-menu');
-  menu.classList.toggle('active');
+    const menu = document.getElementById('side-menu');
+    if (menu) menu.classList.toggle('active');
 }
 
 document.addEventListener('click', function(event) {
-  const menu = document.getElementById('side-menu');
-  const hamburger = document.querySelector('.menu-hamburger');
-  
-  if (menu && menu.classList.contains('active') && 
-      !menu.contains(event.target) && 
-      !hamburger.contains(event.target)) {
-    menu.classList.remove('active');
-  }
+    const menu = document.getElementById('side-menu');
+    const hamburger = document.querySelector('.menu-hamburger');
+    
+    if (menu && menu.classList.contains('active') && 
+        !menu.contains(event.target) && 
+        hamburger && !hamburger.contains(event.target)) {
+        menu.classList.remove('active');
+    }
 });
 
 if (window.innerWidth > 768) {
-  const hamburger = document.querySelector('.menu-hamburger');
-  const menu = document.getElementById('side-menu');
-  
-  if (hamburger && menu) {
-    let hoverTimer;
-    hamburger.addEventListener('mouseenter', function() {
-      hoverTimer = setTimeout(() => menu.classList.add('active'), 200);
-    });
-    hamburger.addEventListener('mouseleave', function() {
-      clearTimeout(hoverTimer);
-    });
-  }
+    const hamburger = document.querySelector('.menu-hamburger');
+    const menu = document.getElementById('side-menu');
+    
+    if (hamburger && menu) {
+        let hoverTimer;
+        hamburger.addEventListener('mouseenter', function() {
+            hoverTimer = setTimeout(() => menu.classList.add('active'), 200);
+        });
+        hamburger.addEventListener('mouseleave', function() {
+            clearTimeout(hoverTimer);
+        });
+    }
 }

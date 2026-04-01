@@ -738,8 +738,13 @@ header-icon:hover {
   overflow-y: auto;
   position: relative;
   animation: slideUp 0.3s ease;
-  cursor: default;
   pointer-events: auto;
+}
+.product-modal .modal-content {
+  overflow-y: auto;
+  max-height: 85vh;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE y Edge */
 }
 
 @keyframes slideUp {
@@ -781,12 +786,15 @@ header-icon:hover {
     cursor: default !important;
   user-select: none;
 }
-
-.modal-product-img img {
-  width: 100%;
-  max-width: 300px;
-  border-radius: 15px;
-  object-fit: cover;
+/* Cursor normal en imágenes del modal */
+.modal-product-img img,
+.product-modal img,
+.modal-content img {
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  pointer-events: none; /* La imagen no recibe clics, solo se ve */
 }
 
 .modal-product-info {
@@ -828,10 +836,11 @@ header-icon:hover {
 }
 
 .modal-product-info .modal-description {
-  color: #555;
-  line-height: 1.6;
-  margin: 15px 0;
+  max-height: 120px;
+  overflow-y: auto;
+  padding-right: 5px;
 }
+
 
 .modal-buttons {
   display: flex;

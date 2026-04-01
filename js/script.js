@@ -8,8 +8,8 @@ let products = [
   { id: 4, name: "HD Photogenic Concealer", price: 160, category: "corrector", brand: "nyx", img: "img/corrector.png", desc: "Corrector que ayuda a cubrir imperfecciones y ojeras." },
   { id: 5, name: "Plumin Delineador Mate", price: 95, category: "ojos", brand: "bissu", img: "img/delineador.png", desc: "Delineador de ojos tipo plumín resistente al agua." },
   { id: 6, name: "Lash Sensational Sky High", price: 285, category: "ojos", brand: "maybelline", img: "img/rimel.png", desc: "Máscara que ofrece longitud sin límites y volumen." },
-  { id: 7, name: "Gloss Labial", price: 85, category: "labial", brand: "bissu", img: "img/labial2.png", desc: "Brillo con destellos brillantes y textura no pegajosa." },
-  { id: 8, name: "Set de Brochas Esenciales", price: 450, category: "accesorios", brand: "luxe", img: "img/brochas.png", desc: "Set profesional de cerdas sintéticas premium." },
+  { id: 7, name: "Lip Oil", price: 85, category: "labial", brand: "bissu", img: "img/labial2.png", desc: "Brillo con destellos brillantes y textura no pegajosa." },
+  { id: 8, name: "Set de Brochas Esenciales", price: 450, category: "accesorios", brand: "rare", img: "img/brochas.png", desc: "Set profesional de cerdas sintéticas premium." },
   { id: 9, name: "Iluminador en Polvo", price: 98, category: "iluminador", brand: "bissu", img: "img/iluminador.png", desc: "Polvo compacto para dar luz al rostro." },
   { id: 10, name: "Rubor Compacto", price: 72, category: "rubor", brand: "bissu", img: "img/rubor.png", desc: "Textura sedosa para un acabado natural." },
   { id: 11, name: "Revitalift Limpiador", price: 195, category: "skincare", brand: "loreal", img: "img/limpiador.png", desc: "Gel de limpieza facial con ácido hialurónico." },
@@ -42,7 +42,7 @@ let products = [
   { id: 38, name: "Agua Micelar Todo en 1", price: 145, category: "skincare", brand: "loreal", img: "img/Agua micelar.png", desc: "Limpia, desmaquilla y tonifica el rostro." },
   { id: 39, name: "Fat Water Toner Serum", price: 720, category: "skincare", brand: "fenty", img: "img/Fat water.png", desc: "Tratamiento que reduce poros y manchas." },
   { id: 40, name: "Dior Addict Lip Maximizer", price: 910, category: "labial", brand: "dior", img: "img/Dior addict.png", desc: "Brillo de labios con efecto volumen instantáneo." },
-  { id: 41, name: "Esponja Beauty Blender", price: 180, category: "accesorios", brand: "luxe", img: "img/Esponja beauty blender.png", desc: "Esponja para difuminar base y corrector." },
+  { id: 41, name: "Esponja Beauty Blender", price: 180, category: "accesorios", brand: "maybelline", img: "img/Esponja beauty blender.png", desc: "Esponja para difuminar base y corrector." },
   { id: 42, name: "Brush Cleanser", price: 390, category: "accesorios", brand: "mac", img: "img/Brush cleanser.png", desc: "Limpiador de brochas de secado rápido." },
   { id: 43, name: "Prep + Prime Fix+", price: 680, category: "accesorios", brand: "mac", img: "img/prep+prime fix.png", desc: "Bruma de agua que fija el maquillaje y refresca." },
   { id: 44, name: "Matte Setting Spray", price: 235, category: "accesorios", brand: "nyx", img: "img/Matte setting.png", desc: "Fijador de maquillaje para evitar el brillo." },
@@ -51,13 +51,13 @@ let products = [
   { id: 47, name: "Pestañas Postizas 3D", price: 85, category: "ojos", brand: "bissu", img: "img/pestañas.png", desc: "Añade volumen y drama a tus ojos." },
   { id: 48, name: "Paleta Pro Contour", price: 320, category: "rubor", brand: "nyx", img: "img/contour.png", desc: "Kit para definir y resaltar facciones." },
   { id: 49, name: "Delineador de Labios Retráctil", price: 55, category: "labial", brand: "bissu", img: "img/Delineador labios.png", desc: "Textura cremosa para delinear labios." },
-  { id: 50, name: "Espejo de Bolsillo Luxe", price: 120, category: "accesorios", brand: "luxe", img: "img/Espejo bolsillo.png", desc: "Espejo con aumento para retoques rápidos." }
+  { id: 50, name: "Espejo de Bolsillo ", price: 120, category: "accesorios", brand: "loreal", img: "img/Espejo bolsillo.png", desc: "Espejo con aumento para retoques rápidos." }
 ];
 
 // Productos para videos
 const videoProducts = [
-  { id: 1001, name: "Rubor Marmoleado", price: 225, category: "rubor", brand: "luxe", img: "img/rubor.png", desc: "Rubor en polvo marmoleado con acabado natural y larga duración. Ideal para dar un toque de color saludable a tus mejillas." },
-  { id: 1002, name: "Labial Cremoso Soft Matte", price: 250, category: "labial", brand: "luxe", img: "img/labial.png", desc: "Labial con textura cremosa que se desliza suavemente, dejando un acabado mate suave y confortable. Hidrata mientras aporta color intenso." },
+  { id: 1001, name: "Rubor Marmoleado", price: 225, category: "rubor", brand: "bissu", img: "img/rubor.png", desc: "Rubor en polvo marmoleado con acabado natural y larga duración. Ideal para dar un toque de color saludable a tus mejillas." },
+  { id: 1002, name: "Labial Cremoso Soft Matte", price: 250, category: "labial", brand: "bissu", img: "img/labial.png", desc: "Labial con textura cremosa que se desliza suavemente, dejando un acabado mate suave y confortable. Hidrata mientras aporta color intenso." },
   { id: 1003, name: "Ultimate Shadow Palette", price: 400, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "Paleta de sombras con 16 tonos de alta pigmentación, desde mates hasta brillos intensos. Perfecta para looks de día y noche." }
 ];
 

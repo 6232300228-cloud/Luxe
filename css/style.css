@@ -667,7 +667,7 @@ header-icon:hover {
 .video-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.2));
+  background: linear-gradient(to top, rgba(0,0,0,0.3), rgba(0,0,0,0.1));
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -2273,11 +2273,26 @@ header-icon:hover {
   }
   
   .video-card {
-    flex: 0 0 200px;
     scroll-snap-align: start;
-    height: 360px;
+  flex: 0 0 170px;  /* Reducido de 200px a 170px */
+    height: 300px;     /* Reducido de 360px a 300px */
     width: auto;
   }
+  /* Ajustar el overlay para móvil */
+  .video-overlay {
+    padding: 12px;
+  }
+  
+  .video-overlay h3 {
+    font-size: 12px;   /* Texto más pequeño */
+    margin-bottom: 5px;
+  }
+  
+  .btn-ver-producto {
+    font-size: 10px;   /* Botón más pequeño */
+    padding: 5px 10px;
+  }
+  
   
   .video-grid::-webkit-scrollbar {
     height: 3px;

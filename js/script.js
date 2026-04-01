@@ -56,9 +56,12 @@ let products = [
 
 // Productos para videos
 const videoProducts = [
-  { id: 1001, name: "Rubor Marmoleado", price: 225, category: "rubor", brand: "bissu", img: "img/rubor.png", desc: "Rubor en polvo marmoleado con acabado natural y larga duración. Ideal para dar un toque de color saludable a tus mejillas." },
-  { id: 1002, name: "Labial Cremoso Soft Matte", price: 250, category: "labial", brand: "bissu", img: "img/labial.png", desc: "Labial con textura cremosa que se desliza suavemente, dejando un acabado mate suave y confortable. Hidrata mientras aporta color intenso." },
-  { id: 1003, name: "Ultimate Shadow Palette", price: 400, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "Paleta de sombras con 16 tonos de alta pigmentación, desde mates hasta brillos intensos. Perfecta para looks de día y noche." }
+  { id: 1001, name: "Rubor Marmoleado", price: 225, category: "rubor", brand: "bissu", img: "img/rubor.png", desc: "Rubor en polvo marmoleado con acabado natural y larga duración." },
+  { id: 1002, name: "Labial Cremoso Soft Matte", price: 250, category: "labial", brand: "bissu", img: "img/labial.png", desc: "Labial con textura cremosa que se desliza suavemente, dejando un acabado mate suave." },
+  { id: 1003, name: "Ultimate Shadow Palette", price: 400, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "Paleta de sombras con 16 tonos de alta pigmentación." },
+  // NUEVOS VIDEOS
+  { id: 1004, name: "Lash Sensational Sky High", price: 285, category: "ojos", brand: "maybelline", img: "img/rimel.png", desc: "Máscara de pestañas que ofrece longitud sin límites y volumen instantáneo." },
+  { id: 1005, name: "Can't Stop Won't Stop Foundation", price: 380, category: "base", brand: "nyx", img: "img/base.png", desc: "Base de maquillaje líquida de cobertura total y acabado mate." }
 ];
 
 let filtered = products;

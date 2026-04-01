@@ -1537,15 +1537,6 @@ header-icon:hover {
   z-index: 2;
 }
 
-.video-grid {
-  display: flex;
-  justify-content: center;
-  gap: 25px;
-  flex-wrap: wrap;
-  position: relative;
-  z-index: 2;
-}
-
 /* ============================================
    TOAST
    ============================================ */
@@ -2297,12 +2288,14 @@ header-icon:hover {
    PANTALLAS GRANDES (normal, sin cambios)
    ============================================ */
 @media (min-width: 1025px) {
-  .video-grid {
+ .video-grid {
     display: flex;
     justify-content: center;
     gap: 25px;
-    flex-wrap: wrap;
-    overflow-x: visible;
+    flex-wrap: nowrap;  /* 👈 Cambia de "wrap" a "nowrap" */
+    overflow-x: auto;   /* 👈 Agrega scroll horizontal si no caben */
+    overflow-y: visible;
+    padding: 10px 20px;
   }
   
   .video-card {

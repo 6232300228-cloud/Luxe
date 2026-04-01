@@ -10,7 +10,7 @@ let userToken = null;
 
 // Constantes de envío
 const ENVIO_GRATIS_MINIMO = 500;
-const COSTO_ENVIO = 50;
+const COSTO_ENVIO = 1;
 
 // ============================================
 // INICIALIZACIÓN

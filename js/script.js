@@ -39,7 +39,7 @@ let products = [
   { id: 35, name: "Polvo Traslúcido Suelto", price: 95, category: "rubor", brand: "bissu", img: "img/polvo.png", desc: "Polvo fino para sellar el maquillaje y eliminar brillo." },
   { id: 36, name: "Rouge Blush", price: 1100, category: "rubor", brand: "dior", img: "img/dior-blush.png", desc: "Rubor de larga duración con pigmentos intensos." },
   { id: 37, name: "Stay Vulnerable Blush", price: 510, category: "rubor", brand: "rare", img: "img/rare-creamblush.png", desc: "Rubor en crema resistente al agua que se funde en la piel." },
-  { id: 38, name: "Agua Micelar Todo en 1", price: 145, category: "skincare", brand: "loreal", img: "img/Agua micelar.png", desc: "Limpia, desmaquilla y tonifica el rostro." },
+  { id: 38, name: "Agua Micelar 5 en 1", price: 145, category: "skincare", brand: "loreal", img: "img/Agua micelar.png", desc: "Limpia, desmaquilla y tonifica el rostro." },
   { id: 39, name: "Fat Water Toner Serum", price: 720, category: "skincare", brand: "fenty", img: "img/Fat water.png", desc: "Tratamiento que reduce poros y manchas." },
   { id: 40, name: "Dior Addict Lip Maximizer", price: 910, category: "labial", brand: "dior", img: "img/Dior addict.png", desc: "Brillo de labios con efecto volumen instantáneo." },
   { id: 41, name: "Esponja Beauty Blender", price: 180, category: "accesorios", brand: "maybelline", img: "img/Esponja beauty blender.png", desc: "Esponja para difuminar base y corrector." },
@@ -128,8 +128,7 @@ function openProductModal(productId) {
       <div class="modal-price">$${product.price}</div>
       <div class="modal-buttons">
         <button class="btn-modal-add" onclick="addToCartFromModal(${product.id})"> Agregar al carrito</button>
-        <button class="btn-modal-close" onclick="closeProductModal()">Seguir comprando</button>
-      </div>
+        <button class="btn-modal-close" onclick="buyNow(${product.id})">Comprar ahora</button>      </div>
     </div>
   `;
   
@@ -148,6 +147,40 @@ function addToCartFromModal(id) {
   showToast("Producto agregado al carrito ");
   closeProductModal();
 }
+// ============================================
+// COMPRAR AHORA - REDIRIGE AL CHECKOUT CON EL PRODUCTO
+// ============================================
+function buyNow(productId) {
+  // Buscar el producto
+  let product = products.find(p => p.id == productId);
+  if (!product) {
+    product = videoProducts.find(p => p.id == productId);
+  }
+  
+  if (!product) {
+    showToast("Producto no encontrado");
+    return;
+  }
+  
+  // Crear un carrito temporal con solo este producto
+  const carritoUnico = [{
+    id: product.id,
+    nombre: product.name,
+    precio: product.price,
+    img: product.img,
+    cantidad: 1
+  }];
+  
+  // Guardar en localStorage
+  localStorage.setItem("carrito", JSON.stringify(carritoUnico));
+  
+  // Redirigir al checkout
+  window.location.href = "checkout.html";
+  
+  // Cerrar modal
+  closeProductModal();
+}
+
 
 // ============================================
 // CARRITO

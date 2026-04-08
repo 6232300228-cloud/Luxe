@@ -141,7 +141,6 @@ function aplicarFiltrosYOrden() {
             productosFiltrados.sort((a, b) => a.price - b.price);
             break;
         default:
-            // Mantener orden original por ID
             productosFiltrados.sort((a, b) => a.id - b.id);
     }
     
@@ -153,7 +152,7 @@ function aplicarFiltrosYOrden() {
 // ============================================
 async function cargarProductos() {
     const tabla = document.getElementById("lista-inventario");
-    tabla.innerHTML = '<td><td colspan="6" style="text-align: center;">Cargando productos...</td></tr>';
+    tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">Cargando productos...</td></tr>';
     
     try {
         const response = await fetch('https://luxe-api-frr5.onrender.com/api/products');
@@ -229,7 +228,6 @@ function renderizarTablaProductos(productos) {
 // ============================================
 async function cargarEstadisticas() {
     try {
-        // Obtener pedidos
         const responsePedidos = await fetch('https://luxe-api-frr5.onrender.com/api/orders/mis-pedidos', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -240,7 +238,6 @@ async function cargarEstadisticas() {
         
         const pedidos = await responsePedidos.json();
         
-        // Obtener usuarios (clientes)
         const responseUsers = await fetch('https://luxe-api-frr5.onrender.com/api/users', {
             headers: { 'Authorization': `Bearer ${token}` }
         });
@@ -248,7 +245,6 @@ async function cargarEstadisticas() {
         let clientes = [];
         if (responseUsers.ok) {
             const allUsers = await responseUsers.json();
-            // Filtrar solo clientes (role = "cliente")
             clientes = allUsers.filter(u => u.role === 'cliente');
         }
         
@@ -256,7 +252,6 @@ async function cargarEstadisticas() {
         const mesActual = hoy.getMonth();
         const añoActual = hoy.getFullYear();
         
-        // Ventas del mes actual
         const ventasMes = pedidos
             .filter(p => {
                 const fecha = new Date(p.fechaPedido);
@@ -264,12 +259,10 @@ async function cargarEstadisticas() {
             })
             .reduce((sum, p) => sum + (p.total || 0), 0);
         
-        // Productos vendidos totales
         const productosVendidos = pedidos
             .flatMap(p => p.productos || [])
             .reduce((sum, prod) => sum + (prod.cantidad || 0), 0);
         
-        // Clientes nuevos (registrados en el mes actual)
         const clientesNuevos = clientes.filter(c => {
             const fechaRegistro = new Date(c.createdAt || c.fechaRegistro);
             return fechaRegistro.getMonth() === mesActual && fechaRegistro.getFullYear() === añoActual;
@@ -313,7 +306,6 @@ async function cargarVentas() {
         for (const pedido of pedidos) {
             const tr = document.createElement("tr");
             
-            // Obtener nombre del cliente si está disponible
             let clienteNombre = 'Cliente';
             if (pedido.userId) {
                 try {
@@ -560,17 +552,20 @@ function cerrarModalEditar() {
     if (modal) modal.style.display = 'none';
 }
 
-// Reemplaza la función guardarEdicionProducto en dashboard.js con esta:
-
+// ============================================
+// GUARDAR EDICIÓN DE PRODUCTO
+// ============================================
 async function guardarEdicionProducto() {
     const id = document.getElementById('editProductoId').value;
     const name = document.getElementById('editProductoNombre').value;
     const price = parseFloat(document.getElementById('editProductoPrecio').value);
     const category = document.getElementById('editProductoCategoria').value;
-    const brand = document.getElementById('editProductoMarca').value;
+    const brand = document.getElementById('editProductoMarca').value;  // ← MARCA
     const img = document.getElementById('editProductoImg').value;
     const desc = document.getElementById('editProductoDesc').value;
     const stock = parseInt(document.getElementById('editProductoStock').value);
+    
+    console.log("📝 Enviando actualización:", { id, name, price, category, brand, stock }); // ← Agrega este log
     
     if (!name || !price || !category) {
         Swal.fire({
@@ -585,6 +580,14 @@ async function guardarEdicionProducto() {
         return;
     }
     
+    Swal.fire({
+        title: 'Guardando cambios...',
+        allowOutsideClick: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+    
     try {
         const response = await fetch(`https://luxe-api-frr5.onrender.com/api/products/actualizar/${id}`, {
             method: 'PUT',
@@ -596,13 +599,14 @@ async function guardarEdicionProducto() {
         });
         
         const data = await response.json();
+        console.log("📦 Respuesta de la API:", data); // ← Agrega este log
         
         if (response.ok) {
             Swal.fire({
                 icon: 'success',
-                title: 'Producto actualizado',
-                text: `${name} ha sido actualizado`,
-                timer: 1500,
+                title: '✅ Producto actualizado',
+                text: `${name} - Marca: ${brand || 'Sin marca'}`,
+                timer: 2000,
                 showConfirmButton: false,
                 toast: true,
                 position: 'top-end'
@@ -610,14 +614,13 @@ async function guardarEdicionProducto() {
             cerrarModalEditar();
             await cargarProductos();
             
-            // LIMPIAR CACHÉ DEL INDEX
             localStorage.removeItem('productosCache');
             localStorage.setItem('productosActualizados', Date.now().toString());
             
         } else {
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+                title: '❌ Error',
                 text: data.error || 'No se pudo actualizar',
                 timer: 1500,
                 showConfirmButton: false,
@@ -638,12 +641,9 @@ async function guardarEdicionProducto() {
         });
     }
 }
-
 // ============================================
 // ELIMINAR PRODUCTO
 // ============================================
-// Reemplaza la función eliminarProducto en dashboard.js con esta:
-
 async function eliminarProducto(id) {
     if (user.role !== 'admin') {
         Swal.fire({
@@ -691,7 +691,6 @@ async function eliminarProducto(id) {
             });
             await cargarProductos();
             
-            // LIMPIAR CACHÉ DEL INDEX
             localStorage.removeItem('productosCache');
             localStorage.setItem('productosActualizados', Date.now().toString());
             
@@ -721,10 +720,9 @@ async function eliminarProducto(id) {
 }
 
 // ============================================
-// AGREGAR NUEVO PRODUCTO (CORREGIDO)
+// AGREGAR NUEVO PRODUCTO
 // ============================================
 function mostrarModalAgregarProducto() {
-    // Remover modal existente si hay
     const existingModal = document.getElementById('modalProducto');
     if (existingModal) {
         existingModal.remove();
@@ -807,8 +805,9 @@ function cerrarModalAgregar() {
     if (modal) modal.remove();
 }
 
-// Reemplaza la función guardarNuevoProducto en dashboard.js con esta:
-
+// ============================================
+// GUARDAR NUEVO PRODUCTO
+// ============================================
 async function guardarNuevoProducto() {
     const name = document.getElementById('productoNombre').value;
     const price = parseFloat(document.getElementById('productoPrecio').value);
@@ -831,7 +830,6 @@ async function guardarNuevoProducto() {
         return;
     }
     
-    // Generar un ID automáticamente
     const newId = productosGlobales.length > 0 ? Math.max(...productosGlobales.map(p => p.id)) + 1 : 1;
     
     try {
@@ -866,10 +864,8 @@ async function guardarNuevoProducto() {
                 position: 'top-end'
             });
             cerrarModalAgregar();
-            await cargarProductos(); // Recargar productos en el dashboard
+            await cargarProductos();
             
-            // LIMPIAR CACHÉ DEL INDEX para que muestre el nuevo producto
-            // Forzar recarga de productos en el index la próxima vez que se abra
             localStorage.removeItem('productosCache');
             localStorage.setItem('productosActualizados', Date.now().toString());
             

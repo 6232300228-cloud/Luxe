@@ -1,7 +1,8 @@
 // ============================================
 // VARIABLES GLOBALES
 // ============================================
-let filtered = products;
+let products = [];
+let filtered = [];
 let selectedBrand = "all";
 let selectedCategory = "all";
 const productList = document.getElementById("product-list");
@@ -10,12 +11,70 @@ const favCount = document.getElementById("fav-count");
 const search = document.getElementById("search");
 const sortSelect = document.getElementById("sort");
 
+// URL de la API
+const API_URL = 'https://luxe-api-frr5.onrender.com/api/products';
+
+// ============================================
+// CARGAR PRODUCTOS DESDE LA API
+// ============================================
+async function cargarProductosDesdeAPI() {
+    try {
+        console.log('Cargando productos desde la API...');
+        
+        if (productList) {
+            productList.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:50px;">Cargando productos...</div>';
+        }
+        
+        const response = await fetch(API_URL);
+        
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+        
+        const productosAPI = await response.json();
+        console.log('Productos cargados:', productosAPI.length);
+        
+        products = productosAPI.map(p => ({
+            id: p.id,
+            name: p.name,
+            price: p.price,
+            img: p.img,
+            category: p.category,
+            brand: p.brand,
+            desc: p.desc,
+            stock: p.stock
+        }));
+        
+        filtered = [...products];
+        renderProducts();
+        updateCartCounter();
+        updateFavCounter();
+        
+        localStorage.setItem('ultimaCargaProductos', Date.now().toString());
+        localStorage.removeItem('productosActualizados');
+        
+    } catch (error) {
+        console.error('Error cargando productos:', error);
+        if (productList) {
+            productList.innerHTML = `
+                <div style="grid-column:1/-1; text-align:center; padding:50px;">
+                    Error al cargar productos<br>
+                    <small>${error.message}</small><br>
+                    <button onclick="cargarProductosDesdeAPI()" style="margin-top:15px; padding:8px 20px; background:#ff4d6d; color:white; border:none; border-radius:25px; cursor:pointer;">
+                        Reintentar
+                    </button>
+                </div>
+            `;
+        }
+    }
+}
+
 // ============================================
 // FUNCIONES AUXILIARES
 // ============================================
 function getCategoryName(category) {
   const categories = {
-    'labial': ' Labios',
+    'labial': 'Labios',
     'sombra': 'Sombras',
     'base': 'Bases',
     'corrector': 'Correctores',
@@ -25,11 +84,12 @@ function getCategoryName(category) {
     'skincare': 'Skincare',
     'accesorios': 'Accesorios'
   };
-  return categories[category] || category;
+  return categories[category] || category || 'General';
 }
 
 function showToast(msg) {
   const toast = document.getElementById("toast");
+  if (!toast) return;
   toast.textContent = msg;
   toast.classList.add("show");
   setTimeout(() => toast.classList.remove("show"), 2000);
@@ -38,18 +98,32 @@ function showToast(msg) {
 // ============================================
 // MODAL DE PRODUCTO
 // ============================================
+// ============================================
+// MODAL DE PRODUCTO (sin mostrar stock numérico)
+// ============================================
 function openProductModal(productId) {
   const modal = document.getElementById("productModal");
   const modalContent = document.getElementById("modalProductDetail");
   
   let product = products.find(p => p.id == productId);
-  if (!product) {
-    product = videoProducts.find(p => p.id == productId);
-  }
   
   if (!product) {
     console.log("Producto no encontrado:", productId);
     return;
+  }
+  
+  // Determinar texto de disponibilidad
+  let stockText = "";
+  let stockClass = "";
+  if (product.stock <= 0) {
+    stockText = "AGOTADO";
+    stockClass = "stock-agotado";
+  } else if (product.stock <= 5) {
+    stockText = " ÚLTIMAS PIEZAS ";
+    stockClass = "stock-ultimas";
+  } else {
+    stockText = "DISPONIBLE AHORA";
+    stockClass = "stock-disponible";
   }
   
   modalContent.innerHTML = `
@@ -57,14 +131,18 @@ function openProductModal(productId) {
       <img src="${product.img}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/300'">
     </div>
     <div class="modal-product-info">
-      <span class="modal-brand">${product.brand.toUpperCase()}</span>
+      <span class="modal-brand">${(product.brand || 'LUXE').toUpperCase()}</span>
       <h2>${product.name}</h2>
       <div class="modal-category">${getCategoryName(product.category)}</div>
-      <p class="modal-description">${product.desc}</p>
+      <p class="modal-description">${product.desc || 'Producto de alta calidad para realzar tu belleza natural.'}</p>
       <div class="modal-price">$${product.price}</div>
+      <div class="modal-stock-status ${stockClass}" style="margin:10px 0; font-size:14px; font-weight:bold;">
+        ${stockText}
+      </div>
       <div class="modal-buttons">
-        <button class="btn-modal-add" onclick="addToCartFromModal(${product.id})"> Agregar al carrito</button>
-        <button class="btn-modal-close" onclick="buyNow(${product.id})">Comprar ahora</button>      </div>
+        <button class="btn-modal-add" onclick="addToCartFromModal(${product.id})" ${product.stock <= 0 ? 'disabled style="opacity:0.5;"' : ''}>Agregar al carrito</button>
+        <button class="btn-modal-close" onclick="buyNow(${product.id})" ${product.stock <= 0 ? 'disabled style="opacity:0.5;"' : ''}>Comprar ahora</button>
+      </div>
     </div>
   `;
   
@@ -74,32 +152,32 @@ function openProductModal(productId) {
 
 function closeProductModal() {
   const modal = document.getElementById("productModal");
-  modal.style.display = "none";
+  if (modal) modal.style.display = "none";
   document.body.style.overflow = "auto";
 }
 
 function addToCartFromModal(id) {
   addToCart(id);
-  showToast("Producto agregado al carrito ");
+  showToast("Producto agregado al carrito");
   closeProductModal();
 }
 
 // ============================================
-// COMPRAR AHORA - REDIRIGE AL CHECKOUT CON EL PRODUCTO
+// COMPRAR AHORA
 // ============================================
 function buyNow(productId) {
-  // Buscar el producto
   let product = products.find(p => p.id == productId);
-  if (!product) {
-    product = videoProducts.find(p => p.id == productId);
-  }
   
   if (!product) {
     showToast("Producto no encontrado");
     return;
   }
   
-  // Crear un carrito temporal con solo este producto
+  if (product.stock <= 0) {
+    showToast("Producto agotado");
+    return;
+  }
+  
   const carritoUnico = [{
     id: product.id,
     nombre: product.name,
@@ -108,13 +186,8 @@ function buyNow(productId) {
     cantidad: 1
   }];
   
-  // Guardar en localStorage
   localStorage.setItem("carrito", JSON.stringify(carritoUnico));
-  
-  // Redirigir al checkout
   window.location.href = "checkout.html";
-  
-  // Cerrar modal
   closeProductModal();
 }
 
@@ -137,14 +210,15 @@ function updateCartCounter() {
 
 function addToCart(id) {
   let cart = JSON.parse(localStorage.getItem("carrito")) || [];
-  
   let product = products.find(p => p.id == id);
-  if (!product) {
-    product = videoProducts.find(p => p.id == id);
-  }
 
   if (!product) {
     console.log("Producto no encontrado:", id);
+    return;
+  }
+  
+  if (product.stock <= 0) {
+    showToast("Producto agotado");
     return;
   }
 
@@ -164,7 +238,7 @@ function addToCart(id) {
 
   localStorage.setItem("carrito", JSON.stringify(cart));
   updateCartCounter();
-  showToast("¡Añadido al carrito!");
+  showToast("Añadido al carrito");
 }
 
 // ============================================
@@ -212,6 +286,9 @@ function toggleFav(event, id) {
 // ============================================
 // RENDER PRODUCTOS
 // ============================================
+// ============================================
+// RENDER PRODUCTOS (con stock inteligente)
+// ============================================
 function renderProducts() {
   if (!productList) return;
   
@@ -226,6 +303,14 @@ function renderProducts() {
   filtered.forEach(p => {
     const isFav = favs.some(f => f.id === p.id);
     
+    // Determinar el texto de disponibilidad según el stock
+    let stockText = "DISPONIBLE AHORA";
+    if (p.stock <= 0) {
+      stockText = "AGOTADO";
+    } else if (p.stock <= 5) {
+      stockText = " ÚLTIMAS PIEZAS ";
+    }
+    
     const productCard = document.createElement('div');
     productCard.className = 'product-card-luxe';
     productCard.innerHTML = `
@@ -234,15 +319,15 @@ function renderProducts() {
       </button>
       <div class="product-clickable" onclick="openProductModal(${p.id})">
         <div class="img-container">
-          <img src="${p.img}" alt="${p.name}" loading="lazy">
+          <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.src='img/logo.png'">
         </div>
         <div class="info-luxe">
           <h4>${p.name.toUpperCase()}</h4>
-          <p class="subtitle-luxe">DISPONIBLE AHORA</p>
+          <p class="subtitle-luxe" style="${p.stock <= 5 && p.stock > 0 ? 'color: #ff4d6d; font-weight: bold;' : ''}">${stockText}</p>
           <p class="price-luxe">$${p.price}</p>
         </div>
       </div>
-      <button class="btn-buy-luxe" onclick="event.stopPropagation(); addToCart(${p.id})">AGREGAR AL CARRITO</button>
+      <button class="btn-buy-luxe" onclick="event.stopPropagation(); addToCart(${p.id})" ${p.stock <= 0 ? 'disabled style="opacity:0.5;"' : ''}>AGREGAR AL CARRITO</button>
     `;
     productList.appendChild(productCard);
   });
@@ -253,12 +338,11 @@ function renderProducts() {
 // ============================================
 function aplicarFiltrosCombinados() {
   filtered = products.filter(p => {
-    const coincideMarca = (selectedBrand === "all" || p.brand.toLowerCase() === selectedBrand.toLowerCase());
+    const coincideMarca = (selectedBrand === "all" || p.brand && p.brand.toLowerCase() === selectedBrand.toLowerCase());
     const coincideCat = (selectedCategory === "all" || p.category === selectedCategory);
     return coincideMarca && coincideCat;
   });
   
-  // Aplicar ordenamiento actual si existe
   if (sortSelect && sortSelect.value !== "default") {
     const option = sortSelect.value;
     if (option === "az") {
@@ -310,12 +394,12 @@ function filterCategory(cat) {
 function showOnlyFavs() {
   let favs = JSON.parse(localStorage.getItem("favs")) || [];
   if (favs.length === 0) {
-    showToast("No tienes favoritos ");
+    showToast("No tienes favoritos");
     return;
   }
   filtered = favs;
   renderProducts();
-  showToast(" Viendo tus favoritos");
+  showToast("Viendo tus favoritos");
 }
 
 // ============================================
@@ -384,7 +468,7 @@ function closeLook() {
 function completeExperience() {
   if (!window.currentExperience) return;
   window.currentExperience.forEach(p => addToCart(p.id));
-  showToast(" ¡Selección añadida al carrito!");
+  showToast("Selección añadida al carrito");
   closeLook();
 }
 
@@ -392,9 +476,7 @@ function completeExperience() {
 // INICIALIZACIÓN
 // ============================================
 document.addEventListener("DOMContentLoaded", function () {
-  renderProducts();
-  updateCartCounter();
-  updateFavCounter();
+  cargarProductosDesdeAPI();
   
   if (search) {
     search.addEventListener("input", () => {
@@ -402,12 +484,10 @@ document.addEventListener("DOMContentLoaded", function () {
       filtered = products.filter(p => p.name.toLowerCase().includes(text));
       renderProducts();
       
-      // Desplazar automáticamente a los productos después de buscar
       const productSection = document.getElementById("product-list");
       if (productSection && text.length > 0) {
-        // Pequeño delay para que el render termine
         setTimeout(() => {
-          const yOffset = -100; // Ajuste para que no quede pegado al header
+          const yOffset = -100;
           const y = productSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
           window.scrollTo({ top: y, behavior: 'smooth' });
         }, 100);
@@ -431,7 +511,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
   
-  // Inicializar filtros de marca
   document.querySelectorAll('.brand-item-mini[data-brand]').forEach(item => {
     item.addEventListener('click', () => {
       const brand = item.getAttribute('data-brand');
@@ -439,7 +518,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
   
-  // Inicializar filtros de categoría
   document.querySelectorAll('.category-menu button[data-category]').forEach(btn => {
     btn.addEventListener('click', () => {
       const cat = btn.getAttribute('data-category');
@@ -459,7 +537,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
   
-  // Inicializar botones de experiencia
   document.querySelectorAll('.btn-luxe[data-experience]').forEach(btn => {
     btn.addEventListener('click', () => {
       const exp = btn.getAttribute('data-experience');
@@ -467,7 +544,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
   
-  // Inicializar enlaces del footer
   const footerTienda = document.getElementById('footer-tienda');
   if (footerTienda) {
     footerTienda.addEventListener('click', (e) => {
@@ -499,22 +575,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
   
-  // Newsletter
   const newsletterBtn = document.getElementById('newsletter-btn');
   const newsletterInput = document.getElementById('newsletter-email');
   if (newsletterBtn) {
     newsletterBtn.onclick = () => {
       const email = newsletterInput.value;
       if (email.includes('@')) {
-        showToast("¡Bienvenida al Club Luxe !");
+        showToast("Bienvenida al Club Luxe");
         newsletterInput.value = "";
       } else {
-        showToast(" Por favor, ingresa un email válido");
+        showToast("Por favor, ingresa un email válido");
       }
     };
   }
   
-  // Videos
   document.querySelectorAll('.video-card').forEach(card => {
     const video = card.querySelector('video');
     const btn = card.querySelector('.btn-ver-producto');
@@ -559,7 +633,6 @@ window.onclick = function(event) {
   }
 }
 
-// Cerrar con tecla ESC
 document.addEventListener('keydown', function(event) {
   if (event.key === "Escape") {
     const productModal = document.getElementById("productModal");

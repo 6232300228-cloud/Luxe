@@ -560,6 +560,8 @@ function cerrarModalEditar() {
     if (modal) modal.style.display = 'none';
 }
 
+// Reemplaza la función guardarEdicionProducto en dashboard.js con esta:
+
 async function guardarEdicionProducto() {
     const id = document.getElementById('editProductoId').value;
     const name = document.getElementById('editProductoNombre').value;
@@ -606,8 +608,12 @@ async function guardarEdicionProducto() {
                 position: 'top-end'
             });
             cerrarModalEditar();
-            cargarProductos();
-            cargarEstadisticas();
+            await cargarProductos();
+            
+            // LIMPIAR CACHÉ DEL INDEX
+            localStorage.removeItem('productosCache');
+            localStorage.setItem('productosActualizados', Date.now().toString());
+            
         } else {
             Swal.fire({
                 icon: 'error',
@@ -636,6 +642,8 @@ async function guardarEdicionProducto() {
 // ============================================
 // ELIMINAR PRODUCTO
 // ============================================
+// Reemplaza la función eliminarProducto en dashboard.js con esta:
+
 async function eliminarProducto(id) {
     if (user.role !== 'admin') {
         Swal.fire({
@@ -681,8 +689,12 @@ async function eliminarProducto(id) {
                 toast: true,
                 position: 'top-end'
             });
-            cargarProductos();
-            cargarEstadisticas();
+            await cargarProductos();
+            
+            // LIMPIAR CACHÉ DEL INDEX
+            localStorage.removeItem('productosCache');
+            localStorage.setItem('productosActualizados', Date.now().toString());
+            
         } else {
             Swal.fire({
                 icon: 'error',
@@ -795,6 +807,8 @@ function cerrarModalAgregar() {
     if (modal) modal.remove();
 }
 
+// Reemplaza la función guardarNuevoProducto en dashboard.js con esta:
+
 async function guardarNuevoProducto() {
     const name = document.getElementById('productoNombre').value;
     const price = parseFloat(document.getElementById('productoPrecio').value);
@@ -852,8 +866,13 @@ async function guardarNuevoProducto() {
                 position: 'top-end'
             });
             cerrarModalAgregar();
-            cargarProductos();
-            cargarEstadisticas();
+            await cargarProductos(); // Recargar productos en el dashboard
+            
+            // LIMPIAR CACHÉ DEL INDEX para que muestre el nuevo producto
+            // Forzar recarga de productos en el index la próxima vez que se abra
+            localStorage.removeItem('productosCache');
+            localStorage.setItem('productosActualizados', Date.now().toString());
+            
         } else {
             Swal.fire({
                 icon: 'error',

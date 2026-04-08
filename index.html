@@ -288,6 +288,15 @@
 
 <!-- Script pequeño para token de Google -->
 <script>
+  // Al cargar el index, verificar si hay productos nuevos
+const productosActualizados = localStorage.getItem('productosActualizados');
+const ultimaCarga = localStorage.getItem('ultimaCargaProductos');
+
+if (productosActualizados && (!ultimaCarga || productosActualizados > ultimaCarga)) {
+    // Recargar productos desde la API
+    cargarProductosDesdeAPI();
+    localStorage.setItem('ultimaCargaProductos', Date.now().toString());
+}
 // FUNCIÓN PARA OBTENER EL PRIMER NOMBRE
 function getPrimerNombre(nombreCompleto) {
     if (!nombreCompleto) return "Usuario";

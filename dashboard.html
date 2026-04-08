@@ -360,22 +360,35 @@
 
 <div class="admin-layout">
   <div class="dashboard-wrapper">
-    <aside class="sidebar">
-      <img src="img/logo.png" alt="Logo" class="logo" style="width: 150px; margin-bottom: 20px;">
-      <div id="info-usuario">
-        <p style="margin-bottom: 5px;">👤 <b id="nombre-usuario">Cargando...</b></p>
-        <span id="rol-usuario" class="badge"></span>
-      </div>
-      <hr style="margin: 20px 0; border: 0.5px solid #eee;">
-      <nav>
-        <ul style="list-style: none; padding: 0;">
-          <li style="margin-bottom: 15px;"><a href="index.html" style="text-decoration: none; color: #333;">🏠 Ir a la Tienda</a></li>
-          <li id="menu-inventario" style="margin-bottom: 15px; color: #ff4d6d; cursor: pointer; font-weight: bold;">📦 Inventario</li>
-          <li id="menu-ventas" style="margin-bottom: 15px; cursor: pointer;">📊 Ventas</li>
-          <li><button id="btn-cerrar-sesion" style="background:none; border:none; color:red; cursor:pointer; font-family: inherit;">🚪 Cerrar Sesión</button></li>
-        </ul>
-      </nav>
-    </aside>
+   <!-- Reemplaza el <aside class="sidebar"> completo con este: -->
+<aside class="sidebar">
+  <img src="img/logo.png" alt="Logo" class="logo" style="width: 150px; margin-bottom: 20px;">
+  <div id="info-usuario">
+    <p style="margin-bottom: 5px;">👤 <b id="nombre-usuario">Cargando...</b></p>
+    <span id="rol-usuario" class="badge"></span>
+  </div>
+  <hr style="margin: 20px 0; border: 0.5px solid #eee;">
+  <nav>
+    <ul style="list-style: none; padding: 0;">
+      <li style="margin-bottom: 15px;">
+        <a href="index.html" style="text-decoration: none; color: #333; display: flex; align-items: center; gap: 10px;">
+          <img src="img/tienda-icon.png" alt="Tienda" style="width: 20px; height: 20px;"> Ir a la Tienda
+        </a>
+      </li>
+      <li id="menu-inventario" style="margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; gap: 10px; color: #ff4d6d; font-weight: bold;">
+        <img src="img/inventario-icon.png" alt="Inventario" style="width: 20px; height: 20px;"> Inventario
+      </li>
+      <li id="menu-ventas" style="margin-bottom: 15px; cursor: pointer; display: flex; align-items: center; gap: 10px;">
+        <img src="img/ventas-icon.png" alt="Ventas" style="width: 20px; height: 20px;"> Ventas
+      </li>
+      <li>
+        <button id="btn-cerrar-sesion" style="background:none; border:none; color:red; cursor:pointer; font-family: inherit; display: flex; align-items: center; gap: 10px;">
+          <img src="img/cerrar-sesion-icon.png" alt="Cerrar Sesión" style="width: 20px; height: 20px;"> Cerrar Sesión
+        </button>
+      </li>
+    </ul>
+  </nav>
+</aside>
 
     <main class="main-content">
       <h1 style="color: #ff4d6d; margin-bottom: 25px;">Panel de Ventas Luxe</h1>

@@ -34,6 +34,21 @@
         height: 100vh; 
     }
     
+    .sidebar nav ul li {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .sidebar nav ul li:hover {
+        color: #ff4d6d;
+        transform: translateX(5px);
+    }
+    
+    .sidebar nav ul li.active {
+        color: #ff4d6d;
+        font-weight: bold;
+    }
+    
     .main-content { 
         flex: 1; 
         padding: 40px; 
@@ -135,8 +150,209 @@
         padding-bottom: 0 !important;
     }
     
-    .card:last-child {
-        margin-bottom: 0 !important;
+    /* Estilos para buscador y filtros */
+    .inventario-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .search-box {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        background: white;
+        padding: 5px 15px;
+        border-radius: 25px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    
+    .search-box input {
+        border: none;
+        padding: 10px;
+        width: 250px;
+        outline: none;
+        font-size: 14px;
+    }
+    
+    .search-box button {
+        background: #ff4d6d;
+        border: none;
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .search-box button:hover {
+        background: #ff3355;
+        transform: scale(1.05);
+    }
+    
+    .filter-box {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+    
+    .filter-box label {
+        font-weight: bold;
+        color: #666;
+    }
+    
+    .filter-box select {
+        padding: 8px 15px;
+        border: 1px solid #ff4d6d;
+        border-radius: 20px;
+        outline: none;
+        background: white;
+        cursor: pointer;
+    }
+    
+    /* Modal mejorado */
+    .modal-producto {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10000;
+    }
+    .modal-contenido {
+        background: white;
+        border-radius: 20px;
+        width: 90%;
+        max-width: 550px;
+        max-height: 90vh;
+        overflow-y: auto;
+        animation: modalSlideIn 0.3s ease;
+    }
+    @keyframes modalSlideIn {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 25px;
+        border-bottom: 2px solid #ff4d6d;
+    }
+    .modal-header h3 { margin: 0; color: #ff4d6d; }
+    .cerrar-modal { font-size: 28px; cursor: pointer; color: #999; transition: color 0.3s; }
+    .cerrar-modal:hover { color: #ff4d6d; }
+    .modal-body { padding: 25px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; }
+    .form-group input, .form-group select, .form-group textarea {
+        width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px;
+        font-family: inherit;
+    }
+    .modal-footer { padding: 20px 25px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 12px; }
+    .btn-cancelar { background: #f0f0f0; color: #666; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; transition: all 0.3s; }
+    .btn-cancelar:hover { background: #e0e0e0; }
+    .btn-guardar { background: #ff4d6d; color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; transition: all 0.3s; }
+    .btn-guardar:hover { background: #ff3355; transform: scale(1.05); }
+    
+    .toast {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 8px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        bottom: 30px;
+        right: 30px;
+        font-size: 14px;
+        opacity: 0;
+        transition: opacity 0.5s, visibility 0.5s;
+    }
+    .toast.show {
+        visibility: visible;
+        opacity: 1;
+    }
+    
+    .section-title {
+        margin-bottom: 20px;
+        color: #ff4d6d;
+        border-left: 4px solid #ff4d6d;
+        padding-left: 15px;
+    }
+    
+    .ventas-section {
+        display: none;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    .ventas-section.active {
+        display: block;
+    }
+    
+    .inventario-section {
+        display: block;
+        animation: fadeIn 0.5s ease;
+    }
+    
+    .inventario-section.hidden {
+        display: none;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .tabla-ventas {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+    }
+    
+    .tabla-ventas th {
+        background: #ff4d6d;
+        color: white;
+        padding: 15px;
+        text-align: left;
+    }
+    
+    .tabla-ventas td {
+        padding: 15px;
+        border-bottom: 1px solid #ffeef1;
+    }
+    
+    .status-pagado {
+        color: #4CAF50;
+        font-weight: bold;
+    }
+    
+    .status-pendiente {
+        color: #ff9800;
+        font-weight: bold;
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px;
+        color: #999;
     }
   </style>
 </head>
@@ -154,8 +370,8 @@
       <nav>
         <ul style="list-style: none; padding: 0;">
           <li style="margin-bottom: 15px;"><a href="index.html" style="text-decoration: none; color: #333;">🏠 Ir a la Tienda</a></li>
-          <li style="margin-bottom: 15px; color: #ff4d6d; cursor: pointer;">📦 Inventario</li>
-          <li style="margin-bottom: 15px; cursor: pointer;">📊 Ventas</li>
+          <li id="menu-inventario" style="margin-bottom: 15px; color: #ff4d6d; cursor: pointer; font-weight: bold;">📦 Inventario</li>
+          <li id="menu-ventas" style="margin-bottom: 15px; cursor: pointer;">📊 Ventas</li>
           <li><button id="btn-cerrar-sesion" style="background:none; border:none; color:red; cursor:pointer; font-family: inherit;">🚪 Cerrar Sesión</button></li>
         </ul>
       </nav>
@@ -175,7 +391,7 @@
         </div>
         <div class="stat-card">
           <h3>Clientes Nuevos</h3>
-          <p>12</p>
+          <p id="clientes-nuevos">0</p>
         </div>
       </div>
 
@@ -183,60 +399,101 @@
         <canvas id="graficaVentas"></canvas>
       </div>
 
-      <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2 style="color: #ff4d6d; margin: 0;">Inventario Actual</h2>
-        <button id="btn-agregar" class="btn-pagar hidden" style="width: auto; padding: 10px 20px;">+ Nuevo Producto</button>
-      </header>
+      <!-- Sección de Inventario -->
+      <div id="inventario-section" class="inventario-section">
+        <div class="inventario-header">
+          <h2 class="section-title" style="margin: 0;">Inventario Actual</h2>
+          <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <div class="search-box">
+              <input type="text" id="buscador-producto" placeholder="🔍 Buscar producto...">
+              <button id="btn-buscar">Buscar</button>
+            </div>
+            <div class="filter-box">
+              <label>Ordenar por:</label>
+              <select id="filtro-orden">
+                <option value="default">Sin orden</option>
+                <option value="az">A - Z</option>
+                <option value="za">Z - A</option>
+                <option value="precio-mayor">Mayor precio</option>
+                <option value="precio-menor">Menor precio</option>
+              </select>
+            </div>
+            <button id="btn-agregar" class="btn-pagar hidden" style="width: auto; padding: 10px 20px;">+ Nuevo Producto</button>
+          </div>
+        </div>
 
-      <div class="card" style="padding: 0;">
-        <table class="tabla-productos">
-          <thead>
-            <tr>
-              <th>Imagen</th>
-              <th>Producto</th>
-              <th>Categoría</th>
-              <th>Precio</th>
-              <th>Stock</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody id="lista-inventario">
-          </tbody>
-        </table>
+        <div class="card" style="padding: 0;">
+          <table class="tabla-productos">
+            <thead>
+              <tr>
+                <th>Imagen</th>
+                <th>Producto</th>
+                <th>Categoría</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="lista-inventario">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Sección de Ventas -->
+      <div id="ventas-section" class="ventas-section">
+        <h2 class="section-title">Historial de Ventas</h2>
+        <div class="card" style="padding: 0;">
+          <table class="tabla-ventas">
+            <thead>
+              <tr>
+                <th>ID Pedido</th>
+                <th>Cliente</th>
+                <th>Fecha</th>
+                <th>Total</th>
+                <th>Estado</th>
+                <th>Productos</th>
+              </tr>
+            </thead>
+            <tbody id="lista-ventas">
+            </tbody>
+          </table>
+        </div>
       </div>
     </main>
   </div>
 
   <footer class="footer-luxe">
-  <div class="footer-container">
-    <div class="footer-column">
-      <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
-      <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
-      <h3>Encuéntranos en</h3>
-      <div class="social-links">
-        <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Instagram" class="logo"></a>                
-        <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
+    <div class="footer-container">
+      <div class="footer-column">
+        <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
+        <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
+        <h3>Encuéntranos en</h3>
+        <div class="social-links">
+          <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Instagram" class="logo"></a>                
+          <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
+        </div>
+      </div>
+      <div class="footer-column newsletter">
+        <h3>Únete al Club Luxe</h3>
+        <p>Recibe ofertas exclusivas.</p>
+        <div class="newsletter-form">
+          <input type="email" id="newsletter-email" placeholder="Tu email...">
+          <button id="newsletter-btn">Unirse</button>
+        </div>
       </div>
     </div>
-    <div class="footer-column newsletter">
-      <h3>Únete al Club Luxe</h3>
-      <p>Recibe ofertas exclusivas.</p>
-      <div class="newsletter-form">
-        <input type="email" id="newsletter-email" placeholder="Tu email...">
-        <button id="newsletter-btn">Unirse</button>
-      </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
     </div>
-  </div>
-  <div class="footer-bottom">
-    <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
-  </div>
+  </footer>
 </div>
 
 <div id="toast" class="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="js/dashboard.js?v=20250313"></script>
+<script src="js/dashboard.js?v=20250314"></script>
 <script src="js/user.js"></script>
 
 <script>

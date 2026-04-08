@@ -207,9 +207,8 @@ function actualizarBarraProgreso() {
     });
 }
 
-// ============================================
-// GUARDAR PEDIDO
-// ============================================
+// Reemplaza la función guardarPedidoCompleto con esta versión mejorada:
+
 async function guardarPedidoCompleto(metodoPago) {
     const nombre = localStorage.getItem('envio_nombre') || '';
     const direccion = localStorage.getItem('envio_direccion') || '';
@@ -218,7 +217,7 @@ async function guardarPedidoCompleto(metodoPago) {
     const totalPagar = total + envioCosto;
     
     const pedidoLocal = {
-        id: Date.now(),
+        idLocal: Date.now(),  // ID temporal
         fecha: new Date().toISOString(),
         items: carrito.map(item => ({
             ...item,
@@ -229,16 +228,13 @@ async function guardarPedidoCompleto(metodoPago) {
         total: Math.round(totalPagar),
         envioData: { nombre, direccion, correo },
         metodoPago: metodoPago,
-        estado: 'pendiente'
+        estado: 'pendiente',
+        idBackend: null  // Aquí guardaremos el ID real del backend
     };
     
-    let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
-    pedidos.push(pedidoLocal);
-    localStorage.setItem('pedidos', JSON.stringify(pedidos));
-    localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
-    localStorage.removeItem('carrito');
-    
     const token = localStorage.getItem('token');
+    let pedidoBackendId = null;
+    
     if (token) {
         try {
             const pedidoData = {
@@ -255,8 +251,10 @@ async function guardarPedidoCompleto(metodoPago) {
                     imagen: item.img || ''
                 })),
                 total: Math.round(totalPagar),
-                metodoPago: metodoPago === 'mercadopago' ? 'tarjeta' : metodoPago
+                metodoPago: metodoPago === 'mercadopago' ? 'mercadopago' : 'tarjeta'
             };
+            
+            console.log('Enviando pedido al backend:', pedidoData);
             
             const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
                 method: 'POST',
@@ -269,24 +267,35 @@ async function guardarPedidoCompleto(metodoPago) {
             
             if (response.ok) {
                 const result = await response.json();
-                console.log('Pedido guardado en backend:', result);
-                if (result.pedido?.id) {
-                    pedidoLocal.id = result.pedido.id;
-                    pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
-                    const index = pedidos.findIndex(p => p.id === pedidoLocal.id || p.fecha === pedidoLocal.fecha);
-                    if (index !== -1) {
-                        pedidos[index] = pedidoLocal;
-                        localStorage.setItem('pedidos', JSON.stringify(pedidos));
-                        localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
-                    }
-                }
+                console.log('Respuesta del backend:', result);
+                // El backend debería devolver el ID del pedido creado
+                pedidoBackendId = result.pedido?.id || result.id;
+                pedidoLocal.idBackend = pedidoBackendId;
+                pedidoLocal.estado = 'pagado'; // Si el pago es exitoso
+                console.log('Pedido guardado en backend con ID:', pedidoBackendId);
             } else {
-                console.log('No se pudo guardar en backend, pedido solo en localStorage');
+                const errorText = await response.text();
+                console.error('Error del backend:', errorText);
             }
         } catch (error) {
             console.error('Error guardando en backend:', error);
         }
     }
+    
+    // Guardar en localStorage con el ID del backend si está disponible
+    let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+    
+    // Usar el ID del backend si existe, si no el ID local
+    if (pedidoBackendId) {
+        pedidoLocal.id = pedidoBackendId;
+    } else {
+        pedidoLocal.id = pedidoLocal.idLocal;
+    }
+    
+    pedidos.push(pedidoLocal);
+    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+    localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
+    localStorage.removeItem('carrito');
     
     return pedidoLocal;
 }

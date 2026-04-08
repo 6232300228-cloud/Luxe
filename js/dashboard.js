@@ -1,4 +1,11 @@
 // ============================================
+// VARIABLES GLOBALES
+// ============================================
+let productosGlobales = [];
+let currentFilter = 'default';
+let currentSearchTerm = '';
+
+// ============================================
 // VALIDAR USUARIO Y ROL
 // ============================================
 const user = JSON.parse(localStorage.getItem("user"));
@@ -25,6 +32,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     badge.innerText = user.role.toUpperCase();
     badge.classList.add(user.role === "admin" ? "badge-admin" : "badge-empleado");
 
+    // Mostrar botón agregar solo para admin
     if (user.role === "admin") {
         const btnAgregar = document.getElementById("btn-agregar");
         if (btnAgregar) {
@@ -35,17 +43,117 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
+    // Configurar eventos de navegación
+    setupNavigation();
+    
+    // Configurar buscador y filtros
+    setupSearchAndFilters();
+    
+    // Cargar datos
     await cargarProductos();
     await cargarEstadisticas();
+    await cargarVentas();
     await crearGrafica();
 });
+
+// ============================================
+// NAVEGACIÓN ENTRE SECCIONES
+// ============================================
+function setupNavigation() {
+    const inventarioSection = document.getElementById('inventario-section');
+    const ventasSection = document.getElementById('ventas-section');
+    const menuInventario = document.getElementById('menu-inventario');
+    const menuVentas = document.getElementById('menu-ventas');
+    
+    menuInventario.addEventListener('click', () => {
+        inventarioSection.classList.remove('hidden');
+        ventasSection.classList.remove('active');
+        ventasSection.style.display = 'none';
+        inventarioSection.style.display = 'block';
+        
+        menuInventario.style.color = '#ff4d6d';
+        menuInventario.style.fontWeight = 'bold';
+        menuVentas.style.color = '#333';
+        menuVentas.style.fontWeight = 'normal';
+    });
+    
+    menuVentas.addEventListener('click', () => {
+        inventarioSection.style.display = 'none';
+        ventasSection.style.display = 'block';
+        ventasSection.classList.add('active');
+        
+        menuVentas.style.color = '#ff4d6d';
+        menuVentas.style.fontWeight = 'bold';
+        menuInventario.style.color = '#333';
+        menuInventario.style.fontWeight = 'normal';
+    });
+}
+
+// ============================================
+// CONFIGURAR BUSCADOR Y FILTROS
+// ============================================
+function setupSearchAndFilters() {
+    const searchInput = document.getElementById('buscador-producto');
+    const searchBtn = document.getElementById('btn-buscar');
+    const filterSelect = document.getElementById('filtro-orden');
+    
+    searchBtn.addEventListener('click', () => {
+        currentSearchTerm = searchInput.value.toLowerCase().trim();
+        aplicarFiltrosYOrden();
+    });
+    
+    searchInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            currentSearchTerm = searchInput.value.toLowerCase().trim();
+            aplicarFiltrosYOrden();
+        }
+    });
+    
+    filterSelect.addEventListener('change', (e) => {
+        currentFilter = e.target.value;
+        aplicarFiltrosYOrden();
+    });
+}
+
+function aplicarFiltrosYOrden() {
+    let productosFiltrados = [...productosGlobales];
+    
+    // Aplicar búsqueda
+    if (currentSearchTerm) {
+        productosFiltrados = productosFiltrados.filter(p => 
+            p.name.toLowerCase().includes(currentSearchTerm) ||
+            (p.category && p.category.toLowerCase().includes(currentSearchTerm))
+        );
+    }
+    
+    // Aplicar ordenamiento
+    switch(currentFilter) {
+        case 'az':
+            productosFiltrados.sort((a, b) => a.name.localeCompare(b.name));
+            break;
+        case 'za':
+            productosFiltrados.sort((a, b) => b.name.localeCompare(a.name));
+            break;
+        case 'precio-mayor':
+            productosFiltrados.sort((a, b) => b.price - a.price);
+            break;
+        case 'precio-menor':
+            productosFiltrados.sort((a, b) => a.price - b.price);
+            break;
+        default:
+            // Mantener orden original por ID
+            productosFiltrados.sort((a, b) => a.id - b.id);
+    }
+    
+    renderizarTablaProductos(productosFiltrados);
+}
 
 // ============================================
 // CARGAR PRODUCTOS
 // ============================================
 async function cargarProductos() {
     const tabla = document.getElementById("lista-inventario");
-    tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">Cargando productos...</td></tr>';
+    tabla.innerHTML = '<td><td colspan="6" style="text-align: center;">Cargando productos...</td></tr>';
     
     try {
         const response = await fetch('https://luxe-api-frr5.onrender.com/api/products');
@@ -54,44 +162,14 @@ async function cargarProductos() {
             throw new Error(`Error HTTP: ${response.status}`);
         }
         
-        const productos = await response.json();
+        productosGlobales = await response.json();
         
-        if (productos.length === 0) {
+        if (productosGlobales.length === 0) {
             tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay productos cargados</td></tr>';
             return;
         }
-
-        tabla.innerHTML = "";
-
-        productos.forEach(p => {
-            const tr = document.createElement("tr");
-            
-            let stockColor = '#4CAF50';
-            if (p.stock <= 0) stockColor = '#f44336';
-            else if (p.stock <= 20) stockColor = '#ff9800';
-            
-            let btns = '';
-            if (user.role === "admin") {
-                btns = `
-                    <button class="btn-accion btn-editar" onclick="editarProducto(${p.id})">Editar</button>
-                    <button class="btn-accion btn-borrar" onclick="eliminarProducto(${p.id})">Eliminar</button>
-                `;
-            } else {
-                btns = `<span style="color: #888;">Solo lectura</span>`;
-            }
-
-            tr.innerHTML = `
-                <td style="text-align: center; vertical-align: middle;">
-                    <img src="${p.img}" width="50" height="50" style="border-radius: 8px; object-fit: cover;" onerror="this.src='img/logo.png'">
-                </td>
-                <td><b>${p.name}</b><br><small style="color: #888;">ID: ${p.id}</small></td>
-                <td>${p.category || 'Sin categoría'}</td>
-                <td style="font-weight: bold; color: #ff4d6d;">$${p.price}</td>
-                <td style="color: ${stockColor}; font-weight: bold;">${p.stock || 0} unidades</td>
-                <td>${btns}</td>
-            `;
-            tabla.appendChild(tr);
-        });
+        
+        aplicarFiltrosYOrden();
         
     } catch (error) {
         console.error('Error cargando productos:', error);
@@ -107,10 +185,113 @@ async function cargarProductos() {
     }
 }
 
+function renderizarTablaProductos(productos) {
+    const tabla = document.getElementById("lista-inventario");
+    tabla.innerHTML = "";
+    
+    productos.forEach(p => {
+        const tr = document.createElement("tr");
+        
+        let stockColor = '#4CAF50';
+        if (p.stock <= 0) stockColor = '#f44336';
+        else if (p.stock <= 20) stockColor = '#ff9800';
+        
+        let btns = '';
+        if (user.role === "admin") {
+            btns = `
+                <button class="btn-accion btn-editar" onclick="editarProducto(${p.id})">Editar</button>
+                <button class="btn-accion btn-borrar" onclick="eliminarProducto(${p.id})">Eliminar</button>
+            `;
+        } else {
+            btns = `<span style="color: #888;">Solo lectura</span>`;
+        }
+        
+        tr.innerHTML = `
+            <td style="text-align: center; vertical-align: middle;">
+                <img src="${p.img}" width="50" height="50" style="border-radius: 8px; object-fit: cover;" onerror="this.src='img/logo.png'">
+            </td>
+            <td><b>${p.name}</b><br><small style="color: #888;">ID: ${p.id}</small></td>
+            <td>${p.category || 'Sin categoría'}</td>
+            <td style="font-weight: bold; color: #ff4d6d;">$${p.price}</td>
+            <td style="color: ${stockColor}; font-weight: bold;">${p.stock || 0} unidades</td>
+            <td>${btns}</td>
+        `;
+        tabla.appendChild(tr);
+    });
+    
+    if (productos.length === 0) {
+        tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">No se encontraron productos</td></tr>';
+    }
+}
+
 // ============================================
 // CARGAR ESTADÍSTICAS
 // ============================================
 async function cargarEstadisticas() {
+    try {
+        // Obtener pedidos
+        const responsePedidos = await fetch('https://luxe-api-frr5.onrender.com/api/orders/mis-pedidos', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (!responsePedidos.ok) {
+            throw new Error('Error obteniendo pedidos');
+        }
+        
+        const pedidos = await responsePedidos.json();
+        
+        // Obtener usuarios (clientes)
+        const responseUsers = await fetch('https://luxe-api-frr5.onrender.com/api/users', {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        let clientes = [];
+        if (responseUsers.ok) {
+            const allUsers = await responseUsers.json();
+            // Filtrar solo clientes (role = "cliente")
+            clientes = allUsers.filter(u => u.role === 'cliente');
+        }
+        
+        const hoy = new Date();
+        const mesActual = hoy.getMonth();
+        const añoActual = hoy.getFullYear();
+        
+        // Ventas del mes actual
+        const ventasMes = pedidos
+            .filter(p => {
+                const fecha = new Date(p.fechaPedido);
+                return fecha.getMonth() === mesActual && fecha.getFullYear() === añoActual;
+            })
+            .reduce((sum, p) => sum + (p.total || 0), 0);
+        
+        // Productos vendidos totales
+        const productosVendidos = pedidos
+            .flatMap(p => p.productos || [])
+            .reduce((sum, prod) => sum + (prod.cantidad || 0), 0);
+        
+        // Clientes nuevos (registrados en el mes actual)
+        const clientesNuevos = clientes.filter(c => {
+            const fechaRegistro = new Date(c.createdAt || c.fechaRegistro);
+            return fechaRegistro.getMonth() === mesActual && fechaRegistro.getFullYear() === añoActual;
+        }).length;
+        
+        document.getElementById("total-ventas").innerText = `$${ventasMes.toFixed(2)}`;
+        document.getElementById("cantidad-vendida").innerText = productosVendidos;
+        document.getElementById("clientes-nuevos").innerText = clientesNuevos;
+        
+    } catch (error) {
+        console.error('Error cargando estadísticas:', error);
+        document.getElementById("clientes-nuevos").innerText = "0";
+    }
+}
+
+// ============================================
+// CARGAR VENTAS
+// ============================================
+async function cargarVentas() {
+    const tabla = document.getElementById("lista-ventas");
+    tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">Cargando ventas...</td></tr>';
+    
     try {
         const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/mis-pedidos', {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -122,26 +303,58 @@ async function cargarEstadisticas() {
         
         const pedidos = await response.json();
         
-        const hoy = new Date();
-        const mesActual = hoy.getMonth();
-        const añoActual = hoy.getFullYear();
+        if (pedidos.length === 0) {
+            tabla.innerHTML = '<tr><td colspan="6" class="empty-state">No hay ventas registradas</td></tr>';
+            return;
+        }
         
-        const ventasMes = pedidos
-            .filter(p => {
-                const fecha = new Date(p.fechaPedido);
-                return fecha.getMonth() === mesActual && fecha.getFullYear() === añoActual;
-            })
-            .reduce((sum, p) => sum + (p.total || 0), 0);
+        tabla.innerHTML = "";
         
-        const productosVendidos = pedidos
-            .flatMap(p => p.productos || [])
-            .reduce((sum, prod) => sum + (prod.cantidad || 0), 0);
-        
-        document.getElementById("total-ventas").innerText = `$${ventasMes.toFixed(2)}`;
-        document.getElementById("cantidad-vendida").innerText = productosVendidos;
+        for (const pedido of pedidos) {
+            const tr = document.createElement("tr");
+            
+            // Obtener nombre del cliente si está disponible
+            let clienteNombre = 'Cliente';
+            if (pedido.userId) {
+                try {
+                    const userResponse = await fetch(`https://luxe-api-frr5.onrender.com/api/users/${pedido.userId}`, {
+                        headers: { 'Authorization': `Bearer ${token}` }
+                    });
+                    if (userResponse.ok) {
+                        const userData = await userResponse.json();
+                        clienteNombre = userData.nombre || 'Cliente';
+                    }
+                } catch (e) {
+                    console.error('Error obteniendo cliente:', e);
+                }
+            }
+            
+            const fecha = new Date(pedido.fechaPedido);
+            const fechaFormateada = fecha.toLocaleDateString('es-ES');
+            const estadoClass = pedido.estado === 'pagado' ? 'status-pagado' : 'status-pendiente';
+            const productosList = pedido.productos ? pedido.productos.map(p => `${p.nombre} x${p.cantidad}`).join(', ') : '-';
+            
+            tr.innerHTML = `
+                <td>#${pedido.id}</td>
+                <td>${clienteNombre}</td>
+                <td>${fechaFormateada}</td>
+                <td style="font-weight: bold; color: #ff4d6d;">$${pedido.total || 0}</td>
+                <td class="${estadoClass}">${pedido.estado || 'pendiente'}</td>
+                <td style="max-width: 200px; font-size: 12px;">${productosList}</td>
+            `;
+            tabla.appendChild(tr);
+        }
         
     } catch (error) {
-        console.error('Error cargando estadísticas:', error);
+        console.error('Error cargando ventas:', error);
+        tabla.innerHTML = `
+            <tr>
+                <td colspan="6" style="text-align: center; color: red; padding: 40px;">
+                    Error al cargar ventas<br>
+                    <small>${error.message}</small>
+                </td>
+            </tr>
+        `;
     }
 }
 
@@ -222,9 +435,7 @@ async function editarProducto(id) {
     }
     
     try {
-        const response = await fetch('https://luxe-api-frr5.onrender.com/api/products');
-        const productos = await response.json();
-        const producto = productos.find(p => p.id == id);
+        const producto = productosGlobales.find(p => p.id == id);
         
         if (!producto) {
             Swal.fire({
@@ -330,54 +541,6 @@ function mostrarModalEditarProducto(producto) {
             </div>
         `;
         document.body.insertAdjacentHTML('beforeend', modalHTML);
-        
-        if (!document.getElementById('modalStyles')) {
-            const styles = `
-                <style id="modalStyles">
-                    .modal-producto {
-                        position: fixed;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                        height: 100%;
-                        background: rgba(0,0,0,0.5);
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        z-index: 10000;
-                    }
-                    .modal-contenido {
-                        background: white;
-                        border-radius: 20px;
-                        width: 90%;
-                        max-width: 550px;
-                        max-height: 90vh;
-                        overflow-y: auto;
-                    }
-                    .modal-header {
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                        padding: 20px 25px;
-                        border-bottom: 2px solid #ff4d6d;
-                    }
-                    .modal-header h3 { margin: 0; color: #ff4d6d; }
-                    .cerrar-modal { font-size: 28px; cursor: pointer; color: #999; }
-                    .cerrar-modal:hover { color: #ff4d6d; }
-                    .modal-body { padding: 25px; }
-                    .form-group { margin-bottom: 18px; }
-                    .form-group label { display: block; font-weight: 600; margin-bottom: 6px; font-size: 13px; }
-                    .form-group input, .form-group select, .form-group textarea {
-                        width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px;
-                    }
-                    .modal-footer { padding: 20px 25px; border-top: 1px solid #eee; display: flex; justify-content: flex-end; gap: 12px; }
-                    .btn-cancelar { background: #f0f0f0; color: #666; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; }
-                    .btn-guardar { background: #ff4d6d; color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; }
-                    .btn-guardar:hover { background: #ff3355; }
-                </style>
-            `;
-            document.head.insertAdjacentHTML('beforeend', styles);
-        }
     }
     
     document.getElementById('editProductoId').value = producto.id;
@@ -444,6 +607,7 @@ async function guardarEdicionProducto() {
             });
             cerrarModalEditar();
             cargarProductos();
+            cargarEstadisticas();
         } else {
             Swal.fire({
                 icon: 'error',
@@ -518,6 +682,7 @@ async function eliminarProducto(id) {
                 position: 'top-end'
             });
             cargarProductos();
+            cargarEstadisticas();
         } else {
             Swal.fire({
                 icon: 'error',
@@ -544,109 +709,106 @@ async function eliminarProducto(id) {
 }
 
 // ============================================
-// AGREGAR NUEVO PRODUCTO
+// AGREGAR NUEVO PRODUCTO (CORREGIDO)
 // ============================================
 function mostrarModalAgregarProducto() {
-    if (!document.getElementById('modalProducto')) {
-        const modalHTML = `
-            <div id="modalProducto" class="modal-producto" style="display: none;">
-                <div class="modal-contenido">
-                    <div class="modal-header">
-                        <h3>Agregar Nuevo Producto</h3>
-                        <span class="cerrar-modal" onclick="cerrarModalAgregar()">&times;</span>
-                    </div>
-                    <div class="modal-body">
-                        <form id="formProducto">
-                            <div class="form-group">
-                                <label>ID del producto *</label>
-                                <input type="number" id="productoId" placeholder="Ej: 51" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Nombre del producto *</label>
-                                <input type="text" id="productoNombre" placeholder="Ej: Labial Mate Rosa" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Precio *</label>
-                                <input type="number" id="productoPrecio" placeholder="Ej: 250" step="0.01" required>
-                            </div>
-                            <div class="form-group">
-                                <label>Categoría *</label>
-                                <select id="productoCategoria" required>
-                                    <option value="">Selecciona una categoría</option>
-                                    <option value="labial">Labial</option>
-                                    <option value="sombra">Sombra</option>
-                                    <option value="base">Base</option>
-                                    <option value="corrector">Corrector</option>
-                                    <option value="ojos">Ojos</option>
-                                    <option value="rubor">Rubor</option>
-                                    <option value="iluminador">Iluminador</option>
-                                    <option value="skincare">Skincare</option>
-                                    <option value="accesorios">Accesorios</option>
-                                    <option value="rostro">Rostro</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Marca</label>
-                                <select id="productoMarca">
-                                    <option value="">Selecciona una marca</option>
-                                    <option value="bissu">Bissu</option>
-                                    <option value="nyx">NYX</option>
-                                    <option value="maybelline">Maybelline</option>
-                                    <option value="loreal">L'Oréal</option>
-                                    <option value="rare">Rare Beauty</option>
-                                    <option value="fenty">Fenty</option>
-                                    <option value="dior">Dior</option>
-                                    <option value="mac">MAC</option>
-                                    <option value="luxe">Luxe</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Imagen (URL o ruta)</label>
-                                <input type="text" id="productoImg" placeholder="Ej: img/nuevo-producto.png">
-                            </div>
-                            <div class="form-group">
-                                <label>Descripción</label>
-                                <textarea id="productoDesc" rows="3"></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label>Stock inicial</label>
-                                <input type="number" id="productoStock" value="100">
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button onclick="cerrarModalAgregar()" class="btn-cancelar">Cancelar</button>
-                        <button onclick="guardarNuevoProducto()" class="btn-guardar">Guardar Producto</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
+    // Remover modal existente si hay
+    const existingModal = document.getElementById('modalProducto');
+    if (existingModal) {
+        existingModal.remove();
     }
     
-    document.getElementById('modalProducto').style.display = 'flex';
+    const modalHTML = `
+        <div id="modalProducto" class="modal-producto" style="display: flex;">
+            <div class="modal-contenido">
+                <div class="modal-header">
+                    <h3>Agregar Nuevo Producto</h3>
+                    <span class="cerrar-modal" onclick="cerrarModalAgregar()">&times;</span>
+                </div>
+                <div class="modal-body">
+                    <form id="formProducto">
+                        <div class="form-group">
+                            <label>Nombre del producto *</label>
+                            <input type="text" id="productoNombre" placeholder="Ej: Labial Mate Rosa" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Precio *</label>
+                            <input type="number" id="productoPrecio" placeholder="Ej: 250" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Categoría *</label>
+                            <select id="productoCategoria" required>
+                                <option value="">Selecciona una categoría</option>
+                                <option value="labial">Labial</option>
+                                <option value="sombra">Sombra</option>
+                                <option value="base">Base</option>
+                                <option value="corrector">Corrector</option>
+                                <option value="ojos">Ojos</option>
+                                <option value="rubor">Rubor</option>
+                                <option value="iluminador">Iluminador</option>
+                                <option value="skincare">Skincare</option>
+                                <option value="accesorios">Accesorios</option>
+                                <option value="rostro">Rostro</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Marca</label>
+                            <select id="productoMarca">
+                                <option value="">Selecciona una marca</option>
+                                <option value="bissu">Bissu</option>
+                                <option value="nyx">NYX</option>
+                                <option value="maybelline">Maybelline</option>
+                                <option value="loreal">L'Oréal</option>
+                                <option value="rare">Rare Beauty</option>
+                                <option value="fenty">Fenty</option>
+                                <option value="dior">Dior</option>
+                                <option value="mac">MAC</option>
+                                <option value="luxe">Luxe</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Imagen (URL o ruta)</label>
+                            <input type="text" id="productoImg" placeholder="Ej: img/nuevo-producto.png" value="img/default.png">
+                        </div>
+                        <div class="form-group">
+                            <label>Descripción</label>
+                            <textarea id="productoDesc" rows="3" placeholder="Descripción del producto..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Stock inicial</label>
+                            <input type="number" id="productoStock" value="100">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button onclick="cerrarModalAgregar()" class="btn-cancelar">Cancelar</button>
+                    <button onclick="guardarNuevoProducto()" class="btn-guardar">Guardar Producto</button>
+                </div>
+            </div>
+        </div>
+    `;
+    document.body.insertAdjacentHTML('beforeend', modalHTML);
 }
 
 function cerrarModalAgregar() {
     const modal = document.getElementById('modalProducto');
-    if (modal) modal.style.display = 'none';
+    if (modal) modal.remove();
 }
 
 async function guardarNuevoProducto() {
-    const id = document.getElementById('productoId').value;
     const name = document.getElementById('productoNombre').value;
-    const price = document.getElementById('productoPrecio').value;
+    const price = parseFloat(document.getElementById('productoPrecio').value);
     const category = document.getElementById('productoCategoria').value;
     const brand = document.getElementById('productoMarca').value;
     const img = document.getElementById('productoImg').value || 'img/default.png';
     const desc = document.getElementById('productoDesc').value;
-    const stock = document.getElementById('productoStock').value;
+    const stock = parseInt(document.getElementById('productoStock').value);
     
-    if (!id || !name || !price || !category) {
+    if (!name || !price || !category) {
         Swal.fire({
             icon: 'error',
             title: 'Campos incompletos',
-            text: 'ID, nombre, precio y categoría son obligatorios',
+            text: 'Nombre, precio y categoría son obligatorios',
             timer: 1500,
             showConfirmButton: false,
             toast: true,
@@ -654,6 +816,9 @@ async function guardarNuevoProducto() {
         });
         return;
     }
+    
+    // Generar un ID automáticamente
+    const newId = productosGlobales.length > 0 ? Math.max(...productosGlobales.map(p => p.id)) + 1 : 1;
     
     try {
         const response = await fetch('https://luxe-api-frr5.onrender.com/api/products/crear', {
@@ -663,14 +828,14 @@ async function guardarNuevoProducto() {
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                id: parseInt(id),
+                id: newId,
                 name,
-                price: parseFloat(price),
+                price,
                 category,
                 brand,
                 img,
                 desc,
-                stock: parseInt(stock)
+                stock
             })
         });
         
@@ -688,11 +853,12 @@ async function guardarNuevoProducto() {
             });
             cerrarModalAgregar();
             cargarProductos();
+            cargarEstadisticas();
         } else {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: data.error || 'No se pudo crear',
+                text: data.error || 'No se pudo crear el producto',
                 timer: 1500,
                 showConfirmButton: false,
                 toast: true,
@@ -713,7 +879,9 @@ async function guardarNuevoProducto() {
     }
 }
 
-// Hacer funciones globales
+// ============================================
+// HACER FUNCIONES GLOBALES
+// ============================================
 window.editarProducto = editarProducto;
 window.eliminarProducto = eliminarProducto;
 window.mostrarModalAgregarProducto = mostrarModalAgregarProducto;

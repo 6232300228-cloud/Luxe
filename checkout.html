@@ -6,10 +6,12 @@
   <title>Checkout - Luxe</title>
   <link rel="icon" href="img/logo.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20250313">
+  <link rel="stylesheet" href="css/style.css?v=20250313">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
+
 <header class="header">
   <div class="header-left">
     <div class="menu-hamburger" onclick="toggleMenu()">
@@ -17,7 +19,6 @@
       <span></span>
       <span></span>
     </div>
-
     <a href="index.html" class="logo-link">
       <img src="img/logo.png" alt="Logo Luxe" class="logo">
       <div class="logo-text-group">
@@ -25,10 +26,8 @@
       </div>
     </a>
   </div>
-
   <div class="icons">
     <a href="carrito.html" class="back-to-cart">Volver al carrito <span id="cart-count"></span></a>
-
     <div id="user-menu" class="dropdown" style="display: none;">
       <button class="dropbtn">
         <span id="user-name"></span> <i class="arrow">▼</i>
@@ -42,6 +41,7 @@
     </div>
   </div>
 </header>
+
 <nav id="side-menu" class="side-nav">
   <span class="close-btn" onclick="toggleMenu()">&times;</span>
   <div class="menu-section">
@@ -55,7 +55,6 @@
   <div class="checkout-card">
     <h2 class="checkout-title">Finalizar Compra</h2>
     
-    <!-- Barra de progreso del checkout -->
     <div class="checkout-progress">
       <div class="progress-step active">
         <span class="step-number">1</span>
@@ -73,7 +72,6 @@
       </div>
     </div>
     
-    <!-- Paso 1: Información de Envío -->
     <section class="checkout-section" id="shipping-section">
       <h3><span class="step-badge">1</span> Información de Envío</h3>
       <div class="input-group">
@@ -83,37 +81,34 @@
       </div>
     </section>
 
-    <!-- Paso 2: Método de Pago -->
-    <section class="checkout-section" id="payment-section">
+    <section class="checkout-section" id="payment-section" style="display: none;">
       <h3><span class="step-badge">2</span> Método de Pago</h3>
-      
- <div class="payment-methods">
-  <label class="payment-option">
-    <input type="radio" name="metodoPago" value="tarjeta" checked>
-    <span class="payment-label">
-      <img src="img/tarjeta.png" alt="Tarjeta" class="payment-icon-img">
-    </span>
-  </label>
-  
-  <label class="payment-option">
-    <input type="radio" name="metodoPago" value="mercadopago">
-    <span class="payment-label">
-      <img src="img/mercadopago.png" alt="Mercado Pago" class="payment-icon-img">
-    </span>
-  </label>
-</div>
-<div id="mercadopagoBox" class="payment-details-box hidden">
-  <h4> Pagar con Mercado Pago</h4>
-  <p class="payment-info">
-    Serás redirigido a Mercado Pago para completar tu pago de forma segura. 
-    Podrás pagar con tarjeta de crédito, débito, efectivo o saldo disponible.
-  </p>
-  <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
-    <img src="/img/mercadopago.png" alt="Mercado Pago" style="height: 40px;">
-    <img src="/img/visa.png" alt="Visa" style="height: 40px;">
-    <img src="/img/mastercard.png" alt="Mastercard" style="height: 40px;">
-  </div>
-</div>
+      <div class="payment-methods">
+        <label class="payment-option">
+          <input type="radio" name="metodoPago" value="tarjeta" checked>
+          <span class="payment-label">
+            <img src="img/tarjeta.png" alt="Tarjeta" class="payment-icon-img">
+          </span>
+        </label>
+        <label class="payment-option">
+          <input type="radio" name="metodoPago" value="mercadopago">
+          <span class="payment-label">
+            <img src="img/mercadopago.png" alt="Mercado Pago" class="payment-icon-img">
+          </span>
+        </label>
+      </div>
+      <div id="mercadopagoBox" class="payment-details-box hidden">
+        <h4>Pagar con Mercado Pago</h4>
+        <p class="payment-info">
+          Serás redirigido a Mercado Pago para completar tu pago de forma segura. 
+          Podrás pagar con tarjeta de crédito, débito, efectivo o saldo disponible.
+        </p>
+        <div style="display: flex; gap: 10px; justify-content: center; margin-top: 15px;">
+          <img src="img/mercadopago.png" alt="Mercado Pago" style="height: 40px;">
+          <img src="img/visa.png" alt="Visa" style="height: 40px;">
+          <img src="img/mastercard.png" alt="Mastercard" style="height: 40px;">
+        </div>
+      </div>
       <div id="tarjetaBox" class="payment-details-box">
         <h4>Datos de la Tarjeta</h4>
         <input type="text" id="numeroTarjeta" placeholder="0000 0000 0000 0000" maxlength="19">
@@ -122,10 +117,8 @@
           <input type="text" id="cvvTarjeta" placeholder="CVV" maxlength="3">
         </div>
       </div>
-
     </section>
 
-    <!-- Resumen de compra -->
     <div class="checkout-summary">
       <h3>Resumen de compra</h3>
       <div class="summary-row">
@@ -136,10 +129,6 @@
         <span>Envío:</span>
         <span id="resumen-envio">$0.00</span>
       </div>
-      <div class="summary-row discount-row" id="discount-row" style="display: none;">
-        <span>Descuento:</span>
-        <span id="resumen-descuento">-$0.00</span>
-      </div>
       <div class="summary-divider"></div>
       <div class="summary-row total-row">
         <span>Total a Pagar:</span>
@@ -147,7 +136,6 @@
       </div>
     </div>
 
-    <!-- Botones de acción -->
     <div class="checkout-actions">
       <button id="btnContinuar" class="btn-luxe-pay">Continuar</button>
       <button id="btnPagar" class="btn-luxe-pay" style="display: none;">Confirmar Pago</button>
@@ -166,25 +154,114 @@
       <div class="social-links">
         <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Instagram" class="logo"></a>                
         <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
-
       </div>
     </div>
-
     <div class="footer-column newsletter">
       <h3>Únete al Club Luxe</h3>
       <p>Recibe ofertas exclusivas.</p>
       <div class="newsletter-form">
         <input type="email" id="newsletter-email" placeholder="Tu email...">
-        <button onclick="suscribirse()">Unirse</button>
+        <button id="newsletter-btn">Unirse</button>
       </div>
     </div>
   </div>
-
   <div class="footer-bottom">
     <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
   </div>
 </footer>
 
+<div id="toast" class="toast"></div>
+
 <script src="js/checkout.js?v=20250313"></script>
+<script src="js/user.js?v=20250313"></script>
+
+<script>
+// Newsletter igual que en las otras paginas
+document.getElementById('newsletter-btn')?.addEventListener('click', function() {
+  const email = document.getElementById('newsletter-email')?.value;
+  const toast = document.getElementById("toast");
+  if (email && email.includes('@')) {
+    toast.textContent = "¡Bienvenida al Club Luxe! Recibirás ofertas exclusivas";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+    document.getElementById('newsletter-email').value = '';
+  } else {
+    toast.textContent = "Por favor, ingresa un email válido";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+  }
+});
+
+function toggleMenu() {
+  const menu = document.getElementById('side-menu');
+  if (menu) menu.classList.toggle('active');
+}
+
+document.addEventListener('click', function(event) {
+  const menu = document.getElementById('side-menu');
+  const hamburger = document.querySelector('.menu-hamburger');
+  if (menu && menu.classList.contains('active') && !menu.contains(event.target) && !hamburger.contains(event.target)) {
+    menu.classList.remove('active');
+  }
+});
+
+if (window.innerWidth > 768) {
+  const hamburger = document.querySelector('.menu-hamburger');
+  const menu = document.getElementById('side-menu');
+  if (hamburger && menu) {
+    let hoverTimer;
+    hamburger.addEventListener('mouseenter', function() {
+      hoverTimer = setTimeout(() => menu.classList.add('active'), 200);
+    });
+    hamburger.addEventListener('mouseleave', function() {
+      clearTimeout(hoverTimer);
+    });
+  }
+}
+
+function actualizarContadores() {
+  const cartCount = document.getElementById('cart-count');
+  if (cartCount) {
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const totalItems = carrito.reduce((sum, item) => sum + (item.cantidad || 1), 0);
+    cartCount.textContent = totalItems;
+    cartCount.setAttribute("data-count", totalItems);
+  }
+}
+
+function cargarUsuario() {
+  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user'));
+  const userMenu = document.getElementById('user-menu');
+  const userNameSpan = document.getElementById('user-name');
+  
+  if (token && user) {
+    if (userMenu) userMenu.style.display = 'block';
+    if (userNameSpan) {
+      const nombre = user.nombre || user.email || 'Usuario';
+      userNameSpan.textContent = nombre.split(' ')[0];
+    }
+  } else {
+    if (userMenu) userMenu.style.display = 'none';
+  }
+}
+
+function cerrarSesion() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  window.location.href = 'index.html';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  actualizarContadores();
+  cargarUsuario();
+  
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) logoutBtn.addEventListener('click', cerrarSesion);
+});
+
+window.toggleMenu = toggleMenu;
+</script>
+
 </body>
 </html>

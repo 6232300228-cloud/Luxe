@@ -6,7 +6,6 @@
   <link rel="icon" href="img/logo.png" type="image/x-icon">
   <link rel="stylesheet" href="css/style.css?v=20250313">
   <style>
-    /* Estilos específicos para el Dashboard */
     html, body {
         height: 100%;
         margin: 0;
@@ -127,7 +126,6 @@
         color: #333; 
     }
     
-    /* Reducir espacios entre contenedores */
     .footer-luxe {
         margin-top: 0 !important;
         flex-shrink: 0;
@@ -209,76 +207,53 @@
     </main>
   </div>
 
-  <!-- FOOTER -->
   <footer class="footer-luxe">
-    <div class="footer-container">
-      <div class="footer-column">
-        <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
-        <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
-        <h3>Encuéntranos en</h3>
-        <div class="social-links">
-          <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Logo Luxe" class="logo"></a>                
-          <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
-        </div>
-      </div>
-
-      <div class="footer-column">
-        <h3>Explorar</h3>
-        <ul>
-          <li><a href="index.html">Tienda</a></li>
-          <li><a href="index.html">Favoritos Pro</a></li>
-          <li><a href="index.html">Kits de Regalo</a></li>
-          <li><a href="index.html">Rituales Skincare</a></li>
-          <li><a href="favoritos.html">Mis Favoritos ❤️</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-column newsletter">
-        <h3>Únete al Club Luxe</h3>
-        <p>Recibe ofertas exclusivas.</p>
-        <div class="newsletter-form">
-          <input type="email" id="newsletter-email" placeholder="Tu email...">
-          <button onclick="suscribirse()">Unirse</button>
-        </div>
+  <div class="footer-container">
+    <div class="footer-column">
+      <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
+      <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
+      <h3>Encuéntranos en</h3>
+      <div class="social-links">
+        <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Instagram" class="logo"></a>                
+        <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
       </div>
     </div>
-
-    <div class="footer-bottom">
-      <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+    <div class="footer-column newsletter">
+      <h3>Únete al Club Luxe</h3>
+      <p>Recibe ofertas exclusivas.</p>
+      <div class="newsletter-form">
+        <input type="email" id="newsletter-email" placeholder="Tu email...">
+        <button id="newsletter-btn">Unirse</button>
+      </div>
     </div>
-  </footer>
+  </div>
+  <div class="footer-bottom">
+    <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+  </div>
 </div>
 
-<!-- SweetAlert2 -->
+<div id="toast" class="toast"></div>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="js/dashboard.js?v=20250313"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/dashboard.js?v=20250313"></script>
 
 <script>
-function suscribirse() {
-    const email = document.getElementById('newsletter-email').value;
-    if (email && email.includes('@')) {
-        Swal.fire({
-            icon: 'success',
-            title: '¡Gracias por suscribirte!',
-            timer: 1500,
-            showConfirmButton: false,
-            toast: true,
-            position: 'top-end'
-        });
-        document.getElementById('newsletter-email').value = '';
-    } else {
-        Swal.fire({
-            icon: 'error',
-            title: 'Email inválido',
-            text: 'Por favor ingresa un email válido',
-            timer: 1500,
-            showConfirmButton: false,
-            toast: true,
-            position: 'top-end'
-        });
-    }
-}
+// Newsletter igual que en las otras paginas
+document.getElementById('newsletter-btn')?.addEventListener('click', function() {
+  const email = document.getElementById('newsletter-email')?.value;
+  const toast = document.getElementById("toast");
+  if (email && email.includes('@')) {
+    toast.textContent = "¡Bienvenida al Club Luxe! Recibirás ofertas exclusivas";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+    document.getElementById('newsletter-email').value = '';
+  } else {
+    toast.textContent = "Por favor, ingresa un email válido";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+  }
+});
 </script>
 
 </body>

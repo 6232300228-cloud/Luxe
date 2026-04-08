@@ -26,14 +26,14 @@
   </div>
 
   <div class="header-right icons">
-   
-    <a href="carrito.html" class="cart-link">
-      <img src="img/carrito.png" alt="Carrito" class="header-icon">
-      <span id="cart-count" data-count="0"></span>
+    <a href="favoritos.html">
+      <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
+    </a>
+    <a href="carrito.html">
+      <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
     </a>
     <a href="login.html" id="login-btn">
-      <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon">
-      <span>Iniciar sesión</span>
+      <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
     </a>
 
     <div id="user-menu" class="dropdown" style="display: none;">
@@ -41,8 +41,8 @@
         <span id="user-name"></span> <i class="arrow">▼</i>
       </button>
       <div class="dropdown-content">
-        <a href="perfil.html">Mi Perfil</a>
-        <a href="pedidos.html">Mis Pedidos</a>
+        <a href="perfil.html"> Mi Perfil</a>
+        <a href="pedidos.html"> Mis Pedidos</a>
         <hr>
         <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
       </div>
@@ -60,59 +60,63 @@
 </nav>
 
 <main class="container">
-  <!-- Header de favoritos -->
   <div class="favorites-header">
-    <button class="btn-vaciar-fav" id="vaciar-favoritos-btn">Vaciar</button>
+    <button class="btn-vaciar" id="vaciar-favoritos-btn">Vaciar favoritos</button>
   </div>
   
-  <!-- Contenedor de productos favoritos -->
   <section class="products-grid" id="fav-items">
     <!-- Los productos se cargarán dinámicamente con JavaScript -->
   </section>
 </main>
 
 <footer class="footer-luxe">
-    <div class="footer-container">
-        <div class="footer-column">
-            <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
-            <p class="footer-description">Realzando tu belleza natural con productos de alta gama. </p>
-           <h3>Encuéntranos en</h3>
-            <div class="social-links">
-            <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Logo Luxe" class="logo"></a>                
-            <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
-
-            </div>
-        </div>
-
-        <div class="footer-column newsletter">
-            <h3>Únete al Club Luxe</h3>
-            <p>Recibe ofertas exclusivas.</p>
-            <div class="newsletter-form">
-                <input type="email" id="newsletter-email" placeholder="Tu email...">
-                <button onclick="suscribirse()">Unirse</button>
-            </div>
-        </div>
+  <div class="footer-container">
+    <div class="footer-column">
+      <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
+      <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
+      <h3>Encuéntranos en</h3>
+      <div class="social-links">
+        <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Logo Luxe" class="logo"></a>                
+        <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
+      </div>
     </div>
 
-    <div class="footer-bottom">
-        <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+    <div class="footer-column newsletter">
+      <h3>Únete al Club Luxe</h3>
+      <p>Recibe ofertas exclusivas.</p>
+      <div class="newsletter-form">
+        <input type="email" id="newsletter-email" placeholder="Tu email...">
+        <button id="newsletter-btn">Unirse</button>
+      </div>
     </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+  </div>
 </footer>
+
+<div id="toast" class="toast"></div>
 
 <script src="js/favoritos.js?v=20250313"></script>
 <script src="js/user.js?v=20250313"></script>
 
-<!-- Script adicional para manejar suscripción si no existe en otros archivos -->
 <script>
-function suscribirse() {
+// Newsletter igual que en index
+document.getElementById('newsletter-btn')?.addEventListener('click', function() {
   const email = document.getElementById('newsletter-email')?.value;
-  if (!email) {
-    alert('Por favor ingresa un email válido');
-    return;
+  const toast = document.getElementById("toast");
+  if (email && email.includes('@')) {
+    toast.textContent = "¡Bienvenida al Club Luxe! Recibirás ofertas exclusivas";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+    document.getElementById('newsletter-email').value = '';
+  } else {
+    toast.textContent = "Por favor, ingresa un email válido";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
   }
-  alert(`¡Gracias por suscribirte ${email}! Recibirás nuestras novedades pronto.`);
-  document.getElementById('newsletter-email').value = '';
-}
+});
 </script>
 
 </body>

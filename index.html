@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LuxeCollection</title>
   <link rel="icon" href="img/logo.png" type="image/x-icon">
-<link rel="stylesheet" href="css/style.css?v=20250313">
+  <link rel="stylesheet" href="css/style.css?v=20250313">
 </head>
 
 <body>
@@ -39,32 +39,30 @@
   </div>
 
   <div class="header-right icons">
-    <!-- Dashboard - solo visible para admin -->
     <a href="dashboard.html" id="dashboard-btn" style="display: none;">
-        <img src="img/dashboard-icon.png" alt="Dashboard" class="header-icon"> Dashboard
+      <img src="img/dashboard-icon.png" alt="Dashboard" class="header-icon"> Dashboard
     </a>
-    
     <a href="favoritos.html">
-        <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
+      <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
     </a>
     <a href="carrito.html">
-        <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
+      <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
     </a>
     <a href="login.html" id="login-btn">
-        <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
+      <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
     </a>
     <div id="user-menu" class="dropdown" style="display: none;">
-        <button class="dropbtn">
-            <span id="user-name"></span> <i class="arrow">▼</i>
-        </button>
-        <div class="dropdown-content">
-            <a href="perfil.html"> Mi Perfil</a>
-            <a href="pedidos.html"> Mis Pedidos</a>
-            <hr>
-            <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
-        </div>
+      <button class="dropbtn">
+        <span id="user-name"></span> <i class="arrow">▼</i>
+      </button>
+      <div class="dropdown-content">
+        <a href="perfil.html"> Mi Perfil</a>
+        <a href="pedidos.html"> Mis Pedidos</a>
+        <hr>
+        <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
+      </div>
     </div>
-</div>
+  </div>
 </header>
 
 <nav id="side-menu" class="side-nav">
@@ -87,58 +85,50 @@
   <button class="next" onclick="nextSlide()">▶</button>
 </section>
 
-
 <section class="video-showcase">
   <div class="video-grid">
-    <!-- Video 1 - Rubor -->
-    <div class="video-card" onclick="openProductModal(1001)">
+    <div class="video-card" data-product-id="1001">
       <div class="video-badge">TOP</div>
       <video src="videos/rubor.mp4" muted loop playsinline></video>
       <div class="video-overlay">
         <h3>Rubor Marmoleado</h3>
-        <button class="btn-ver-producto" onclick="event.stopPropagation(); openProductModal(1001)">Ver producto</button>
+        <button class="btn-ver-producto">Ver producto</button>
       </div>
     </div>
 
-    
-
-    <!-- Video 3 - Sombra -->
-    <div class="video-card" onclick="openProductModal(1003)">
+    <div class="video-card" data-product-id="1003">
       <div class="video-badge">TOP</div>
       <video src="videos/swatch.mp4" muted loop playsinline></video>
       <div class="video-overlay">
         <h3>Ultimate Shadow Palette</h3>
-        <button class="btn-ver-producto" onclick="event.stopPropagation(); openProductModal(1003)">Ver producto</button>
+        <button class="btn-ver-producto">Ver producto</button>
       </div>
     </div>
 
-    <!-- NUEVO Video 4 - Rímel -->
-    <div class="video-card" onclick="openProductModal(1004)">
+    <div class="video-card" data-product-id="1004">
       <div class="video-badge">NUEVO</div>
       <video src="videos/rimel.mp4" muted loop playsinline></video>
       <div class="video-overlay">
         <h3>Lash Sensational Sky High</h3>
-        <button class="btn-ver-producto" onclick="event.stopPropagation(); openProductModal(1004)">Ver producto</button>
+        <button class="btn-ver-producto">Ver producto</button>
       </div>
     </div>
 
-    <!-- NUEVO Video 5 - Base -->
-    <div class="video-card" onclick="openProductModal(1005)">
+    <div class="video-card" data-product-id="1005">
       <div class="video-badge">TOP</div>
       <video src="videos/base.mp4" muted loop playsinline></video>
       <div class="video-overlay">
         <h3>Can't Stop Won't Stop Foundation</h3>
-        <button class="btn-ver-producto" onclick="event.stopPropagation(); openProductModal(1005)">Ver producto</button>
+        <button class="btn-ver-producto">Ver producto</button>
       </div>
     </div>
 
-    <!-- Video 2 - Labial -->
-    <div class="video-card" onclick="openProductModal(1002)">
+    <div class="video-card" data-product-id="1002">
       <div class="video-badge">NUEVO</div>
       <video src="videos/gloss.mp4" muted loop playsinline></video>
       <div class="video-overlay">
         <h3>Labial Cremoso Soft Matte</h3>
-        <button class="btn-ver-producto" onclick="event.stopPropagation(); openProductModal(1002)">Ver producto</button>
+        <button class="btn-ver-producto">Ver producto</button>
       </div>
     </div>
   </div>
@@ -148,29 +138,29 @@
 <section class="brand-menu-sticky">
   <div class="brand-instruction">Elije tu marca favorita</div>
   <div class="brand-carousel-compact">
-    <div class="brand-item-mini todo-btn" onclick="filterBrand('all', this)">TODAS</div>
-    <div class="brand-item-mini" onclick="filterBrand('bissu', this)">
+    <div class="brand-item-mini todo-btn" data-brand="all">TODAS</div>
+    <div class="brand-item-mini" data-brand="bissu">
       <img src="img/logobissu.png" alt="Bissu">
     </div>
-    <div class="brand-item-mini" onclick="filterBrand('nyx', this)">
+    <div class="brand-item-mini" data-brand="nyx">
       <img src="img/logonyx.png" alt="NYX">
     </div>
-    <div class="brand-item-mini" onclick="filterBrand('maybelline', this)">
+    <div class="brand-item-mini" data-brand="maybelline">
       <img src="img/logomay.png" alt="Maybelline">
     </div>
-    <div class="brand-item-mini" onclick="filterBrand('loreal', this)">
+    <div class="brand-item-mini" data-brand="loreal">
       <img src="img/logoloreal.png" alt="L'Oréal">
     </div>
-    <div class="brand-item-mini" onclick="filterBrand('rare', this)">
+    <div class="brand-item-mini" data-brand="rare">
       <img src="img/logorare.png" alt="Rare Beauty">
     </div>
-    <div class="brand-item-mini" onclick="filterBrand('fenty', this)">
+    <div class="brand-item-mini" data-brand="fenty">
       <img src="img/logofenty.png" alt="Fenty">
     </div>
-    <div class="brand-item-mini" onclick="filterBrand('dior', this)">
+    <div class="brand-item-mini" data-brand="dior">
       <img src="img/logodior.png" alt="Dior">
     </div>
-    <div class="brand-item-mini" onclick="filterBrand('mac', this)">
+    <div class="brand-item-mini" data-brand="mac">
       <img src="img/logomac.png" alt="MAC">
     </div>
   </div>
@@ -183,7 +173,7 @@
       <div class="banner-info-luxe">
         <h3>FAVORITOS PRO</h3>
         <p>La selección exclusiva de nuestros maquilladores profesionales.</p>
-        <button class="btn-luxe" onclick="openExperience('pro')">Ver Selección</button>
+        <button class="btn-luxe" data-experience="pro">Ver Selección</button>
       </div>
       <div class="banner-img-luxe">
         <img src="img/modelo.png" alt="Favoritos Pro"> 
@@ -194,7 +184,7 @@
       <div class="banner-info-luxe">
         <h3>KITS DE REGALO</h3>
         <p>Sets armados listos para regalar o para consentirte a ti misma.</p>
-        <button class="btn-luxe" onclick="openExperience('kit')">Ver Regalos</button>
+        <button class="btn-luxe" data-experience="kit">Ver Regalos</button>
       </div>
       <div class="banner-img-luxe">
         <img src="img/kit.png" alt="Kits de Regalo">
@@ -205,7 +195,7 @@
       <div class="banner-info-luxe">
         <h3>RITUAL SKINCARE</h3>
         <p>Prepara tu piel con lo mejor en cuidado facial antes del maquillaje.</p>
-        <button class="btn-luxe" onclick="openExperience('skincare')">Ver Rutina</button>
+        <button class="btn-luxe" data-experience="skincare">Ver Rutina</button>
       </div>
       <div class="banner-img-luxe">
         <img src="img/skincare.png" alt="Cuidado de la piel">
@@ -216,16 +206,16 @@
 
 <!-- Menú de categorías -->
 <section class="category-menu">
-  <button onclick="filterCategory('all')">Todo</button>
-  <button onclick="filterCategory('accesorios')">Accesorios</button>
-  <button onclick="filterCategory('skincare')">Skincare</button>
-  <button onclick="filterCategory('labial')">Labios</button>
-  <button onclick="filterCategory('sombra')">Sombras</button>
-  <button onclick="filterCategory('ojos')">Ojos</button>
-  <button onclick="filterCategory('base')">Bases</button>
-  <button onclick="filterCategory('corrector')">Correctores</button>
-  <button onclick="filterCategory('rubor')">Rubores</button>
-  <button onclick="filterCategory('iluminador')">Iluminador</button>
+  <button data-category="all">Todo</button>
+  <button data-category="accesorios">Accesorios</button>
+  <button data-category="skincare">Skincare</button>
+  <button data-category="labial">Labios</button>
+  <button data-category="sombra">Sombras</button>
+  <button data-category="ojos">Ojos</button>
+  <button data-category="base">Bases</button>
+  <button data-category="corrector">Correctores</button>
+  <button data-category="rubor">Rubores</button>
+  <button data-category="iluminador">Iluminador</button>
 </section>
 
 <!-- Productos -->
@@ -241,6 +231,7 @@
     <div id="look-products" class="products"></div>
   </div>
 </div>
+
 <!--modal videos Modal de Producto -->
 <div id="productModal" class="product-modal">
   <div class="modal-content">
@@ -250,6 +241,7 @@
     </div>
   </div>
 </div>
+
 <!-- Footer -->
 <footer class="footer-luxe">
   <div class="footer-container">
@@ -266,11 +258,11 @@
     <div class="footer-column">
       <h3>Explorar</h3>
       <ul>
-        <li><a href="javascript:void(0)" onclick="filterCategory('all'); window.scrollTo(0,0)">Tienda</a></li>
-        <li><a href="javascript:void(0)" onclick="openExperience('pro')">Favoritos Pro</a></li>
-        <li><a href="javascript:void(0)" onclick="openExperience('kit')">Kits de Regalo</a></li>
-        <li><a href="javascript:void(0)" onclick="openExperience('skincare')">Rituales Skincare</a></li>
-        <li><a href="javascript:void(0)" onclick="showOnlyFavs()">Mis Favoritos ❤️</a></li>
+        <li><a href="javascript:void(0)" id="footer-tienda">Tienda</a></li>
+        <li><a href="javascript:void(0)" class="footer-experience" data-experience="pro">Favoritos Pro</a></li>
+        <li><a href="javascript:void(0)" class="footer-experience" data-experience="kit">Kits de Regalo</a></li>
+        <li><a href="javascript:void(0)" class="footer-experience" data-experience="skincare">Rituales Skincare</a></li>
+        <li><a href="javascript:void(0)" id="footer-favs">Mis Favoritos ❤️</a></li>
       </ul>
     </div>
 
@@ -279,7 +271,7 @@
       <p>Recibe ofertas exclusivas.</p>
       <div class="newsletter-form">
         <input type="email" id="newsletter-email" placeholder="Tu email...">
-        <button onclick="suscribirse()">Unirse</button>
+        <button id="newsletter-btn">Unirse</button>
       </div>
     </div>
   </div>
@@ -290,10 +282,10 @@
 </footer>
 
 <!-- Scripts -->
-<script src="js/script.js?v=20250313"></script>
-<script src="js/slider.js?v=20250313"></script>
-<script src="js/user.js?v=20250313"></script>
+<script src="data/data.js"></script>
+<script src="js/script.js"></script>
 
+<!-- Script pequeño para token de Google -->
 <script>
 // FUNCIÓN PARA OBTENER EL PRIMER NOMBRE
 function getPrimerNombre(nombreCompleto) {
@@ -348,137 +340,6 @@ document.addEventListener('DOMContentLoaded', function() {
         userNameElement.textContent = getPrimerNombre(user.nombre);
     }
 });
-</script>
-<script>
-// CONTROL DE VIDEOS MÓVIL - REPRODUCCIÓN EN PRIMER CLIC
-(function() {
-  // Solo en móvil
-  if (window.innerWidth > 768) return;
-  
-  console.log('📱 Modo móvil activado');
-  
-  const videoCards = document.querySelectorAll('.video-card');
-  let activeVideo = null;
-  let userInteracted = false;
-  
-  if (videoCards.length === 0) return;
-  
-  // Función para activar todos los videos después de la primera interacción
-  function enableAllVideos() {
-    if (userInteracted) return;
-    userInteracted = true;
-    console.log('✅ Primera interacción - videos activados');
-    
-    // Precargar y preparar todos los videos
-    videoCards.forEach(card => {
-      const video = card.querySelector('video');
-      if (video) {
-        video.load();
-        video.muted = true;
-        video.playsInline = true;
-      }
-    });
-  }
-  
-  // Configurar cada video
-  videoCards.forEach(card => {
-    const video = card.querySelector('video');
-    const btn = card.querySelector('.btn-ver-producto');
-    const productId = card.getAttribute('data-product-id');
-    
-    if (!video) return;
-    
-    video.preload = 'auto';
-    video.muted = true;
-    video.playsInline = true;
-    card.removeAttribute('onclick');
-    
-    // Botón para abrir modal
-    if (btn && productId) {
-      btn.removeAttribute('onclick');
-      btn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        enableAllVideos(); // Activar videos al tocar botón también
-        if (typeof openProductModal === 'function') {
-          openProductModal(parseInt(productId));
-        }
-      });
-    }
-    
-    // PRIMER CLIC - reproduce inmediatamente
-    card.addEventListener('click', function(e) {
-      if (e.target === btn || btn?.contains(e.target)) return;
-      
-      e.stopPropagation();
-      e.preventDefault();
-      
-      // Activar videos en el primer toque
-      enableAllVideos();
-      
-      // Pausar todos los demás
-      videoCards.forEach(otherCard => {
-        const otherVideo = otherCard.querySelector('video');
-        if (otherVideo && otherVideo !== video && !otherVideo.paused) {
-          otherVideo.pause();
-        }
-      });
-      
-      // Reproducir ESTE video (en el primer clic)
-      video.play().then(() => {
-        activeVideo = video;
-        console.log('▶️ Video reproduciéndose en primer clic');
-      }).catch(err => {
-        console.log('Error, reintentando:', err);
-        // Si falla, intentar de nuevo
-        setTimeout(() => {
-          video.play().catch(e => console.log('Error final:', e));
-        }, 100);
-      });
-    });
-  });
-  
-  // Autoplay al hacer scroll (solo después de interacción)
-  let scrollTimeout;
-  function playVisibleVideo() {
-    if (!userInteracted) return; // Solo después de que el usuario tocó algo
-    
-    let bestCard = null;
-    let bestVisibility = 0;
-    
-    videoCards.forEach(card => {
-      const video = card.querySelector('video');
-      if (!video) return;
-      
-      const rect = card.getBoundingClientRect();
-      const visibleHeight = Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0);
-      const visibility = visibleHeight / rect.height;
-      
-      if (visibility > bestVisibility && visibility > 0.4) {
-        bestVisibility = visibility;
-        bestCard = card;
-      }
-    });
-    
-    if (bestCard) {
-      const bestVideo = bestCard.querySelector('video');
-      if (activeVideo !== bestVideo) {
-        if (activeVideo && !activeVideo.paused) activeVideo.pause();
-        bestVideo.play().catch(e => console.log('Error scroll:', e));
-        activeVideo = bestVideo;
-      }
-    } else if (activeVideo && !activeVideo.paused) {
-      activeVideo.pause();
-      activeVideo = null;
-    }
-  }
-  
-  window.addEventListener('scroll', function() {
-    clearTimeout(scrollTimeout);
-    scrollTimeout = setTimeout(playVisibleVideo, 150);
-  });
-  
-  console.log('✅ Videos listos - primer toque reproduce');
-})();
 </script>
 </body>
 </html>

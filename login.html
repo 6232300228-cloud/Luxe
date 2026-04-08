@@ -2,106 +2,87 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <!-- Agrega esto en el head de tu login.html -->
-<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Acceso - Luxe Maquillaje</title>
   <link rel="icon" href="img/logo.png" type="image/x-icon">
-  <!-- SweetAlert2 -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<link rel="stylesheet" href="css/style.css?v=20250313">
+  <link rel="stylesheet" href="css/style.css?v=20250313">
 </head>
 
 <body>
 
 <header class="header">
   <a href="index.html" class="logo-link">
-      <img src="img/logo.png" alt="Logo Luxe" class="logo">
-      <div class="logo-text-group">
-        <span class="slogan-minimal">Tu destino de belleza</span>
-      </div>
-    </a>
-  </div>
+    <img src="img/logo.png" alt="Logo Luxe" class="logo">
+    <div class="logo-text-group">
+      <span class="slogan-minimal">Tu destino de belleza</span>
+    </div>
+  </a>
   <div class="icons">
     <a href="index.html">Volver</a>
   </div>
-  
 </header>
 
 <main style="padding: 20px; min-height: 80vh; display: flex; align-items: center; justify-content: center;">
   <div class="auth-container">
     
-    <!-- SECCIÓN LOGIN (CON LOS IDs ORIGINALES) -->
     <div id="login-section" class="auth-box">
       <h2>Iniciar sesión</h2>
-      
-      <!-- ¡IMPORTANTE! Estos IDs deben coincidir EXACTAMENTE con tu JS -->
       <input type="email" id="login-correo" placeholder="Correo electrónico" required><br>
       <input type="password" id="login-pass" placeholder="Contraseña" required><br>
-      
       <button id="btnLogin">Entrar</button>
-      
       <div class="separador">
         <span>o</span>
       </div>
-      
       <button id="btnGoogle" class="btn-google">
         <img src="img/google-icon.png" alt="Google" width="20">
         Iniciar sesión con Google
       </button>
-      
       <p class="toggle-text">¿No tienes cuenta? <span id="to-register">Regístrate</span></p>
     </div>
 
-    <!-- login.html - SECCIÓN REGISTRO ACTUALIZADA -->
-<!-- SECCIÓN REGISTRO - CON INPUTS EN PARES -->
-<div id="register-section" class="auth-box hidden card">
-  <h2>Crear cuenta</h2>
-  
-  <!-- Nombre y Apellido en la misma línea -->
-  <div class="input-pair">
-    <input type="text" id="reg-nombre" placeholder="Nombre" required>
-    <input type="text" id="reg-apellido" placeholder="Apellido" required>
-  </div>
-  
-  <!-- Correo y Contraseña en la misma línea -->
-  <div class="input-pair">
-    <input type="email" id="reg-correo" placeholder="Correo electrónico" required>
-    <input type="password" id="reg-pass" placeholder="Contraseña" required>
-  </div>
-  
-  <h2>Contacto</h2>
-  
-  <!-- Teléfono con +52 -->
-  <div class="phone-input-container">
-    <span class="phone-prefix">+52</span>
-    <input type="tel" id="reg-telefono" placeholder="5544332211" maxlength="10" pattern="[0-9]{10}" required>
-  </div>
-  
-  <h2>Dirección de Envío</h2>
-  
-  <!-- Calle y número -->
-  <div class="row-inputs">
-    <input type="text" id="reg-calle" placeholder="Calle" required>
-    <input type="text" id="reg-numero" placeholder="Número" required>
-  </div>
-  
-  <!-- Colonia (ancho completo) -->
-  <input type="text" id="reg-colonia" placeholder="Colonia" required>
-  
-  <!-- Estado y Código Postal -->
-  <div class="row-inputs">
-    <input type="text" id="reg-estado" placeholder="Estado" required>
-    <input type="text" id="reg-cp" placeholder="C.P." maxlength="5" pattern="[0-9]{5}" required>
-  </div>
-  
-  <!-- Referencia (opcional) -->
-  <input type="text" id="reg-referencia" placeholder="Referencia (ej. entre calles, color de casa)">
+    <div id="register-section" class="auth-box hidden card">
+      <h2>Crear cuenta</h2>
+      
+      <div class="input-pair">
+        <input type="text" id="reg-nombre" placeholder="Nombre" required>
+        <input type="text" id="reg-apellido" placeholder="Apellido" required>
+      </div>
+      
+      <div class="input-pair">
+        <input type="email" id="reg-correo" placeholder="Correo electrónico" required>
+        <input type="password" id="reg-pass" placeholder="Contraseña" required>
+      </div>
+      
+      <h2>Contacto</h2>
+      
+      <div class="phone-input-container">
+        <span class="phone-prefix">+52</span>
+        <input type="tel" id="reg-telefono" placeholder="5544332211" maxlength="10" pattern="[0-9]{10}" required>
+      </div>
+      
+      <h2>Dirección de Envío</h2>
+      
+      <div class="row-inputs">
+        <input type="text" id="reg-calle" placeholder="Calle" required>
+        <input type="text" id="reg-numero" placeholder="Número" required>
+      </div>
+      
+      <input type="text" id="reg-colonia" placeholder="Colonia" required>
+      
+      <div class="row-inputs">
+        <input type="text" id="reg-estado" placeholder="Estado" required>
+        <input type="text" id="reg-cp" placeholder="C.P." maxlength="5" pattern="[0-9]{5}" required>
+      </div>
+      
+      <input type="text" id="reg-referencia" placeholder="Referencia (ej. entre calles, color de casa)">
 
-  <button id="btnRegister">Registrarme</button>
-  
-  <p class="toggle-text">¿Ya tienes cuenta? <span id="to-login">Inicia sesión</span></p>
-</div>
+      <button id="btnRegister">Registrarme</button>
+      
+      <p class="toggle-text">¿Ya tienes cuenta? <span id="to-login">Inicia sesión</span></p>
+    </div>
+  </div>
 </main>
 
 <footer class="footer-luxe">
@@ -113,7 +94,6 @@
       <div class="social-links">
         <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Instagram" class="logo"></a>                
         <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
-
       </div>
     </div>
 
@@ -122,7 +102,7 @@
       <p>Recibe ofertas exclusivas.</p>
       <div class="newsletter-form">
         <input type="email" id="newsletter-email" placeholder="Tu email...">
-        <button onclick="suscribirse()">Unirse</button>
+        <button id="newsletter-btn">Unirse</button>
       </div>
     </div>
   </div>
@@ -132,6 +112,27 @@
   </div>
 </footer>
 
+<div id="toast" class="toast"></div>
+
 <script src="js/login.js?v=20250313"></script>
+
+<script>
+// Newsletter igual que en las otras paginas
+document.getElementById('newsletter-btn')?.addEventListener('click', function() {
+  const email = document.getElementById('newsletter-email')?.value;
+  const toast = document.getElementById("toast");
+  if (email && email.includes('@')) {
+    toast.textContent = "¡Bienvenida al Club Luxe! Recibirás ofertas exclusivas";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+    document.getElementById('newsletter-email').value = '';
+  } else {
+    toast.textContent = "Por favor, ingresa un email válido";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+  }
+});
+</script>
+
 </body>
 </html>

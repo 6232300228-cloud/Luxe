@@ -1,4 +1,86 @@
-// js/pedidos.js - CARGAR DE LOCALSTORAGE Y BACKEND
+// ============================================
+// FUNCIONES DEL HEADER
+// ============================================
+
+function toggleMenu() {
+    const menu = document.getElementById('side-menu');
+    if (menu) menu.classList.toggle('active');
+}
+
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('side-menu');
+    const hamburger = document.querySelector('.menu-hamburger');
+    if (menu && menu.classList.contains('active') && !menu.contains(event.target) && !hamburger.contains(event.target)) {
+        menu.classList.remove('active');
+    }
+});
+
+if (window.innerWidth > 768) {
+    const hamburger = document.querySelector('.menu-hamburger');
+    const menu = document.getElementById('side-menu');
+    if (hamburger && menu) {
+        let hoverTimer;
+        hamburger.addEventListener('mouseenter', function() {
+            hoverTimer = setTimeout(() => menu.classList.add('active'), 200);
+        });
+        hamburger.addEventListener('mouseleave', function() {
+            clearTimeout(hoverTimer);
+        });
+    }
+}
+
+// ============================================
+// ACTUALIZAR CONTADORES
+// ============================================
+
+function actualizarContadores() {
+    const favCount = document.getElementById('fav-count');
+    const cartCount = document.getElementById('cart-count');
+    if (favCount) {
+        const favs = JSON.parse(localStorage.getItem('favs')) || [];
+        favCount.textContent = favs.length;
+        favCount.setAttribute("data-count", favs.length);
+    }
+    if (cartCount) {
+        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+        const totalItems = carrito.reduce((sum, item) => sum + (item.cantidad || 1), 0);
+        cartCount.textContent = totalItems;
+        cartCount.setAttribute("data-count", totalItems);
+    }
+}
+
+// ============================================
+// USUARIO Y SESSION
+// ============================================
+
+function cargarUsuario() {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+    const loginBtn = document.getElementById('login-btn');
+    const userMenu = document.getElementById('user-menu');
+    const userNameSpan = document.getElementById('user-name');
+    if (token && user) {
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (userMenu) userMenu.style.display = 'block';
+        if (userNameSpan) {
+            const nombre = user.nombre || user.email || 'Usuario';
+            userNameSpan.textContent = nombre.split(' ')[0];
+        }
+    } else {
+        if (loginBtn) loginBtn.style.display = 'flex';
+        if (userMenu) userMenu.style.display = 'none';
+    }
+}
+
+function cerrarSesion() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    window.location.href = 'index.html';
+}
+
+// ============================================
+// CARGAR PEDIDOS
+// ============================================
 
 async function cargarPedidos() {
     const contenedor = document.getElementById("contenedor-pedidos");
@@ -19,12 +101,10 @@ async function cargarPedidos() {
 
     let todosPedidos = [];
     
-    // 1. Cargar pedidos de localStorage
     const pedidosLocal = JSON.parse(localStorage.getItem('pedidos')) || [];
     const pedidosFiltradosLocal = pedidosLocal.filter(p => p.envioData?.correo === user.correo);
     todosPedidos.push(...pedidosFiltradosLocal);
     
-    // 2. Cargar pedidos del backend
     try {
         const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/mis-pedidos', {
             headers: { 'Authorization': `Bearer ${token}` }
@@ -38,7 +118,6 @@ async function cargarPedidos() {
         console.error('Error cargando pedidos del backend:', error);
     }
     
-    // Eliminar duplicados (por ID)
     const pedidosUnicos = [];
     const ids = new Set();
     for (const pedido of todosPedidos) {
@@ -49,7 +128,6 @@ async function cargarPedidos() {
         }
     }
     
-    // Ordenar de más reciente a más antiguo
     pedidosUnicos.sort((a, b) => {
         const fechaA = new Date(a.fechaPedido || a.fecha);
         const fechaB = new Date(b.fechaPedido || b.fecha);
@@ -135,6 +213,10 @@ async function cargarPedidos() {
     });
 }
 
+// ============================================
+// VERIFICAR ADMIN PARA DASHBOARD
+// ============================================
+
 function verificarAdmin() {
     const user = JSON.parse(localStorage.getItem('user'));
     const token = localStorage.getItem('token');
@@ -149,22 +231,19 @@ function verificarAdmin() {
     }
 }
 
+// ============================================
+// INICIALIZAR
+// ============================================
+
 document.addEventListener("DOMContentLoaded", function() {
+    actualizarContadores();
+    cargarUsuario();
     cargarPedidos();
     verificarAdmin();
     
-    const favCount = document.getElementById('fav-count');
-    const cartCount = document.getElementById('cart-count');
-    if (favCount) {
-        const favs = JSON.parse(localStorage.getItem('favs')) || [];
-        favCount.textContent = favs.length;
-    }
-    if (cartCount) {
-        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-        const totalItems = carrito.reduce((sum, item) => sum + (item.cantidad || 1), 0);
-        cartCount.textContent = totalItems;
-    }
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) logoutBtn.addEventListener('click', cerrarSesion);
 });
 
+window.toggleMenu = toggleMenu;
 window.cargarPedidos = cargarPedidos;
-window.verificarAdmin = verificarAdmin;

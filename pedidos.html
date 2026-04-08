@@ -6,7 +6,7 @@
     <title>Mis Pedidos - Luxe</title>
     <link rel="icon" href="img/logo.png" type="image/x-icon">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=20250313">
     <style>
         .card-pedido {
             background: white;
@@ -34,257 +34,108 @@
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-left">
-            <div class="menu-hamburger" onclick="toggleMenu()">
-                <span></span>
-                <span></span>
-                <span></span>
+
+<header class="header">
+    <div class="header-left">
+        <div class="menu-hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <a href="index.html" class="logo-link">
+            <img src="img/logo.png" alt="Logo Luxe" class="logo">
+            <div class="logo-text-group">
+                <span class="slogan-minimal">Tu destino de belleza</span>
             </div>
-            <a href="index.html" class="logo-link">
-                <img src="img/logo.png" alt="Logo Luxe" class="logo">
-                <div class="logo-text-group">
-                    <span class="slogan-minimal">Tu destino de belleza</span>
-                </div>
-            </a>
-        </div>
-        <div class="header-right icons">
-            <a href="favoritos.html">
-                <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
-            </a>
-            <a href="carrito.html">
-                <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
-            </a>
-            <a href="login.html" id="login-btn">
-                <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
-            </a>
-            <div id="user-menu" class="dropdown" style="display: none;">
-                <button class="dropbtn">
-                    <span id="user-name"></span> <i class="arrow">▼</i>
-                </button>
-                <div class="dropdown-content">
-                    <a href="perfil.html"> Mi Perfil</a>
-                    <a href="pedidos.html"> Mis Pedidos</a>
-                    <hr>
-                    <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <nav id="side-menu" class="side-nav">
-        <span class="close-btn" onclick="toggleMenu()">&times;</span>
-        <div class="menu-section">
-            <a href="nosotros.html"> Sobre Nosotros</a>
-            <a href="#">Lo más nuevo</a>
-            <a href="#"> Ofertas</a>
-        </div>
-    </nav>
-
-    <main style="min-height: 70vh; padding: 40px 20px;">
-        <div style="max-width: 800px; margin: 0 auto;">
-            <h1 style="color: #ff4d6d; text-align: center; margin-bottom: 30px; font-family: 'Playfair Display', serif;">Mis Pedidos</h1>
-            <div id="contenedor-pedidos"></div>
-        </div>
-    </main>
-
-    <footer class="footer-luxe">
-        <div class="footer-container">
-            <div class="footer-column">
-                <img src="img/logo.png" alt="Luxe Logo" class="footer-logo">
-                <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
-                <h3>Encuéntranos en</h3>
-                <div class="social-links">
-                    <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Instagram" class="logo"></a>                
-                    <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
-
-                </div>
-            </div>
-            <div class="footer-column newsletter">
-                <h3>Únete al Club Luxe</h3>
-                <p>Recibe ofertas exclusivas.</p>
-                <div class="newsletter-form">
-                    <input type="email" id="newsletter-email" placeholder="Tu email...">
-                    <button onclick="suscribirse()">Unirse</button>
-                </div>
+        </a>
+    </div>
+    <div class="header-right icons">
+        <a href="favoritos.html">
+            <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
+        </a>
+        <a href="carrito.html">
+            <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
+        </a>
+        <a href="login.html" id="login-btn">
+            <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
+        </a>
+        <div id="user-menu" class="dropdown" style="display: none;">
+            <button class="dropbtn">
+                <span id="user-name"></span> <i class="arrow">▼</i>
+            </button>
+            <div class="dropdown-content">
+                <a href="perfil.html"> Mi Perfil</a>
+                <a href="pedidos.html"> Mis Pedidos</a>
+                <hr>
+                <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+    </div>
+</header>
+
+<nav id="side-menu" class="side-nav">
+    <span class="close-btn" onclick="toggleMenu()">&times;</span>
+    <div class="menu-section">
+        <a href="nosotros.html"> Sobre Nosotros</a>
+        <a href="#">Lo más nuevo</a>
+        <a href="#"> Ofertas</a>
+    </div>
+</nav>
+
+<main style="min-height: 70vh; padding: 40px 20px;">
+    <div style="max-width: 800px; margin: 0 auto;">
+        <h1 style="color: #ff4d6d; text-align: center; margin-bottom: 30px; font-family: 'Playfair Display', serif;">Mis Pedidos</h1>
+        <div id="contenedor-pedidos"></div>
+    </div>
+</main>
+
+<footer class="footer-luxe">
+    <div class="footer-container">
+        <div class="footer-column">
+            <img src="img/logo.png" alt="Luxe Logo" class="footer-logo">
+            <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
+            <h3>Encuéntranos en</h3>
+            <div class="social-links">
+                <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Instagram" class="logo"></a>                
+                <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
+            </div>
         </div>
-    </footer>
+        <div class="footer-column newsletter">
+            <h3>Únete al Club Luxe</h3>
+            <p>Recibe ofertas exclusivas.</p>
+            <div class="newsletter-form">
+                <input type="email" id="newsletter-email" placeholder="Tu email...">
+                <button id="newsletter-btn">Unirse</button>
+            </div>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+    </div>
+</footer>
 
-    <script>
-        // Funciones del header
-        function toggleMenu() {
-            const menu = document.getElementById('side-menu');
-            menu.classList.toggle('active');
-        }
+<div id="toast" class="toast"></div>
 
-        document.addEventListener('click', function(event) {
-            const menu = document.getElementById('side-menu');
-            const hamburger = document.querySelector('.menu-hamburger');
-            if (menu && menu.classList.contains('active') && !menu.contains(event.target) && !hamburger.contains(event.target)) {
-                menu.classList.remove('active');
-            }
-        });
+<script src="js/pedidos.js?v=20250313"></script>
+<script src="js/user.js?v=20250313"></script>
 
-        function actualizarContadores() {
-            const favCount = document.getElementById('fav-count');
-            const cartCount = document.getElementById('cart-count');
-            if (favCount) {
-                const favs = JSON.parse(localStorage.getItem('favs')) || [];
-                favCount.textContent = favs.length;
-            }
-            if (cartCount) {
-                const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-                const totalItems = carrito.reduce((sum, item) => sum + (item.cantidad || 1), 0);
-                cartCount.textContent = totalItems;
-            }
-        }
+<script>
+// Newsletter igual que en las otras paginas
+document.getElementById('newsletter-btn')?.addEventListener('click', function() {
+  const email = document.getElementById('newsletter-email')?.value;
+  const toast = document.getElementById("toast");
+  if (email && email.includes('@')) {
+    toast.textContent = "¡Bienvenida al Club Luxe! Recibirás ofertas exclusivas";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+    document.getElementById('newsletter-email').value = '';
+  } else {
+    toast.textContent = "Por favor, ingresa un email válido";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+  }
+});
+</script>
 
-        function cargarUsuario() {
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user'));
-            const loginBtn = document.getElementById('login-btn');
-            const userMenu = document.getElementById('user-menu');
-            const userNameSpan = document.getElementById('user-name');
-            if (token && user) {
-                if (loginBtn) loginBtn.style.display = 'none';
-                if (userMenu) userMenu.style.display = 'block';
-                if (userNameSpan) {
-                    const nombre = user.nombre || user.email || 'Usuario';
-                    userNameSpan.textContent = nombre.split(' ')[0];
-                }
-            } else {
-                if (loginBtn) loginBtn.style.display = 'flex';
-                if (userMenu) userMenu.style.display = 'none';
-            }
-        }
-
-        function cerrarSesion() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            window.location.href = 'index.html';
-        }
-
-        // Cargar pedidos
-        async function cargarPedidos() {
-            const contenedor = document.getElementById("contenedor-pedidos");
-            const token = localStorage.getItem("token");
-            const user = JSON.parse(localStorage.getItem("user"));
-
-            if (!token || !user) {
-                contenedor.innerHTML = `
-                    <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 20px;">
-                        <p>Necesitas iniciar sesión para ver el historial de tus compras.</p>
-                        <a href="login.html" style="display: inline-block; background: #ff4d6d; color: white; padding: 12px 30px; text-decoration: none; border-radius: 25px; margin-top: 20px;">
-                            Ir a iniciar sesión
-                        </a>
-                    </div>
-                `;
-                return;
-            }
-
-            try {
-                contenedor.innerHTML = `<div style="text-align: center; padding: 40px;">Cargando tus pedidos...</div>`;
-                const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/mis-pedidos', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-
-                if (!response.ok) throw new Error('Error al cargar pedidos');
-                const pedidos = await response.json();
-
-                if (pedidos.length === 0) {
-                    contenedor.innerHTML = `
-                        <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 20px;">
-                            <h2 style="color: #ff4d6d;">Aún no tienes pedidos</h2>
-                            <p>Hola ${user.nombre || 'usuario'}, cuando realices tu primera compra, aparecerá aquí.</p>
-                            <a href="index.html" style="display: inline-block; background: #ff4d6d; color: white; padding: 12px 30px; text-decoration: none; border-radius: 25px; margin-top: 20px;">
-                                Ir a la tienda
-                            </a>
-                        </div>
-                    `;
-                    return;
-                }
-
-                contenedor.innerHTML = "";
-                pedidos.reverse().forEach((pedido) => {
-                    const fecha = new Date(pedido.fechaPedido).toLocaleDateString('es-MX', {
-                        year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit'
-                    });
-
-                    let listaProductos = pedido.productos.map(p => 
-                        `<li style="margin-bottom: 5px;">${p.nombre} x${p.cantidad || 1} - $${Math.round(p.precio * (p.cantidad || 1))}</li>`
-                    ).join("");
-
-                    const estadoClass = {
-                        'pendiente': 'estado-pendiente',
-                        'pagado': 'estado-pagado',
-                        'enviado': 'estado-enviado',
-                        'entregado': 'estado-entregado',
-                        'cancelado': 'estado-cancelado'
-                    }[pedido.estado] || 'estado-pendiente';
-
-                    const div = document.createElement("div");
-                    div.className = "card-pedido";
-                    div.innerHTML = `
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; border-bottom: 1px solid #eee; padding-bottom: 15px;">
-                            <div>
-                                <strong>Pedido #${pedido._id.slice(-8)}</strong>
-                                <p style="font-size: 12px; color: #666; margin: 5px 0 0 0;">${fecha}</p>
-                            </div>
-                            <span class="estado-badge ${estadoClass}">${pedido.estado.toUpperCase()}</span>
-                        </div>
-                        <div style="padding: 15px 0;">
-                            <p><strong>Dirección de envío:</strong> ${pedido.usuario?.direccion || 'No especificada'}</p>
-                            <p><strong>Método de pago:</strong> ${pedido.metodoPago === 'mercadopago' ? 'Mercado Pago' : 'Tarjeta'}</p>
-                        </div>
-                        <div>
-                            <p><strong>Productos:</strong></p>
-                            <ul style="font-size: 14px; color: #555; padding-left: 20px;">${listaProductos}</ul>
-                        </div>
-                        <div style="text-align: right; margin-top: 15px; padding-top: 15px; border-top: 2px solid #ff4d6d;">
-                            <strong style="font-size: 18px; color: #ff4d6d;">Total: $${Math.round(pedido.total)}</strong>
-                        </div>
-                    `;
-                    contenedor.appendChild(div);
-                });
-            } catch (error) {
-                console.error('Error cargando pedidos:', error);
-                contenedor.innerHTML = `
-                    <div style="text-align: center; padding: 40px; background: white; border-radius: 20px;">
-                        <h2 style="color: #ff4d6d;">Error al cargar los pedidos</h2>
-                        <p>Hubo un problema al cargar tu historial. Por favor intenta de nuevo.</p>
-                        <button onclick="cargarPedidos()" style="background: #ff4d6d; color: white; border: none; padding: 10px 25px; border-radius: 25px; cursor: pointer; margin-top: 20px;">
-                            Reintentar
-                        </button>
-                    </div>
-                `;
-            }
-        }
-
-        function suscribirse() {
-            const email = document.getElementById('newsletter-email')?.value;
-            if (email && email.includes('@')) {
-                alert('Bienvenida al Club Luxe');
-                document.getElementById('newsletter-email').value = '';
-            } else {
-                alert('Por favor, ingresa un email valido');
-            }
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            actualizarContadores();
-            cargarUsuario();
-            cargarPedidos();
-            const logoutBtn = document.getElementById('logout-btn');
-            if (logoutBtn) logoutBtn.addEventListener('click', cerrarSesion);
-        });
-
-        window.toggleMenu = toggleMenu;
-        window.cargarPedidos = cargarPedidos;
-        window.suscribirse = suscribirse;
-    </script>
 </body>
 </html>

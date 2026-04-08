@@ -9,7 +9,7 @@ const sugerenciasContenedor = document.getElementById("productos-sugeridos");
 let carrito = JSON.parse(localStorage.getItem("carrito")) || [];
 
 // ============================================
-// 2. ACTUALIZAR HEADER (FAVORITOS)
+// 2. ACTUALIZAR HEADER (FAVORITOS Y CARRITO)
 // ============================================
 function actualizarHeader() {
     const favCount = document.getElementById("fav-count");
@@ -19,11 +19,22 @@ function actualizarHeader() {
         favCount.setAttribute("data-count", favsActual.length);
     }
 }
-// Función para el menú hamburguesa (agrega al final)
-function toggleMenu() {
-  const menu = document.getElementById('side-menu');
-  if (menu) menu.classList.toggle('active');
+
+function actualizarContadorCarrito() {
+  const cartCount = document.getElementById("cart-count");
+  if (!cartCount) return;
+  let cart = JSON.parse(localStorage.getItem("carrito")) || [];
+  const total = cart.reduce((sum, item) => sum + (item.cantidad || 1), 0);
+  cartCount.textContent = total;
+  cartCount.setAttribute("data-count", total);
+  
+  if (total > 0) {
+    cartCount.classList.remove("pulse");
+    void cartCount.offsetWidth;
+    cartCount.classList.add("pulse");
+  }
 }
+
 // ============================================
 // 3. CATÁLOGO DE SUGERENCIAS
 // ============================================
@@ -44,7 +55,7 @@ function renderCarrito() {
     if (carrito.length === 0) {
         cartItems.innerHTML = `
             <div style="text-align:center; padding: 50px;">
-                <h2>Tu carrito está vacío </h2>
+                <h2>Tu carrito está vacío</h2>
                 <a href="index.html" style="color: #ff4d6d; font-weight:bold;">Ir de compras</a>
             </div>`;
         totalText.innerHTML = "Total: $0.00";
@@ -55,6 +66,7 @@ function renderCarrito() {
         localStorage.removeItem("totalAPagar");
         cargarSugerencias(); 
         actualizarHeader();
+        actualizarContadorCarrito();
         return;
     }
 
@@ -140,6 +152,7 @@ function renderCarrito() {
 
     cargarSugerencias(); 
     actualizarHeader();
+    actualizarContadorCarrito();
 }
 
 // ============================================
@@ -209,9 +222,13 @@ function vaciarCarrito() {
         renderCarrito();
     }
 }
+
+// ============================================
+// 10. MENÚ HAMBURGUESA
+// ============================================
 function toggleMenu() {
   const menu = document.getElementById('side-menu');
-  menu.classList.toggle('active');
+  if (menu) menu.classList.toggle('active');
 }
 
 document.addEventListener('click', function(event) {
@@ -239,7 +256,9 @@ if (window.innerWidth > 768) {
     });
   }
 }
+
 // ============================================
-// 10. INICIALIZAR
+// 11. INICIALIZAR
 // ============================================
 renderCarrito();
+actualizarContadorCarrito();

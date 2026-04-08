@@ -6,11 +6,10 @@
   <title>Sobre Nosotros | Luxe</title>
   <link rel="icon" href="img/logo.png" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=20250313">
+  <link rel="stylesheet" href="css/style.css?v=20250313">
 </head>
 
 <body>
-
 
 <header class="header">
   <div class="header-left">
@@ -40,8 +39,9 @@
     </a>
 
     <div id="user-menu" class="dropdown" style="display: none;">
-  <button class="dropbtn">
-  <span id="user-name"></span> <i class="arrow">▼</i></button>
+      <button class="dropbtn">
+        <span id="user-name"></span> <i class="arrow">▼</i>
+      </button>
       <div class="dropdown-content">
         <a href="perfil.html"> Mi Perfil</a>
         <a href="pedidos.html"> Mis Pedidos</a>
@@ -61,8 +61,6 @@
   </div>
 </nav>
 
-<div id="overlay" class="overlay" onclick="toggleMenu()"></div>
-
 <main class="container">
   <section class="about-hero">
     <h1>Nuestra Historia</h1>
@@ -78,50 +76,71 @@
     </div>
   </section>
 
-   <section class="values">
-      <div class="value-card">
-        <h3>Tendencia Global</h3>
-        <p>Las marcas más exclusivas del mundo de la belleza, seleccionadas para ti.</p>
-      </div>
-      <div class="value-card">
-        <h3>Calidad Premium</h3>
-        <p>Solo trabajamos con marcas de prestigio que garantizan los mejores resultados.</p>
-      </div>
-      <div class="value-card">
-        <h3>Inclusión</h3>
-        <p>Maquillaje para cada tono de piel y cada estilo. Tu belleza, sin etiquetas.</p>
-      </div>
-    </section>
+  <section class="values">
+    <div class="value-card">
+      <h3>Tendencia Global</h3>
+      <p>Las marcas más exclusivas del mundo de la belleza, seleccionadas para ti.</p>
+    </div>
+    <div class="value-card">
+      <h3>Calidad Premium</h3>
+      <p>Solo trabajamos con marcas de prestigio que garantizan los mejores resultados.</p>
+    </div>
+    <div class="value-card">
+      <h3>Inclusión</h3>
+      <p>Maquillaje para cada tono de piel y cada estilo. Tu belleza, sin etiquetas.</p>
+    </div>
+  </section>
 </main>
+
 <footer class="footer-luxe">
-    <div class="footer-container">
-        <div class="footer-column">
-            <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
-            <p class="footer-description">Realzando tu belleza natural con productos de alta gama. </p>
-           <h3>Encuéntranos en</h3>
-            <div class="social-links">
-            <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Logo Luxe" class="logo"></a>                
-            <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
-
-            </div>
-        </div>
-
-        <div class="footer-column newsletter">
-            <h3>Únete al Club Luxe</h3>
-            <p>Recibe ofertas exclusivas.</p>
-            <div class="newsletter-form">
-                <input type="email" id="newsletter-email" placeholder="Tu email...">
-                <button onclick="suscribirse()">Unirse</button>
-            </div>
-        </div>
+  <div class="footer-container">
+    <div class="footer-column">
+      <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
+      <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
+      <h3>Encuéntranos en</h3>
+      <div class="social-links">
+        <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Logo Luxe" class="logo"></a>                
+        <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
+      </div>
     </div>
 
-    <div class="footer-bottom">
-        <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+    <div class="footer-column newsletter">
+      <h3>Únete al Club Luxe</h3>
+      <p>Recibe ofertas exclusivas.</p>
+      <div class="newsletter-form">
+        <input type="email" id="newsletter-email" placeholder="Tu email...">
+        <button id="newsletter-btn">Unirse</button>
+      </div>
     </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+  </div>
 </footer>
-<script src="js/script.js?v=20250313"></script>
-<script src="js/nosotros.js"></script>
+
+<div id="toast" class="toast"></div>
+
+<script src="js/nosotros.js?v=20250313"></script>
+<script src="js/user.js?v=20250313"></script>
+
+<script>
+// Newsletter igual que en index
+document.getElementById('newsletter-btn')?.addEventListener('click', function() {
+  const email = document.getElementById('newsletter-email')?.value;
+  const toast = document.getElementById("toast");
+  if (email && email.includes('@')) {
+    toast.textContent = "¡Bienvenida al Club Luxe! Recibirás ofertas exclusivas";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+    document.getElementById('newsletter-email').value = '';
+  } else {
+    toast.textContent = "Por favor, ingresa un email válido";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+  }
+});
+</script>
 
 </body>
 </html>

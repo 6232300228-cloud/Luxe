@@ -1,73 +1,9 @@
 // ============================================
 // VARIABLES GLOBALES
 // ============================================
-let products = [
-  { id: 1, name: "Labial Humectante", price: 65, category: "labial", brand: "bissu", img: "img/labial.png", desc: "Labial clásico de Bissú con aceite de coco." },
-  { id: 2, name: "Ultimate Shadow Palette", price: 420, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "Paleta profesional con 16 tonos de alta pigmentación." },
-  { id: 3, name: "Can't Stop Won't Stop Foundation", price: 380, category: "base", brand: "nyx", img: "img/base.png", desc: "Base de maquillaje líquida de cobertura total y mate." },
-  { id: 4, name: "HD Photogenic Concealer", price: 160, category: "corrector", brand: "nyx", img: "img/corrector.png", desc: "Corrector que ayuda a cubrir imperfecciones y ojeras." },
-  { id: 5, name: "Plumin Delineador Mate", price: 95, category: "ojos", brand: "bissu", img: "img/delineador.png", desc: "Delineador de ojos tipo plumín resistente al agua." },
-  { id: 6, name: "Lash Sensational Sky High", price: 285, category: "ojos", brand: "maybelline", img: "img/rimel.png", desc: "Máscara que ofrece longitud sin límites y volumen." },
-  { id: 7, name: "Lip Oil", price: 85, category: "labial", brand: "bissu", img: "img/labial2.png", desc: "Brillo con destellos brillantes y textura no pegajosa." },
-  { id: 8, name: "Set de Brochas Esenciales", price: 450, category: "accesorios", brand: "rare", img: "img/brochas.png", desc: "Set profesional de cerdas sintéticas premium." },
-  { id: 9, name: "Iluminador en Polvo", price: 98, category: "iluminador", brand: "bissu", img: "img/iluminador.png", desc: "Polvo compacto para dar luz al rostro." },
-  { id: 10, name: "Rubor Compacto", price: 72, category: "rubor", brand: "bissu", img: "img/rubor.png", desc: "Textura sedosa para un acabado natural." },
-  { id: 11, name: "Revitalift Limpiador", price: 195, category: "skincare", brand: "loreal", img: "img/limpiador.png", desc: "Gel de limpieza facial con ácido hialurónico." },
-  { id: 12, name: "Sérum Pure Vitamin C10", price: 850, category: "skincare", brand: "loreal", img: "img/serum.png", desc: "Sérum renovador antioxidante para dar luminosidad." },
-  { id: 13, name: "Hydra Touch Primer", price: 340, category: "skincare", brand: "nyx", img: "img/crema.png", desc: "Base de maquillaje hidratante con extractos de plantas." },
-  { id: 14, name: "Pro Filt'r Soft Matte", price: 790, category: "base", brand: "fenty", img: "img/fenty-base.png", desc: "Base de larga duración en 50 tonos." },
-  { id: 15, name: "Studio Fix Fluid SPF 15", price: 760, category: "base", brand: "mac", img: "img/mac-base.png", desc: "Base con control de aceite y acabado mate natural." },
-  { id: 16, name: "Dior Backstage Face & Body", price: 980, category: "base", brand: "dior", img: "img/dior-base.png", desc: "La base secreta de los maquilladores de Dior." },
-  { id: 17, name: "Fit Me Matte + Poreless", price: 215, category: "base", brand: "maybelline", img: "img/fit-me.png", desc: "Matifica la piel y desvanece los poros." },
-  { id: 18, name: "Infallible Fresh Wear 24H", price: 310, category: "base", brand: "loreal", img: "img/infallible.png", desc: "Cobertura completa que permite que la piel respire." },
-  { id: 19, name: "Liquid Touch Concealer", price: 520, category: "corrector", brand: "rare", img: "img/rare-concealer.png", desc: "Corrector hidratante de cobertura media a total." },
-  { id: 20, name: "Corrector de Larga Duración", price: 110, category: "corrector", brand: "bissu", img: "img/corrector-bissu.png", desc: "Corrector líquido cremoso de alta cobertura." },
-  { id: 21, name: "SuperStay Matte Ink", price: 260, category: "labial", brand: "maybelline", img: "img/Superstay.png", desc: "Tinta de labios líquida con hasta 16 horas de duración." },
-  { id: 22, name: "Matte Lipstick Ruby Woo", price: 460, category: "labial", brand: "mac", img: "img/Mate lipstick.png", desc: "El rojo más famoso del mundo con acabado ultra mate." },
-  { id: 23, name: "Soft Pinch Liquid Blush", price: 540, category: "rubor", brand: "rare", img: "img/rare-blush.png", desc: "Rubor líquido de larga duración que se difumina hermoso." },
-  { id: 24, name: "Gloss Bomb Universal", price: 490, category: "labial", brand: "fenty", img: "img/Gloss bomb.png", desc: "Brillo de labios irresistible con aroma a melocotón y vainilla." },
-  { id: 25, name: "Lip Glow Oil", price: 890, category: "labial", brand: "dior", img: "img/Glow oil.png", desc: "Aceite labial brillante que protege y realza." },
-  { id: 26, name: "Fat Oil Lip Drip", price: 220, category: "labial", brand: "nyx", img: "img/Fat oil.png", desc: "Aceite hidratante con color de gran brillo." },
-  { id: 27, name: "Paleta de Sombras 'Mi Tierra'", price: 115, category: "sombra", brand: "bissu", img: "img/Sombra tierra.png", desc: "Quintetos de sombras con colores intensos." },
-  { id: 28, name: "Mascara Lash Paradise", price: 275, category: "ojos", brand: "loreal", img: "img/paradise.png", desc: "Volumen y longitud instantáneos con cepillo suave." },
-  { id: 29, name: "Epic Ink Liner Black", price: 255, category: "ojos", brand: "nyx", img: "img/epic-ink.png", desc: "Delineador líquido con punta de pincel precisa." },
-  { id: 30, name: "Perfect Strokes Eye Liner", price: 480, category: "ojos", brand: "rare", img: "img/rare-liner.png", desc: "Delineador líquido mate con flujo continuo." },
-  { id: 31, name: "Delineador en Gel para Cejas", price: 85, category: "ojos", brand: "bissu", img: "img/cejas-bissu.png", desc: "Define y rellena tus cejas con acabado natural." },
-  { id: 32, name: "Brow Fast Sculpt", price: 195, category: "ojos", brand: "maybelline", img: "img/brow-mascara.png", desc: "Máscara de cejas con color para peinar y fijar." },
-  { id: 33, name: "Mineralize Skinfinish", price: 810, category: "iluminador", brand: "mac", img: "img/mac-high.png", desc: "Polvo facial de lujo cocido a fuego lento." },
-  { id: 34, name: "Killawatt Highlighter Duo", price: 820, category: "iluminador", brand: "fenty", img: "img/fenty-high.png", desc: "Dos tonos de iluminador para un brillo personalizado." },
-  { id: 35, name: "Polvo Traslúcido Suelto", price: 95, category: "rubor", brand: "bissu", img: "img/polvo.png", desc: "Polvo fino para sellar el maquillaje y eliminar brillo." },
-  { id: 36, name: "Rouge Blush", price: 1100, category: "rubor", brand: "dior", img: "img/dior-blush.png", desc: "Rubor de larga duración con pigmentos intensos." },
-  { id: 37, name: "Stay Vulnerable Blush", price: 510, category: "rubor", brand: "rare", img: "img/rare-creamblush.png", desc: "Rubor en crema resistente al agua que se funde en la piel." },
-  { id: 38, name: "Agua Micelar 5 en 1", price: 145, category: "skincare", brand: "loreal", img: "img/Agua micelar.png", desc: "Limpia, desmaquilla y tonifica el rostro." },
-  { id: 39, name: "Fat Water Toner Serum", price: 720, category: "skincare", brand: "fenty", img: "img/Fat water.png", desc: "Tratamiento que reduce poros y manchas." },
-  { id: 40, name: "Dior Addict Lip Maximizer", price: 910, category: "labial", brand: "dior", img: "img/Dior addict.png", desc: "Brillo de labios con efecto volumen instantáneo." },
-  { id: 41, name: "Esponja Beauty Blender", price: 180, category: "accesorios", brand: "maybelline", img: "img/Esponja beauty blender.png", desc: "Esponja para difuminar base y corrector." },
-  { id: 42, name: "Brush Cleanser", price: 390, category: "accesorios", brand: "mac", img: "img/Brush cleanser.png", desc: "Limpiador de brochas de secado rápido." },
-  { id: 43, name: "Prep + Prime Fix+", price: 680, category: "accesorios", brand: "mac", img: "img/prep+prime fix.png", desc: "Bruma de agua que fija el maquillaje y refresca." },
-  { id: 44, name: "Matte Setting Spray", price: 235, category: "accesorios", brand: "nyx", img: "img/Matte setting.png", desc: "Fijador de maquillaje para evitar el brillo." },
-  { id: 45, name: "Sacapuntas de Cosméticos", price: 10, category: "accesorios", brand: "bissu", img: "img/Sacapuntas.png", desc: "Mantén tus lápices con punta perfecta." },
-  { id: 46, name: "Pegamento Lash It Loud", price: 190, category: "accesorios", brand: "nyx", img: "img/Pegamento.png", desc: "Adhesivo para pestañas de alta fijación." },
-  { id: 47, name: "Pestañas Postizas 3D", price: 85, category: "ojos", brand: "bissu", img: "img/pestañas.png", desc: "Añade volumen y drama a tus ojos." },
-  { id: 48, name: "Paleta Pro Contour", price: 320, category: "rubor", brand: "nyx", img: "img/contour.png", desc: "Kit para definir y resaltar facciones." },
-  { id: 49, name: "Delineador de Labios Retráctil", price: 55, category: "labial", brand: "bissu", img: "img/Delineador labios.png", desc: "Textura cremosa para delinear labios." },
-  { id: 50, name: "Espejo de Bolsillo ", price: 120, category: "accesorios", brand: "loreal", img: "img/Espejo bolsillo.png", desc: "Espejo con aumento para retoques rápidos." }
-];
-
-// Productos para videos
-const videoProducts = [
-  { id: 1001, name: "Rubor Marmoleado", price: 225, category: "rubor", brand: "bissu", img: "img/rubor.png", desc: "Rubor en polvo marmoleado con acabado natural y larga duración." },
-  { id: 1002, name: "Labial Cremoso Soft Matte", price: 250, category: "labial", brand: "bissu", img: "img/labial.png", desc: "Labial con textura cremosa que se desliza suavemente, dejando un acabado mate suave." },
-  { id: 1003, name: "Ultimate Shadow Palette", price: 400, category: "sombra", brand: "nyx", img: "img/paletas.png", desc: "Paleta de sombras con 16 tonos de alta pigmentación." },
-  // NUEVOS VIDEOS
-  { id: 1004, name: "Lash Sensational Sky High", price: 285, category: "ojos", brand: "maybelline", img: "img/rimel.png", desc: "Máscara de pestañas que ofrece longitud sin límites y volumen instantáneo." },
-  { id: 1005, name: "Can't Stop Won't Stop Foundation", price: 380, category: "base", brand: "nyx", img: "img/base.png", desc: "Base de maquillaje líquida de cobertura total y acabado mate." }
-];
-
 let filtered = products;
 let selectedBrand = "all";
 let selectedCategory = "all";
-
 const productList = document.getElementById("product-list");
 const cartCount = document.getElementById("cart-count");
 const favCount = document.getElementById("fav-count");
@@ -147,6 +83,7 @@ function addToCartFromModal(id) {
   showToast("Producto agregado al carrito ");
   closeProductModal();
 }
+
 // ============================================
 // COMPRAR AHORA - REDIRIGE AL CHECKOUT CON EL PRODUCTO
 // ============================================
@@ -180,7 +117,6 @@ function buyNow(productId) {
   // Cerrar modal
   closeProductModal();
 }
-
 
 // ============================================
 // CARRITO
@@ -321,6 +257,21 @@ function aplicarFiltrosCombinados() {
     const coincideCat = (selectedCategory === "all" || p.category === selectedCategory);
     return coincideMarca && coincideCat;
   });
+  
+  // Aplicar ordenamiento actual si existe
+  if (sortSelect && sortSelect.value !== "default") {
+    const option = sortSelect.value;
+    if (option === "az") {
+      filtered.sort((a, b) => a.name.localeCompare(b.name));
+    } else if (option === "za") {
+      filtered.sort((a, b) => b.name.localeCompare(a.name));
+    } else if (option === "precioAsc") {
+      filtered.sort((a, b) => a.price - b.price);
+    } else if (option === "precioDesc") {
+      filtered.sort((a, b) => b.price - a.price);
+    }
+  }
+  
   renderProducts();
 }
 
@@ -446,23 +397,24 @@ document.addEventListener("DOMContentLoaded", function () {
   updateFavCounter();
   
   if (search) {
-  search.addEventListener("input", () => {
-    let text = search.value.toLowerCase();
-    filtered = products.filter(p => p.name.toLowerCase().includes(text));
-    renderProducts();
-    
-    // Desplazar automáticamente a los productos después de buscar
-    const productSection = document.getElementById("product-list");
-    if (productSection && text.length > 0) {
-      // Pequeño delay para que el render termine
-      setTimeout(() => {
-        const yOffset = -100; // Ajuste para que no quede pegado al header
-        const y = productSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
-        window.scrollTo({ top: y, behavior: 'smooth' });
-      }, 100);
-    }
-  });
-}
+    search.addEventListener("input", () => {
+      let text = search.value.toLowerCase();
+      filtered = products.filter(p => p.name.toLowerCase().includes(text));
+      renderProducts();
+      
+      // Desplazar automáticamente a los productos después de buscar
+      const productSection = document.getElementById("product-list");
+      if (productSection && text.length > 0) {
+        // Pequeño delay para que el render termine
+        setTimeout(() => {
+          const yOffset = -100; // Ajuste para que no quede pegado al header
+          const y = productSection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }, 100);
+      }
+    });
+  }
+  
   if (sortSelect) {
     sortSelect.addEventListener("change", () => {
       const option = sortSelect.value;
@@ -479,13 +431,82 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
   
-  const newsletterBtn = document.querySelector('.newsletter-form button');
-  const newsletterInput = document.querySelector('.newsletter-form input');
+  // Inicializar filtros de marca
+  document.querySelectorAll('.brand-item-mini[data-brand]').forEach(item => {
+    item.addEventListener('click', () => {
+      const brand = item.getAttribute('data-brand');
+      filterBrand(brand, item);
+    });
+  });
+  
+  // Inicializar filtros de categoría
+  document.querySelectorAll('.category-menu button[data-category]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const cat = btn.getAttribute('data-category');
+      selectedCategory = cat;
+      document.querySelectorAll(".category-menu button").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      aplicarFiltrosCombinados();
+      
+      setTimeout(() => {
+        const categorySection = document.querySelector('.category-menu');
+        if (categorySection) {
+          const yOffset = -120;
+          const y = categorySection.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        }
+      }, 100);
+    });
+  });
+  
+  // Inicializar botones de experiencia
+  document.querySelectorAll('.btn-luxe[data-experience]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const exp = btn.getAttribute('data-experience');
+      openExperience(exp);
+    });
+  });
+  
+  // Inicializar enlaces del footer
+  const footerTienda = document.getElementById('footer-tienda');
+  if (footerTienda) {
+    footerTienda.addEventListener('click', (e) => {
+      e.preventDefault();
+      selectedCategory = "all";
+      selectedBrand = "all";
+      aplicarFiltrosCombinados();
+      document.querySelectorAll('.brand-item-mini').forEach(item => item.classList.remove('selected'));
+      document.querySelector('.brand-item-mini.todo-btn').classList.add('selected');
+      document.querySelectorAll(".category-menu button").forEach(btn => btn.classList.remove("active"));
+      document.querySelector('.category-menu button[data-category="all"]').classList.add("active");
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  }
+  
+  const footerFavs = document.getElementById('footer-favs');
+  if (footerFavs) {
+    footerFavs.addEventListener('click', (e) => {
+      e.preventDefault();
+      showOnlyFavs();
+    });
+  }
+  
+  document.querySelectorAll('.footer-experience').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      const exp = link.getAttribute('data-experience');
+      openExperience(exp);
+    });
+  });
+  
+  // Newsletter
+  const newsletterBtn = document.getElementById('newsletter-btn');
+  const newsletterInput = document.getElementById('newsletter-email');
   if (newsletterBtn) {
     newsletterBtn.onclick = () => {
       const email = newsletterInput.value;
       if (email.includes('@')) {
-        showToast("¡Bienvenida al Club Luxe!");
+        showToast("¡Bienvenida al Club Luxe !");
         newsletterInput.value = "";
       } else {
         showToast(" Por favor, ingresa un email válido");
@@ -493,13 +514,33 @@ document.addEventListener("DOMContentLoaded", function () {
     };
   }
   
+  // Videos
   document.querySelectorAll('.video-card').forEach(card => {
     const video = card.querySelector('video');
-    card.addEventListener('mouseenter', () => video.play());
-    card.addEventListener('mouseleave', () => {
-      video.pause();
-      video.currentTime = 0;
-    });
+    const btn = card.querySelector('.btn-ver-producto');
+    const productId = card.getAttribute('data-product-id');
+    
+    if (video) {
+      card.addEventListener('mouseenter', () => video.play());
+      card.addEventListener('mouseleave', () => {
+        video.pause();
+        video.currentTime = 0;
+      });
+    }
+    
+    if (btn && productId) {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        openProductModal(parseInt(productId));
+      });
+    }
+    
+    if (productId) {
+      card.addEventListener('click', (e) => {
+        if (e.target === btn || btn?.contains(e.target)) return;
+        openProductModal(parseInt(productId));
+      });
+    }
   });
 });
 
@@ -561,3 +602,36 @@ if (window.innerWidth > 768) {
     });
   }
 }
+
+// ============================================
+// SLIDER AUTOMÁTICO
+// ============================================
+let slideIndex = 0;
+
+function showSlide(n) {
+  const slides = document.getElementsByClassName("slide");
+  if (slides.length === 0) return;
+  
+  if (n >= slides.length) slideIndex = 0;
+  if (n < 0) slideIndex = slides.length - 1;
+  
+  for (let i = 0; i < slides.length; i++) {
+    slides[i].classList.remove("active");
+  }
+  
+  slides[slideIndex].classList.add("active");
+}
+
+function nextSlide() {
+  slideIndex++;
+  showSlide(slideIndex);
+}
+
+function prevSlide() {
+  slideIndex--;
+  showSlide(slideIndex);
+}
+
+setInterval(() => {
+  nextSlide();
+}, 5000);

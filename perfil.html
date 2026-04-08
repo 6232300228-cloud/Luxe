@@ -1,4 +1,3 @@
-<!-- perfil.html - Versión actualizada con dirección detallada -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,252 +11,274 @@
 </head>
 
 <body>
-  <header class="header">
-    <div class="header-left">
-      <div class="menu-hamburger" onclick="toggleMenu()">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <a href="index.html" class="logo-link">
-        <img src="img/logo.png" alt="Logo Luxe" class="logo">
-        <div class="logo-text-group">
-          <span class="slogan-minimal">Tu destino de belleza</span>
-        </div>
-      </a>
-    </div>
-    <div class="header-right icons">
-      <a href="favoritos.html">
-        <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
-      </a>
-      <a href="carrito.html">
-        <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
-      </a>
-      <a href="dashboard.html" id="dashboard-btn" style="display: none;">
-        <img src="img/dashboard-icon.png" alt="Dashboard" class="header-icon"> Dashboard
-      </a>
-      <a href="login.html" id="login-btn">
-        <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
-      </a>
-      <div id="user-menu" class="dropdown" style="display: none;">
-        <button class="dropbtn">
-          <span id="user-name"></span> <i class="arrow">▼</i>
-        </button>
-        <div class="dropdown-content">
-          <a href="perfil.html"> Mi Perfil</a>
-          <a href="pedidos.html"> Mis Pedidos</a>
-          <hr>
-          <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
-        </div>
-      </div>
-    </div>
-  </header>
 
-  <nav id="side-menu" class="side-nav">
-    <span class="close-btn" onclick="toggleMenu()">&times;</span>
-    <div class="menu-section">
-      <a href="nosotros.html"> Sobre Nosotros</a>
-      <a href="#">Lo más nuevo</a>
-      <a href="#"> Ofertas</a>
+<header class="header">
+  <div class="header-left">
+    <div class="menu-hamburger" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
-  </nav>
+    <a href="index.html" class="logo-link">
+      <img src="img/logo.png" alt="Logo Luxe" class="logo">
+      <div class="logo-text-group">
+        <span class="slogan-minimal">Tu destino de belleza</span>
+      </div>
+    </a>
+  </div>
+  <div class="header-right icons">
+    <a href="favoritos.html">
+      <img src="img/corazon.png" alt="Favoritos" class="header-icon"> <span id="fav-count">0</span>
+    </a>
+    <a href="carrito.html">
+      <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
+    </a>
+    <a href="dashboard.html" id="dashboard-btn" style="display: none;">
+      <img src="img/dashboard-icon.png" alt="Dashboard" class="header-icon"> Dashboard
+    </a>
+    <a href="login.html" id="login-btn">
+      <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
+    </a>
+    <div id="user-menu" class="dropdown" style="display: none;">
+      <button class="dropbtn">
+        <span id="user-name"></span> <i class="arrow">▼</i>
+      </button>
+      <div class="dropdown-content">
+        <a href="perfil.html"> Mi Perfil</a>
+        <a href="pedidos.html"> Mis Pedidos</a>
+        <hr>
+        <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
+      </div>
+    </div>
+  </div>
+</header>
 
-  <div class="perfil-container">
-    <div class="perfil-avatar">
-      <div class="avatar-circle" id="avatarInicial"></div>
+<nav id="side-menu" class="side-nav">
+  <span class="close-btn" onclick="toggleMenu()">&times;</span>
+  <div class="menu-section">
+    <a href="nosotros.html"> Sobre Nosotros</a>
+    <a href="#">Lo más nuevo</a>
+    <a href="#"> Ofertas</a>
+  </div>
+</nav>
+
+<div class="perfil-container">
+  <div class="perfil-avatar">
+  <div class="avatar-wrapper">
+    <div class="avatar-circle" id="avatarInicial"></div>
+    <button id="btnCambiarFoto" class="btn-editar-foto">
+      <img src="img/lapiz.png" alt="Editar foto">
+    </button>
+  </div>
+  <input type="file" id="inputFotoPerfil" accept="image/jpeg,image/png,image/jpg" style="display: none;">
+</div>
+  
+  <h2>Mi Perfil</h2>
+  
+  <div class="perfil-section">
+    <h3>Información Personal</h3>
+    
+    <div class="perfil-campo">
+      <label>Nombre completo</label>
+      <input type="text" id="perfilNombreInput" placeholder="Tu nombre completo">
     </div>
     
-    <h2>Mi Perfil</h2>
-    
-    <!-- Sección de información personal -->
-    <div class="perfil-section">
-      <h3>Información Personal</h3>
-      
-      <div class="perfil-campo">
-        <label>Nombre completo</label>
-        <input type="text" id="perfilNombreInput" placeholder="Tu nombre completo">
-      </div>
-      
-      <div class="perfil-campo">
-        <label>Correo electrónico</label>
-        <input type="email" id="perfilCorreoInput" placeholder="correo@ejemplo.com">
-      </div>
-      
-      <div class="perfil-campo">
-        <label>Teléfono</label>
-        <div class="phone-input-container">
-          <span class="phone-prefix">+52</span>
-          <input type="tel" id="perfilTelefonoInput" placeholder="5544332211" maxlength="10">
-        </div>
-      </div>
+    <div class="perfil-campo">
+      <label>Correo electrónico</label>
+      <input type="email" id="perfilCorreoInput" placeholder="correo@ejemplo.com">
     </div>
     
-    <!-- Sección de dirección -->
-    <div class="perfil-section">
-      <h3>Dirección de Envío</h3>
-      
-      <div class="direccion-grid">
-        <div class="perfil-campo">
-          <label>Calle</label>
-          <input type="text" id="perfilCalleInput" placeholder="Calle">
-        </div>
-        
-        <div class="perfil-campo">
-          <label>Número</label>
-          <input type="text" id="perfilNumeroInput" placeholder="Número">
-        </div>
-        
-        <div class="perfil-campo full-width">
-          <label>Colonia</label>
-          <input type="text" id="perfilColoniaInput" placeholder="Colonia">
-        </div>
-        
-        <div class="perfil-campo">
-          <label>Estado</label>
-          <input type="text" id="perfilEstadoInput" placeholder="Estado">
-        </div>
-        
-        <div class="perfil-campo">
-          <label>Código Postal</label>
-          <input type="text" id="perfilCpInput" placeholder="C.P." maxlength="5">
-        </div>
-        
-        <div class="perfil-campo full-width">
-          <label>Referencia</label>
-          <input type="text" id="perfilReferenciaInput" placeholder="Entre calles, color de casa, etc.">
-        </div>
+    <div class="perfil-campo">
+      <label>Teléfono</label>
+      <div class="phone-input-container">
+        <span class="phone-prefix">+52</span>
+        <input type="tel" id="perfilTelefonoInput" placeholder="5544332211" maxlength="10">
       </div>
     </div>
-    
-    <!-- Sección de pago -->
-    <div class="perfil-section">
-      <h3>Método de Pago</h3>
-      
-      <div class="perfil-campo">
-        <label>Tarjeta</label>
-        <input type="text" id="perfilTarjetaInput" placeholder="0000 0000 0000 0000" maxlength="19">
-      </div>
-    </div>
-    
-    <button id="btnGuardar">Guardar todos los cambios</button>
   </div>
   
-  <footer class="footer-luxe">
-    <div class="footer-container">
-      <div class="footer-column">
-        <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
-        <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
-        <h3>Encuéntranos en</h3>
-        <div class="social-links">
-          <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Instagram" class="logo"></a>
-          <a href="https://www.tiktok.com/@luxecollection_1"><img src="img/tiktok.png" alt="TikTok" class="logo"></a>
-        </div>
+  <div class="perfil-section">
+    <h3>Dirección de Envío</h3>
+    
+    <div class="direccion-grid">
+      <div class="perfil-campo">
+        <label>Calle</label>
+        <input type="text" id="perfilCalleInput" placeholder="Calle">
       </div>
       
-      <div class="footer-column newsletter">
-        <h3>Únete al Club Luxe</h3>
-        <p>Recibe ofertas exclusivas.</p>
-        <div class="newsletter-form">
-          <input type="email" id="newsletter-email" placeholder="Tu email...">
-          <button onclick="suscribirse()">Unirse</button>
-        </div>
+      <div class="perfil-campo">
+        <label>Número</label>
+        <input type="text" id="perfilNumeroInput" placeholder="Número">
+      </div>
+      
+      <div class="perfil-campo full-width">
+        <label>Colonia</label>
+        <input type="text" id="perfilColoniaInput" placeholder="Colonia">
+      </div>
+      
+      <div class="perfil-campo">
+        <label>Estado</label>
+        <input type="text" id="perfilEstadoInput" placeholder="Estado">
+      </div>
+      
+      <div class="perfil-campo">
+        <label>Código Postal</label>
+        <input type="text" id="perfilCpInput" placeholder="C.P." maxlength="5">
+      </div>
+      
+      <div class="perfil-campo full-width">
+        <label>Referencia</label>
+        <input type="text" id="perfilReferenciaInput" placeholder="Entre calles, color de casa, etc.">
+      </div>
+    </div>
+  </div>
+  
+  <div class="perfil-section">
+    <h3>Método de Pago</h3>
+    
+    <div class="perfil-campo">
+      <label>Tarjeta</label>
+      <input type="text" id="perfilTarjetaInput" placeholder="0000 0000 0000 0000" maxlength="19">
+    </div>
+  </div>
+  
+  <button id="btnGuardar">Guardar todos los cambios</button>
+</div>
+
+<footer class="footer-luxe">
+  <div class="footer-container">
+    <div class="footer-column">
+      <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
+      <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
+      <h3>Encuéntranos en</h3>
+      <div class="social-links">
+        <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Instagram" class="logo"></a>
+        <a href="https://www.tiktok.com/@luxecollection_1"><img src="img/tiktok.png" alt="TikTok" class="logo"></a>
       </div>
     </div>
     
-    <div class="footer-bottom">
-      <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+    <div class="footer-column newsletter">
+      <h3>Únete al Club Luxe</h3>
+      <p>Recibe ofertas exclusivas.</p>
+      <div class="newsletter-form">
+        <input type="email" id="newsletter-email" placeholder="Tu email...">
+        <button id="newsletter-btn">Unirse</button>
+      </div>
     </div>
-  </footer>
+  </div>
   
-  <script src="js/perfil.js?v=20250313"></script>
-  <script>
-    // Funciones del header
-    function toggleMenu() {
-      const menu = document.getElementById('side-menu');
-      menu.classList.toggle('active');
-    }
+  <div class="footer-bottom">
+    <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
+  </div>
+</footer>
 
-    document.addEventListener('click', function(event) {
-      const menu = document.getElementById('side-menu');
-      const hamburger = document.querySelector('.menu-hamburger');
-      if (menu && menu.classList.contains('active') && !menu.contains(event.target) && !hamburger.contains(event.target)) {
-        menu.classList.remove('active');
-      }
+<div id="toast" class="toast"></div>
+
+<script src="js/perfil.js?v=20250313"></script>
+<script src="js/user.js?v=20250313"></script>
+
+<script>
+// Newsletter igual que en las otras paginas
+document.getElementById('newsletter-btn')?.addEventListener('click', function() {
+  const email = document.getElementById('newsletter-email')?.value;
+  const toast = document.getElementById("toast");
+  if (email && email.includes('@')) {
+    toast.textContent = "¡Bienvenida al Club Luxe! Recibirás ofertas exclusivas";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+    document.getElementById('newsletter-email').value = '';
+  } else {
+    toast.textContent = "Por favor, ingresa un email válido";
+    toast.classList.add("show");
+    setTimeout(() => toast.classList.remove("show"), 2000);
+  }
+});
+
+// Funciones del header
+function toggleMenu() {
+  const menu = document.getElementById('side-menu');
+  if (menu) menu.classList.toggle('active');
+}
+
+document.addEventListener('click', function(event) {
+  const menu = document.getElementById('side-menu');
+  const hamburger = document.querySelector('.menu-hamburger');
+  if (menu && menu.classList.contains('active') && !menu.contains(event.target) && !hamburger.contains(event.target)) {
+    menu.classList.remove('active');
+  }
+});
+
+if (window.innerWidth > 768) {
+  const hamburger = document.querySelector('.menu-hamburger');
+  const menu = document.getElementById('side-menu');
+  if (hamburger && menu) {
+    let hoverTimer;
+    hamburger.addEventListener('mouseenter', function() {
+      hoverTimer = setTimeout(() => menu.classList.add('active'), 200);
     });
-
-    // Actualizar contadores
-    function actualizarContadores() {
-      const favCount = document.getElementById('fav-count');
-      const cartCount = document.getElementById('cart-count');
-      if (favCount) {
-        const favs = JSON.parse(localStorage.getItem('favs')) || [];
-        favCount.textContent = favs.length;
-      }
-      if (cartCount) {
-        const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-        const totalItems = carrito.reduce((sum, item) => sum + (item.cantidad || 1), 0);
-        cartCount.textContent = totalItems;
-      }
-    }
-
-    // Cargar usuario y mostrar nombre
-    function cargarUsuario() {
-      const token = localStorage.getItem('token');
-      const user = JSON.parse(localStorage.getItem('user'));
-      const loginBtn = document.getElementById('login-btn');
-      const userMenu = document.getElementById('user-menu');
-      const userNameSpan = document.getElementById('user-name');
-      const dashboardBtn = document.getElementById('dashboard-btn');
-      
-      if (token && user) {
-        if (loginBtn) loginBtn.style.display = 'none';
-        if (userMenu) userMenu.style.display = 'block';
-        if (userNameSpan) {
-          const nombre = user.nombre || user.email || 'Usuario';
-          userNameSpan.textContent = nombre.split(' ')[0];
-        }
-        // Mostrar dashboard solo para admin/empleado
-        if (dashboardBtn && (user.role === 'admin' || user.role === 'empleado')) {
-          dashboardBtn.style.display = 'flex';
-        }
-        // Mostrar inicial en avatar
-        const avatarInicial = document.getElementById('avatarInicial');
-        if (avatarInicial && user.nombre) {
-          avatarInicial.textContent = user.nombre.charAt(0).toUpperCase();
-        }
-      } else {
-        if (loginBtn) loginBtn.style.display = 'flex';
-        if (userMenu) userMenu.style.display = 'none';
-        if (dashboardBtn) dashboardBtn.style.display = 'none';
-      }
-    }
-
-    function cerrarSesion() {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = 'index.html';
-    }
-
-    function suscribirse() {
-      const email = document.getElementById('newsletter-email')?.value;
-      if (email && email.includes('@')) {
-        Swal.fire('¡Bienvenida al Club Luxe!', 'Recibirás ofertas exclusivas', 'success');
-        document.getElementById('newsletter-email').value = '';
-      } else {
-        Swal.fire('Email inválido', 'Por favor ingresa un correo válido', 'error');
-      }
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-      actualizarContadores();
-      cargarUsuario();
-      
-      const logoutBtn = document.getElementById('logout-btn');
-      if (logoutBtn) logoutBtn.addEventListener('click', cerrarSesion);
+    hamburger.addEventListener('mouseleave', function() {
+      clearTimeout(hoverTimer);
     });
+  }
+}
 
-    window.toggleMenu = toggleMenu;
-    window.suscribirse = suscribirse;
-  </script>
+function actualizarContadores() {
+  const favCount = document.getElementById('fav-count');
+  const cartCount = document.getElementById('cart-count');
+  if (favCount) {
+    const favs = JSON.parse(localStorage.getItem('favs')) || [];
+    favCount.textContent = favs.length;
+    favCount.setAttribute("data-count", favs.length);
+  }
+  if (cartCount) {
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const totalItems = carrito.reduce((sum, item) => sum + (item.cantidad || 1), 0);
+    cartCount.textContent = totalItems;
+    cartCount.setAttribute("data-count", totalItems);
+  }
+}
+
+function cargarUsuario() {
+  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user'));
+  const loginBtn = document.getElementById('login-btn');
+  const userMenu = document.getElementById('user-menu');
+  const userNameSpan = document.getElementById('user-name');
+  const dashboardBtn = document.getElementById('dashboard-btn');
+  
+  if (token && user) {
+    if (loginBtn) loginBtn.style.display = 'none';
+    if (userMenu) userMenu.style.display = 'block';
+    if (userNameSpan) {
+      const nombre = user.nombre || user.email || 'Usuario';
+      userNameSpan.textContent = nombre.split(' ')[0];
+    }
+    if (dashboardBtn && (user.role === 'admin' || user.role === 'empleado')) {
+      dashboardBtn.style.display = 'flex';
+    }
+  } else {
+    if (loginBtn) loginBtn.style.display = 'flex';
+    if (userMenu) userMenu.style.display = 'none';
+    if (dashboardBtn) dashboardBtn.style.display = 'none';
+  }
+}
+
+function cerrarSesion() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  window.location.href = 'index.html';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  actualizarContadores();
+  cargarUsuario();
+  
+  const logoutBtn = document.getElementById('logout-btn');
+  if (logoutBtn) logoutBtn.addEventListener('click', cerrarSesion);
+});
+
+window.toggleMenu = toggleMenu;
+</script>
+
 </body>
 </html>

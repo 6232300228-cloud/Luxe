@@ -1,4 +1,6 @@
-// login.js - VERSIÓN COMPLETA SIN VERIFICACIÓN DE CORREO
+// ============================================
+// VARIABLES GLOBALES
+// ============================================
 const loginSection = document.getElementById("login-section");
 const registerSection = document.getElementById("register-section");
 const toRegister = document.getElementById("to-register");
@@ -7,16 +9,16 @@ const btnLogin = document.getElementById("btnLogin");
 const btnRegister = document.getElementById("btnRegister");
 const btnGoogle = document.getElementById("btnGoogle");
 
-// VARIABLE DE CONFIGURACIÓN
 const API_URL = 'https://luxe-api-frr5.onrender.com/api';
 
-// FUNCIÓN PARA OBTENER EL PRIMER NOMBRE
+// ============================================
+// FUNCIONES AUXILIARES
+// ============================================
 function getPrimerNombre(nombreCompleto) {
     if (!nombreCompleto) return 'Usuario';
     return nombreCompleto.split(' ')[0];
 }
 
-// FUNCIÓN PARA MOSTRAR MENSAJES
 function mostrarToast(mensaje, tipo = 'error') {
     if (typeof Swal !== 'undefined') {
         Swal.fire({
@@ -32,7 +34,9 @@ function mostrarToast(mensaje, tipo = 'error') {
     }
 }
 
+// ============================================
 // CAMBIO ENTRE FORMULARIOS
+// ============================================
 if (toRegister) {
     toRegister.addEventListener("click", () => {
         loginSection.classList.add("hidden");
@@ -101,11 +105,10 @@ if (btnLogin) {
 }
 
 // ============================================
-// REGISTRO - SIN VERIFICACIÓN DE CORREO
+// REGISTRO
 // ============================================
 if (btnRegister) {
     btnRegister.addEventListener("click", async () => {
-        // Obtener valores de los inputs
         const nombre = document.getElementById("reg-nombre").value.trim();
         const apellido = document.getElementById("reg-apellido").value.trim();
         const telefono = document.getElementById("reg-telefono").value.trim();
@@ -118,10 +121,7 @@ if (btnRegister) {
         const correo = document.getElementById("reg-correo").value.trim();
         const contraseña = document.getElementById("reg-pass").value;
 
-        // ============================================
-        // VALIDACIONES
-        // ============================================
-        
+        // Validaciones
         if (nombre === "") {
             mostrarToast('Por favor ingresa tu nombre', 'error');
             document.getElementById("reg-nombre").focus();
@@ -206,21 +206,11 @@ if (btnRegister) {
             return;
         }
 
-        // Deshabilitar botón mientras se procesa
         btnRegister.disabled = true;
         btnRegister.textContent = 'Registrando...';
 
-        // ============================================
-        // CONSTRUIR DATOS PARA ENVIAR
-        // ============================================
-        
-        // Nombre completo
         const nombreCompleto = `${nombre} ${apellido}`.trim();
-        
-        // Dirección completa
         const direccionCompleta = `${calle} #${numero}, ${colonia}, ${estado}, C.P. ${cp}`;
-        
-        // Dirección detallada para guardar
         const direccionDetallada = {
             calle: calle,
             numero: numero,
@@ -229,14 +219,6 @@ if (btnRegister) {
             cp: cp,
             referencia: referencia || ''
         };
-
-        console.log('📝 Datos a enviar:', {
-            nombre: nombreCompleto,
-            correo: correo,
-            telefono: `+52${telefono}`,
-            direccion: direccionCompleta,
-            direccion_detallada: direccionDetallada
-        });
 
         try {
             const response = await fetch(`${API_URL}/auth/register`, {
@@ -255,7 +237,6 @@ if (btnRegister) {
             const data = await response.json();
 
             if (response.ok) {
-                // Guardar usuario en localStorage
                 const userData = {
                     ...data.user,
                     direccion_detallada: direccionDetallada,
@@ -269,7 +250,6 @@ if (btnRegister) {
 
                 const primerNombre = getPrimerNombre(nombreCompleto);
 
-                // ✅ MODIFICADO: Ya no dice nada de correo de verificación
                 Swal.fire({
                     icon: 'success',
                     title: `¡Bienvenido ${primerNombre}!`,
@@ -279,7 +259,6 @@ if (btnRegister) {
                     position: 'top-end',
                     toast: true,
                     didClose: () => {
-                        // Redirigir según el rol
                         if (data.user.role === "admin" || data.user.role === "empleado") {
                             window.location.href = "dashboard.html";
                         } else {
@@ -361,14 +340,3 @@ async function loginConToken(token) {
         window.history.replaceState({}, document.title, window.location.pathname);
     }
 })();
-
-// Función para newsletter
-function suscribirse() {
-    const email = document.getElementById('newsletter-email').value;
-    if (email && email.includes('@')) {
-        mostrarToast('¡Gracias por suscribirte!', 'success');
-        document.getElementById('newsletter-email').value = '';
-    } else {
-        mostrarToast('Por favor ingresa un email válido', 'error');
-    }
-}

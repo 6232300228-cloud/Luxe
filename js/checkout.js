@@ -1,14 +1,11 @@
 // ============================================
-// CHECKOUT.JS - GUARDAR EN LOCALSTORAGE Y BACKEND
+// VARIABLES GLOBALES
 // ============================================
-
-// Variables globales
 let carrito = [];
 let total = 0;
 let pasoActual = 1;
 let userToken = null;
 
-// Constantes de envío
 const ENVIO_GRATIS_MINIMO = 500;
 const COSTO_ENVIO = 1;
 
@@ -16,7 +13,7 @@ const COSTO_ENVIO = 1;
 // INICIALIZACIÓN
 // ============================================
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('✅ Checkout inicializado');
+    console.log('Checkout inicializado');
     
     userToken = localStorage.getItem('token');
     
@@ -49,13 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const correoInput = document.getElementById('correo');
         if (nombreInput && user.nombre) nombreInput.value = user.nombre;
         if (correoInput && user.correo) correoInput.value = user.correo;
-    }
-    
-    const cartCount = document.getElementById('cart-count');
-    if (cartCount) {
-        const carritoGuardado = JSON.parse(localStorage.getItem('carrito')) || [];
-        const totalItems = carritoGuardado.reduce((sum, item) => sum + (item.cantidad || 1), 0);
-        cartCount.textContent = totalItems;
     }
 });
 
@@ -218,7 +208,7 @@ function actualizarBarraProgreso() {
 }
 
 // ============================================
-// GUARDAR PEDIDO EN LOCALSTORAGE Y BACKEND
+// GUARDAR PEDIDO
 // ============================================
 async function guardarPedidoCompleto(metodoPago) {
     const nombre = localStorage.getItem('envio_nombre') || '';
@@ -227,7 +217,6 @@ async function guardarPedidoCompleto(metodoPago) {
     const envioCosto = calcularEnvio();
     const totalPagar = total + envioCosto;
     
-    // Datos para el pedido local
     const pedidoLocal = {
         id: Date.now(),
         fecha: new Date().toISOString(),
@@ -243,14 +232,12 @@ async function guardarPedidoCompleto(metodoPago) {
         estado: 'pendiente'
     };
     
-    // 1. Guardar en localStorage
     let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
     pedidos.push(pedidoLocal);
     localStorage.setItem('pedidos', JSON.stringify(pedidos));
     localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
     localStorage.removeItem('carrito');
     
-    // 2. Guardar en backend (si hay token)
     const token = localStorage.getItem('token');
     if (token) {
         try {
@@ -282,8 +269,7 @@ async function guardarPedidoCompleto(metodoPago) {
             
             if (response.ok) {
                 const result = await response.json();
-                console.log('✅ Pedido guardado en backend:', result);
-                // Actualizar el ID del pedido local con el ID de MongoDB
+                console.log('Pedido guardado en backend:', result);
                 if (result.pedido?.id) {
                     pedidoLocal.id = result.pedido.id;
                     pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
@@ -295,21 +281,18 @@ async function guardarPedidoCompleto(metodoPago) {
                     }
                 }
             } else {
-                console.log('⚠️ No se pudo guardar en backend, pedido solo en localStorage');
+                console.log('No se pudo guardar en backend, pedido solo en localStorage');
             }
         } catch (error) {
-            console.error('❌ Error guardando en backend:', error);
-            console.log('⚠️ Pedido guardado solo en localStorage');
+            console.error('Error guardando en backend:', error);
         }
-    } else {
-        console.log('⚠️ Usuario no logueado, pedido solo en localStorage');
     }
     
     return pedidoLocal;
 }
 
 // ============================================
-// PROCESAR PAGO - TARJETA
+// PROCESAR PAGO
 // ============================================
 async function procesarTarjeta(btnPagar, textoOriginal) {
     try {
@@ -326,9 +309,6 @@ async function procesarTarjeta(btnPagar, textoOriginal) {
     }
 }
 
-// ============================================
-// MERCADO PAGO
-// ============================================
 async function procesarMercadoPago(btnPagar, textoOriginal) {
     if (!carrito || carrito.length === 0) {
         mostrarToast('El carrito está vacío', 'error');
@@ -349,7 +329,6 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
     const envioCosto = calcularEnvio();
     
     try {
-        // Guardar pedido (localStorage + backend)
         await guardarPedidoCompleto('mercadopago');
         
         const response = await fetch('https://luxe-api-frr5.onrender.com/api/crear-preferencia', {
@@ -379,9 +358,6 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
     }
 }
 
-// ============================================
-// PROCESAR PAGO PRINCIPAL
-// ============================================
 async function procesarPago() {
     const metodoSeleccionado = document.querySelector('input[name="metodoPago"]:checked');
     if (!metodoSeleccionado) {
@@ -468,38 +444,13 @@ function escapeHTML(str) {
 }
 
 function mostrarToast(mensaje, tipo = 'success') {
-    let toast = document.getElementById('custom-toast');
-    if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'custom-toast';
-        toast.style.cssText = `
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: ${tipo === 'error' ? '#ff4d6d' : '#4caf50'};
-            color: white;
-            padding: 12px 24px;
-            border-radius: 25px;
-            font-size: 14px;
-            z-index: 9999;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            white-space: nowrap;
-        `;
-        document.body.appendChild(toast);
-    }
-    toast.textContent = mensaje;
-    toast.style.background = tipo === 'error' ? '#ff4d6d' : '#4caf50';
-    toast.style.display = 'block';
-    setTimeout(() => { toast.style.display = 'none'; }, 3000);
-}
-
-function suscribirse() {
-    const email = document.getElementById('newsletter-email')?.value;
-    if (email && email.includes('@')) {
-        mostrarToast('Bienvenida al Club Luxe', 'success');
-        document.getElementById('newsletter-email').value = '';
+    let toast = document.getElementById('toast');
+    if (toast) {
+        toast.textContent = mensaje;
+        toast.style.background = tipo === 'error' ? '#ff4d6d' : '#4caf50';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
     } else {
-        mostrarToast('Email inválido', 'error');
+        alert(mensaje);
     }
 }

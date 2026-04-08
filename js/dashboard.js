@@ -1,10 +1,9 @@
 // ============================================
-// 1. VALIDAR USUARIO Y ROL
+// VALIDAR USUARIO Y ROL
 // ============================================
 const user = JSON.parse(localStorage.getItem("user"));
 const token = localStorage.getItem("token");
 
-// Si no hay sesión o el usuario es cliente, redirigir
 if (!user || !token || (user.role !== "admin" && user.role !== "empleado")) {
     Swal.fire({
         icon: 'warning',
@@ -18,16 +17,14 @@ if (!user || !token || (user.role !== "admin" && user.role !== "empleado")) {
 }
 
 // ============================================
-// 2. CONFIGURACIÓN INICIAL
+// CONFIGURACIÓN INICIAL
 // ============================================
 document.addEventListener("DOMContentLoaded", async () => {
-    // Mostrar información del usuario
     document.getElementById("nombre-usuario").innerText = user.nombre;
     const badge = document.getElementById("rol-usuario");
     badge.innerText = user.role.toUpperCase();
     badge.classList.add(user.role === "admin" ? "badge-admin" : "badge-empleado");
 
-    // Mostrar botón de agregar solo para admin
     if (user.role === "admin") {
         const btnAgregar = document.getElementById("btn-agregar");
         if (btnAgregar) {
@@ -38,14 +35,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
     }
 
-    // Cargar datos
     await cargarProductos();
     await cargarEstadisticas();
     await crearGrafica();
 });
 
 // ============================================
-// 3. CARGAR PRODUCTOS
+// CARGAR PRODUCTOS
 // ============================================
 async function cargarProductos() {
     const tabla = document.getElementById("lista-inventario");
@@ -59,7 +55,6 @@ async function cargarProductos() {
         }
         
         const productos = await response.json();
-        console.log('📦 Productos cargados:', productos.length);
         
         if (productos.length === 0) {
             tabla.innerHTML = '<tr><td colspan="6" style="text-align: center;">No hay productos cargados</td></tr>';
@@ -71,20 +66,18 @@ async function cargarProductos() {
         productos.forEach(p => {
             const tr = document.createElement("tr");
             
-            // Color según stock
             let stockColor = '#4CAF50';
             if (p.stock <= 0) stockColor = '#f44336';
             else if (p.stock <= 20) stockColor = '#ff9800';
             
-            // Botones según rol
             let btns = '';
             if (user.role === "admin") {
                 btns = `
-                    <button class="btn-accion btn-editar" onclick="editarProducto(${p.id})"> Editar</button>
-                    <button class="btn-accion btn-borrar" onclick="eliminarProducto(${p.id})"> Eliminar</button>
+                    <button class="btn-accion btn-editar" onclick="editarProducto(${p.id})">Editar</button>
+                    <button class="btn-accion btn-borrar" onclick="eliminarProducto(${p.id})">Eliminar</button>
                 `;
             } else {
-                btns = `<span style="color: #888;"> Solo lectura</span>`;
+                btns = `<span style="color: #888;">Solo lectura</span>`;
             }
 
             tr.innerHTML = `
@@ -101,11 +94,11 @@ async function cargarProductos() {
         });
         
     } catch (error) {
-        console.error('❌ Error cargando productos:', error);
+        console.error('Error cargando productos:', error);
         tabla.innerHTML = `
             <tr>
                 <td colspan="6" style="text-align: center; color: red; padding: 40px;">
-                    ❌ Error al cargar productos<br>
+                    Error al cargar productos<br>
                     <small>${error.message}</small><br>
                     <button onclick="cargarProductos()" style="margin-top: 10px; padding: 5px 15px;">Reintentar</button>
                 </td>
@@ -115,7 +108,7 @@ async function cargarProductos() {
 }
 
 // ============================================
-// 4. CARGAR ESTADÍSTICAS
+// CARGAR ESTADÍSTICAS
 // ============================================
 async function cargarEstadisticas() {
     try {
@@ -153,7 +146,7 @@ async function cargarEstadisticas() {
 }
 
 // ============================================
-// 5. CREAR GRÁFICA
+// CREAR GRÁFICA
 // ============================================
 async function crearGrafica() {
     try {
@@ -203,7 +196,7 @@ async function crearGrafica() {
 }
 
 // ============================================
-// 6. CERRAR SESIÓN
+// CERRAR SESIÓN
 // ============================================
 document.getElementById("btn-cerrar-sesion").onclick = () => {
     localStorage.removeItem("user");
@@ -212,7 +205,7 @@ document.getElementById("btn-cerrar-sesion").onclick = () => {
 };
 
 // ============================================
-// 7. EDITAR PRODUCTO
+// EDITAR PRODUCTO
 // ============================================
 async function editarProducto(id) {
     if (user.role !== 'admin') {
@@ -259,7 +252,7 @@ async function editarProducto(id) {
 }
 
 // ============================================
-// 8. MOSTRAR MODAL EDITAR PRODUCTO
+// MOSTRAR MODAL EDITAR PRODUCTO
 // ============================================
 function mostrarModalEditarProducto(producto) {
     if (!document.getElementById('modalEditarProducto')) {
@@ -267,7 +260,7 @@ function mostrarModalEditarProducto(producto) {
             <div id="modalEditarProducto" class="modal-producto" style="display: none;">
                 <div class="modal-contenido">
                     <div class="modal-header">
-                        <h3>✏️ Editar Producto</h3>
+                        <h3>Editar Producto</h3>
                         <span class="cerrar-modal" onclick="cerrarModalEditar()">&times;</span>
                     </div>
                     <div class="modal-body">
@@ -442,7 +435,7 @@ async function guardarEdicionProducto() {
         if (response.ok) {
             Swal.fire({
                 icon: 'success',
-                title: '✅ Producto actualizado',
+                title: 'Producto actualizado',
                 text: `${name} ha sido actualizado`,
                 timer: 1500,
                 showConfirmButton: false,
@@ -477,7 +470,7 @@ async function guardarEdicionProducto() {
 }
 
 // ============================================
-// 9. ELIMINAR PRODUCTO
+// ELIMINAR PRODUCTO
 // ============================================
 async function eliminarProducto(id) {
     if (user.role !== 'admin') {
@@ -517,7 +510,7 @@ async function eliminarProducto(id) {
         if (response.ok) {
             Swal.fire({
                 icon: 'success',
-                title: '✅ Producto eliminado',
+                title: 'Producto eliminado',
                 text: data.mensaje || 'Producto eliminado exitosamente',
                 timer: 1500,
                 showConfirmButton: false,
@@ -551,7 +544,7 @@ async function eliminarProducto(id) {
 }
 
 // ============================================
-// 10. AGREGAR NUEVO PRODUCTO
+// AGREGAR NUEVO PRODUCTO
 // ============================================
 function mostrarModalAgregarProducto() {
     if (!document.getElementById('modalProducto')) {
@@ -559,7 +552,7 @@ function mostrarModalAgregarProducto() {
             <div id="modalProducto" class="modal-producto" style="display: none;">
                 <div class="modal-contenido">
                     <div class="modal-header">
-                        <h3>➕ Agregar Nuevo Producto</h3>
+                        <h3>Agregar Nuevo Producto</h3>
                         <span class="cerrar-modal" onclick="cerrarModalAgregar()">&times;</span>
                     </div>
                     <div class="modal-body">
@@ -686,7 +679,7 @@ async function guardarNuevoProducto() {
         if (response.ok) {
             Swal.fire({
                 icon: 'success',
-                title: '✅ Producto creado',
+                title: 'Producto creado',
                 text: `${name} ha sido agregado`,
                 timer: 1500,
                 showConfirmButton: false,
@@ -729,5 +722,3 @@ window.guardarEdicionProducto = guardarEdicionProducto;
 window.cerrarModalAgregar = cerrarModalAgregar;
 window.guardarNuevoProducto = guardarNuevoProducto;
 window.cargarProductos = cargarProductos;
-
-console.log('✅ Dashboard.js cargado correctamente');

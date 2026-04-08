@@ -565,7 +565,7 @@ async function guardarEdicionProducto() {
     const desc = document.getElementById('editProductoDesc').value;
     const stock = parseInt(document.getElementById('editProductoStock').value);
     
-    console.log("📝 Enviando actualización:", { id, name, price, category, brand, stock }); // ← Agrega este log
+    console.log(" Enviando actualización:", { id, name, price, category, brand, stock }); // ← Agrega este log
     
     if (!name || !price || !category) {
         Swal.fire({
@@ -599,12 +599,12 @@ async function guardarEdicionProducto() {
         });
         
         const data = await response.json();
-        console.log("📦 Respuesta de la API:", data); // ← Agrega este log
+        console.log("Respuesta de la API:", data); // ← Agrega este log
         
         if (response.ok) {
             Swal.fire({
                 icon: 'success',
-                title: '✅ Producto actualizado',
+                title: 'Producto actualizado',
                 text: `${name} - Marca: ${brand || 'Sin marca'}`,
                 timer: 2000,
                 showConfirmButton: false,
@@ -620,7 +620,7 @@ async function guardarEdicionProducto() {
         } else {
             Swal.fire({
                 icon: 'error',
-                title: '❌ Error',
+                title: ' Error',
                 text: data.error || 'No se pudo actualizar',
                 timer: 1500,
                 showConfirmButton: false,

@@ -614,6 +614,33 @@ if (!ultimoPedido) {
     }
 }
 
+// Enviar correo de confirmacion de compra
+const compraPendiente = localStorage.getItem('compraPendiente');
+if (compraPendiente) {
+    const datos = JSON.parse(compraPendiente);
+    
+    fetch('https://luxe-api-frr5.onrender.com/api/confirmar-compra', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            emailCliente: datos.email,
+            datosCompra: datos
+        })
+    })
+    .then(response => response.json())
+    .then(resultado => {
+        if (resultado.exito) {
+            console.log('Correo de confirmacion enviado a', datos.email);
+            localStorage.removeItem('compraPendiente');
+        } else {
+            console.error('Error enviando correo:', resultado.error);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
 function mostrarDetallesPedido() {
     if (ultimoPedido) {
         const orderIdElem = document.getElementById('order-id');

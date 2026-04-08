@@ -305,7 +305,35 @@ async function guardarPedidoCompleto(metodoPago) {
 // ============================================
 async function procesarTarjeta(btnPagar, textoOriginal) {
     try {
-        await guardarPedidoCompleto('tarjeta');
+        const pedido = await guardarPedidoCompleto('tarjeta');
+        
+        const nombre = localStorage.getItem('envio_nombre') || '';
+        const correo = localStorage.getItem('envio_correo') || '';
+        const envioCosto = calcularEnvio();
+        
+        const datosCompra = {
+            email: correo,
+            nombre: nombre,
+            productos: carrito.map(item => ({
+                nombre: item.nombre,
+                cantidad: item.cantidad || 1,
+                precio: item.precio
+            })),
+            total: total + envioCosto,
+            fecha: new Date().toISOString()
+        };
+        
+        fetch('https://luxe-api-frr5.onrender.com/api/confirmar-compra', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                emailCliente: correo,
+                datosCompra: datosCompra
+            })
+        }).catch(error => console.error('Error enviando correo:', error));
+        
         mostrarToast('Pago procesado exitosamente', 'success');
         setTimeout(() => {
             window.location.href = 'success.html';
@@ -320,7 +348,7 @@ async function procesarTarjeta(btnPagar, textoOriginal) {
 
 async function procesarMercadoPago(btnPagar, textoOriginal) {
     if (!carrito || carrito.length === 0) {
-        mostrarToast('El carrito está vacío', 'error');
+        mostrarToast('El carrito esta vacio', 'error');
         btnPagar.textContent = textoOriginal;
         btnPagar.disabled = false;
         return;
@@ -339,6 +367,20 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
     
     try {
         await guardarPedidoCompleto('mercadopago');
+        
+        const datosCompra = {
+            email: correo,
+            nombre: nombre,
+            productos: carrito.map(item => ({
+                nombre: item.nombre,
+                cantidad: item.cantidad || 1,
+                precio: item.precio
+            })),
+            total: total + envioCosto,
+            fecha: new Date().toISOString()
+        };
+        
+        localStorage.setItem('compraPendiente', JSON.stringify(datosCompra));
         
         const response = await fetch('https://luxe-api-frr5.onrender.com/api/crear-preferencia', {
             method: 'POST',
@@ -361,7 +403,7 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
         }
     } catch (error) {
         console.error('Error:', error);
-        mostrarToast('Error de conexión: ' + error.message, 'error');
+        mostrarToast('Error de conexion: ' + error.message, 'error');
         btnPagar.textContent = textoOriginal;
         btnPagar.disabled = false;
     }

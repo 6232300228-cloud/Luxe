@@ -575,19 +575,47 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
   
-  const newsletterBtn = document.getElementById('newsletter-btn');
-  const newsletterInput = document.getElementById('newsletter-email');
-  if (newsletterBtn) {
-    newsletterBtn.onclick = () => {
-      const email = newsletterInput.value;
-      if (email.includes('@')) {
-        showToast("Bienvenida al Club Luxe");
-        newsletterInput.value = "";
+ const newsletterBtn = document.getElementById('newsletter-btn');
+const newsletterInput = document.getElementById('newsletter-email');
+if (newsletterBtn) {
+  newsletterBtn.onclick = async () => {
+    const email = newsletterInput.value;
+    
+    if (!email || !email.includes('@') || !email.includes('.')) {
+      showToast("Email invalido");
+      return;
+    }
+    
+    const btnOriginal = newsletterBtn.innerHTML;
+    newsletterBtn.innerHTML = 'Enviando...';
+    newsletterBtn.disabled = true;
+    
+    try {
+      const response = await fetch('https://luxe-api-frr5.onrender.com/api/newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: email })
+      });
+      
+      const resultado = await response.json();
+      
+      if (resultado.exito) {
+        showToast("Bienvenida al Club Luxe! Revisa tu correo");
+        newsletterInput.value = '';
       } else {
-        showToast("Por favor, ingresa un email válido");
+        throw new Error(resultado.error || 'Error al suscribir');
       }
-    };
-  }
+    } catch (error) {
+      console.error('Error:', error);
+      showToast("Error al suscribir. Intenta mas tarde");
+    } finally {
+      newsletterBtn.innerHTML = btnOriginal;
+      newsletterBtn.disabled = false;
+    }
+  };
+}
   
   document.querySelectorAll('.video-card').forEach(card => {
     const video = card.querySelector('video');

@@ -171,26 +171,11 @@
 </footer>
 
 <div id="toast" class="toast"></div>
-
+<script src="js/script.js"></script>
 <script src="js/checkout.js?v=20250313"></script>
 <script src="js/user.js?v=20250313"></script>
 
 <script>
-// Newsletter igual que en las otras paginas
-document.getElementById('newsletter-btn')?.addEventListener('click', function() {
-  const email = document.getElementById('newsletter-email')?.value;
-  const toast = document.getElementById("toast");
-  if (email && email.includes('@')) {
-    toast.textContent = "¡Bienvenida al Club Luxe! Recibirás ofertas exclusivas";
-    toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 2000);
-    document.getElementById('newsletter-email').value = '';
-  } else {
-    toast.textContent = "Por favor, ingresa un email válido";
-    toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 2000);
-  }
-});
 
 function toggleMenu() {
   const menu = document.getElementById('side-menu');

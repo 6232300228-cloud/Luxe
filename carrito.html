@@ -110,29 +110,11 @@
     <p>&copy; 2026 LUXE Beauty Shop. Todos los derechos reservados.</p>
   </div>
 </footer>
+<div id="toast" class="toast"></div>
 
 <script src="js/carrito.js?v=20250313"></script>
 <script src="js/user.js?v=20250313"></script>
+<script src="js/script.js"></script>
 
-<script>
-// Funcion para el newsletter
-document.getElementById('newsletter-btn')?.addEventListener('click', function() {
-  const email = document.getElementById('newsletter-email')?.value;
-  if (email && email.includes('@')) {
-    if (typeof Swal !== 'undefined') {
-      Swal.fire('¡Bienvenida al Club Luxe!', 'Recibirás ofertas exclusivas', 'success');
-    } else {
-      alert('¡Bienvenida al Club Luxe!');
-    }
-    document.getElementById('newsletter-email').value = '';
-  } else {
-    if (typeof Swal !== 'undefined') {
-      Swal.fire('Email inválido', 'Por favor ingresa un correo válido', 'error');
-    } else {
-      alert('Por favor ingresa un email válido');
-    }
-  }
-});
-</script>
 </body>
 </html>

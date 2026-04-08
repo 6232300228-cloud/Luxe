@@ -123,24 +123,8 @@
 
 <script src="js/nosotros.js?v=20250313"></script>
 <script src="js/user.js?v=20250313"></script>
+<script src="js/script.js"></script>
 
-<script>
-// Newsletter igual que en index
-document.getElementById('newsletter-btn')?.addEventListener('click', function() {
-  const email = document.getElementById('newsletter-email')?.value;
-  const toast = document.getElementById("toast");
-  if (email && email.includes('@')) {
-    toast.textContent = "¡Bienvenida al Club Luxe! Recibirás ofertas exclusivas";
-    toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 2000);
-    document.getElementById('newsletter-email').value = '';
-  } else {
-    toast.textContent = "Por favor, ingresa un email válido";
-    toast.classList.add("show");
-    setTimeout(() => toast.classList.remove("show"), 2000);
-  }
-});
-</script>
 
 </body>
 </html>

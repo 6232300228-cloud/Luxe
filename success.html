@@ -364,7 +364,7 @@
             <img src="img/carrito.png" alt="Carrito" class="header-icon"> <span id="cart-count">0</span>
         </a>
         <a href="login.html" id="login-btn">
-            <img src="img/usuario.png" alt="Iniciar sesión" class="header-icon"> Iniciar sesión
+            <img src="img/usuario.png" alt="Iniciar sesion" class="header-icon"> Iniciar sesion
         </a>
         <div id="user-menu" class="dropdown" style="display: none;">
             <button class="dropbtn">
@@ -374,7 +374,7 @@
                 <a href="perfil.html"> Mi Perfil</a>
                 <a href="pedidos.html"> Mis Pedidos</a>
                 <hr>
-                <button id="logout-btn" class="logout-link">Cerrar Sesión</button>
+                <button id="logout-btn" class="logout-link">Cerrar Sesion</button>
             </div>
         </div>
     </div>
@@ -384,7 +384,7 @@
     <span class="close-btn" onclick="toggleMenu()">&times;</span>
     <div class="menu-section">
         <a href="nosotros.html"> Sobre Nosotros</a>
-        <a href="index.html">Lo más nuevo</a>
+        <a href="index.html">Lo mas nuevo</a>
         <a href="index.html"> Ofertas</a>
     </div>
 </nav>
@@ -393,7 +393,7 @@
     <div class="tracking-container">
         <div class="success-header">
             <div class="success-icon">
-                <img src="img/success-icon.png" alt="Exito" onerror="this.src='https://via.placeholder.com/80?text=✓'">
+                <img src="img/success-icon.png" alt="Exito" onerror="this.src='https://via.placeholder.com/80?text=OK'">
             </div>
             <h1 style="color: #ff4d6d;">Pago exitoso</h1>
             <p>Tu compra se ha procesado correctamente</p>
@@ -402,25 +402,25 @@
         <div class="tracking-steps" id="trackingSteps">
             <div class="step completed" id="step-pago">
                 <div class="step-icon">
-                    <img src="img/pago-icon.png" alt="Pago" onerror="this.src='https://via.placeholder.com/32?text=💳'">
+                    <img src="img/pago-icon.png" alt="Pago" onerror="this.src='https://via.placeholder.com/32?text=$'">
                 </div>
                 <div class="step-label">Pago aprobado</div>
             </div>
             <div class="step" id="step-preparando">
                 <div class="step-icon">
-                    <img src="img/preparando-icon.png" alt="Preparando" onerror="this.src='https://via.placeholder.com/32?text=📦'">
+                    <img src="img/preparando-icon.png" alt="Preparando" onerror="this.src='https://via.placeholder.com/32?text=box'">
                 </div>
                 <div class="step-label">Preparando pedido</div>
             </div>
             <div class="step" id="step-envio">
                 <div class="step-icon">
-                    <img src="img/envio-icon.png" alt="Envio" onerror="this.src='https://via.placeholder.com/32?text=🚚'">
+                    <img src="img/envio-icon.png" alt="Envio" onerror="this.src='https://via.placeholder.com/32?text=truck'">
                 </div>
                 <div class="step-label">En camino</div>
             </div>
             <div class="step" id="step-entregado">
                 <div class="step-icon">
-                    <img src="img/entregado-icon.png" alt="Entregado" onerror="this.src='https://via.placeholder.com/32?text=🏠'">
+                    <img src="img/entregado-icon.png" alt="Entregado" onerror="this.src='https://via.placeholder.com/32?text=home'">
                 </div>
                 <div class="step-label">Entregado</div>
             </div>
@@ -498,14 +498,14 @@
     <div class="footer-column">
       <img src="img/logo.png" alt="Luxe Logo" class="footer-logo" onerror="this.src='https://via.placeholder.com/150x50?text=LUXE'">
       <p class="footer-description">Realzando tu belleza natural con productos de alta gama.</p>
-      <h3>Encuéntranos en</h3>
+      <h3>Encuentranos en</h3>
       <div class="social-links">
         <a href="https://www.instagram.com/tiendaluxeedb/"><img src="img/ig.png" alt="Instagram" class="logo"></a>                
-        <a href="https://www.tiktok.com/@luxecollection_1?_r=1&_t=ZS-950CZexEpLc"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
+        <a href="https://www.tiktok.com/@luxecollection_1"><img src="img/tiktok.png" alt="Logo Luxe" class="logo"></a>                
       </div>
     </div>
     <div class="footer-column newsletter">
-      <h3>Únete al Club Luxe</h3>
+      <h3>Unete al Club Luxe</h3>
       <p>Recibe ofertas exclusivas.</p>
       <div class="newsletter-form">
         <input type="email" id="newsletter-email" placeholder="Tu email...">
@@ -523,7 +523,6 @@
 <script src="js/user.js"></script>
 <script>
 
-// Menu hamburguesa
 function toggleMenu() {
     const menu = document.getElementById('side-menu');
     if (menu) menu.classList.toggle('active');
@@ -592,48 +591,21 @@ function cerrarSesion() {
     window.location.href = 'index.html';
 }
 
-let ultimoPedido = JSON.parse(localStorage.getItem('ultimoPedido'));
-if (!ultimoPedido) {
-    const pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
-    if (pedidos.length > 0) {
-        ultimoPedido = pedidos[pedidos.length - 1];
-    }
-}
-
-// Enviar correo de confirmacion de compra
-const compraPendiente = localStorage.getItem('compraPendiente');
-if (compraPendiente) {
-    const datos = JSON.parse(compraPendiente);
-    
-    fetch('https://luxe-api-frr5.onrender.com/api/confirmar-compra', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            emailCliente: datos.email,
-            datosCompra: datos
-        })
-    })
-    .then(response => response.json())
-    .then(resultado => {
-        if (resultado.exito) {
-            console.log('Correo de confirmacion enviado a', datos.email);
-            localStorage.removeItem('compraPendiente');
-        } else {
-            console.error('Error enviando correo:', resultado.error);
-        }
-    })
-    .catch(error => console.error('Error:', error));
-}
-
 function mostrarDetallesPedido() {
-    if (ultimoPedido) {
+    let ultimoPedido = JSON.parse(localStorage.getItem('ultimoPedido'));
+    
+    if (!ultimoPedido) {
+        const pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+        if (pedidos.length > 0) {
+            ultimoPedido = pedidos[pedidos.length - 1];
+        }
+    }
+    
+    if (ultimoPedido && ultimoPedido.items && ultimoPedido.items.length > 0) {
         const orderIdElem = document.getElementById('order-id');
         if (orderIdElem) {
-            // Mostrar el ID del backend si existe, si no el local
-            const idMostrar = ultimoPedido.idBackend || ultimoPedido.id;
-            orderIdElem.textContent = `#${idMostrar}`;
+            const idMostrar = ultimoPedido.idBackend || ultimoPedido.id || ultimoPedido.idLocal;
+            orderIdElem.textContent = '#' + idMostrar;
         }
         
         const orderDateElem = document.getElementById('order-date');
@@ -650,32 +622,120 @@ function mostrarDetallesPedido() {
         
         const orderAddressElem = document.getElementById('order-address');
         if (orderAddressElem) {
-            if (ultimoPedido.envioData && ultimoPedido.envioData.direccion) {
-                orderAddressElem.textContent = ultimoPedido.envioData.direccion;
-            } else if (ultimoPedido.direccion) {
-                orderAddressElem.textContent = ultimoPedido.direccion;
-            } else {
-                orderAddressElem.textContent = 'No especificada';
+            const direccion = (ultimoPedido.envioData && ultimoPedido.envioData.direccion) ? ultimoPedido.envioData.direccion : (ultimoPedido.direccion || 'No especificada');
+            orderAddressElem.textContent = direccion;
+        }
+        
+        const orderMethodElem = document.getElementById('order-method');
+        if (orderMethodElem) {
+            const metodo = ultimoPedido.metodoPago === 'mercadopago' ? 'Mercado Pago' : 'Tarjeta de Credito o Debito';
+            orderMethodElem.textContent = metodo;
+        }
+        
+        const productosContainer = document.getElementById('order-products');
+        if (productosContainer) {
+            productosContainer.innerHTML = '';
+            for (let i = 0; i < ultimoPedido.items.length; i++) {
+                const item = ultimoPedido.items[i];
+                const subtotal = (item.precio || 0) * (item.cantidad || 1);
+                const productHtml = '<div class="product-item">' +
+                    '<img src="' + (item.img || 'https://luxecollection.org/img/logo.png') + '" alt="' + item.nombre + '" class="product-img" onerror="this.src=' + "'https://luxecollection.org/img/logo.png'" + '">' +
+                    '<div class="product-info">' +
+                        '<div class="product-name">' + item.nombre + '</div>' +
+                        '<div class="product-price">$' + (item.precio || 0).toFixed(2) + ' x ' + (item.cantidad || 1) + '</div>' +
+                    '</div>' +
+                    '<div style="font-weight: bold; color: #ff4d6d;">$' + subtotal.toFixed(2) + '</div>' +
+                '</div>';
+                productosContainer.innerHTML += productHtml;
             }
         }
         
-        // ... resto del código igual ...
+        const orderTotalElem = document.getElementById('order-total');
+        if (orderTotalElem) {
+            const total = ultimoPedido.total || 0;
+            orderTotalElem.textContent = '$' + total.toFixed(2);
+        }
+    } else {
+        const compraPendiente = localStorage.getItem('compraPendiente');
+        if (compraPendiente) {
+            const datos = JSON.parse(compraPendiente);
+            const orderIdElem = document.getElementById('order-id');
+            if (orderIdElem) orderIdElem.textContent = '# Pendiente';
+            
+            const productosContainer = document.getElementById('order-products');
+            if (productosContainer && datos.productos) {
+                productosContainer.innerHTML = '';
+                for (let i = 0; i < datos.productos.length; i++) {
+                    const item = datos.productos[i];
+                    const subtotal = (item.precio || 0) * (item.cantidad || 1);
+                    const productHtml = '<div class="product-item">' +
+                        '<div class="product-img" style="background:#ffe4ec; display:flex; align-items:center; justify-content:center;">box</div>' +
+                        '<div class="product-info">' +
+                            '<div class="product-name">' + item.nombre + '</div>' +
+                            '<div class="product-price">$' + (item.precio || 0).toFixed(2) + ' x ' + (item.cantidad || 1) + '</div>' +
+                        '</div>' +
+                        '<div style="font-weight: bold; color: #ff4d6d;">$' + subtotal.toFixed(2) + '</div>' +
+                    '</div>';
+                    productosContainer.innerHTML += productHtml;
+                }
+            }
+            
+            const orderTotalElem = document.getElementById('order-total');
+            if (orderTotalElem && datos.total) {
+                orderTotalElem.textContent = '$' + datos.total.toFixed(2);
+            }
+        }
     }
+}
+
+function enviarCorreoPendiente() {
+    const compraPendiente = localStorage.getItem('compraPendiente');
+    if (compraPendiente) {
+        const datos = JSON.parse(compraPendiente);
+        
+        fetch('https://luxe-api-frr5.onrender.com/api/confirmar-compra', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                emailCliente: datos.email,
+                datosCompra: datos
+            })
+        })
+        .then(function(response) { return response.json(); })
+        .then(function(resultado) {
+            if (resultado.exito) {
+                console.log('Correo de confirmacion enviado a', datos.email);
+                localStorage.removeItem('compraPendiente');
+            } else {
+                console.error('Error enviando correo:', resultado.error);
+            }
+        })
+        .catch(function(error) { console.error('Error:', error); });
+    }
+}
+
+function limpiarCarrito() {
+    localStorage.removeItem('carrito');
+    const cartCount = document.getElementById('cart-count');
+    if (cartCount) cartCount.textContent = '0';
 }
 
 function simularProgresoPedido() {
     const ahora = new Date();
-    const fechaPago = ahora.toLocaleString('es-MX', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
     const fechaPagoElem = document.getElementById('fecha-pago');
-    if (fechaPagoElem) fechaPagoElem.textContent = fechaPago;
+    if (fechaPagoElem) {
+        fechaPagoElem.textContent = ahora.toLocaleString('es-MX', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+    }
     
-    setTimeout(() => {
+    setTimeout(function() {
         const stepPreparando = document.getElementById('step-preparando');
         const timelinePreparando = document.getElementById('timeline-preparando');
         const fechaPreparando = document.getElementById('fecha-preparando');
@@ -687,12 +747,13 @@ function simularProgresoPedido() {
             fechaPreparando.textContent = fechaPrep.toLocaleString('es-MX', { hour: '2-digit', minute: '2-digit' });
         }
         
-        setTimeout(() => {
+        setTimeout(function() {
             const stepEnvio = document.getElementById('step-envio');
             const timelineEnvio = document.getElementById('timeline-envio');
-            if (stepPreparando) {
-                stepPreparando.classList.add('completed');
-                stepPreparando.classList.remove('active');
+            const stepPreparando2 = document.getElementById('step-preparando');
+            if (stepPreparando2) {
+                stepPreparando2.classList.add('completed');
+                stepPreparando2.classList.remove('active');
             }
             if (stepEnvio) stepEnvio.classList.add('active');
             if (timelinePreparando) {
@@ -709,12 +770,13 @@ function simularProgresoPedido() {
                 }
             }
             
-            setTimeout(() => {
+            setTimeout(function() {
                 const stepEntregado = document.getElementById('step-entregado');
                 const timelineEntregado = document.getElementById('timeline-entregado');
-                if (stepEnvio) {
-                    stepEnvio.classList.add('completed');
-                    stepEnvio.classList.remove('active');
+                const stepEnvio2 = document.getElementById('step-envio');
+                if (stepEnvio2) {
+                    stepEnvio2.classList.add('completed');
+                    stepEnvio2.classList.remove('active');
                 }
                 if (stepEntregado) stepEntregado.classList.add('active');
                 if (timelineEnvio) {
@@ -731,14 +793,16 @@ function simularProgresoPedido() {
                     }
                 }
                 
-                setTimeout(() => {
-                    if (stepEntregado) {
-                        stepEntregado.classList.add('completed');
-                        stepEntregado.classList.remove('active');
+                setTimeout(function() {
+                    const stepEntregado2 = document.getElementById('step-entregado');
+                    const timelineEntregado2 = document.getElementById('timeline-entregado');
+                    if (stepEntregado2) {
+                        stepEntregado2.classList.add('completed');
+                        stepEntregado2.classList.remove('active');
                     }
-                    if (timelineEntregado) {
-                        timelineEntregado.classList.remove('current');
-                        timelineEntregado.classList.add('completed');
+                    if (timelineEntregado2) {
+                        timelineEntregado2.classList.remove('current');
+                        timelineEntregado2.classList.add('completed');
                     }
                 }, 2000);
             }, 3000);
@@ -750,8 +814,9 @@ document.addEventListener('DOMContentLoaded', function() {
     actualizarContadores();
     cargarUsuario();
     mostrarDetallesPedido();
+    enviarCorreoPendiente();
+    limpiarCarrito();
     simularProgresoPedido();
-    localStorage.removeItem('carrito');
     
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {

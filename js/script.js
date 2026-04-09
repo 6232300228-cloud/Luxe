@@ -613,80 +613,100 @@ if (newsletterBtn) {
   };
 }
   
-  document.querySelectorAll('.video-card').forEach(card => {
-    const video = card.querySelector('video');
-    const btn = card.querySelector('.btn-ver-producto');
-    const productId = card.getAttribute('data-product-id');
+  // ============================================
+// VIDEOS - CARGA INSTANTÁNEA CON POSTER
+// ============================================
+document.querySelectorAll('.video-card').forEach(card => {
+  const video = card.querySelector('video');
+  const btn = card.querySelector('.btn-ver-producto');
+  const productId = card.getAttribute('data-product-id');
+  
+  if (!video) return;
+  
+  // Configuración inicial
+  video.muted = true;
+  video.playsInline = true;
+  video.preload = 'none'; // No cargar video hasta que se necesite
+  
+  // ========== SOLUCIÓN PARA ESCRITORIO ==========
+  const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+  
+  if (!isTouchDevice) {
+    // Cargar video SOLO cuando el mouse entra
+    let videoLoaded = false;
     
-    // Configurar video
-    if (video) {
-      video.muted = true;
-      video.playsInline = true;
-      video.preload = 'metadata';
-    }
+    card.addEventListener('mouseenter', () => {
+      if (!videoLoaded) {
+        // Cargar el video solo cuando es necesario
+        video.load();
+        videoLoaded = true;
+      }
+      video.play().catch(e => console.log('Error playing:', e));
+    });
     
-    // ========== DESKTOP: HOVER para reproducir ==========
-    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    card.addEventListener('mouseleave', () => {
+      video.pause();
+      video.currentTime = 0;
+    });
+  }
+  
+  // ========== SOLUCIÓN PARA MÓVIL ==========
+  if (isTouchDevice) {
+    let isPlaying = false;
+    let touchTimeout = null;
     
-    if (!isTouchDevice && video) {
-      card.addEventListener('mouseenter', () => {
-        video.play().catch(e => console.log('Error playing:', e));
+    // Precargar video al hacer scroll cerca (opcional - mejora rendimiento)
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !video.src) {
+          // Precargar cuando el video está cerca del viewport
+          video.preload = 'metadata';
+          video.load();
+          observer.unobserve(video);
+        }
       });
+    }, { rootMargin: '200px' });
+    
+    observer.observe(video);
+    
+    // Tocar para reproducir
+    card.addEventListener('click', (e) => {
+      if (e.target.classList.contains('btn-ver-producto') || 
+          e.target.closest('.btn-ver-producto')) {
+        return;
+      }
       
-      card.addEventListener('mouseleave', () => {
+      e.stopPropagation();
+      
+      if (isPlaying) {
         video.pause();
         video.currentTime = 0;
-      });
-    }
-    
-    // ========== BOTÓN VER PRODUCTO (funciona en todos los dispositivos) ==========
-    if (btn && productId) {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        e.preventDefault();
-        openProductModal(parseInt(productId));
-      });
-    }
-    
-    // ========== MÓVIL: Tocar video = reproducir/pausar ==========
-    if (isTouchDevice && video) {
-      let isPlaying = false;
-      let touchTimeout = null;
-      
-      // Usamos 'click' en lugar de 'touchstart' para mejor compatibilidad con scroll
-      card.addEventListener('click', (e) => {
-        // Si hicieron clic en el botón, ignorar
-        if (e.target.classList.contains('btn-ver-producto') || 
-            e.target.closest('.btn-ver-producto')) {
-          return;
-        }
-        
-        // Detener propagación para que no afecte el scroll
-        e.stopPropagation();
-        
-        if (isPlaying) {
-          // Pausar video
-          video.pause();
-          video.currentTime = 0;
-          isPlaying = false;
-          if (touchTimeout) clearTimeout(touchTimeout);
-        } else {
-          // Reproducir video
-          video.play().then(() => {
-            isPlaying = true;
-            // Auto-pausar después de 3 segundos
-            touchTimeout = setTimeout(() => {
-              if (isPlaying) {
-                video.pause();
-                video.currentTime = 0;
-                isPlaying = false;
-              }
-            }, 3000);
-          }).catch(e => console.log('Error:', e));
-        }
-      });
-    }
-  });
+        isPlaying = false;
+        if (touchTimeout) clearTimeout(touchTimeout);
+      } else {
+        video.play().then(() => {
+          isPlaying = true;
+          touchTimeout = setTimeout(() => {
+            if (isPlaying) {
+              video.pause();
+              video.currentTime = 0;
+              isPlaying = false;
+            }
+          }, 3000);
+        }).catch(e => console.log('Error:', e));
+      }
+    });
+  }
+  
+  // Botón ver producto
+  if (btn && productId) {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      openProductModal(parseInt(productId));
+    });
+  }
+});
 });
 
 // ============================================

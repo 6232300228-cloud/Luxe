@@ -4155,11 +4155,15 @@ header-icon:hover {
   font-size: 15px;
 }
 
-
-
-.payment-logo {
-  height: 32px;
+.payment-icon-img {
+  height: 45px !important;
+  width: auto !important;
+  max-width: 100%;
   object-fit: contain;
+}
+.payment-option .payment-icon-img {
+  height: 45px !important;
+  width: auto !important;
 }
 /* Para la tarjeta específicamente si sigue siendo más grande */
 .payment-option:first-child .payment-icon-img {
@@ -4247,33 +4251,41 @@ header-icon:hover {
   .payment-methods {
     display: flex;
     flex-direction: row !important;
-    gap: 8px;
+    gap: 10px;
     justify-content: space-between;
   }
   
-  .payment-option {
+    .payment-option {
     flex: 1;
     min-width: 0;
   }
-  
+   .payment-option input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
   .payment-label {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 10px 4px;
+    gap: 8px;
+    padding: 12px 8px;
     background: #f9f9f9;
-    border: 1px solid #eee;
-    border-radius: 12px;
+    border: 2px solid #eee;
+    border-radius: 16px;
+    transition: all 0.2s ease;
+    cursor: pointer;
   }
   
-  .payment-icon-img {
-    width: 32px;
-    height: 32px;
+ .payment-icon-img {
+    width: 48px !important;
+    height: 48px !important;
     object-fit: contain;
+    display: block;
+    margin: 0 auto;
   }
-  
   .payment-label span {
     font-size: 10px;
     font-weight: 600;
@@ -4281,7 +4293,21 @@ header-icon:hover {
   }
 }
 
-
+/* FIX DEFINITIVO - Tamaño uniforme */
+@media (max-width: 550px) {
+  .payment-icon-img {
+    width: auto !important;
+    height: 45px !important;
+    max-width: none !important;
+    object-fit: contain !important;
+  }
+  
+  /* Que ninguna imagen se pase de 55px */
+  .payment-option img {
+    max-height: 45px !important;
+    width: auto !important;
+  }
+}
 
 /* ============================================
    ESTILOS ESPECÍFICOS PARA DASHBOARD - IMÁGENES

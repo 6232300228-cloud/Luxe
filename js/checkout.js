@@ -374,21 +374,65 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
         return;
     }
     
-    const items = [];
-    for (let i = 0; i < carrito.length; i++) {
-        items.push({
-            nombre: carrito[i].nombre,
-            precio: carrito[i].precio,
-            cantidad: carrito[i].cantidad || 1
-        });
-    }
-    
     const nombre = localStorage.getItem('envio_nombre') || '';
     const direccion = localStorage.getItem('envio_direccion') || '';
     const correo = localStorage.getItem('envio_correo') || '';
     const envioCosto = calcularEnvio();
     const totalPagar = total + envioCosto;
     
+    // 1. Guardar el pedido en el backend ANTES de ir a Mercado Pago
+    const token = localStorage.getItem('token');
+    let pedidoBackendId = null;
+    
+    if (token) {
+        try {
+            const productosData = [];
+            for (let i = 0; i < carrito.length; i++) {
+                productosData.push({
+                    nombre: carrito[i].nombre,
+                    precio: Math.round(carrito[i].precio),
+                    cantidad: carrito[i].cantidad || 1,
+                    imagen: carrito[i].img || ''
+                });
+            }
+            
+            const pedidoData = {
+                usuario: {
+                    nombre: nombre,
+                    correo: correo,
+                    direccion: direccion,
+                    telefono: ''
+                },
+                productos: productosData,
+                total: Math.round(totalPagar),
+                metodoPago: 'mercadopago',
+                estado: 'pendiente'
+            };
+            
+            console.log('Guardando pedido en backend antes de MP:', pedidoData);
+            
+            const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(pedidoData)
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                pedidoBackendId = result.pedido?.id || result.id;
+                console.log('Pedido guardado en backend con ID:', pedidoBackendId);
+            } else {
+                console.error('Error guardando pedido en backend:', await response.text());
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    
+    // 2. Guardar en localStorage como respaldo
     const itemsCarrito = [];
     for (let i = 0; i < carrito.length; i++) {
         itemsCarrito.push({
@@ -400,7 +444,8 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
     }
     
     const pedidoCompleto = {
-        idLocal: Date.now(),
+        id: pedidoBackendId || Date.now(),
+        idBackend: pedidoBackendId,
         fecha: new Date().toISOString(),
         items: itemsCarrito,
         subtotal: Math.round(total),
@@ -411,8 +456,13 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
         estado: 'pendiente'
     };
     
+    // Guardar en localStorage
+    let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+    pedidos.push(pedidoCompleto);
+    localStorage.setItem('pedidos', JSON.stringify(pedidos));
     localStorage.setItem('ultimoPedido', JSON.stringify(pedidoCompleto));
     
+    // 3. Guardar datos para el correo
     const productosData = [];
     for (let i = 0; i < carrito.length; i++) {
         productosData.push({
@@ -429,9 +479,20 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
         productos: productosData,
         total: totalPagar,
         metodoPago: 'mercadopago',
-        fecha: new Date().toISOString()
+        fecha: new Date().toISOString(),
+        pedidoId: pedidoBackendId
     };
     localStorage.setItem('compraPendiente', JSON.stringify(datosCompra));
+    
+    // 4. Crear preferencia en Mercado Pago
+    const items = [];
+    for (let i = 0; i < carrito.length; i++) {
+        items.push({
+            nombre: carrito[i].nombre,
+            precio: carrito[i].precio,
+            cantidad: carrito[i].cantidad || 1
+        });
+    }
     
     const response = await fetch('https://luxe-api-frr5.onrender.com/api/crear-preferencia', {
         method: 'POST',
@@ -439,13 +500,16 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
         body: JSON.stringify({ 
             items: items,
             envio: envioCosto,
-            payer: { name: nombre, email: correo, address: direccion }
+            payer: { name: nombre, email: correo, address: direccion },
+            external_reference: pedidoBackendId ? pedidoBackendId.toString() : Date.now().toString()
         })
     });
     
     const data = await response.json();
     
     if (data.init_point) {
+        // Limpiar carrito solo despues de crear la preferencia
+        localStorage.removeItem('carrito');
         window.location.href = data.init_point;
     } else {
         mostrarToast(data.error || 'Error al crear el pago', 'error');

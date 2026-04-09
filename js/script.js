@@ -98,9 +98,7 @@ function showToast(msg) {
 // ============================================
 // MODAL DE PRODUCTO
 // ============================================
-// ============================================
-// MODAL DE PRODUCTO (sin mostrar stock numérico)
-// ============================================
+
 function openProductModal(productId) {
   const modal = document.getElementById("productModal");
   const modalContent = document.getElementById("modalProductDetail");
@@ -286,9 +284,7 @@ function toggleFav(event, id) {
 // ============================================
 // RENDER PRODUCTOS
 // ============================================
-// ============================================
-// RENDER PRODUCTOS (con stock inteligente)
-// ============================================
+
 function renderProducts() {
   if (!productList) return;
   
@@ -622,25 +618,72 @@ if (newsletterBtn) {
     const btn = card.querySelector('.btn-ver-producto');
     const productId = card.getAttribute('data-product-id');
     
+    // Configurar video
     if (video) {
-      card.addEventListener('mouseenter', () => video.play());
+      video.muted = true;
+      video.playsInline = true;
+      video.preload = 'metadata';
+    }
+    
+    // ========== DESKTOP: HOVER para reproducir ==========
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    
+    if (!isTouchDevice && video) {
+      card.addEventListener('mouseenter', () => {
+        video.play().catch(e => console.log('Error playing:', e));
+      });
+      
       card.addEventListener('mouseleave', () => {
         video.pause();
         video.currentTime = 0;
       });
     }
     
+    // ========== BOTÓN VER PRODUCTO (funciona en todos los dispositivos) ==========
     if (btn && productId) {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
+        e.preventDefault();
         openProductModal(parseInt(productId));
       });
     }
     
-    if (productId) {
+    // ========== MÓVIL: Tocar video = reproducir/pausar ==========
+    if (isTouchDevice && video) {
+      let isPlaying = false;
+      let touchTimeout = null;
+      
+      // Usamos 'click' en lugar de 'touchstart' para mejor compatibilidad con scroll
       card.addEventListener('click', (e) => {
-        if (e.target === btn || btn?.contains(e.target)) return;
-        openProductModal(parseInt(productId));
+        // Si hicieron clic en el botón, ignorar
+        if (e.target.classList.contains('btn-ver-producto') || 
+            e.target.closest('.btn-ver-producto')) {
+          return;
+        }
+        
+        // Detener propagación para que no afecte el scroll
+        e.stopPropagation();
+        
+        if (isPlaying) {
+          // Pausar video
+          video.pause();
+          video.currentTime = 0;
+          isPlaying = false;
+          if (touchTimeout) clearTimeout(touchTimeout);
+        } else {
+          // Reproducir video
+          video.play().then(() => {
+            isPlaying = true;
+            // Auto-pausar después de 3 segundos
+            touchTimeout = setTimeout(() => {
+              if (isPlaying) {
+                video.pause();
+                video.currentTime = 0;
+                isPlaying = false;
+              }
+            }, 3000);
+          }).catch(e => console.log('Error:', e));
+        }
       });
     }
   });

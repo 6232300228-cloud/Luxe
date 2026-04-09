@@ -613,17 +613,27 @@ if (newsletterBtn) {
   };
 }
   
-  document.querySelectorAll('.video-card').forEach(card => {
+ // ============================================
+// MANEJO DE VIDEOS MEJORADO
+// ============================================
+let videoActual = null; // Variable global para trackear el video que se está reproduciendo
+
+document.querySelectorAll('.video-card').forEach(card => {
     const video = card.querySelector('video');
     const btn = card.querySelector('.btn-ver-producto');
     const productId = card.getAttribute('data-product-id');
     
-    // Configurar video para reproducción automática en hover (Desktop)
+    // Configurar video
     if (video) {
       video.muted = true;
       video.playsInline = true;
-      
-      // Desktop: reproducir al pasar el mouse
+      video.preload = 'metadata';
+    }
+    
+    // ========== DESKTOP: HOVER para reproducir ==========
+    const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    
+    if (!isTouchDevice && video) {
       card.addEventListener('mouseenter', () => {
         video.play().catch(e => console.log('Error playing:', e));
       });
@@ -634,8 +644,7 @@ if (newsletterBtn) {
       });
     }
     
-    // BOTÓN VER PRODUCTO - SOLO ESTO ABRE EL MODAL
-  
+    // ========== BOTÓN VER PRODUCTO (funciona en todos los dispositivos) ==========
     if (btn && productId) {
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -643,51 +652,60 @@ if (newsletterBtn) {
         openProductModal(parseInt(productId));
       });
     }
-    // ========== PARA MÓVIL: REPRODUCIR VIDEO AL TOCAR ==========
-    // En móviles, al tocar el video (no el botón) se reproduce/pausa
-    // NUNCA abre el modal
     
-    if (video) {
-      // Detectar si es dispositivo táctil
-      const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    // ========== MÓVIL: Tocar video = reproducir/pausar ==========
+    if (isTouchDevice && video) {
+      let isPlaying = false;
+      let touchTimeout = null;
       
-      if (isTouchDevice) {
-        // Variable para controlar reproducción
-        let isPlaying = false;
-        let touchTimeout = null;
+      // Usamos 'click' en lugar de 'touchstart' para mejor compatibilidad con scroll
+      card.addEventListener('click', (e) => {
+        // Si hicieron clic en el botón, ignorar
+        if (e.target.classList.contains('btn-ver-producto') || 
+            e.target.closest('.btn-ver-producto')) {
+          return;
+        }
         
-        card.addEventListener('touchstart', (e) => {
-          // Si tocaron el botón, NO hacer nada con el video
-          if (e.target.classList.contains('btn-ver-producto') || 
-              e.target.closest('.btn-ver-producto')) {
-            return;
+        // Detener propagación para que no afecte el scroll
+        e.stopPropagation();
+        
+        // 👇 NUEVO: Pausar el video anterior si existe y es diferente
+        if (videoActual && videoActual !== video) {
+          videoActual.pause();
+          videoActual.currentTime = 0;
+          if (videoActual.touchTimeout) {
+            clearTimeout(videoActual.touchTimeout);
           }
-          
-          e.preventDefault(); // Evita scroll mientras se reproduce
-          
-          // Si ya está reproduciendo, pausar
-          if (isPlaying) {
-            video.pause();
-            video.currentTime = 0;
-            isPlaying = false;
-            if (touchTimeout) clearTimeout(touchTimeout);
-            return;
-          }
-          
-          // Reproducir video
+          videoActual.isPlaying = false;
+        }
+        
+        if (isPlaying) {
+          // Pausar video actual
+          video.pause();
+          video.currentTime = 0;
+          isPlaying = false;
+          if (touchTimeout) clearTimeout(touchTimeout);
+          videoActual = null;
+        } else {
+          // Reproducir video actual
           video.play().then(() => {
             isPlaying = true;
-            // Auto-pausar después de 3 segundos
+            video.isPlaying = true;
+            video.touchTimeout = touchTimeout;
+            videoActual = video; // Guardar referencia del video actual
+            
+            // Auto-pausar después de 15 segundos
             touchTimeout = setTimeout(() => {
               if (isPlaying) {
                 video.pause();
                 video.currentTime = 0;
                 isPlaying = false;
+                if (videoActual === video) videoActual = null;
               }
-            }, 3000);
-          }).catch(e => console.log('Error en móvil:', e));
-        });
-      }
+            }, 20000); // 15 segundos de reproducción
+          }).catch(e => console.log('Error:', e));
+        }
+      });
     }
   });
 });

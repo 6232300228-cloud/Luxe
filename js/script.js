@@ -800,3 +800,21 @@ function prevSlide() {
 setInterval(() => {
   nextSlide();
 }, 5000);
+// ============================================
+// CONVERTIR SCROLL VERTICAL EN HORIZONTAL PARA MARCAS
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+  const brandMenu = document.querySelector('.brand-menu-sticky');
+  
+  if (brandMenu) {
+    brandMenu.addEventListener('wheel', function(e) {
+      // Si el usuario hace scroll vertical sobre el carrusel de marcas
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        // Prevenir el scroll vertical de la página
+        e.preventDefault();
+        // Convertir el scroll vertical en horizontal
+        brandMenu.scrollLeft += e.deltaY;
+      }
+    });
+  }
+});

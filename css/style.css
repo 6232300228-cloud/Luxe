@@ -1975,6 +1975,8 @@ header-icon:hover {
   .brand-menu-sticky {
     top: 70px;
     height: 55px;
+     scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
   }
   
   .brand-instruction {
@@ -1982,9 +1984,9 @@ header-icon:hover {
   }
   
   .brand-carousel-compact {
-    width: 100%;
+   
     gap: 18px;
-    padding: 0 5px;
+    padding: 0 15px;
   }
   
   .brand-item-mini img {

@@ -146,7 +146,55 @@ function aplicarFiltrosYOrden() {
     
     renderizarTablaProductos(productosFiltrados);
 }
+async function cargarClientes() {
+    const token = localStorage.getItem('token');
+    const user = JSON.parse(localStorage.getItem('user'));
+    
+    // Verificar que sea admin
+    if (!user || user.role !== 'admin') {
+        console.log('No eres admin');
+        return;
+    }
+    
+    try {
+        const response = await fetch('https://luxe-api-frr5.onrender.com/api/auth/usuarios', {
+            headers: {
+                'Authorization': 'Bearer ' + token
+            }
+        });
+        
+        if (response.ok) {
+            const usuarios = await response.json();
+            console.log('Clientes cargados:', usuarios.length);
+            
+            // Mostrar en tu tabla
+            const tbody = document.getElementById('clientes-tbody');
+            if (tbody) {
+                tbody.innerHTML = '';
+                usuarios.forEach(usuario => {
+                    const row = `
+                        <tr>
+                            <td>${usuario.nombre || '-'}</td>
+                            <td>${usuario.correo}</td>
+                            <td>${usuario.role || 'cliente'}</td>
+                            <td>${new Date(usuario.fechaRegistro).toLocaleDateString()}</td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+            }
+        } else {
+            console.error('Error al cargar clientes');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
 
+// Llamar a la función cuando carga el dashboard
+document.addEventListener('DOMContentLoaded', function() {
+    cargarClientes();
+});
 // ============================================
 // CARGAR PRODUCTOS
 // ============================================

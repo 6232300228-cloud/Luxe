@@ -8,336 +8,53 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css?v=20250313">
     <style>
-        .tracking-container {
-            max-width: 700px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-        
-        .success-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .success-icon {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-        }
-        
-        .success-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        
-        .tracking-steps {
-            display: flex;
-            justify-content: space-between;
-            margin: 40px 0;
-            position: relative;
-            overflow-x: auto;
-            padding-bottom: 15px;
-        }
-        
-        .tracking-steps::-webkit-scrollbar {
-            height: 4px;
-        }
-        
-        .tracking-steps::-webkit-scrollbar-track {
-            background: #f0f0f0;
-            border-radius: 10px;
-        }
-        
-        .tracking-steps::-webkit-scrollbar-thumb {
-            background: #ff4d6d;
-            border-radius: 10px;
-        }
-        
-        .tracking-steps::before {
-            content: '';
-            position: absolute;
-            top: 30px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: #e0e0e0;
-            z-index: 1;
-        }
-        
-        .step {
-            text-align: center;
-            flex: 1;
-            min-width: 80px;
-            position: relative;
-            z-index: 2;
-        }
-        
-        .step-icon {
-            width: 60px;
-            height: 60px;
-            background: white;
-            border: 3px solid #e0e0e0;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            background: white;
-            transition: all 0.3s ease;
-        }
-        
-        .step-icon img {
-            width: 32px;
-            height: 32px;
-            object-fit: contain;
-        }
-        
-        .step.active .step-icon {
-            border-color: #ff4d6d;
-            background: #ff4d6d;
-        }
-        
-        .step.active .step-icon img {
-            filter: brightness(0) invert(1);
-        }
-        
-        .step.completed .step-icon {
-            border-color: #4caf50;
-            background: #4caf50;
-        }
-        
-        .step.completed .step-icon img {
-            filter: brightness(0) invert(1);
-        }
-        
-        .step-label {
-            font-size: 11px;
-            color: #666;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .step.active .step-label,
-        .step.completed .step-label {
-            color: #ff4d6d;
-        }
-        
-        .step.completed .step-label {
-            color: #4caf50;
-        }
-        
-        .order-details {
-            background: #f9f9f9;
-            border-radius: 15px;
-            padding: 20px;
-            margin: 30px 0;
-        }
-        
-        .order-details h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-        
-        .order-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .order-row:last-child {
-            border-bottom: none;
-        }
-        
-        .product-item {
-            display: flex;
-            gap: 15px;
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .product-img {
-            width: 60px;
-            height: 60px;
-            object-fit: contain;
-            background: white;
-            border-radius: 8px;
-        }
-        
-        .product-info {
-            flex: 1;
-        }
-        
-        .product-name {
-            font-weight: 600;
-            margin-bottom: 5px;
-            font-size: 14px;
-        }
-        
-        .product-price {
-            color: #ff4d6d;
-            font-size: 13px;
-        }
-        
-        .tracking-timeline {
-            margin: 30px 0;
-            padding: 20px;
-            background: white;
-            border-radius: 15px;
-            border: 1px solid #f0f0f0;
-        }
-        
-        .timeline-item {
-            display: flex;
-            gap: 15px;
-            padding: 15px 0;
-            border-left: 2px solid #e0e0e0;
-            margin-left: 20px;
-            padding-left: 25px;
-            position: relative;
-        }
-        
-        .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -9px;
-            top: 20px;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            background: #e0e0e0;
-        }
-        
-        .timeline-item.completed::before {
-            background: #4caf50;
-        }
-        
-        .timeline-item.current::before {
-            background: #ff4d6d;
-            box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.3);
-        }
-        
-        .timeline-date {
-            font-size: 11px;
-            color: #999;
-            margin-bottom: 5px;
-        }
-        
-        .timeline-title {
-            font-weight: 600;
-            color: #333;
-            font-size: 14px;
-        }
-        
-        .timeline-desc {
-            font-size: 12px;
-            color: #666;
-        }
-        
-        .btn-group {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            margin-top: 30px;
-        }
-        
-        .btn-primary {
-            background: #ff4d6d;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            display: inline-block;
-            text-align: center;
-        }
-        
-        .btn-primary:hover {
-            background: #e63946;
-            transform: translateY(-2px);
-        }
-        
-        .btn-secondary {
-            background: #ff8fa3;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-            display: inline-block;
-            text-align: center;
-        }
-        
-        .btn-secondary:hover {
-            background: #ff6b8b;
-            transform: translateY(-2px);
-        }
-        
-        .order-id {
-            font-family: monospace;
-            background: #f0f0f0;
-            padding: 5px 10px;
-            border-radius: 8px;
-            font-size: 13px;
-        }
-        
-        @media (max-width: 650px) {
-            .tracking-container {
-                padding: 15px;
-                margin: 20px auto;
-            }
-            .tracking-steps {
-                gap: 10px;
-                justify-content: flex-start;
-            }
-            .step {
-                min-width: 70px;
-            }
-            .step-icon {
-                width: 50px;
-                height: 50px;
-            }
-            .step-icon img {
-                width: 26px;
-                height: 26px;
-            }
-            .step-label {
-                font-size: 9px;
-            }
-            .btn-group {
-                flex-direction: column;
-                gap: 12px;
-            }
-            .btn-primary, .btn-secondary {
-                width: 100%;
-                text-align: center;
-                padding: 12px 20px;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .step-icon {
-                width: 45px;
-                height: 45px;
-            }
-            .step-icon img {
-                width: 24px;
-                height: 24px;
-            }
-            .step-label {
-                font-size: 8px;
-            }
-            .step {
-                min-width: 60px;
-            }
-        }
+        /* ============================================
+           Tus estilos (se mantienen exactamente igual)
+        ============================================ */
+        .tracking-container { max-width: 700px; margin: 40px auto; padding: 20px; }
+        .success-header { text-align: center; margin-bottom: 30px; }
+        .success-icon { width: 80px; height: 80px; margin: 0 auto 20px; }
+        .success-icon img { width: 100%; height: 100%; object-fit: contain; }
+        .tracking-steps { display: flex; justify-content: space-between; margin: 40px 0; position: relative; overflow-x: auto; padding-bottom: 15px; }
+        .tracking-steps::-webkit-scrollbar { height: 4px; }
+        .tracking-steps::-webkit-scrollbar-track { background: #f0f0f0; border-radius: 10px; }
+        .tracking-steps::-webkit-scrollbar-thumb { background: #ff4d6d; border-radius: 10px; }
+        .tracking-steps::before { content: ''; position: absolute; top: 30px; left: 0; right: 0; height: 3px; background: #e0e0e0; z-index: 1; }
+        .step { text-align: center; flex: 1; min-width: 80px; position: relative; z-index: 2; }
+        .step-icon { width: 60px; height: 60px; background: white; border: 3px solid #e0e0e0; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 10px; background: white; transition: all 0.3s ease; }
+        .step-icon img { width: 32px; height: 32px; object-fit: contain; }
+        .step.active .step-icon { border-color: #ff4d6d; background: #ff4d6d; }
+        .step.active .step-icon img { filter: brightness(0) invert(1); }
+        .step.completed .step-icon { border-color: #4caf50; background: #4caf50; }
+        .step.completed .step-icon img { filter: brightness(0) invert(1); }
+        .step-label { font-size: 11px; color: #666; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+        .step.active .step-label, .step.completed .step-label { color: #ff4d6d; }
+        .step.completed .step-label { color: #4caf50; }
+        .order-details { background: #f9f9f9; border-radius: 15px; padding: 20px; margin: 30px 0; }
+        .order-details h3 { color: #333; margin-bottom: 15px; font-size: 18px; }
+        .order-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
+        .order-row:last-child { border-bottom: none; }
+        .product-item { display: flex; gap: 15px; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .product-img { width: 60px; height: 60px; object-fit: contain; background: white; border-radius: 8px; }
+        .product-info { flex: 1; }
+        .product-name { font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+        .product-price { color: #ff4d6d; font-size: 13px; }
+        .tracking-timeline { margin: 30px 0; padding: 20px; background: white; border-radius: 15px; border: 1px solid #f0f0f0; }
+        .timeline-item { display: flex; gap: 15px; padding: 15px 0; border-left: 2px solid #e0e0e0; margin-left: 20px; padding-left: 25px; position: relative; }
+        .timeline-item::before { content: ''; position: absolute; left: -9px; top: 20px; width: 16px; height: 16px; border-radius: 50%; background: #e0e0e0; }
+        .timeline-item.completed::before { background: #4caf50; }
+        .timeline-item.current::before { background: #ff4d6d; box-shadow: 0 0 0 3px rgba(255, 77, 109, 0.3); }
+        .timeline-date { font-size: 11px; color: #999; margin-bottom: 5px; }
+        .timeline-title { font-weight: 600; color: #333; font-size: 14px; }
+        .timeline-desc { font-size: 12px; color: #666; }
+        .btn-group { display: flex; gap: 15px; justify-content: center; margin-top: 30px; }
+        .btn-primary { background: #ff4d6d; color: white; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.3s ease; display: inline-block; text-align: center; }
+        .btn-primary:hover { background: #e63946; transform: translateY(-2px); }
+        .btn-secondary { background: #ff8fa3; color: white; padding: 12px 30px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 14px; transition: all 0.3s ease; display: inline-block; text-align: center; }
+        .btn-secondary:hover { background: #ff6b8b; transform: translateY(-2px); }
+        .order-id { font-family: monospace; background: #f0f0f0; padding: 5px 10px; border-radius: 8px; font-size: 13px; }
+        @media (max-width: 650px) { .tracking-container { padding: 15px; margin: 20px auto; } .tracking-steps { gap: 10px; justify-content: flex-start; } .step { min-width: 70px; } .step-icon { width: 50px; height: 50px; } .step-icon img { width: 26px; height: 26px; } .step-label { font-size: 9px; } .btn-group { flex-direction: column; gap: 12px; } .btn-primary, .btn-secondary { width: 100%; text-align: center; padding: 12px 20px; } }
+        @media (max-width: 480px) { .step-icon { width: 45px; height: 45px; } .step-icon img { width: 24px; height: 24px; } .step-label { font-size: 8px; } .step { min-width: 60px; } }
     </style>
 </head>
 <body>
@@ -522,6 +239,10 @@
 <script src="js/script.js"></script>
 <script src="js/user.js"></script>
 <script>
+
+// ============================================
+// TUS FUNCIONES (se mantienen EXACTAMENTE igual)
+// ============================================
 
 function toggleMenu() {
     const menu = document.getElementById('side-menu');
@@ -721,45 +442,65 @@ function limpiarCarrito() {
     const cartCount = document.getElementById('cart-count');
     if (cartCount) cartCount.textContent = '0';
 }
+
+// ============================================
+// FUNCION CORREGIDA (guardar pedido en backend)
+// ============================================
 async function guardarPedidoManual() {
     const compraPendiente = localStorage.getItem('compraPendiente');
     const token = localStorage.getItem('token');
     
     if (compraPendiente && token) {
-        const datos = JSON.parse(compraPendiente);
-        
-        const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-            },
-            body: JSON.stringify({
-                usuario: {
-                    nombre: datos.nombre,
-                    correo: datos.email,
-                    direccion: datos.direccion
+        try {
+            const datos = JSON.parse(compraPendiente);
+            console.log("Intentando guardar pedido manualmente:", datos);
+            
+            const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
                 },
-                productos: datos.productos.map(p => ({
-                    nombre: p.nombre,
-                    precio: p.precio,
-                    cantidad: p.cantidad,
-                    imagen: p.imagen || ''
-                })),
-                total: datos.total,
-                metodoPago: 'mercadopago'
-            })
-        });
-        
-        if (response.ok) {
-            console.log('✅ Pedido guardado manualmente');
-            localStorage.removeItem('compraPendiente');
+                body: JSON.stringify({
+                    usuario: {
+                        nombre: datos.nombre,
+                        correo: datos.email,
+                        direccion: datos.direccion
+                    },
+                    productos: datos.productos.map(p => ({
+                        nombre: p.nombre,
+                        precio: p.precio,
+                        cantidad: p.cantidad,
+                        imagen: p.imagen || ''
+                    })),
+                    total: datos.total,
+                    metodoPago: 'mercadopago'
+                })
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Pedido guardado exitosamente:', result);
+                localStorage.removeItem('compraPendiente');
+                // Actualizar el pedido en localStorage con el ID del backend
+                let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+                if (pedidos.length > 0) {
+                    pedidos[pedidos.length - 1].idBackend = result.pedido?.id;
+                    pedidos[pedidos.length - 1].estado = 'pagado';
+                    localStorage.setItem('pedidos', JSON.stringify(pedidos));
+                    localStorage.setItem('ultimoPedido', JSON.stringify(pedidos[pedidos.length - 1]));
+                }
+            } else {
+                console.error('Error del backend:', await response.text());
+            }
+        } catch (error) {
+            console.error('Error de red:', error);
         }
+    } else {
+        console.log("No hay compra pendiente o usuario no autenticado");
     }
 }
 
-// Llamar esta función al cargar success.html
-guardarPedidoManual();
 function simularProgresoPedido() {
     const ahora = new Date();
     const fechaPagoElem = document.getElementById('fecha-pago');
@@ -848,12 +589,26 @@ function simularProgresoPedido() {
     }, 2000);
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+// ============================================
+// INICIALIZACION CORREGIDA
+// ============================================
+document.addEventListener('DOMContentLoaded', async function() {
     actualizarContadores();
     cargarUsuario();
+    
+    // 1. PRIMERO: Guardar el pedido en el backend
+    await guardarPedidoManual();
+    
+    // 2. SEGUNDO: Mostrar los detalles
     mostrarDetallesPedido();
+    
+    // 3. Enviar correo si hay pendiente
     enviarCorreoPendiente();
+    
+    // 4. Limpiar carrito
     limpiarCarrito();
+    
+    // 5. Simular progreso
     simularProgresoPedido();
     
     const logoutBtn = document.getElementById('logout-btn');

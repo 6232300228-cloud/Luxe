@@ -218,16 +218,22 @@ function actualizarBarraProgreso() {
 }
 
 async function guardarPedidoEnBackend(metodoPago) {
+    console.log('===== INICIANDO guardarPedidoEnBackend =====');
+    
     const nombre = localStorage.getItem('envio_nombre') || '';
     const direccion = localStorage.getItem('envio_direccion') || '';
     const correo = localStorage.getItem('envio_correo') || '';
     const envioCosto = calcularEnvio();
     const totalPagar = total + envioCosto;
     
+    console.log('1. Datos de envio:', { nombre, direccion, correo, envioCosto, totalPagar });
+    
     const token = localStorage.getItem('token');
+    console.log('2. Token existe?', token ? 'SI' : 'NO');
     
     if (!token) {
-        console.log('No hay token, no se puede guardar en backend');
+        console.log('ERROR: No hay token, no se puede guardar en backend');
+        mostrarToast('Debes iniciar sesion para continuar', 'error');
         return null;
     }
     
@@ -241,6 +247,7 @@ async function guardarPedidoEnBackend(metodoPago) {
                 imagen: carrito[i].img || ''
             });
         }
+        console.log('3. Productos:', productosData);
         
         const pedidoData = {
             usuario: {
@@ -255,7 +262,7 @@ async function guardarPedidoEnBackend(metodoPago) {
             estado: 'pagado'
         };
         
-        console.log('Guardando pedido en backend:', pedidoData);
+        console.log('4. Enviando al backend:', JSON.stringify(pedidoData, null, 2));
         
         const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
             method: 'POST',
@@ -266,17 +273,21 @@ async function guardarPedidoEnBackend(metodoPago) {
             body: JSON.stringify(pedidoData)
         });
         
+        console.log('5. Respuesta status:', response.status);
+        
         if (response.ok) {
             const result = await response.json();
-            console.log('Pedido guardado en backend con ID:', result.pedido.id);
-            return result.pedido.id;
+            console.log('6. Pedido guardado con ID:', result);
+            return result.pedido ? result.pedido.id : result.id;
         } else {
             const errorText = await response.text();
-            console.error('Error del backend:', errorText);
+            console.error('7. ERROR del backend:', errorText);
+            mostrarToast('Error al guardar el pedido: ' + errorText, 'error');
             return null;
         }
     } catch (error) {
-        console.error('Error guardando en backend:', error);
+        console.error('8. ERROR de red:', error);
+        mostrarToast('Error de conexion: ' + error.message, 'error');
         return null;
     }
 }

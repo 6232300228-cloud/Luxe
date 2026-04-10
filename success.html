@@ -721,7 +721,45 @@ function limpiarCarrito() {
     const cartCount = document.getElementById('cart-count');
     if (cartCount) cartCount.textContent = '0';
 }
+async function guardarPedidoManual() {
+    const compraPendiente = localStorage.getItem('compraPendiente');
+    const token = localStorage.getItem('token');
+    
+    if (compraPendiente && token) {
+        const datos = JSON.parse(compraPendiente);
+        
+        const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({
+                usuario: {
+                    nombre: datos.nombre,
+                    correo: datos.email,
+                    direccion: datos.direccion
+                },
+                productos: datos.productos.map(p => ({
+                    nombre: p.nombre,
+                    precio: p.precio,
+                    cantidad: p.cantidad,
+                    imagen: p.imagen || ''
+                })),
+                total: datos.total,
+                metodoPago: 'mercadopago'
+            })
+        });
+        
+        if (response.ok) {
+            console.log('✅ Pedido guardado manualmente');
+            localStorage.removeItem('compraPendiente');
+        }
+    }
+}
 
+// Llamar esta función al cargar success.html
+guardarPedidoManual();
 function simularProgresoPedido() {
     const ahora = new Date();
     const fechaPagoElem = document.getElementById('fecha-pago');

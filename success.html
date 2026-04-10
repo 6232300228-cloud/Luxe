@@ -8,9 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css?v=20250313">
     <style>
-        /* ============================================
-           Tus estilos (se mantienen exactamente igual)
-        ============================================ */
         .tracking-container { max-width: 700px; margin: 40px auto; padding: 20px; }
         .success-header { text-align: center; margin-bottom: 30px; }
         .success-icon { width: 80px; height: 80px; margin: 0 auto 20px; }
@@ -240,10 +237,6 @@
 <script src="js/user.js"></script>
 <script>
 
-// ============================================
-// TUS FUNCIONES (se mantienen EXACTAMENTE igual)
-// ============================================
-
 function toggleMenu() {
     const menu = document.getElementById('side-menu');
     if (menu) menu.classList.toggle('active');
@@ -277,13 +270,13 @@ function actualizarContadores() {
     if (favCount) {
         const favs = JSON.parse(localStorage.getItem('favs')) || [];
         favCount.textContent = favs.length;
-        favCount.setAttribute("data-count", favs.length);
+        favCount.setAttribute('data-count', favs.length);
     }
     if (cartCount) {
         const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
-        const totalItems = carrito.reduce((sum, item) => sum + (item.cantidad || 1), 0);
+        const totalItems = carrito.reduce(function(sum, item) { return sum + (item.cantidad || 1); }, 0);
         cartCount.textContent = totalItems;
-        cartCount.setAttribute("data-count", totalItems);
+        cartCount.setAttribute('data-count', totalItems);
     }
 }
 
@@ -360,7 +353,6 @@ function mostrarDetallesPedido() {
                 const item = ultimoPedido.items[i];
                 const subtotal = (item.precio || 0) * (item.cantidad || 1);
                 const productHtml = '<div class="product-item">' +
-                    '<img src="' + (item.img || 'https://luxecollection.org/img/logo.png') + '" alt="' + item.nombre + '" class="product-img" onerror="this.src=' + "'https://luxecollection.org/img/logo.png'" + '">' +
                     '<div class="product-info">' +
                         '<div class="product-name">' + item.nombre + '</div>' +
                         '<div class="product-price">$' + (item.precio || 0).toFixed(2) + ' x ' + (item.cantidad || 1) + '</div>' +
@@ -376,64 +368,6 @@ function mostrarDetallesPedido() {
             const total = ultimoPedido.total || 0;
             orderTotalElem.textContent = '$' + total.toFixed(2);
         }
-    } else {
-        const compraPendiente = localStorage.getItem('compraPendiente');
-        if (compraPendiente) {
-            const datos = JSON.parse(compraPendiente);
-            const orderIdElem = document.getElementById('order-id');
-            if (orderIdElem) orderIdElem.textContent = '# Pendiente';
-            
-            const productosContainer = document.getElementById('order-products');
-            if (productosContainer && datos.productos) {
-                productosContainer.innerHTML = '';
-                for (let i = 0; i < datos.productos.length; i++) {
-                    const item = datos.productos[i];
-                    const subtotal = (item.precio || 0) * (item.cantidad || 1);
-                    const productHtml = '<div class="product-item">' +
-                        '<div class="product-img" style="background:#ffe4ec; display:flex; align-items:center; justify-content:center;">box</div>' +
-                        '<div class="product-info">' +
-                            '<div class="product-name">' + item.nombre + '</div>' +
-                            '<div class="product-price">$' + (item.precio || 0).toFixed(2) + ' x ' + (item.cantidad || 1) + '</div>' +
-                        '</div>' +
-                        '<div style="font-weight: bold; color: #ff4d6d;">$' + subtotal.toFixed(2) + '</div>' +
-                    '</div>';
-                    productosContainer.innerHTML += productHtml;
-                }
-            }
-            
-            const orderTotalElem = document.getElementById('order-total');
-            if (orderTotalElem && datos.total) {
-                orderTotalElem.textContent = '$' + datos.total.toFixed(2);
-            }
-        }
-    }
-}
-
-function enviarCorreoPendiente() {
-    const compraPendiente = localStorage.getItem('compraPendiente');
-    if (compraPendiente) {
-        const datos = JSON.parse(compraPendiente);
-        
-        fetch('https://luxe-api-frr5.onrender.com/api/confirmar-compra', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                emailCliente: datos.email,
-                datosCompra: datos
-            })
-        })
-        .then(function(response) { return response.json(); })
-        .then(function(resultado) {
-            if (resultado.exito) {
-                console.log('Correo de confirmacion enviado a', datos.email);
-                localStorage.removeItem('compraPendiente');
-            } else {
-                console.error('Error enviando correo:', resultado.error);
-            }
-        })
-        .catch(function(error) { console.error('Error:', error); });
     }
 }
 
@@ -443,17 +377,25 @@ function limpiarCarrito() {
     if (cartCount) cartCount.textContent = '0';
 }
 
-// ============================================
-// FUNCION CORREGIDA (guardar pedido en backend)
-// ============================================
 async function guardarPedidoManual() {
     const compraPendiente = localStorage.getItem('compraPendiente');
-    const token = localStorage.getItem('token');
     
-    if (compraPendiente && token) {
+    if (compraPendiente) {
         try {
             const datos = JSON.parse(compraPendiente);
-            console.log("Intentando guardar pedido manualmente:", datos);
+            console.log('Intentando guardar pedido manualmente:', datos);
+            
+            if (datos.pedidoId) {
+                console.log('Pedido ya tiene ID en backend:', datos.pedidoId);
+                localStorage.removeItem('compraPendiente');
+                return;
+            }
+            
+            const token = localStorage.getItem('token');
+            if (!token) {
+                console.log('No hay token, no se puede guardar en backend');
+                return;
+            }
             
             const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
                 method: 'POST',
@@ -467,14 +409,17 @@ async function guardarPedidoManual() {
                         correo: datos.email,
                         direccion: datos.direccion
                     },
-                    productos: datos.productos.map(p => ({
-                        nombre: p.nombre,
-                        precio: p.precio,
-                        cantidad: p.cantidad,
-                        imagen: p.imagen || ''
-                    })),
+                    productos: datos.productos.map(function(p) {
+                        return {
+                            nombre: p.nombre,
+                            precio: p.precio,
+                            cantidad: p.cantidad,
+                            imagen: ''
+                        };
+                    }),
                     total: datos.total,
-                    metodoPago: 'mercadopago'
+                    metodoPago: 'mercadopago',
+                    estado: 'pagado'
                 })
             });
             
@@ -482,22 +427,27 @@ async function guardarPedidoManual() {
                 const result = await response.json();
                 console.log('Pedido guardado exitosamente:', result);
                 localStorage.removeItem('compraPendiente');
-                // Actualizar el pedido en localStorage con el ID del backend
+                
+                let ultimoPedido = JSON.parse(localStorage.getItem('ultimoPedido'));
+                if (ultimoPedido) {
+                    ultimoPedido.idBackend = result.pedido ? result.pedido.id : null;
+                    ultimoPedido.estado = 'pagado';
+                    localStorage.setItem('ultimoPedido', JSON.stringify(ultimoPedido));
+                }
+                
                 let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
                 if (pedidos.length > 0) {
-                    pedidos[pedidos.length - 1].idBackend = result.pedido?.id;
+                    pedidos[pedidos.length - 1].idBackend = result.pedido ? result.pedido.id : null;
                     pedidos[pedidos.length - 1].estado = 'pagado';
                     localStorage.setItem('pedidos', JSON.stringify(pedidos));
-                    localStorage.setItem('ultimoPedido', JSON.stringify(pedidos[pedidos.length - 1]));
                 }
             } else {
-                console.error('Error del backend:', await response.text());
+                const errorText = await response.text();
+                console.error('Error del backend:', errorText);
             }
         } catch (error) {
             console.error('Error de red:', error);
         }
-    } else {
-        console.log("No hay compra pendiente o usuario no autenticado");
     }
 }
 
@@ -589,26 +539,13 @@ function simularProgresoPedido() {
     }, 2000);
 }
 
-// ============================================
-// INICIALIZACION CORREGIDA
-// ============================================
 document.addEventListener('DOMContentLoaded', async function() {
     actualizarContadores();
     cargarUsuario();
     
-    // 1. PRIMERO: Guardar el pedido en el backend
     await guardarPedidoManual();
-    
-    // 2. SEGUNDO: Mostrar los detalles
     mostrarDetallesPedido();
-    
-    // 3. Enviar correo si hay pendiente
-    enviarCorreoPendiente();
-    
-    // 4. Limpiar carrito
     limpiarCarrito();
-    
-    // 5. Simular progreso
     simularProgresoPedido();
     
     const logoutBtn = document.getElementById('logout-btn');

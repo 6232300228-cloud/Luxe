@@ -217,110 +217,69 @@ function actualizarBarraProgreso() {
     }
 }
 
-async function guardarPedidoCompleto(metodoPago) {
+async function guardarPedidoEnBackend(metodoPago) {
     const nombre = localStorage.getItem('envio_nombre') || '';
     const direccion = localStorage.getItem('envio_direccion') || '';
     const correo = localStorage.getItem('envio_correo') || '';
     const envioCosto = calcularEnvio();
     const totalPagar = total + envioCosto;
     
-    const itemsCarrito = [];
-    for (let i = 0; i < carrito.length; i++) {
-        itemsCarrito.push({
-            id: carrito[i].id,
-            nombre: carrito[i].nombre,
-            precio: Math.round(carrito[i].precio),
-            cantidad: carrito[i].cantidad || 1,
-            img: carrito[i].img || ''
-        });
-    }
-    
-    const pedidoLocal = {
-        idLocal: Date.now(),
-        fecha: new Date().toISOString(),
-        items: itemsCarrito,
-        subtotal: Math.round(total),
-        envio: envioCosto,
-        total: Math.round(totalPagar),
-        envioData: { nombre: nombre, direccion: direccion, correo: correo },
-        metodoPago: metodoPago,
-        estado: 'pendiente',
-        idBackend: null
-    };
-    
     const token = localStorage.getItem('token');
-    let pedidoBackendId = null;
     
-    if (token) {
-        try {
-            const productosData = [];
-            for (let i = 0; i < carrito.length; i++) {
-                productosData.push({
-                    nombre: carrito[i].nombre,
-                    precio: Math.round(carrito[i].precio),
-                    cantidad: carrito[i].cantidad || 1,
-                    imagen: carrito[i].img || ''
-                });
-            }
-            
-            const pedidoData = {
-                usuario: {
-                    nombre: nombre,
-                    correo: correo,
-                    direccion: direccion,
-                    telefono: ''
-                },
-                productos: productosData,
-                total: Math.round(totalPagar),
-                metodoPago: metodoPago === 'mercadopago' ? 'mercadopago' : 'tarjeta'
-            };
-            
-            console.log('Enviando pedido al backend:', pedidoData);
-            
-            const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                },
-                body: JSON.stringify(pedidoData)
-            });
-            
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Respuesta del backend:', result);
-                pedidoBackendId = result.pedido?.id || result.id;
-                pedidoLocal.idBackend = pedidoBackendId;
-                pedidoLocal.estado = 'pagado';
-                console.log('Pedido guardado en backend con ID:', pedidoBackendId);
-            } else {
-                const errorText = await response.text();
-                console.error('Error del backend:', errorText);
-            }
-        } catch (error) {
-            console.error('Error guardando en backend:', error);
+    if (!token) {
+        console.log('No hay token, no se puede guardar en backend');
+        return null;
+    }
+    
+    try {
+        const productosData = carrito.map(item => ({
+            nombre: item.nombre,
+            precio: Math.round(item.precio),
+            cantidad: item.cantidad || 1,
+            imagen: item.img || ''
+        }));
+        
+        const pedidoData = {
+            usuario: {
+                nombre: nombre,
+                correo: correo,
+                direccion: direccion,
+                telefono: ''
+            },
+            productos: productosData,
+            total: Math.round(totalPagar),
+            metodoPago: metodoPago,
+            estado: 'pagado'
+        };
+        
+        console.log('Guardando pedido en backend:', pedidoData);
+        
+        const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify(pedidoData)
+        });
+        
+        if (response.ok) {
+            const result = await response.json();
+            console.log('Pedido guardado en backend con ID:', result.pedido?.id);
+            return result.pedido?.id;
+        } else {
+            console.error('Error del backend:', await response.text());
+            return null;
         }
+    } catch (error) {
+        console.error('Error guardando en backend:', error);
+        return null;
     }
-    
-    let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
-    
-    if (pedidoBackendId) {
-        pedidoLocal.id = pedidoBackendId;
-    } else {
-        pedidoLocal.id = pedidoLocal.idLocal;
-    }
-    
-    pedidos.push(pedidoLocal);
-    localStorage.setItem('pedidos', JSON.stringify(pedidos));
-    localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
-    localStorage.removeItem('carrito');
-    
-    return pedidoLocal;
 }
 
 async function procesarTarjeta(btnPagar, textoOriginal) {
     try {
-        await guardarPedidoCompleto('tarjeta');
+        const pedidoId = await guardarPedidoEnBackend('tarjeta');
         
         const nombre = localStorage.getItem('envio_nombre') || '';
         const correo = localStorage.getItem('envio_correo') || '';
@@ -340,19 +299,41 @@ async function procesarTarjeta(btnPagar, textoOriginal) {
             nombre: nombre,
             productos: productosData,
             total: total + envioCosto,
-            fecha: new Date().toISOString()
+            fecha: new Date().toISOString(),
+            pedidoId: pedidoId
         };
         
         fetch('https://luxe-api-frr5.onrender.com/api/confirmar-compra', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                emailCliente: correo,
-                datosCompra: datosCompra
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ emailCliente: correo, datosCompra: datosCompra })
         }).catch(function(error) { console.error('Error enviando correo:', error); });
+        
+        // Guardar en localStorage como respaldo
+        const itemsCarrito = carrito.map(item => ({
+            nombre: item.nombre,
+            precio: Math.round(item.precio),
+            cantidad: item.cantidad || 1,
+            img: item.img || ''
+        }));
+        
+        const pedidoLocal = {
+            id: pedidoId || Date.now(),
+            idBackend: pedidoId,
+            fecha: new Date().toISOString(),
+            items: itemsCarrito,
+            subtotal: Math.round(total),
+            envio: envioCosto,
+            total: Math.round(total + envioCosto),
+            envioData: { nombre: nombre, direccion: localStorage.getItem('envio_direccion'), correo: correo },
+            metodoPago: 'tarjeta',
+            estado: 'pagado'
+        };
+        
+        let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
+        pedidos.push(pedidoLocal);
+        localStorage.setItem('pedidos', JSON.stringify(pedidos));
+        localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
         
         mostrarToast('Pago procesado exitosamente', 'success');
         setTimeout(function() {
@@ -367,10 +348,10 @@ async function procesarTarjeta(btnPagar, textoOriginal) {
 }
 
 async function procesarMercadoPago(btnPagar, textoOriginal) {
-    console.log('1. Iniciando procesarMercadoPago');
-    
     if (!carrito || carrito.length === 0) {
         mostrarToast('El carrito esta vacio', 'error');
+        btnPagar.textContent = textoOriginal;
+        btnPagar.disabled = false;
         return;
     }
     
@@ -380,9 +361,10 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
     const envioCosto = calcularEnvio();
     const totalPagar = total + envioCosto;
     
-    console.log('2. Datos del pedido:', { nombre, direccion, correo, totalPagar });
+    // PASO 1: Guardar en el backend ANTES de ir a Mercado Pago
+    const pedidoId = await guardarPedidoEnBackend('mercadopago');
     
-    // Guardar en localStorage primero (siempre)
+    // PASO 2: Guardar en localStorage como respaldo
     const itemsCarrito = carrito.map(item => ({
         nombre: item.nombre,
         precio: Math.round(item.precio),
@@ -390,71 +372,25 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
         img: item.img || ''
     }));
     
-    const pedidoLocal = {
-        idLocal: Date.now(),
+    const pedidoCompleto = {
+        id: pedidoId || Date.now(),
+        idBackend: pedidoId,
         fecha: new Date().toISOString(),
         items: itemsCarrito,
         subtotal: Math.round(total),
         envio: envioCosto,
         total: Math.round(totalPagar),
-        envioData: { nombre, direccion, correo },
+        envioData: { nombre: nombre, direccion: direccion, correo: correo },
         metodoPago: 'mercadopago',
-        estado: 'pendiente'
+        estado: pedidoId ? 'pagado' : 'pendiente'
     };
     
-    console.log('3. Pedido local creado:', pedidoLocal);
-    
-    // Guardar en localStorage
     let pedidos = JSON.parse(localStorage.getItem('pedidos')) || [];
-    pedidos.push(pedidoLocal);
+    pedidos.push(pedidoCompleto);
     localStorage.setItem('pedidos', JSON.stringify(pedidos));
-    localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
-    console.log('4. Pedido guardado en localStorage');
+    localStorage.setItem('ultimoPedido', JSON.stringify(pedidoCompleto));
     
-    // Guardar en backend si hay token
-    const token = localStorage.getItem('token');
-    if (token) {
-        try {
-            const productosData = carrito.map(item => ({
-                nombre: item.nombre,
-                precio: Math.round(item.precio),
-                cantidad: item.cantidad || 1,
-                imagen: item.img || ''
-            }));
-            
-            const pedidoData = {
-                usuario: { nombre, correo, direccion, telefono: '' },
-                productos: productosData,
-                total: Math.round(totalPagar),
-                metodoPago: 'mercadopago'
-            };
-            
-            console.log('5. Enviando a backend:', pedidoData);
-            
-            const response = await fetch('https://luxe-api-frr5.onrender.com/api/orders/crear', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                },
-                body: JSON.stringify(pedidoData)
-            });
-            
-            if (response.ok) {
-                const result = await response.json();
-                console.log('6. Pedido guardado en backend:', result);
-                pedidoLocal.idBackend = result.pedido?.id;
-                pedidoLocal.estado = 'pagado';
-                localStorage.setItem('ultimoPedido', JSON.stringify(pedidoLocal));
-            } else {
-                console.error('Error en backend:', await response.text());
-            }
-        } catch (error) {
-            console.error('Error guardando en backend:', error);
-        }
-    }
-    
-    // Guardar datos para el correo
+    // PASO 3: Datos para el correo
     const datosCompra = {
         email: correo,
         nombre: nombre,
@@ -466,19 +402,17 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
         })),
         total: totalPagar,
         metodoPago: 'mercadopago',
-        fecha: new Date().toISOString()
+        fecha: new Date().toISOString(),
+        pedidoId: pedidoId
     };
     localStorage.setItem('compraPendiente', JSON.stringify(datosCompra));
-    console.log('7. Datos para correo guardados');
     
-    // Crear preferencia en Mercado Pago
+    // PASO 4: Crear preferencia en Mercado Pago
     const items = carrito.map(item => ({
         nombre: item.nombre,
         precio: item.precio,
         cantidad: item.cantidad || 1
     }));
-    
-    console.log('8. Creando preferencia en MP...');
     
     const response = await fetch('https://luxe-api-frr5.onrender.com/api/crear-preferencia', {
         method: 'POST',
@@ -486,16 +420,15 @@ async function procesarMercadoPago(btnPagar, textoOriginal) {
         body: JSON.stringify({ 
             items: items,
             envio: envioCosto,
-            payer: { name: nombre, email: correo, address: direccion }
+            payer: { name: nombre, email: correo, address: direccion },
+            external_reference: pedidoId ? pedidoId.toString() : Date.now().toString()
         })
     });
     
     const data = await response.json();
-    console.log('9. Respuesta MP:', data);
     
     if (data.init_point) {
         localStorage.removeItem('carrito');
-        console.log('10. Redirigiendo a MP...');
         window.location.href = data.init_point;
     } else {
         mostrarToast(data.error || 'Error al crear el pago', 'error');
